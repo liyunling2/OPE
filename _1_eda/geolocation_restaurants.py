@@ -46,6 +46,8 @@ def extract_city_from_components(components: List[Dict]) -> Dict:
             
     return loc
 
+
+
 def search_place_new_api(query_string: str, api_key: str) -> Dict:
     """
     Uses the Google Places API (New) to search for a place.
