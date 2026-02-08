@@ -1,0 +1,461 @@
+,KOL_ID,Username,Followers,Country,Social media URL,Restaurant name,Restaurant ID,Cuisine Type,Package Type,Package price,Package Name,Allergies,Comments,Fee per content,Column 15,Column 16,Column 17,Target Date,Target time,No people,Sales Check,Line_thread_id,Booking ID,Target post date,Post details,Notes,index
+,HH-TESTING,TESTING,"12,345",Test city,ig.com/testing,tesitng restaurant,#N/A,#N/A,Party Pack,1234,Testing menu,Testing alergies,Test comments,"12,345",FALSE,,#N/A,10/10/1990,6:00:00 pm,20,Asked Guillaume,588528281180176784,,,TEST,,HH-TESTINGXDE71
+,HH-TESTING,TESTING,"12,345",Test city,ig.com/testing,test 4,#N/A,#N/A,Party Pack,1234,Testing menu,Testing alergies,Test comments,"12,345",FALSE,,#N/A,31/10/1990,7:00:00 pm,100,Asked Guillaume,588528294350291663,,,TEST,,HH-TESTINGQHU28
+,HH-TESTING,TESTING,"12,345",Test city,ig.com/testing,test 3,#N/A,#N/A,Party Pack,1234,Testing menu,Testing alergies,Test comments,"12,345",FALSE,,#N/A,10/12/1990,10:00:00 am,50,Asked Guillaume,588528289937883222,,,TEST,,HH-TESTINGYSO07
+,HH-TESTING,TESTING,"12,345",Test city,ig.com/testing,test 2,#N/A,#N/A,Party Pack,1234,Testing menu,Testing alergies,Test comments,"12,345",FALSE,,#N/A,10/11/2021,6:00:00 pm,10,Asked Guillaume,588528285491921411,,,TEST,,HH-TESTINGLNF73
+,#REF!,eaterries,"26,326",Singapore,,Warm Up Cafe @ Mackenzie Road,5318,Thai,Party Pack,69,Sharing Set for 2 People,,,"5,063",,Approved,fred@hungryhub.com,25/02/2025,6:30:00 pm,2,Booked,,7186274,,Check Later,,
+,HH-SGMEY,melicacy,"44,191",Singapore,Instagram.com/melicacy,Forma,5345,Italian,Party Pack,112,3-COURSE WINTER SET DINNER,,,"5,063",,,fred@hungryhub.com,25/02/2025,7:00:00 pm,2,Booked,,,,Posted,,
+,HH-SGMEY,melicacy,"44,191",Singapore,Instagram.com/melicacy,Wild Child Pizzette,5344,Italian,Party Pack,151,Sharing Set for 2 People,,,"5,063",,,fred@hungryhub.com,26/02/2025,7:00:00 pm,2,Booked,,,,Check Later,,
+,HH-SGMEY,melicacy,"44,191",Singapore,Instagram.com/melicacy,Mizuya Omakase,5362,Japanese,Party Pack,155,Special x2 Omakase 7 Course With Free Flow Green Tea ,,,"5,063",,,fred@hungryhub.com,04/03/2025,7:00:00 pm,2,Booked,,,,Posted,,
+,HH-LOTHI,thara_koiii,"95,611",Singapore,Instagram.com/thara_koiii,"Colony At The Ritz-Carlton, Millenia Singapore",5412,"International, Singaporean",All You Can Eat,89,Lunch Buffet (Mon-Fri) ,,,"1,686",,,fred@hungryhub.com,10/03/2025,12:00:00 pm,2,Booked,,,,Posted,,
+,#REF!,eaterries,"26,326",Singapore,,Wild Child Pizzette,5344,Italian,Party Pack,151,Sharing Set for 2 People,,,"5,063",,Approved,fred@hungryhub.com,15/03/2025,1:00:00 pm,2,Booked,,7175926,,Check Later,,
+,#REF!,eaterries,"26,326",Singapore,,Fook Kin 福劲,5376,"Chinese, Singaporean",Party Pack,76,Sharing Set for 2 People,,,"5,063",,Approved,fred@hungryhub.com,18/03/2025,7:00:00 pm,2,Booked,,7344487,,Check Later,,
+,#REF!,eaterries,"26,326",Singapore,,Bar Cicheti,5343,Italian,Party Pack,76,3-Course Set Dinner Menu,,,"5,063",,Approved,fred@hungryhub.com,25/03/2025,7:00:00 pm,2,Booked,,7326718,,Check Later,,
+,HH-LOTHI,thara_koiii,"95,611",Singapore,Instagram.com/thara_koiii,Hai Tien Lo at Pan Pacific Hotel Singapore,5457,Chinese,Party Pack,110,Hai Tien Lo l 5-Course Dinner Set,,,"1,686",,,fred@hungryhub.com,02/04/2025,6:00:00 pm,2,Booked,,,,Posted,,
+,HH-INJKO,jkonthego,"38,900",Singapore,,Oh Ho Thai BBQ,5474,#N/A,Party Pack,34,Sharing Set for 2 People (Book 2 Hours in Advance),,,"1,671",FALSE,Approved,#N/A,16/04/2025,12:00:00 pm,2,Booked,,7398610,,Check Later,,
+,HH-INTAZ,tachichosz,"70,870",Singapore,,Bone Apple Tea Bistro,5738,Fusion,Party Pack,69, Lunch Set for 2 people,,,"14,153",TRUE,Approved,fred@hungryhub.com,17/04/2025,4:00:00 pm,2,Booked,,7419684,27/05/2025,Posted,,
+,HH-INJKO,jkonthego,"38,900",Singapore,,Home Dusk: Live House,5648,"International, Italian, Japanese, Fusion, Korean, American",Party Pack,130,Sharing Set for 2 people,,,"1,671",FALSE,Approved,fred@hungryhub.com,17/04/2025,6:30:00 pm,2,Booked,,7398617,,Check Later,,
+,HH-INTAZ,tachichosz,"70,870",Singapore,,Waterfall Lounge at Furama Riverfront Hotel,5643,"Chinese, European",Party Pack,50,Waterfall l Tea Bliss Set for 2 People,,,"14,153",TRUE,Approved,fred@hungryhub.com,18/04/2025,3:30:00 pm,2,Booked,,7422629,30/04/2025,Check Later,,
+,HH-INTAZ,tachichosz,"70,870",Singapore,,Grand Konak Turkish and Lebanese Restaurant,5813,"Egyptian, Mediterranean, Lebanese, Turkish, Middle Eastern",Party Pack,199,Sharing Set for 2 people,,,"14,153",TRUE,Approved,fred@hungryhub.com,18/04/2025,11:30:00 am,2,Booked,,7421309,28/04/2025,Posted,,
+,HH-INTAZ,tachichosz,"70,870",Singapore,,Taksim Restaurant,5736,"Egyptian, Mediterranean, Lebanese, Middle Eastern",Party Pack,99,Sharing Set for 2 people,,,"14,153",TRUE,Approved,fred@hungryhub.com,19/04/2025,8:00:00 pm,2,Booked,,7419713,23/05/2025,Posted,,
+,HH-INTAZ,tachichosz,"70,870",Singapore,,Tea Lounge at Conrad Singapore Orchard,5597,International,All You Can Eat,76,Weekend High Tea Buffet,,,"14,153",TRUE,Approved,fred@hungryhub.com,19/04/2025,3:00:00 pm,2,Booked,,7424025,25/04/2025,Posted,,
+,HH-INJKO,jkonthego,"38,900",Singapore,,Fook Kin 福劲,5376,"Chinese, Singaporean",Party Pack,76,Sharing Set for 2 People,,,"1,671",FALSE,Approved,fred@hungryhub.com,23/04/2025,11:30:00 am,2,Booked,,7398622,,Check Later,,
+,HH-SGLIE,liveloveatwithjie,"20,920",Singapore,,Mama Diam 妈妈店,5735,"Singaporean, Chinese",Party Pack,108,Sharing Set for 2 People,,,"5,063",,Approved,fred@hungryhub.com,14/06/2025,7:00:00 pm,2,Booked,,7700367,,Posted,,
+,HH-SGMEY,melicacy,"44,191",Singapore,Instagram.com/melicacy,Les Bouchons at Robertson Quay,5640,"European, French, Steakhouse",Party Pack,100,A Taste of France l 3-Course Meal,,,"5,063",,,fred@hungryhub.com,20/06/2025,7:00:00 pm,2,Validated,,,,Check Later,,
+,HH-LOMYG,myfoodiegallerysg,"30,467",Singapore,,Enjoy Eating House and Bar,5462,"Chinese, Singaporean",,,,,,,,,fred@hungryhub.com,23/06/2025,,,Validated,,,,Check Later,,
+,HH-LOMYG,myfoodiegallerysg,"30,467",Singapore,,Hai Tien Lo at Pan Pacific Hotel Singapore,5457,Chinese,,,,,,,,,fred@hungryhub.com,26/06/2025,,,Validated,,,,Posted,,
+,HH-SGLIE,liveloveatwithjie,"20,920",Singapore,,Edge at Pan Pacific Hotel Singapore,5465,International,All You Can Eat,97,Weekday Dinner Buffet (Sun-Thu),,,"5,063",,Approved,fred@hungryhub.com,30/06/2025,7:00:00 pm,2,Booked,,7586879,23/07/2025,Posted,,
+,HH-SGLIE,liveloveatwithjie,"20,920",Singapore,,Synthesis 食拿酒稳 Chinese Cuisine,5637,Fusion,Party Pack,248,"Review date:: 30 Jun, 7PM",,,"5,063",,Approved,fred@hungryhub.com,09/07/2025,7:00:00 pm,4,Booked,,7586898,,Check Later,,
+,HH-INJKO,jkonthego,"38,900",Singapore,,Edge at Pan Pacific Hotel Singapore,5465,International,All You Can Eat,97,Weekday Dinner Buffet (Sun-Thu),,,"1,671",FALSE,Approved,fred@hungryhub.com,10/07/2025,6:00:00 pm,2,Booked,,7671275,,Posted,,
+,HH-LOMYG,myfoodiegallerysg,"30,467",Singapore,,Crossroads Buffet at Singapore Marriott Tang Plaza Hotel,5547,International,,,,,,,FALSE,Approved,fred@hungryhub.com,13/07/2025,,,Validated,,,,Posted,,
+,HH-SIGLN,globetrotterkin,"31,387",Singapore,Instagram.com/globetrotterkin,Pacific Emporium at Pan Pacific Hotel Singapore,5460,Singaporean,Party Pack,73.4,NEW: Local-Inspired Afternoon Tea (Sat-Sun),,,0,,,fred@hungryhub.com,27/07/2025,2:00:00 pm,3,Booked,,7709865,,Check Later,,
+,HH-SIGLN,globetrotterkin,"31,387",Singapore,Instagram.com/globetrotterkin,Shrimp Prawn Seafood,5211,Thai,Party Pack,139,Premium Set for 3 People,,"Blogger from KKDAY
+KOL :globetrotterkin
+IG : https://www.instagram.com/globetrotterkin/ 
+Follower : 31K",0,,,fred@hungryhub.com,29/07/2025,7:00:00 pm,3,Booked,,7751400,,Check Later,,
+,HH-SIGLN,globetrotterkin,"31,387",Singapore,Instagram.com/globetrotterkin,The Seafood Market by House of White Bee Hoon,5755,Chinese,Party Pack,255,Sharing Set for 3 people,,,0,,,fred@hungryhub.com,29/07/2025,7:00:00 pm,3,Validated,,,,Check Later,,
+,#REF!,eaterries,"26,326",Singapore,,Enjoy Eating House and Bar,5462,"Chinese, Singaporean",Party Pack,85,Sharing Set for 2 People,,,"5,063",,Approved,fred@hungryhub.com,29/07/2025,7:00:00 pm,2,Booked,,7733275,,Check Later,,
+,HH-SGEAG,eatsnapsg,"25,100",Singapore,Tiktok.com/@eatsnapsg,O.BBa Jjajang,6153,Korean,,159,BBQ Set for 3 People,No Dietary restrictions,August Campaign,"1,266",,,fred@hungryhub.com,12/08/2025,7:30:00 pm,3,Booked,,7799247,28/08/2025,Posted,Guillaume,
+,HH-INBIK,bigjohnjiak,"48,879",Singapore,,Nozomi at Millenia Walk,5594,Japanese,All You Can Eat,139,Nozomi l Premium Buffet & 1 Special Menu,None,"August Campaign, Instagram : https://www.instagram.com/bigjohnjiak/","12,656",,Approved,fred@hungryhub.com,12/08/2025,11:30:00 am,2,Booked,573865938483937496,7826084,,Posted,Sirada,
+,HH-SGGIS,girldevours,"2,338",Singapore,Tiktok.com/@girldevours,Wild Child Pizzette,5344,Italian,Party Pack,115,Sharing set for 2,None,August Campaign,"1,519",,,fred@hungryhub.com,16/08/2025,6:00:00 pm,2,Booked,573456397380092487,7833694,24/08/2025,Posted,Guillaume,
+,HH-INPAR,parttimefoodblogger,"16,406",Singapore,Instagram.com/parttimefoodblogger,Baia Rooftop Dining Lounge Bar,5647,Fusion,Party Pack,228,Sharing Set for 4 People,None,"August Campaign, Instagram : https://www.instagram.com/parttimefoodblogger/ (will post on Tiktok too)","10,125",,,fred@hungryhub.com,18/08/2025,7:00:00 pm,4,Refused,574165946647183599,,,,Sirada,HH-INPARXEU
+,HH-INROA,roadtrippers.asia,"51,300",Singapore,Tiktok.com/@roadtrippers.asia,Riviera,6087,"Fusion, French, Mediterranean",All You Can Eat,169.2,Lunch course 3 meals - 3 pax ,None,"August Campaign
+Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","7,594",,,fred@hungryhub.com,19/08/2025,12:30:00 pm,3,Booked,574749961032826970,7850140,05/09/2025,Posted,Guillaume,
+,HH-INROA,roadtrippers.asia,"51,300",Singapore,Tiktok.com/@roadtrippers.asia,Bar Cicheti,5343,Italian,Party Pack,76,3-course set dinner menu,None,"August Campaing
+Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+
+IG
+https://www.instagram.com/eatwithandrewchan
+ 
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+
+Youtube
+https://youtube.com/@roadtrippers-asia","7,594",,,fred@hungryhub.com,19/08/2025,7:00:00 pm,3,Booked,,7813043,29/08/2025,Posted,Guillaume,
+,HH-SGQIX,qingxiangsqx,"23,385",Singapore,Instagram.com/qingxiangsqx,Mama Diam 妈妈店,5735,"Singaporean, Chinese",Party Pack,180,Sharing Set for 4 People,Guest does not eat: Lamb or beef ,August Campaign,"1,266",,,fred@hungryhub.com,19/08/2025,7:15:00 pm,3,Booked,,7834272,28/08/2025,Posted,Guillaume,
+,HH-INROA,roadtrippers.asia,"51,300",Singapore,Tiktok.com/@roadtrippers.asia,Fu Lin Bar & Kitchen (Clarke Quay),6151,"Chinese, Fusion, Singaporean",Party Pack,159,Sharing set for 3 people,None,"August Campaign
+Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","7,594",,,fred@hungryhub.com,20/08/2025,12:00:00 pm,3,Booked,574190196955283542,7835968,03/09/2025,Posted,Guillaume,
+,HH-SGGIS,girldevours,"2,338",Singapore,Tiktok.com/@girldevours,Nozomi at Millenia Walk,5594,Japanese,All You Can Eat,138,Nozomi l Premium Buffet,None,August Campaign,"1,519",,,fred@hungryhub.com,23/08/2025,6:00:00 pm,2,Booked,,7801439,30/08/2025,Posted,Guillaume,
+,HH-SGJJ6,jjloves86,"14,291",Singapore,Instagram.com/jjloves86,Edge at Pan Pacific Hotel Singapore,5465,International,All You Can Eat,81,Saturday Lunch,,August Campaign,"3,797",,,fred@hungryhub.com,23/08/2025,12:00:00 pm,3,Booked,,7808185,27/08/2025,Posted,Guillaume,
+,HH-INGOS,goofytwocooks,"28,732",Singapore,https://www.instagram.com/goofytwocooks/,Nozomi at Millenia Walk,5594,Japanese,All You Can Eat,69,Nozomi l Premium Buffet,None,,"3,797",,Approved,fred@hungryhub.com,23/08/2025,12:00:00 pm,4,Booked,,7808162,,Posted,Sirada,
+,HH-SGVIN,vincas_kitchen,"20,961",Singapore,Instagram.com/vincas_kitchen,Mama Diam 妈妈店,5735,"Singaporean, Chinese",Party Pack,180,Sharing set for 4 people,None,August Campaign (updated time),"5,063",,,fred@hungryhub.com,24/08/2025,7:00:00 pm,4,Booked,574457070502281256,7860950,29/08/2025,Posted,Guillaume,
+,HH-LOTHZ,thesiutwinz,"23,792",Singapore,Instagram.com/thesiutwinz,NOVA,6057,Fusion,Party Pack,129,Sip & Dine for 2 People,,"Additional social media : 
+Instagram : https://www.instagram.com/Twinzinbangkok","7,000",,,fred@hungryhub.com,25/08/2025,7:00:00 pm,2,Booked,573865938416828669,7852372,03/09/2025,posted,Guillaume,
+,HH-SGVIN,vincas_kitchen,"20,961",Singapore,Instagram.com/vincas_kitchen,Enjoy Eating House and Bar,5462,"Chinese, Singaporean",Party Pack,145,Sharing Set for 3 people,None,August Campaign,"5,063",,,fred@hungryhub.com,27/08/2025,12:00:00 pm,3,Booked,574154487775363232,7836071,03/09/2025,Posted,Guillaume,
+,HH-SGTHY,the_ace_sisters_and_mummy_fay,"26,886",,Instagram.com/the_ace_sisters_and_mummy_fay,Food Exchange at Novotel Singapore On Stevens,6310,,All You Can Eat,115,"Special Price 50% Off | Lobstermania – Exclusive Saturday Dinner, 7 PM (Only 10 Seats Daily)","can’t take spicy , broad beans and animals organs","Cross post to 
+Tiktok : https://www.tiktok.com/@theacesistersandmummyfay
+Fb : https://www.facebook.com/ArissaAnya/?ref=pro_upsell_xav_ig_profile_page_web#
+Lemon8
+Youtube Short : https://www.youtube.com/@theacesistersandmummyfay","8,860",,,,06/09/2025,6:00:00 pm,3,Booked,576483703048897142,7887907,12/09/2025,Posted,Guillaume,
+,HH-SGCOR,comfortchomper,"16,100",,Tiktok.com/@comfortchomper,Fook Kin 福劲,5376,"Chinese, Singaporean",Party Pack,103.7,Sharing Set for 3 People,none,Cross posted on https://www.instagram.com/comfortchomper,"8,860",,,,07/09/2025,1:00:00 pm,3,Booked,577350712661377160,7918767,14/09/2025,Posted,Guillaume,
+,HH-SGFOS,foody_flyers,"87,213",,Instagram.com/foody_flyers,The Butcher's Wife,5874,"Mediterranean, Latin American",Party Pack,169,Sharing Set for 3 People,,,"6,328",,,,07/09/2025,6:00:00 pm,3,Booked,576921410095022507,7906796,,Posted,Sirada,
+,HH-LOMYG,myfoodiegallerysg,"30,467",Singapore,https://www.instagram.com/myfoodiegallerysg/,Nozomi at Millenia Walk,5594,Japanese,All You Can Eat,139,Nozomi l Premium Buffet & 1 Special Menu,,,,FALSE,Approved,fred@hungryhub.com,08/09/2025,6:30:00 pm,2,Booked,577516820354040137,7918703,,Posted,,
+,HH-SGCOR,comfortchomper,"16,100",,Tiktok.com/@comfortchomper,Heaven's lotus,5896,Thai,Party Pack,79.2,Sharing Set for 3 People,none,Cross posted on https://www.instagram.com/comfortchomper,"8,860",,,,10/09/2025,7:00:00 pm,3,Booked,577938871422550461,7917735,20/09/2025,Posted,Guillaume,
+,HH-SGVIN,vincas_kitchen,"20,961",Singapore,Instagram.com/vincas_kitchen,Oscar's At Conrad Singapore Marina Bay,5708,International,All You Can Eat,72,"Oscar's Dinner Buffet l The Sea, Smoke & Spice (Wed-Sun)",None,August Campaign,"5,063",,,fred@hungryhub.com,12/09/2025,6:00:00 pm,4,Booked,577052058084180244,7936870,25/09/2025,Posted,Guillaume,
+,HH-SGARK,arctheshark,"40,934",,Instagram.com/arctheshark,Korat Thai Cafe,5650,"Thai Isaan, Thai",Party Pack,65.45,Sharing set for 3 people,None,,"6,703",,,,12/09/2025,2:30:00 pm,3,Booked,577970260737786054,7928788,16/09/2025,Posted,Lars,
+,HH-INGOS,goofytwocooks,"28,732",Singapore,https://www.instagram.com/goofytwocooks/,Oscar's At Conrad Singapore Marina Bay,5708,International,All You Can Eat,86.33,"(1st-30th September 2025) Oscar's Dinner Buffet l The Sea, Smoke & Spice (Wed-Sun)",None,,"3,797",,Approved,fred@hungryhub.com,13/09/2025,6:00:00 pm,4,Booked,577514629300224246,7936799,,Posted,Sirada,
+,HH-SGJJ6,jjloves86,"14,291",,Instagram.com/jjloves86,Oscar's At Conrad Singapore Marina Bay,5708,International,All You Can Eat,86.33,"(1st-30th September 2025) Oscar's Dinner Buffet l The Sea, Smoke & Spice (Wed-Sun)",none,,"3,797",,,,14/09/2025,12:00:00 pm,3,Booked,577242940540453083,7938325,16/09/2025,Posted,Guillaume,
+,HH-SGFOS,foody_flyers,"87,213",,Instagram.com/foody_flyers,Town Restaurant At The Fullerton Hotel Singapore,6141,International,Party Pack,94,Sunday Brunch (Unlimited Lobster),,,"6,328",,,,14/09/2025,12:00:00 pm,3,Booked,576952617058959857,7934597,,Posted,Sirada,
+,HH-SGCOR,comfortchomper,"16,100",,Tiktok.com/@comfortchomper,中国好味道 China Taste,5899,Chinese,Party Pack,55.2,Sharing Set for 3 People,none,Cross posted on https://www.instagram.com/comfortchomper,"8,860",,,,14/09/2025,7:00:00 pm,3,Booked,577350715177959886,7938164,,Posted,Guillaume,
+,HH-LOMYG,myfoodiegallerysg,"30,467",Singapore,https://www.instagram.com/myfoodiegallerysg/,Oscar's At Conrad Singapore Marina Bay,5708,International,All You Can Eat,86.33,"(1st-30th September 2025) Oscar's Dinner Buffet l The Sea, Smoke & Spice (Wed-Sun)",,,,FALSE,Approved,fred@hungryhub.com,14/09/2025,6:00:00 pm,2,Booked,577516823223468156,7938054,,Posted,,
+,HH-SGSHR,sheen_cher,"23,153",,Instagram.com/sheen_cher,Fook Kin 福劲,5376,"Chinese, Singaporean",Party Pack,134.4,Sharing set for 4 people,None,,0,,,,16/09/2025,7:00:00 pm,4,Booked,578073728362480217,7931373,23/09/2025,Posted,Lars,
+,HH-INPAR,parttimefoodblogger,"16,406",Singapore,Instagram.com/parttimefoodblogger,Horses Mouth,#N/A,#N/A,All You Can Eat,85,The Horse’s Feast: Limited Edition+ 1 Premium Menu (All You Can Eat),None,,"10,125",,,#N/A,16/09/2025,7:00:00 pm,4,Booked,578366144096763924,7942715,,Posted,Sirada,HH-INPARQRU
+,HH-SGARK,arctheshark,"40,934",,Instagram.com/arctheshark,Obba.Jjanag,#N/A,#N/A,Party Pack,143.1,BBQ Set for 3 people,None,,"6,703",,,,17/09/2025,2:30:00 pm,3,Booked,577970263203774844,7931428,01/10/2025,Posted,Lars,
+,HH-SGJJ6,jjloves86,"14,291",,Instagram.com/jjloves86,The Horse's Mouth,5571,Latin American,Party Pack,85,International Buffet + 1 Premium Menu,none,,"3,797",,,,19/09/2025,7:00:00 pm,3,Booked,577345221730239019,7938325,26/09/2025,Posted,Guillaume,
+,HH-SGNWL,nwso.ul,"14,700",,Tiktok.com/@nwso.ul,ShoSha,6104,"Fusion, Indian",Party Pack,99,Sharing Set for 3 people,,Certified Halal,"5,063",,,,19/09/2025,7:00:00 pm,3,Booked,577947313549869108,7941266,,Posted,Guillaume,HH-SGNWLLOE
+,HH-SGJJ6,jjloves86,"14,291",,Instagram.com/jjloves86,Nozomi at Millenia Walk,5594,Japanese,All You Can Eat,69,Nozomi l Premium Buffet,none,,"3,797",,,,20/09/2025,12:00:00 pm,3,Booked,577242944466321634,7968910,23/09/2025,Posted,Guillaume,HH-SGJJ6RFN
+,HH-SGEAT,eatwithkeat,"10,718",,Instagram.com/eatwithkeat,The Butcher's Wife,5874,"Mediterranean, Latin American",Party Pack,169,Sharing Set for 3 People,allergic to uni and abalone,Tiktok : tiktok.com/eatwithkheat,0,,,,21/09/2025,7:00:00 pm,3,Booked,579251341588168875,7961505,29/09/2025,Posted,Guillaume,HH-SGEATOXB
+,HH-SGEAT,eatwithkeat,"10,718",,Instagram.com/eatwithkeat,中国好味道 China Taste,5899,Chinese,Party Pack,68,Sharing Set for 4 People,allergic to uni and abalone,Tiktok : tiktok.com/eatwithkheat,0,,,,22/09/2025,7:00:00 pm,4,Booked,579263674066141408,7972694,30/09/2025,Posted,Guillaume,HH-SGEATWEA
+,HH-SGNWL,nwso.ul,"14,700",,Tiktok.com/@nwso.ul,Kintamani at Furama Riverfront Hotel,5644,Indonesian,All You Can Eat,45,Weekday Dinner Buffet (Mon-Thu),,Certified Halal,"5,063",,,,22/09/2025,7:00:00 pm,3,Booked,577947310177124516,7977628,,Posted,Guillaume,HH-SGNWLNIU
+,HH-SGLUELIP,lucy.rezel,"36,490",,Instagram.com/lucy.rezel,Fook Kin 福劲,5376,"Chinese, Singaporean",Party Pack,64.59,Sharing Set For 2 People,None,,"5,063",,,,25/09/2025,1:00:00 pm,2,Booked,579956093946691639,7977829,30/09/2025,Posted,Lars,HH-SGLUELIPVWG72
+,HH-SGNWL,nwso.ul,"14,700",,Tiktok.com/@nwso.ul,Taksim Restaurant,5736,"Egyptian, Mediterranean, Lebanese, Middle Eastern",Party Pack,149,Sharing Set for 3 people,,Certified Halal,"5,063",,,,25/09/2025,7:00:00 pm,3,Booked,577947316318110006,7941579,,Posted,Guillaume,HH-SGNWLMWE
+,HH-SGGIS,girldevours,"2,338",Singapore,Tiktok.com/@girldevours,The Horse's Mouth,5571,Latin American,All You Can Eat,59,The Horse’s Feast: Limited Edition (All You Can Eat),None,,"1,519",,,,27/09/2025,6:00:00 pm,4,Booked,580538827828625704,7993212,,Posted,Guillaume,HH-SGGISCFU
+,HH-LOMYG,myfoodiegallerysg,"30,604",,Instagram.com/myfoodiegallerysg,Town Restaurant At The Fullerton Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,97.12,Spice Odyssey Dinner Buffet (Fri-Sat & Public Holidays),,,"7,594",,,,27/09/2025,6:00:00 pm,2,Booked,1997ad98805dc3b2,7992710,,Posted,Sirada,HH-LOMYGAYE37
+,HH-SGEXN,exploretomakan,"14,669",,Instagram.com/exploretomakan,Kintamani at Furama Riverfront Hotel,5644,Indonesian,All You Can Eat,36,Weekday Lunch Buffet (Mon-Thu),"Halal only, no red meat",Arrives in Singapore 25 Sept,"7,594",,,,29/09/2025,12:00:00 pm,3,Booked,577234971078165096,7977637,,Posted,Guillaume,HH-SGEXNPWE
+,HH-LOTHI,thara_koiii,"95,611",Singapore,Instagram.com/thara_koiii,FIRE,6027,Argentinian,Party Pack,162,FIRE l 5 Course Dinner,,,"1,686",,,fred@hungryhub.com,29/09/2025,6:00:00 pm,2,Refused,577234973460267341,,,,,HH-LOTHIJWC
+,HH-SGLUELIP,lucy.rezel,"36,490",,Instagram.com/lucy.rezel,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,73,Lunch Buffet (Mon-Fri),None,She plans to arrive early so the buffet spread still looks full and nice.,"5,063",,,,30/09/2025,12:00:00 pm,2,Booked,1996f7c5ef2b3c71,7978617,06/10/2025,Posted,Lars,HH-SGLUELIPNZE69
+,HH-SGEAT,eatwithkeat,"10,718",,Instagram.com/eatwithkeat,Sakon Thai At E!Hub Downtown East,5795,Thai,Party Pack,66.3,Sharing Set for 3 people,allergic to uni and abalone,Tiktok : tiktok.com/eatwithkheat,0,,,,30/09/2025,7:00:00 pm,3,Booked,579983656076968027,7981933,05/10/2025,Posted,Guillaume,HH-SGEATVRP
+,HH-SGLUELIP,lucy.rezel,"36,490",,Instagram.com/lucy.rezel,Nozomi at Millenia Walk,5594,Japanese,All You Can Eat,139,Nozomi l Premium Buffet & 1 Special Menu,None,,"5,063",,,,01/10/2025,12:00:00 pm,2,Booked,579956096681378228,7988886,19/10/2025,Posted,Lars,HH-SGLUELIPKLL95
+,HH-LOMYG,myfoodiegallerysg,"30,604",,Instagram.com/myfoodiegallerysg,The Butcher's Wife,5874,"Mediterranean, Latin American",Party Pack,169,Sharing Set for 3 People,,,"7,594",,,,01/10/2025,6:00:00 pm,3,Booked,580275936587940335,	8009511,,Posted,Sirada,HH-LOMYGAKX12
+,HH-SGFOISPL,foodkakis,"11,606",,Instagram.com/foodkakis,Nozomi at Millenia Walk,5594,Japanese,All You Can Eat,69,Nozomi l Premium Buffet,,,"3,038",,,,03/10/2025,7:00:00 pm,4,Booked,580968047783969442,8020322,,Posted,Sirada,HH-SGFOISPLEAU91
+,HH-SGVIN,vincas_kitchen,"20,961",,Instagram.com/vincas_kitchen,Food Exchange at Novotel Singapore On Stevens,6310,,All You Can Eat,82.5,"Special Price 50% Off | Lobstermania – Exclusive Saturday Dinner, 7 PM (Only 10 Seats Daily)",None,October Campaign,"5,063",,,,04/10/2025,7:00:00 pm,3,Booked,581256410025951569,8017115,14/10/2025,Posted,Guillaume,HH-SGVINUJG48
+,HH-TFRTRRNJ,fred.and.chloe,"20,181",,Instagram.com/fred.and.chloe,Obba.Jjanag,#N/A,#N/A,Party Pack,98.1,BBQ Set for 2 People,None,,"5,063",,,,04/10/2025,1:00:00 pm,2,Booked,579534187632525942,7990567,09/10/2025,Posted,Lars,HH-TFRTRRNJDYL12
+,HH-TSAAGLUQ,sakshi_reliving,"11,627",,Instagram.com/sakshi_reliving,Oscar's At Conrad Singapore Marina Bay (mail),#N/A,#N/A,All You Can Eat,96,"Oscar's Dinner Buffet I The Sea, Smoke & Spice (Wed-Sun)",No pork and beef,,0,,,,05/10/2025,6:00:00 pm,2,Refused,1999490b28012e0f,,,,Lars,HH-TSAAGLUQJSS98
+,HH-SGARK,arctheshark,"40,934",,Instagram.com/arctheshark,Edge at Pan Pacific Hotel Singapore,5465,International,All You Can Eat,73,Lunch Buffet (Mon-Fri),None,,"6,703",,,,07/10/2025,12:00:00 pm,3,Booked,578214619211104772,7938177,18/10/2025,Posted,Lars,
+,HH-LOMEX,megsandalex,"20,381",,Instagram.com/megsandalex,HIGHHOUSE ,#N/A,#N/A,Party Pack,76.5,Individual Set (Dinner Only),,,"4,349",,,,08/10/2025,7:30:00 pm,3,Refused,580137182602199258,,,,Sirada,HH-LOMEXFVG73
+,HH-SGXCTYWH,xchubbykitty,"24,483",,Instagram.com/xchubbykitty,Obba.Jjanag,#N/A,#N/A,Party Pack,143.1,BBQ Set for 3 People,No beef and mutton,,0,,,,08/10/2025,7:30:00 pm,3,Refused,581984919023517923,,,,Lars,HH-SGXCTYWHPBP09
+,HH-INROA,roadtrippers.asia,"51,300",Singapore,Tiktok.com/@roadtrippers.asia,Absurdities Singapore,6279,#N/A,Party Pack,367,6 Course Omakase,None,"August Campaign
+Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","5,062",,,,10/10/2025,7:30:00 pm,2,Booked,580398918346211794,8050550,20/10/2025,Posted,Guillaume,HH-INROAXLE37
+,HH-INROA,roadtrippers.asia,"51,300",Singapore,Tiktok.com/@roadtrippers.asia,Shrimp Prawn Seafood,5211,Thai,Party Pack,139,FREE LOBSTER worth $88 - Premium Set for 3 People (End October),None,"August Campaign
+Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","5,062",,,,10/10/2025,12:00:00 pm,3,Booked,580398915930030389,8048331,18/10/2025,Posted,Guillaume,HH-INROAMBC10
+,HH-INROA,roadtrippers.asia,"51,300",Singapore,Tiktok.com/@roadtrippers.asia,The Horse's Mouth,5571,Latin American,All You Can Eat,85,The Horse’s Feast: Limited Edition+ 1 Premium Menu (All You Can Eat),None,"August Campaign
+Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","5,062",,,,11/10/2025,7:00:00 pm,3,Booked,580398923126931907,8043251,25/10/2025,Posted,Guillaume,HH-INROAPII64
+,HH-INROA,roadtrippers.asia,"51,300",Singapore,Tiktok.com/@roadtrippers.asia,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,81,Saturday Lunch,None,"August Campaign
+Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","5,062",,,,11/10/2025,12:00:00 pm,3,Booked,1997f3809bb175ee,7990087,22/10/2025,Posted,Guillaume,HH-INROARYL46
+,HH-TSAAGLUQ,sakshi_reliving,"11,627",,Instagram.com/sakshi_reliving,Firangi Super Star,#N/A,#N/A,Party Pack,203,Dinner Set for 2 People,No pork and beef,,0,,,,11/10/2025,6:00:00 pm,2,Refused,580999760329572423,,,,Lars,HH-TSAAGLUQCZQ77
+,HH-SGLUELIP,lucy.rezel,"36,490",,Instagram.com/lucy.rezel,Beach Road Kitchen at JW Marriott Singapore South Beach (mail),#N/A,#N/A,All You Can Eat,108,Weekend Dinner (Fri-Sat),None,,"5,063",,,,11/10/2025,6:00:00 pm,1 + 1 Child,Refused,1996f7c5ef2b3c71,,,,Lars,HH-SGLUELIPAOB32
+,HH-SGBAH3AJ,bakencookwith3,"28,698",,Instagram.com/bakencookwith3,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,Party Pack,81,Saturday Lunch,,,"4,219",,,,11/10/2025,12:00:00 pm,3,Booked,199be53ee689e05f,8037909,,Posted,Sirada,HH-SGBAH3AJCSX25
+,HH-TXXFOERQ,munchingmomentswithm,"18,776",,Instagram.com/munchingmomentswithm,Town Restaurant At The Fullerton Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,97.12,Spice Odyssey Dinner Buffet (Fri-Sat & Public Holidays),,,"5,063",,,,11/10/2025,6:30:00 pm,3,Booked,199a82edd53f36b6,8019975,,Posted,Sirada,HH-TXXFOERQXYY85
+,HH-INROA,roadtrippers.asia,"51,300",Singapore,Tiktok.com/@roadtrippers.asia,Mama Diam 妈妈店,5735,"Singaporean, Chinese",Party Pack,145,Sharing Set for 3 People,None,"August Campaign
+Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","5,062",,,,12/10/2025,7:00:00 pm,3,Booked,580398920862793883,8051688,31/10/2025,Posted,Guillaume,HH-INROAXII71
+,HH-INROA,roadtrippers.asia,"51,300",Singapore,Tiktok.com/@roadtrippers.asia,Nozomi at The Star Vista,5595,Japanese,All You Can Eat,69,Nozomi l Premium Buffet,None,"August Campaign
+Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","5,062",FALSE,,,12/10/2025,12:00:00 pm,3,Booked,580398925794771502,8051713,28/10/2025,Posted,Guillaume,HH-INROAQLP90
+,HH-TLICHGFX,heyyolina616,"10,755",,Instagram.com/heyyolina616,Nozomi at The Star Vista,5595,Japanese,All You Can Eat,69,Nozomi I Premium Buffet,None,,"1,266",,,,12/10/2025,1:00:00 pm,3,Booked,582012612184375509,8043291,17/10/2025,Posted,Lars,HH-TLICHGFXXYO67
+,HH-SGLUELIP,lucy.rezel,"36,490",,Instagram.com/lucy.rezel,Food Exchange at Novotel Singapore On Stevens,6310,,All You Can Eat,70.5,"Special Price 50% Off I Stevens - Exclusive Sunday Brunch, 1:30 PM (Only 10 Seats Daily)",None,2 Adults + 1 Child,"5,063",FALSE,,,12/10/2025,1:30:00 pm,3,Booked,582301770656252013,8043308,27/10/2025,Posted,Lars,HH-SGLUELIPZKZ56
+,HH-SGFOISPL,foodkakis,"11,606",,Instagram.com/foodkakis,Fook Kin 福劲,5376,"Chinese, Singaporean",Party Pack,134.3,Sharing Set for 4 People,,,"3,038",,,,12/10/2025,11:30:00 am,4,Booked,582022343405339126,8036903,,Posted,Sirada,HH-SGFOISPLDZI98
+,HH-CEXXZX,certifiedfabclub,"6,567",,Tiktok.com/@certifiedfabclub,Obba.Jjanag,#N/A,#N/A,Party Pack,143.1,BBQ Set for 3 People,None,,0,,,,12/10/2025,2:00:00 pm,3,Refused,580985086305632773,,,,Lars,HH-CEXXZXMCT36
+,HH-TXXFOERQ,munchingmomentswithm,"18,776",,Instagram.com/munchingmomentswithm,"Colony At The Ritz-Carlton, Millenia Singapore (mail)",#N/A,#N/A,All You Can Eat,274,Champagne Brunch - Sunday,,,"5,063",,,,12/10/2025,12:00:00 pm,3,Booked,19994fdcda8d8ec7,8050864,,Posted,Sirada,HH-TXXFOERQFSE94
+,HH-SGLUELIP,lucy.rezel,"36,490",,Instagram.com/lucy.rezel,Food Exchange at Novotel Singapore On Stevens,6310,,All You Can Eat,70.5,"Special Price 50% Off I Stevens - Exclusive Sunday Brunch, 1:30 PM (Only 10 Seats Daily)",None,,"5,063",,,,12/10/2025,1:30:00 pm,2 + 1 Child,Refused,582288748398772263,,,Posted,Lars,HH-SGLUELIPSBL06
+,HH-TSAAGLUQ,sakshi_reliving,"11,627",,Instagram.com/sakshi_reliving,La Brasserie At The Fullerton Bay Hotel Singapore,6137,French,Party Pack,119,Dinner Set for 2 People,No pork and beef,,0,,,,12/10/2025,7:00:00 pm,2,Refused,580999762560942134,,,,Lars,HH-TSAAGLUQHMB73
+,HH-SGRON,rontreechan,"16,250",,Instagram.com/rontreechan,Nozomi at The Star Vista,5595,Japanese,Party Pack,149,Sharing Set for 3 People,None,,"3,367",,,,13/10/2025,7:00:00 pm,3,Booked,580414746407731459,7993240,20/10/2025,Posted,Lars,HH-SGRONDCE24
+,HH-INGOS,goofytwocooks,"28,732",,Instagram.com/goofytwocooks,La Brasserie At The Fullerton Bay Hotel Singapore,6137,French,Party Pack,259,Dinner Set for 4 People,,,"6,328",,,,14/10/2025,6:30:00 pm,4,Booked,580538629252972722,8005139,,Posted,Sirada,HH-INGOSGUH83
+,HH-TLICHGFX,heyyolina616,"10,755",,Instagram.com/heyyolina616,Sakon Thai At Northpoint City,5798,Thai,Party Pack,78,Sharing Set for 3 People,No beef,,"1,266",,,,14/10/2025,7:00:00 pm,3,Booked,582281324329959974,,30/10/2025,Posted,Lars,HH-TLICHGFXMGG78
+,HH-SGJJ6,jjloves86,"14,291",,Instagram.com/jjloves86,Fook Kin 福劲,5376,"Chinese, Singaporean",Party Pack,103.7,Sharing Set for 3 People,,,"3,100",,,,14/10/2025,11:30:00 am,3,Booked,582419225277629039,8046709,,Posted,Guillaume,HH-SGJJ6LXM26
+,HH-SGTHY,the_ace_sisters_and_mummy_fay,"26,886",,Instagram.com/the_ace_sisters_and_mummy_fay,Mama Diam 妈妈店,5735,"Singaporean, Chinese",Party Pack,145,Sharing Set for 3 People,"can’t take spicy , broad beans and animals organs","2 adults , 2 kids 
+Cross post to 
+Tiktok : https://www.tiktok.com/@theacesistersandmummyfay
+Fb : https://www.facebook.com/ArissaAnya/?ref=pro_upsell_xav_ig_profile_page_web#
+Lemon8
+Youtube Short : https://www.youtube.com/@theacesistersandmummyfay","5,695",,,,14/10/2025,5:30:00 pm,4,Booked,582412250384957918,8051801,,Posted,Guillaume,HH-SGTHYPAP79
+,HH-SGTHY,the_ace_sisters_and_mummy_fay,"26,886",,Instagram.com/the_ace_sisters_and_mummy_fay,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,120,Australian Outback (13Oct - 9 Nov) 6:00-10:00 pm.,"can’t take spicy , broad beans and animals organs","Cross post to 
+Tiktok : https://www.tiktok.com/@theacesistersandmummyfay
+Fb : https://www.facebook.com/ArissaAnya/?ref=pro_upsell_xav_ig_profile_page_web#
+Lemon8
+Youtube Short : https://www.youtube.com/@theacesistersandmummyfay","5,695",,,,14/10/2025,6:00:00 pm,3,Booked,199c6bf703677181,8050810,,Posted,Guillaume,HH-SGTHYHNM38
+,HH-SGLUELIP,lucy.rezel,"36,490",,Instagram.com/lucy.rezel,Crossroads Buffet at Singapore - Marriott Tang Plaza Hotel (mail),#N/A,#N/A,All You Can Eat,61,Weekday Lunch Buffet,None,,"5,063",FALSE,,,14/10/2025,12:00:00 pm,2,Refused,199cda09d31de63e,,,,Lars,HH-SGLUELIPIVB79
+,HH-TLICHGFX,heyyolina616,"10,755",,Instagram.com/heyyolina616,Mama Diam 妈妈店,5735,"Singaporean, Chinese",Party Pack,145,Sharing Set for 3 People,None,,"1,266",,,,15/10/2025,6:00:00 pm,3,Booked,582012615069270600,8051812,22/10/2025,Posted,Lars,HH-TLICHGFXXRP90
+,HH-TSAAGLUQ,sakshi_reliving,"11,627",,Instagram.com/sakshi_reliving,Oscar's At Conrad Singapore Marina Bay (mail),#N/A,#N/A,All You Can Eat,86.33,"(Special Rate) Oscar's Dinner Buffet I The Sea, Smoke & Spice (Wed-Sun)",No pork and beef,,0,,,,15/10/2025,7:00:00 pm,2,Refused,199bdcb0118af30d,,,,Lars,HH-TSAAGLUQQJN11
+,HH-INGOS,goofytwocooks,"28,732",,Instagram.com/goofytwocooks,Morita Unigoro,5915,Japanese,Party Pack,361.6,Exclusive Limited 1:1 Course (Lunch/Dinner),,,"6,328",,,,16/10/2025,12:00:00 pm,2,Booked,580557855892177089,8019919,,Posted,Sirada,HH-INGOSLJZ92
+,HH-SG8FABHN,8foodlab,"187,703",,Instagram.com/8foodlab,Fu Lin Bar & Kitchen (Clarke Quay),6151,"Chinese, Fusion, Singaporean",Party Pack,159,Sharing Set for 3 People,None,,"20,947",,,,16/10/2025,5:00:00 pm,3,Booked,582411484119171092,8050831,,Posted,Guillaume,HH-SG8FABHNHZJ04
+,HH-SGRON,rontreechan,"16,250",,Instagram.com/rontreechan,The Horse's Mouth,5571,Latin American,All You Can Eat,85,The Horse’s Feast: Limited Edition+ 1 Premium Menu (All You Can Eat),None,,"3,367",,,,17/10/2025,7:30:00 pm,3,Booked,580414755786195305,8010006,23/10/2025,Posted,Lars,HH-SGRONALU81
+,HH-SG8FABHN,8foodlab,"187,703",,Instagram.com/8foodlab,Enjoy Eating House and Bar,5462,"Chinese, Singaporean",Party Pack,99,Sharing Set for 2 People,None,,"20,947",,,,17/10/2025,11:30:00 am,2,Booked,582411477239988302,8050675,,Posted,Guillaume,HH-SG8FABHNJVX23
+,HH-SG8FABHN,8foodlab,"187,703",,Instagram.com/8foodlab,Nozomi at Millenia Walk,5594,Japanese,All You Can Eat,139,Nozomi l Premium Buffet & 1 Special Menu,None,,"20,947",,,,17/10/2025,5:00:00 pm,2,Booked,582411479522476127,8050665,,Posted,Guillaume,HH-SG8FABHNNNA95
+,HH-SGLIE,liveloveatwithjie,"20,920",,Instagram.com/liveloveatwithjie,"Colony At The Ritz-Carlton, Millenia Singapore (mail)",#N/A,#N/A,All You Can Eat,142,Seafood Dinner Buffet (Fri-Sat),,,"5,063",,,,17/10/2025,7:00:00 pm,2,Refused,199c71346292fc12,,,,Sirada,HH-SGLIEFAP60
+,HH-SGLUELIP,lucy.rezel,"36,490",,Instagram.com/lucy.rezel,Crossroads Buffet at Singapore - Marriott Tang Plaza Hotel (mail),#N/A,#N/A,All You Can Eat,61,Weekday Lunch Buffet,None,,"5,063",FALSE,,,17/10/2025,12:00:00 pm,2,Refused,199cda09d31de63e,,,,Lars,HH-SGLUELIPTDR48
+,HH-TFRTRRNJ,fred.and.chloe,"20,181",,Instagram.com/fred.and.chloe,Nozomi at The Star Vista,5595,Japanese,Party Pack,75,Sharing Set For 2 People,None,,"5,063",,,,18/10/2025,1:30:00 pm,2,Booked,579977953535066568,8009319,02/11/2025,Posted,Lars,HH-TFRTRRNJASJ95
+,HH-SGVIN,vincas_kitchen,"20,961",,Instagram.com/vincas_kitchen,Absurdities Singapore,6279,#N/A,Party Pack,311.89,6 Course Omakase for 2 People (Mon-Fri),None,October Campaign,"5,063",,,,18/10/2025,8:00:00 pm,2,Booked,581256413046112750,8071029,,Posted,Guillaume,HH-SGVINFKB69
+,HH-TXXFOERQ,munchingmomentswithm,"18,776",,Instagram.com/munchingmomentswithm,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,120,Australian Outback (13Oct - 9 Nov) 6:00-10:00 pm.,,,"5,063",,,,18/10/2025,7:00:00 pm,3,Booked,199a3e253c2b1726,8038080,,Posted,Sirada,HH-TXXFOERQMWC25
+,HH-SG8FABHN,8foodlab,"187,703",,Instagram.com/8foodlab,Obba.Jjanag,#N/A,#N/A,Party Pack,143.1,BBQ Set for 3 People,None,,"20,947",,,,18/10/2025,11:30:00 am,3,Booked,582411481820692713,8050654,,Posted,Guillaume,HH-SG8FABHNCRA49
+,HH-SGAIT,aikokat,"18,098",,Instagram.com/aikokat,Nozomi at The Star Vista,5595,Japanese,All You Can Eat,69,Nozomi I Premium Buffet,"Allergic to oysters, doesn't really drink alochol",,0,,,,18/10/2025,7:00:00 pm,2,Booked,583149531047657916,8080109,29/10/2025,Posted,Lars,HH-SGAITNJG50
+,HH-SGRON,rontreechan,"16,250",,Instagram.com/rontreechan,Food Exchange at Novotel Singapore On Stevens,6310,,All You Can Eat,70.5,"Special Price 50% Off I Stevens - Exclusive Sunday Brunch, 1:30 PM (Only 10 Seats Daily)",None,,"3,367",,,,19/10/2025,1:30:00 pm,3,Booked,580414758554435962,8017124,27/10/2025,Posted,Lars,HH-SGRONHFM62
+,HH-SGJJ6,jjloves86,"14,291",,Instagram.com/jjloves86,Mama Diam 妈妈店,5735,"Singaporean, Chinese",Party Pack,145,Sharing Set for 3 People,,,"3,100",,,,19/10/2025,5:00:00 pm,3,Booked,582024738202190275,8021714,,Posted,Guillaume,HH-SGJJ6JMB16
+,HH-SGHEE,hey.itsmechie,"7,268",Singapore,Tiktok.com/@hey.itsmechie,Mama Diam 妈妈店,5735,"Singaporean, Chinese",All You Can Eat,145,Sharing Set for 3 People,-,Instagram : https://www.instagram.com/hey.itsmechie (will post stories as well),"12,656",,,fred@hungryhub.com,19/10/2025,7:00:00 pm,2pax + 1 child,Booked,581301547263590403,8032599,,check later,Guillaume,HH-SGHEETKX48
+,HH-INGOS,goofytwocooks,"28,732",,Instagram.com/goofytwocooks,Shrimp Prawn Seafood,5211,Thai,Party Pack,175,Premium Set for 4 People,,,"3,797",,,,19/10/2025,12:00:00 pm,4,Booked,581120416127910333,8036779,,Posted,Sirada,HH-INGOSJID29
+,HH-LOMYG,myfoodiegallerysg,"30,467",Singapore,,"Colony At The Ritz-Carlton, Millenia Singapore",5412,"International, Singaporean",All You Can Eat,274,Champagne Brunch - Sunday,,,,TRUE,Approved,fred@hungryhub.com,19/10/2025,12:00:00 pm,2,Booked,580402826162209500,8050882,,Posted,,HH-LOMYGSTO37
+,HH-TXXXXXZT,hialan1314,"10,956",,Instagram.com/hialan1314,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,73,Lunch Buffet (Mon-Fri),"No raw food, avoid overly spicy dishes and eats beef occasionally but prefers non–beef-heavy meals",,"3,797",,,,20/10/2025,1:00:00 pm,3,Booked,199e212c1e247c58,8089270,25/10/2025,Posted,Lars,HH-TXXXXXZTBCS82
+,HH-SGARK,arctheshark,"40,934",,Instagram.com/arctheshark,Fook Kin 福劲,5376,"Chinese, Singaporean",Party Pack,103.7,Sharing Set for 3 People,None,,0,,,,20/10/2025,2:00:00 pm,3,Booked,581299057558552936,8017094,24/10/2025,Posted,Lars,HH-SGARKEHS23
+,HH-SGJJ6,jjloves86,"14,291",,Instagram.com/jjloves86,Basilico at Conrad Singapore Orchard,5587,Italian,Party Pack,100,Buffet Dinner Experience: La Cucina Storica,,KOL will arrive 15min early to start shooting,"3,100",,,,20/10/2025,6:30:00 pm,3,Booked,582024740969906394,8089364,21/10/2025,Posted,Guillaume,HH-SGJJ6XZI04
+,HH-SGEALECD,eat_play_lifestyle,"20,488",,Instagram.com/eat_play_lifestyle,"Colony At The Ritz-Carlton, Millenia Singapore (mail)",#N/A,#N/A,All You Can Eat,116,Dinner Buffet (Sun-Thur),,,"5,063",,,,20/10/2025,6:00:00 pm,2,Booked,199e6fe47326c588,8091279,,Waiting for revise draft,Sirada,HH-SGEALECDBJT08
+,HH-INBIK,bigjohnjiak,"48,879",,Instagram.com/bigjohnjiak,Oscar's At Conrad Singapore Marina Bay (mail),#N/A,#N/A,All You Can Eat,61.15,(Special Rate) Around The World – Lunch Buffet (Everyday),,,,,,,20/10/2025,12:30:00 pm,2,Booked,199ec86d37f35ea7,8097875,,Posted,Sirada,HH-INBIKGJT74
+,HH-TVANNYAY,vannytelly,"37,786",,Instagram.com/vannytelly,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,73,Lunch Buffet (Mon-Fri),,"2 adults + 3 kids (family visit)
+Request for a birthday surprise, it’s the influencer’s own birthday.
+She would like to arrive 15–30 minutes earlier to film before the buffet starts (if possible).","3,797",,,,20/10/2025,12:00:00 pm,5,Booked,199c8124626fbcf1,8050821,25/10/2025,Posted,Lars,HH-TVANNYAYWCE37
+,HH-INBIK,12656.45,"48,879",,Instagram.com/bigjohnjiak,"Colony At The Ritz-Carlton, Millenia Singapore (mail)",#N/A,#N/A,All You Can Eat,116,Dinner Buffet (Sun-Thur),,,"12,656",,,,20/10/2025,6:00:00 pm,2,Booked,199e7b9d4adc15b9,8091256,,,Sirada,HH-INBIKLFO48
+,HH-LOMYG,myfoodiegallerysg,"30,604",,Instagram.com/myfoodiegallerysg,Crab Wang Imperial Dining At Hotel Boss,6125,"Chinese, Singaporean",Party Pack,179,Sharing Set for 3 People,,,"7,594",,,,20/10/2025,5:30:00 pm,3,Refused,583322327430201792,,,,Sirada,HH-LOMYGAKM74
+,HH-SIKEX,kerrynleemx,"88,593",,Instagram.com/kerrynleemx,Mama Diam 妈妈店,5735,"Singaporean, Chinese",Party Pack,145,Sharing Set for 3 People,None,,"12,656",,,,21/10/2025,7:00:00 pm,3,Booked,582016021951676639,8051761,,Posted,Guillaume,HH-SIKEXAQP59
+,HH-SGBAH3AJ,bakencookwith3,"28,698",,Instagram.com/bakencookwith3,The Horse's Mouth,5571,Latin American,All You Can Eat,59,The Horse’s Feast: Limited Edition (All You Can Eat),,,"4,219",,,,22/10/2025,12:00:00 pm,2,Refused,199b78b7b9866d54,,,,Sirada,HH-SGBAH3AJCSX2588
+,HH-SIKEX,kerrynleemx,"88,593",,Instagram.com/kerrynleemx,Shrimp Prawn Seafood,5211,Thai,Party Pack,139,FREE LOBSTER worth $88 - Premium Set for 3 People (End October),None,,"12,656",,,,22/10/2025,7:00:00 pm,3,Booked,582016024216338919,8034246,,Posted,Guillaume,HH-SIKEXAFI40
+,HH-SGTHY,the_ace_sisters_and_mummy_fay,"26,886",,Instagram.com/the_ace_sisters_and_mummy_fay,Oscar's At Conrad Singapore Marina Bay (mail),#N/A,#N/A,All You Can Eat,79.13,"(Special Rate) Oscar's Dinner Buffet l The Sea, Smoke & Spice (Wed-Sun)","can’t take spicy , broad beans and animals organs","Cross post to 
+Tiktok : https://www.tiktok.com/@theacesistersandmummyfay
+Fb : https://www.facebook.com/ArissaAnya/?ref=pro_upsell_xav_ig_profile_page_web#
+Lemon8
+Youtube Short : https://www.youtube.com/@theacesistersandmummyfay","5,695",,,,22/10/2025,6:00:00 pm,3,Booked,199f0106012baa72,8090240,,Posted,Guillaume,HH-SGTHYSEL25
+,HH-INREK,rebeccaeatbook,"23,000",,Tiktok.com/@rebeccaeatbook,Hongdae Korean BBQ x HH,#N/A,#N/A,Party Pack,132,Sharing Set for 3 People,None,Cross post to: https://www.instagram.com/rebeccaeatbook/,"2,531",TRUE,,,23/10/2025,7:00:00 pm,3,Booked,583153244147548486,8071064,26/10/2025,,Lars,HH-INREKGJT59
+,HH-SGEXN,exploretomakan,"14,669",,Instagram.com/exploretomakan,Shosha,6104,"Fusion, Indian",Party Pack,99,Sharing Set for 3 People,"Halal only, no red meat",,"7,594",FALSE,,,23/10/2025,12:00:00 pm,3,Refused,583287216710090897,,,,Guillaume,HH-SGEXNYWE24
+,HH-SGLIE,liveloveatwithjie,"20,920",,Instagram.com/liveloveatwithjie,La Brasserie At The Fullerton Bay Hotel Singapore,6137,French,Party Pack,119,Dinner Set for 2 People,,,"5,063",,,,24/10/2025,6:00:00 pm,2,Booked,583612857976619305,8114618,,Posted,Sirada,HH-SGLIEOSG33
+,HH-SGXCTYWH,xchubbykitty,"24,483",,Instagram.com/xchubbykitty,Wild Child Pizzette,5344,Italian,Party Pack,115,Sharing Set for 2 People,No beef and mutton,,0,,,,24/10/2025,7:30:00 pm,2,Refused,582012175238038316,,29/10/2025,,Lars,HH-SGXCTYWHVQX56
+,HH-SGXCTYWH,xchubbykitty,"24,483",,Instagram.com/xchubbykitty,Hongdae Korean BBQ x HH,#N/A,#N/A,Party Pack,132,Sharing Set for 3 People,No beef and mutton,,0,,,,24/10/2025,7:30:00 pm,3,Refused,584189753202049501,,29/10/2025,,Lars,HH-SGXCTYWHPEB23
+,HH-INREK,rebeccaeatbook,"23,000",,Tiktok.com/@rebeccaeatbook,Tha Siam Authentic Thai Kitchen Parklane,5937,Thai,Party Pack,72,Sharing Set for 3 People,None,Cross post to: https://www.instagram.com/rebeccaeatbook/,"2,531",TRUE,,,24/10/2025,7:00:00 pm,3,Booked,583153246748278857,8114637,28/10/2025,,Lars,HH-INREKOXX09
+,HH-SGJJ6,jjloves86,"14,291",,Instagram.com/jjloves86,Enjoy Eating House and Bar,5462,"Chinese, Singaporean",All You Can Eat,145,Sharing Set for 3 People,,,"3,100",,,,24/10/2025,12:00:00 pm,3,Booked,583307940900634937,8108575,,Posted,Guillaume,HH-SGJJ6IBC73
+,HH-SIKEX,kerrynleemx,"88,593",,Instagram.com/kerrynleemx,Wonderland Upside Down,6280,#N/A,Party Pack,208,5 Course Omakase for 2 People,None,,"12,656",,,,24/10/2025,7:00:00 pm,2,Booked,582016016885219754,8043264,,Posted,Guillaume,HH-SIKEXIES95
+,HH-SGTHY,the_ace_sisters_and_mummy_fay,"26,886",,Instagram.com/the_ace_sisters_and_mummy_fay,Nozomi at The Star Vista,5595,Japanese,All You Can Eat,69,Nozomi l Premium Buffet,"can’t take spicy , broad beans and animals organs","Cross post to 
+Tiktok : https://www.tiktok.com/@theacesistersandmummyfay
+Fb : https://www.facebook.com/ArissaAnya/?ref=pro_upsell_xav_ig_profile_page_web#
+Lemon8
+Youtube Short : https://www.youtube.com/@theacesistersandmummyfay","5,695",,,,24/10/2025,6:00:00 pm,2,Booked,583282602237755465,8080023,,Posted,Guillaume,HH-SGTHYDNL49
+,HH-TXXXXXZT,hialan1314,"10,956",,Instagram.com/hialan1314,Wonderland Upside Down,6280,#N/A,Party Pack,208,5 Course Omakase for 2 People,"No raw food, avoid overly spicy dishes and eats beef occasionally but prefers non–beef-heavy meals",,"3,797",,,,25/10/2025,6:30:00 pm,2,Booked,583181388967838233,8123126,30/10/2025,Posted,Lars,HH-TXXXXXZTGQQ43
+,HH-TFRTRRNJ,fred.and.chloe,"20,181",,Instagram.com/fred.and.chloe,Korat Thai Cafe,5650,"Thai Isaan, Thai",Party Pack,46.75,Sharing Set For 2 People,None,,"5,063",,,,25/10/2025,1:00:00 pm,2,Booked,579534193470734356,7990572,09/11/2025,Posted,Lars,HH-TFRTRRNJKTF11
+,HH-SGARK,arctheshark,"40,934",,Instagram.com/arctheshark,Food Exchange at Novotel Singapore On Stevens,6310,,All You Can Eat,82.5,"Special Price 50% Of I Lobstermania - Exclusive Saturday Dinner, 7 PM (Only 10 Seats Daily)",None,,0,,,,25/10/2025,7:00:00 pm,3,Booked,581299051585601945,8017101,28/10/2025,Posted,Lars,HH-SGARKGIY25
+,HH-SGEALECD,eat_play_lifestyle,"20,488",,Instagram.com/eat_play_lifestyle,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,120,Australian Outback (13Oct - 9 Nov) 6:00-10:00 pm.,,,"5,063",,,,25/10/2025,6:00:00 pm,2,Booked,19a04f6b4676da4a,8122799,,,Sirada,HH-SGEALECDXLX05
+,HH-INGOS,goofytwocooks,"28,732",,Instagram.com/goofytwocooks,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,81,Saturday Lunch,,,"6,328",,,,25/10/2025,12:00:00 pm,4,Booked,19985290b927a2c2,8005128,,Posted,Sirada,HH-INGOSWTM94
+,HH-SGFOISPL,foodkakis,"11,606",,Instagram.com/foodkakis,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,120,Australian Outback (13Oct - 9 Nov) 6:00-10:00 pm.,,,"3,038",,,,25/10/2025,6:00:00 pm,4,Booked,199e1953f0f91da2,8089296,,Posted,Sirada,HH-SGFOISPLFFX64
+,HH-TXXXXXZT,hialan1314,"10,956",,Instagram.com/hialan1314,Korat Thai Cafe,5650,"Thai Isaan, Thai",Party Pack,110,Sharing Set for 4 People,"No raw food, avoid overly spicy dishes and eats beef occasionally but prefers non–beef-heavy meals",,"3,797",,,,26/10/2025,1:30:00 pm,4,Booked,583181391869509670,8109866,30/10/2025,Posted,Lars,HH-TXXXXXZTWHU88
+,HH-SGEIT,eileen_eats_alot,"21,742",,Instagram.com/eileen_eats_alot,"Colony At The Ritz-Carlton, Millenia Singapore (mail)",#N/A,#N/A,All You Can Eat,274,Champagne Brunch - Sunday,,,"5,063",,,,26/10/2025,12:00:00 pm,2,Refused,199a442569387fc9,,,,Sirada,HH-SGEITCWH03
+,HH-SGVIN,vincas_kitchen,"20,961",,Instagram.com/vincas_kitchen,Synthesis,#N/A,#N/A,Party Pack,250,Sharing Set for 4 People,None,,"5,063",,,,26/10/2025,7:00:00 pm,4,Booked,584305075170574360,8122821,,Posted,Guillaume,HH-SGVINDHW51
+,HH-SGAIT,aikokat,"18,098",,Instagram.com/aikokat,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,73,Lunch Buffet (Mon-Fri),"Allergic to oysters, doesn't really drink alochol",,0,,,,27/10/2025,1:00:00 pm,3,Booked,199e727cc38c1571,8089229,,Posted,Lars,HH-SGAITRPA75
+,HH-SGLIE,liveloveatwithjie,"20,920",,Instagram.com/liveloveatwithjie,"Colony At The Ritz-Carlton, Millenia Singapore (mail)",#N/A,#N/A,All You Can Eat,116,Dinner Buffet (Sun-Thur),,,"5,063",,,,27/10/2025,7:00:00 pm,2,Refused,199ffda88cd1f9b0,,,,Sirada,HH-SGLIEHAL86
+,HH-SGLUELIP,lucy.rezel,"36,490",,Instagram.com/lucy.rezel,Beach Road Kitchen at JW Marriott Singapore South Beach (mail),#N/A,#N/A,All You Can Eat,108,Weekend Dinner (Fri-Sat),None,,"5,063",,,,27/10/2025,12:00:00 pm,2,Refused,1996f7c5ef2b3c71,,,,Lars,
+,HH-SGBAH3AJ,bakencookwith3,"28,698",,Instagram.com/bakencookwith3,Fook Kin 福劲,5376,"Chinese, Singaporean",Party Pack,145,Sharing Set for 3 People,,,,FALSE,,,27/10/2025,12:00:00 pm,3,Booked,584191555008201116,8110667,,Posted,,HH-SGBAH3AJRJE65
+,HH-INBIK,bigjohnjiak,"48,879",,Instagram.com/bigjohnjiak,Fu Lin Bar & Kitchen (Telok Ayer),6148,Chinese,All You Can Eat,95,All You Can Eat (Premium),,,"12,656",FALSE,,,27/10/2025,5:30:00 pm,2,Booked,584165127235043446,8123103,,Posted,,HH-INBIKMDR72
+,HH-SGLUELIP,lucy.rezel,"36,490",,Instagram.com/lucy.rezel,Crossroads Buffet at Singapore - Marriott Tang Plaza Hotel (mail),#N/A,#N/A,All You Can Eat,61,Weekday Lunch Buffet (Mon-Fri),None,,"5,063",,,,27/10/2025,12:00:00 pm,2,Booked,19a05a9f550240e3,8122840,03/11/2025,Posted,Lars,HH-SGLUELIPZIL33
+,HH-INREK,rebeccaeatbook,"23,000",,Tiktok.com/@rebeccaeatbook,Shrimp Prawn Seafood,5211,Thai,Party Pack,139,FREE LOBSTER worth $88 - Premium Set for 3 People (End October),None,Cross post to: https://www.instagram.com/rebeccaeatbook/,"2,531",,,,28/10/2025,7:00:00 pm,3,Booked,583153249365000297,8079973,31/10/2025,,Lars,HH-INREKEVL94
+,HH-SGAIT,aikokat,"18,098",,Instagram.com/aikokat,Morita Unigoro,5915,Japanese,Party Pack,189.84,Luxury Course (Dinner),"Allergic to oysters, doesn't really drink alochol",,0,,,,29/10/2025,7:00:00 pm,2,Refused,583324444664529681,,,,Lars,HH-SGAITLVF75
+,HH-SIKEX,kerrynleemx,"88,593",,Instagram.com/kerrynleemx,La Brasserie At The Fullerton Bay Hotel Singapore,6137,French,Party Pack,119,Dinner Set for 2 People,None,,"12,656",,,,01/11/2025,7:00:00 pm,2,Booked,584042636898730054,8156943,,Posted,Guillaume,HH-SIKEXKGZ45
+,HH-SGBAH3AJ,bakencookwith3,"28,698",,Instagram.com/bakencookwith3,Food Exchange at Novotel Singapore On Stevens,6310,,Party Pack,112.8,"Special Price 20% Off | Stevens – Exclusive Sunday Brunch, (12:30 - 3 pm).",,,"4,219",,,,02/11/2025,12:30:00 pm,3,Booked,,8156733,05/11/2025,Posted,Sirada,HH-SGBAH3AJCSX28
+,HH-TXXXXXZT,hialan1314,"10,956",,Instagram.com/hialan1314,Cheeky Signature’s (Bee Hoon),5946,Chinese,Party Pack,39,Sharing Set for 3 People,"No raw food, avoid overly spicy dishes and eats beef occasionally but prefers non–beef-heavy meals",,"3,797",,,,02/11/2025,1:00:00 pm,3,Booked,583439798073557005,8078982,11/11/2025,Posted,Lars,HH-TXXXXXZTFKN83
+,HH-TSAAGLUQ,sakshi_reliving,"11,627",,Instagram.com/sakshi_reliving,La Brasserie At The Fullerton Bay Hotel Singapore,6137,French,Party Pack,195,Dinner Set for 3 People,No pork and beef,,0,,,,02/11/2025,7:00:00 pm,3,Refused,199bdcb0118af30d,,,,Lars,HH-TSAAGLUQLCD31
+,HH-SGLUI2,lutonikuyalevi,"33,181",,Instagram.com/lutonikuyalevi,Korat Thai Cafe,5650,"Thai Isaan, Thai",Party Pack,110,Sharing Set for 4 People,None,,0,,,,05/11/2025,7:00:00 pm,4,Booked,582568002323743206,8050835,12/11/2025,Posted,Lars,HH-SGLUI2HSI02
+,HH-SGLUI2,lutonikuyalevi,"33,181",,Instagram.com/lutonikuyalevi,Hongdae Korean BBQ x HH,#N/A,#N/A,Party Pack,130,BBQ Set for 4 People,None,,0,,,,06/11/2025,7:00:00 pm,4,Booked,582570056878129427,8051639,17/11/2025,Posted,Lars,HH-SGLUI2SDW04
+,HH-TSAAGLUQ,sakshi_reliving,"11,627",,Instagram.com/sakshi_reliving,Firangi SuperStar,6040,Indian,Party Pack,203,Dinner Set for 2 People,No pork and beef,,0,,,,07/11/2025,7:00:00 pm,2,Refused,199bdcb0118af30d,,,,Lars,HH-TSAAGLUQFTR15
+,HH-SGLUI2,lutonikuyalevi,"33,181",,Instagram.com/lutonikuyalevi,Fu Lin Bar & Kitchen (Telok Ayer),6148,Chinese,All You Can Eat,69,All You Can Eat (Standard),None,,0,,,,11/11/2025,7:00:00 pm,4,Refused,582568002323743206,,,,Lars,HH-SGLUI2RRJ11
+,HH-SGLUI2,lutonikuyalevi,"33,181",,Instagram.com/lutonikuyalevi,Obba.Jjanag,#N/A,#N/A,Party Pack,143.1,BBQ Set for 3 People,None,,0,,,,11/11/2025,7:00:00 pm,3,Refused,582568005343642180,,20/11/2025,,Lars,HH-SGLUI2HQB88
+,HH-SGEALECD,eat_play_lifestyle,"20,488",,Instagram.com/eat_play_lifestyle,Town Restaurant At The Fullerton Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,79.12,Spice Odyssey Dinner Buffet (Tue-Thurs),,,"5,063",,,,11/11/2025,6:00:00 pm,2,Validated,199e6fe47326c588,,,,Sirada,HH-SGEALECDLXK00
+,HH-SGLIE,liveloveatwithjie,"20,920",,Instagram.com/liveloveatwithjie,Town Restaurant At The Fullerton Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,79.12,Spice Odyssey Dinner Buffet (Tue-Thurs),,,"5,063",,,,13/11/2025,7:00:00 pm,2,Booked,199eb486e7ee6504,8181593,,,Sirada,HH-SGLIEUCY74
+,HH-TSAAGLUQ,sakshi_reliving,"11,627",,Instagram.com/sakshi_reliving,Oscar's At Conrad Singapore Marina Bay (mail),#N/A,#N/A,All You Can Eat,61.15,(Special Rate) Around The World – Lunch Buffet (Everyday),No pork and beef,,0,,,,14/11/2025,7:00:00 pm,3,Refused,199bdcb0118af30d,,,,Lars,HH-TSAAGLUQVLR75
+,HH-SGAIT,aikokat,"18,098",,Instagram.com/aikokat,Neon Pigeon,6022,Japanese,Party Pack,140,Sharing Set for 2 People,"Allergic to oysters, doesn't really drink alochol",,0,,,,14/11/2025,7:00:00 pm,2,Refused,583149531047657916,,,,Lars,HH-SGAITMPT20
+,HH-TXXFOERQ,munchingmomentswithm,"18,776",,Instagram.com/munchingmomentswithm,Hai Tien Lo at Pan Pacific Hotel Singapore,5457,Chinese,All You Can Eat,86,Unlimited Dim Sum Buffet (Weekdays),,,"5,063",FALSE,,,14/11/2025,11:30:00 am,2,Booked,586377005461667861,8209728,,,,HH-TXXFOERQUQH17
+,HH-SGTHDVZC,thatfoodadv,"5,834",,Instagram.com/thatfoodadv,Basilico at Conrad Singapore Orchard,5587,Italian,All You Can Eat,131,Weekend Brunch Buffet: La Cucina Storica,Allergic to Prawns,,0,,,,15/11/2025,12:00:00 pm,2,Refused,584018507990827640,,,,Lars,HH-SGTHDVZCPBU46
+,HH-TXXFOERQ,munchingmomentswithm,"18,776",,Instagram.com/munchingmomentswithm,Tea Lounge at Conrad Singapore Orchard,5597,International,All You Can Eat,76,Weekend High Tea Buffet,,,"5,063",FALSE,,,15/11/2025,3:00:00 pm,2,Booked,586377009287135732,8234247,,Posted,,HH-TXXFOERQXPP84
+,HH-INROA,roadtrippers.asia,"51,300",,Tiktok.com/@roadtrippers.asia,FLNT,6030,"Japanese, Peruvian",Party Pack,219,Dinner Set for 3 People,None,"Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","7,594",,,,15/11/2025,7:00:00 pm,3,Booked,586523776339148926,8233143,,,Guillaume,HH-INROAKXB16
+,HH-INROA,roadtrippers.asia,"51,300",,Tiktok.com/@roadtrippers.asia,Yenney,5971,Vietnamese,,,,None,"Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","7,594",,,,15/11/2025,12:00:00 pm,3,Booked,586523783738163337,8233497,,,Guillaume,HH-INROAEQX04
+,HH-SGSWN,swaggyreian,"79,400",,Tiktok.com/@swaggyreian,Taksim,#N/A,#N/A,Party Pack,149,Sharing Set for 3 people,⚠️⚠️ Alergies to Prawns and Seafood ! ,,"7,594",,,,15/11/2025,1:00:00 pm,3,Asked Fred,587387806033642128,,,,Guillaume,HH-SGSWNWLY53
+,HH-TTOJENBK,tomatojen,"10,655",,Instagram.com/tomatojen,Nozomi at The Star Vista,5595,Japanese,All You Can Eat,99,"(New) Premium Buffet + 2 Special menus
+",None,,0,,,,16/11/2025,2:00:00 pm,2,Booked,,8181977,25/11/2025,,Lars,HH-TTOJENBKWPO28
+,HH-INROA,roadtrippers.asia,"51,300",,Tiktok.com/@roadtrippers.asia,Synthesis,#N/A,#N/A,Party Pack,180,Sharing Set for 3 People,None,"Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","7,594",,,,16/11/2025,7:00:00 pm,3,Booked,586523779879403725,	8233351,,,Guillaume,HH-INROAOKB56
+,HH-INROA,roadtrippers.asia,"51,300",,Tiktok.com/@roadtrippers.asia,canteen by enjoy,#N/A,#N/A,Party Pack,102,sharing set for 3 People,None,"Tiktok
+https://www.tiktok.com/@roadtrippers.asia
+IG
+https://www.instagram.com/eatwithandrewchan
+Facebook
+https://www.facebook.com/@roadtrippers.asia
+Lemon8
+https://www.lemon8-app.com/@roadtrippers.asia
+Xiao Hong Shu
+https://www.xiaohongshu.com/user/profile/66b9854e000000001d020eb8
+Youtube
+https://youtube.com/@roadtrippers-asia","7,594",,,,16/11/2025,12:00:00 pm,2,Booked,586523787194270005,,,,Guillaume,HH-INROAIDC08
+,HH-TJOCXCQD,camilla_mamajoanne,"30,283",,Instagram.com/camilla_mamajoanne,Coriander Leaf @ Craig,5826,"Chinese, Indian, Japanese, Korean, Thai, Vietnamese, Indonesian, Middle Eastern, Singaporean",Party Pack,129,Sharing Set for 3 People,None,,0,,,,17/11/2025,5:00:00 pm,3,Refused,,,,,Lars,HH-TJOCXCQDYJU88
+,HH-TXXXXXZT,hialan1314,"10,956",,Instagram.com/hialan1314,Obba.Jjanag,#N/A,#N/A,Party Pack,143.1,"BBQ Set for 3 People
+","No raw food, avoid overly spicy dishes and eats beef occasionally but prefers non–beef-heavy meals",,"3,797",,,,20/11/2025,5:00:00 pm,,Refused,,,,,Lars,HH-TXXXXXZTEHA98
+,HH-TXXFOERQ,munchingmomentswithm,"18,776",,Instagram.com/munchingmomentswithm,Jade At The Fullerton Hotel Singapore,6139,Chinese,Party Pack,137,Sharing Set for 2 People,,,"5,063",FALSE,,,20/11/2025,6:00:00 pm,2,Refused,588266548222230546,,,,,HH-TXXFOERQCZG17
+,HH-TSAAGLUQ,sakshi_reliving,"11,627",,Instagram.com/sakshi_reliving,Coriander Leaf @ Craig,5826,"Chinese, Indian, Japanese, Korean, Thai, Vietnamese, Indonesian, Middle Eastern, Singaporean",Party Pack,89,Sharing Set for 2 People,No pork and beef,,0,,,,21/11/2025,7:00:00 pm,2,Refused,199bdcb0118af30d,,,,Lars,HH-TSAAGLUQSBJ96
+,HH-SGVIN,vincas_kitchen,"20,961",,Instagram.com/vincas_kitchen,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,128,Edge Festive Dinner (Everyday),None,November Campaign,"5,063",,,,21/11/2025,6:00:00 pm,3,Booked,19a820dc127fb29d,8250974,,,Guillaume,HH-SGVINZVD12
+,HH-SGVIN,vincas_kitchen,"20,961",,Instagram.com/vincas_kitchen,Nozomi at Millenia Walk,5594,Japanese,All You Can Eat,99,(New) Premium Buffet + 2 Special menus,None,November Campaign,"5,063",,,,23/11/2025,6:00:00 pm,3,Booked,587684440852398251,8294327,,,Guillaume,HH-SGVINUIL95
+,HH-TJETRRAY,jeethehungrytraveler,"9,668",,Instagram.com/jeethehungrytraveler,Riviera,6087,"Fusion, French, Mediterranean",Party Pack,117.5,"3-Course Set Dinner + 1 Complimentary Drink (Prosecco, House pour Wine, Mocktail, Soft drink)",,,0,,,,24/11/2025,7:00:00 pm,2,Refused,586377001855353092,,,,Sirada,HH-TJETRRAYOKA46
+,HH-SGXCTYWH,xchubbykitty,"24,483",,Instagram.com/xchubbykitty,Enjoy Eating House and Bar,5462,"Chinese, Singaporean",Party Pack,145,Sharing Set for 3 People,No beef and mutton,,0,,,,24/11/2025,7:30:00 pm,3,Booked,583159738104545881,8297705,29/11/2025,,Lars,HH-SGXCTYWHKGT29
+,HH-SGXCTYWH,xchubbykitty,"24,483",,Instagram.com/xchubbykitty,中国好味道 China Taste,5899,Chinese,Party Pack,55.2,Sharing Set for 3 People,No beef and mutton,,0,,,,25/11/2025,7:30:00 pm,3,Asked Fred,583159735688626246,,30/11/2025,,Lars,HH-SGXCTYWHHZX78
+,HH-INYE9,yenlyn0109,"22,526",,Instagram.com/yenlyn0109,HIGHHOUSE ,#N/A,#N/A,Party Pack,90,Individual Set (Dinner Only),No beef,Cross post to: https://www.facebook.com/yanlinfansclub/?ref=_xav_ig_profile_page_web#,"1,676",,,,27/11/2025,7:00:00 pm,1,Booked,586522317895500364,8225149,04/12/2025,,Lars,HH-INYE9IDH80
+,HH-SGLUI2,lutonikuyalevi,"33,181",,Instagram.com/lutonikuyalevi,Fook Kin 福劲,5376,"Chinese, Singaporean",Party Pack,122,Sharing Set for 3 People,None,,0,,,,27/11/2025,7:00:00 pm,4,Booked,587080189855400102,8215400,19/11/2025,,Lars,HH-SGLUI2PHD89
+,HH-TXXFOERQ,munchingmomentswithm,"18,776",,Instagram.com/munchingmomentswithm,Fu Lin Bar & Kitchen (Telok Ayer),6148,Chinese,All You Can Eat,69,All You Can Eat (Standard),,,"5,063",FALSE,,,27/11/2025,7:00:00 pm,4,Refused,,,,,Sirada,
+,HH-INYE9,yenlyn0109,"22,526",,Instagram.com/yenlyn0109,Shrimp Prawn Seafood,5211,Thai,Party Pack,88,Sharing Set for 2 People,No beef,Cross post to: https://www.facebook.com/yanlinfansclub/?ref=_xav_ig_profile_page_web#,"1,676",,,,28/11/2025,12:30:00 pm,1,Refused,586522321654382894,,08/12/2025,,Lars,HH-INYE9DTV77
+,HH-INYE9,yenlyn0109,"22,526",,Instagram.com/yenlyn0109,Wonderland Upside Down,6280,#N/A,Party Pack,148,5 Course Omakase for 1 Person (Mon ; Fri/Sat),No beef,Cross post to: https://www.facebook.com/yanlinfansclub/?ref=_xav_ig_profile_page_web#,"1,676",,,,28/11/2025,6:30:00 pm,1,Booked,586522326435627264,8209683,11/12/2025,,Lars,HH-INYE9GZQ11
+,HH-INYE9,yenlyn0109,"22,526",,Instagram.com/yenlyn0109,Hai Tien Lo at Pan Pacific Hotel Singapore,5457,Chinese,All You Can Eat,86,Unlimited Dim Sum Buffet (Weekdays),No beef,Cross post to: https://www.facebook.com/yanlinfansclub/?ref=_xav_ig_profile_page_web#,"1,676",,,,28/11/2025,12:30:00 pm,1,Asked Fred,587217442934095980,,08/12/2025,,Lars,HH-INYE9OZM93
+,HH-TXXFOERQ,munchingmomentswithm,"18,776",,Instagram.com/munchingmomentswithm,Synthesis,#N/A,#N/A,Party Pack,250,Sharing Set for 4 People,,,"5,063",FALSE,,,28/11/2025,4:30:00 pm,4,Booked,588542205631922714,8294261,,,Sirada,HH-TXXFOERQMFE29
+,HH-SGVIN,vincas_kitchen,"20,961",,Instagram.com/vincas_kitchen,Tanoke,5821,Japanese,Party Pack,188,Sharing Set for 3 People,None,November Campaign,"5,063",,,,29/11/2025,6:00:00 pm,3,Booked,588662051996959299,8297675,,,Guillaume,HH-SGVINQFV57
+,HH-TMIXXXLM,mickeyhuang0126,"56,829",,Instagram.com/mickeyhuang0126,Tanoke,5821,Japanese,,,,None,,"7,594",,,,29/11/2025,5:30:00 pm,2,,,,,,Lars,
+,HH-INYE9,yenlyn0109,"22,526",,Instagram.com/yenlyn0109,La Brasserie At The Fullerton Bay Hotel Singapore,6137,French,All You Can Eat,113.19,Festive Weekend Brunch,No beef,Cross post to: https://www.facebook.com/yanlinfansclub/?ref=_xav_ig_profile_page_web#,"1,676",,,,30/11/2025,12:30:00 pm,1,Booked,586522330176421950,8246167,15/12/2025,,Lars,HH-INYE9YZH11
+,HH-INYE9,yenlyn0109,"22,526",,Instagram.com/yenlyn0109,Nozomi at The Star Vista,5595,Japanese,All You Can Eat,139,(New) Premium Buffet + 1 Special Premium Menu,No beef,Cross post to: https://www.facebook.com/yanlinfansclub/?ref=_xav_ig_profile_page_web#,"1,676",,,,30/11/2025,6:30:00 pm,1,Booked,586522334437835096,8209662,18/12/2025,,Lars,HH-INYE9OQF16
+,HH-SGDOA,doveria,"12,739",,Instagram.com/doveria,FLNT,6030,"Japanese, Peruvian",Party Pack,219,Dinner Set for 3 People,None,,0,,,,01/12/2025,7:00:00 pm,3,Booked,587065685952430171,	8233173,,,Lars,HH-SGDOAQCK24
+,HH-TRALIEPU,ray_yee,"16,633",,Instagram.com/ray_yee,FLNT,6030,"Japanese, Peruvian",Party Pack,145,Dinner Set for 2 People,,"Cross post to: Facebook: https://www.facebook.com/raymondyeesg
+
+Google Reviews: https://maps.app.goo.gl/aAWEDMEmCn1uvCESA?g_st=ic
+
+TikTok: https://www.tiktok.com/@ray_yee2022?_r=1&_t=ZS-91UwQljLKjA
+
+Xiaohongshu (XHS): https://xhslink.com/m/9CbXhaBnW3T
+
+Lemon8: https://s.lemon8-app.com/s/GgkxkdvZRN",0,,,,03/12/2025,6:30:00 pm,2,Asked Fred,588685880877908260,,,,Sirada,HH-TRALIEPUHQW95
+,HH-SGXCTYWH,xchubbykitty,"24,483",,Instagram.com/xchubbykitty,Hongdae Korean BBQ x HH,#N/A,#N/A,Party Pack,132,Sharing Set for 3 People,No beef and mutton,,0,,,,05/12/2025,7:30:00 pm,3,Booked,584323061571125455,8123068,,,Lars,HH-SGXCTYWHFPK93
+,HH-SGAIT,aikokat,"18,098",,Instagram.com/aikokat,FLNT,6030,"Japanese, Peruvian",Party Pack,145,Dinner Set for 2 People,"Allergic to oysters, doesn't really drink alochol",,0,,,,05/12/2025,6:00:00 pm,2,Refused,588369420272009354,,,,Lars,HH-SGAITWVE18
+,HH-TMIXXXLM,mickeyhuang0126,"56,829",,Instagram.com/mickeyhuang0126,Town Restaurant At The Fullerton Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,61.15,Festive Lunch Buffet,None,,"7,594",,,,05/12/2025,6:00:00 pm,2,Refused,19a9f7e60d9e1ab5,,,,Lars,HH-TMIXXXLMKII90
+,HH-TMIXXXLM,mickeyhuang0126,"56,829",,Instagram.com/mickeyhuang0126,Town Restaurant At The Fullerton Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,97.12,"Festive Barbecue Dinner Buffet (Fri-Sat)
+",None,,"7,594",,,,05/12/2025,6:30:00 pm,2,Booked,19aa56246fa1fc83,8300342,,,Lars,HH-TMIXXXLMWSX62
+,HH-SIKEX,kerrynleemx,"88,593",,Instagram.com/kerrynleemx,Nozomi at The Star Vista,5595,Japanese,All You Can Eat,139,(New) Premium Buffet + 1 Special Premium Menu,None,,"12,656",,,,06/12/2025,7:00:00 pm,3,Asked Fred,589087879633043926,,,,Guillaume,HH-SIKEXHUD64
+,HH-TXXXXXZT,hialan1314,"10,956",,Instagram.com/hialan1314,Food Exchange at Novotel Singapore On Stevens,6310,,All You Can Eat,82.5,"Special Price 50% Off | Lobstermania – Exclusive Saturday Dinner, 7 PM (Only 10 Seats Daily)","No raw food, avoid overly spicy dishes and eats beef occasionally but prefers non–beef-heavy meals",,"3,797",,,,06/12/2025,7:00:00 pm,3,Asked Fred,588254674348933156,,,,Lars,HH-TXXXXXZTVNO54
+,HH-SGAIT,aikokat,"18,098",,Instagram.com/aikokat,FLNT,6030,"Japanese, Peruvian",Party Pack,145,Dinner Set for 2 People,"Allergic to oysters, doesn't really drink alochol",,0,,,,11/12/2025,6:00:00 pm,2,Asked Fred,588664475465810125,,,,Lars,HH-SGAITCSF64
+,HH-TRALIEPU,ray_yee,"16,633",,Instagram.com/ray_yee,Basilico at Conrad Singapore Orchard,5587,Italian,All You Can Eat,100,Festive Dinner Buffet,,"Cross post to: Facebook: https://www.facebook.com/raymondyeesg
+
+Google Reviews: https://maps.app.goo.gl/aAWEDMEmCn1uvCESA?g_st=ic
+
+TikTok: https://www.tiktok.com/@ray_yee2022?_r=1&_t=ZS-91UwQljLKjA
+
+Xiaohongshu (XHS): https://xhslink.com/m/9CbXhaBnW3T
+
+Lemon8: https://s.lemon8-app.com/s/GgkxkdvZRN",0,,,,12/12/2025,6:30:00 pm,2,Asked Fred,588685883310866946,,,,Sirada,HH-TRALIEPUKFZ11
+,HH-SGDOA,doveria,"12,739",,Instagram.com/doveria,Food Exchange at Novotel Singapore On Stevens,6310,,All You Can Eat,82.5,"Special Price 50% Off | Lobstermania – Exclusive Saturday Dinner, 7 PM (Only 10 Seats Daily)",None,,0,,,,13/12/2025,7:00:00 pm,2,Validated,587217447027999049,,,,Lars,HH-SGDOALUU75
+,HH-TRALIEPU,ray_yee,"16,633",,Instagram.com/ray_yee,Coriander Leaf @ Craig,5826,"Chinese, Indian, Japanese, Korean, Thai, Vietnamese, Indonesian, Middle Eastern, Singaporean",Party Pack,179,Sharing Set for 4 People,,"Cross post to: Facebook: https://www.facebook.com/raymondyeesg
+
+Google Reviews: https://maps.app.goo.gl/aAWEDMEmCn1uvCESA?g_st=ic
+
+TikTok: https://www.tiktok.com/@ray_yee2022?_r=1&_t=ZS-91UwQljLKjA
+
+Xiaohongshu (XHS): https://xhslink.com/m/9CbXhaBnW3T
+
+Lemon8: https://s.lemon8-app.com/s/GgkxkdvZRN",0,,,,17/12/2025,6:30:00 pm,4,Asked Fred,588685885827448953,,,,Sirada,HH-TRALIEPUROA97
+,HH-SGTHDVZC,thatfoodadv,"5,834",,Instagram.com/thatfoodadv,Edge at Pan Pacific Hotel Singapore (mail),#N/A,#N/A,All You Can Eat,128,Edge Festive Dinner (Everyday),Allergic to Prawns,,0,,,,20/12/2025,6:00:00 pm,2,Refused,19a961925defb8d6,,,,Lars,HH-SGTHDVZCTHW00
+,HH-SGVIN,vincas_kitchen,"20,961",,Instagram.com/vincas_kitchen,Hongdae Korean BBQ x HH,#N/A,#N/A,Party Pack,132,Sharing Set for 3 People,None,November Campaign,"5,063",,,,,,2,,587684432396157297,,,,Guillaume,HH-SGVINZJU99
+,HH-SGTHN,thesherryamin,"56,782",Singapore,Instagram.com/thesherryamin,Riviera,6087,"Fusion, French, Mediterranean",Party Pack,177,Sharing Set for 2 People + Alcoholic Beverage,No pork & Halal,August Campaign,"3,797",,,fred@hungryhub.com,,,,Refused,,KOL canceled,,CANCEL,"Guillaume, KOL canceled",
+,HH-SGTHN,thesherryamin,"56,782",Singapore,Instagram.com/thesherryamin,Sabio by the Sea,6028,Spanish,,98,Sharing Set for 2 People + Alcoholic Beverage,No pork & Halal,August Campaign,"3,797",,,fred@hungryhub.com,,,,Refused,,KOL canceled,,CANCEL,"Guillaume, KOL canceled",
+,HH-SGHEE,hey.itsmechie,"7,268",Singapore,Tiktok.com/@hey.itsmechie,La Brasserie At The Fullerton Bay Hotel Singapore,6137,French,Party Pack,94,Joie de Vivre Weekend Brunch,-,"2 adults + 1 child 
+Instagram : https://www.instagram.com/hey.itsmechie (will post stories as well)","12,656",,,fred@hungryhub.com,,12:00:00 pm,3,,581301549746618796,,,,Guillaume,HH-SGHEESGX
+,HH-SGTHT,thehungryfeet,"14,651",,Instagram.com/thehungryfeet,La Brasserie At The Fullerton Bay Hotel Singapore,6137,French,All You Can Eat,94,Joie de Vivre Weekend Brunch,,,0,,,,,,,,577963116764594200,,,,Sirada,HH-SGTHTMQO
+,HH-SGSEO,serenetomato,"21,825",,Instagram.com/serenetomato,,#N/A,#N/A,,,,,,0,,,#N/A,,,,,,,,,Sirada,
+,HH-SGEIT,eileen_eats_alot,"21,742",,Instagram.com/eileen_eats_alot,,#N/A,#N/A,,,,,,"5,063",,,,,,,,,,,,Sirada,
+,HH-SGFOS,foody_flyers,"87,213",,Instagram.com/foody_flyers,,#N/A,#N/A,,,,,,"6,328",,,,,,,,,,,,Sirada,HH-SGFOSULR
+,HH-SGFOS,foody_flyers,"87,213",,Instagram.com/foody_flyers,,#N/A,#N/A,,,,,,"6,328",,,,,,,,,,,,Sirada,
+,HH-INGOS,goofytwocooks,"28,732",,Instagram.com/goofytwocooks,,#N/A,#N/A,,,,,,"6,328",,,,,,,,,,,,Sirada,
+,HH-LOMYG,myfoodiegallerysg,"30,604",,Instagram.com/myfoodiegallerysg,,#N/A,#N/A,,,,,,"7,594",,,,,,,,,,,,Sirada,
+,HH-INPAR,parttimefoodblogger,"16,406",,Instagram.com/parttimefoodblogger,,#N/A,#N/A,,,,,,"10,125",,,,,,,,,,,,Sirada,
+,HH-SGHEE,hey.itsmechie,"7,268",Singapore,Tiktok.com/@hey.itsmechie,Shrimp Prawn Seafood,5211,Thai,Party Pack,129,FREE LOBSTER worth $88 - Premium Set for 3 People (End October),-,Instagram : https://www.instagram.com/hey.itsmechie (will post stories as well),"12,656",,,fred@hungryhub.com,,,,Refused,575887573416411909,,,,Guillaume,
+,HH-LOGII,gianaarmellini,"4,562",Singapore,Instagram.com/gianaarmellini,,#N/A,#N/A,,,,,,,,,#N/A,,,,,,,,,Sirada,HH-LOGIIBWB
+,HH-SGEXN,exploretomakan,"14,669",,Instagram.com/exploretomakan,,#N/A,#N/A,,,,,,,FALSE,,,,,,,,,,,Guillaume,
+,HH-SGFOH,foodhunterph,"15,737",,Instagram.com/foodhunterph,,#N/A,#N/A,,,,,,"5,063",,,,,,,,,,,,Sirada,
+,HH-TVANNYAY,vannytelly,"37,786",,Instagram.com/vannytelly,,#N/A,#N/A,,,,,,"3,797",,,,,,,,,,,,Lars,
+,HH-TVANNYAY,vannytelly,"37,786",,Instagram.com/vannytelly,,#N/A,#N/A,,,,,,"3,797",,,,,,,,,,,,Lars,
+,HH-SGTHDVZC,thatfoodadv,"5,834",,Instagram.com/thatfoodadv,,#N/A,#N/A,,,,,,0,,,,,,,,,,,,Lars,
+,HH-TJOCXCQD,camilla_mamajoanne,"30,283",,Instagram.com/camilla_mamajoanne,,#N/A,#N/A,,,,None,,0,,,,,,,,,,,,Lars,
+,HH-TJOCXCQD,camilla_mamajoanne,"30,283",,Instagram.com/camilla_mamajoanne,,#N/A,#N/A,,,,None,,0,,,,,,,,,,,,Lars,
+,HH-SGSWN,swaggyreian,"79,400",,Tiktok.com/@swaggyreian,Shosha,6104,"Fusion, Indian",Party Pack,99,Sharing Set for 3 People,⚠️⚠️ Alergies to Prawns and Seafood ! ,,"7,594",,,,,,,,,,,,Guillaume,
+,HH-INTID,tiffie.on.the.road,"29,411",,Instagram.com/tiffie.on.the.road,,#N/A,#N/A,,,,,,"2,000",,,,,,,,,,,,Lars,
+,HH-INTID,tiffie.on.the.road,"29,411",,Instagram.com/tiffie.on.the.road,,#N/A,#N/A,,,,,,"2,000",,,,,,,,,,,,Lars,
+,HH-SGSWN,swaggyreian,"79,400",,Tiktok.com/@swaggyreian,,#N/A,#N/A,,,,⚠️⚠️ Alergies to Prawns and Seafood ! ,,"7,594",,,,,,,,,,,,Guillaume,
+,HH-TXXCRRDO,bycharlenechong,"7,721",,Instagram.com/bycharlenechong,,#N/A,#N/A,,,,,,0,,,,,,,,,,,,Sirada,
+,HH-TSHLOWHF,shirlynlw,"5,623",,Instagram.com/shirlynlw,,#N/A,#N/A,,,,,,,,,,,,,,,,,,Sirada,
