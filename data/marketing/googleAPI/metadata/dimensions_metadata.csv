@@ -1,0 +1,390 @@
+api_name,custom,category,deprecated_name,description
+achievementId,False,Other,,The achievement ID in a game for an event. Populated by the event parameter `achievement_id`.
+adFormat,False,Publisher,,"Describes the way ads looked and where they were located. Typical formats include `Interstitial`, `Banner`, `Rewarded`, and `Native advanced`."
+adSourceName,False,Publisher,,"The source network that served the ad. Typical sources include `AdMob Network`, `Liftoff`, `Facebook Audience Network`, and `Mediated house ads`."
+adUnitName,False,Publisher,,The name you chose to describe this Ad unit. Ad units are containers you place in your apps to show ads to users.
+appVersion,False,Platform / Device,,The app's versionName (Android) or short bundle version (iOS).
+audienceId,False,User,,The numeric identifier of an Audience. Users are reported in the audiences to which they belonged during the report's date range. Current user behavior does not affect historical audience membership in reports.
+audienceName,False,User,,The given name of an Audience. Users are reported in the audiences to which they belonged during the report's date range. Current user behavior does not affect historical audience membership in reports.
+audienceResourceName,False,User,,"The resource name of this audience. Resource names contain both collection & resource identifiers to uniquely identify a resource; to learn more, see [Resource names](//google.aip.dev/122)."
+brandingInterest,False,Demographics,,"Interests demonstrated by users who are higher in the shopping funnel. Users can be counted in multiple interest categories. For example, `Shoppers`, `Lifestyles & Hobbies/Pet Lovers`, or `Travel/Travel Buffs/Beachbound Travelers`."
+browser,False,Platform / Device,,The browsers used to view your website.
+campaignId,False,Attribution,,"The identifier of the marketing campaign. Present only for key events. Includes Google Ads Campaigns, Manual Campaigns, & other Campaigns."
+campaignName,False,Attribution,,"The name of the marketing campaign. Present only for key events. Includes Google Ads Campaigns, Manual Campaigns, & other Campaigns."
+character,False,Other,,The player character in a game for an event. Populated by the event parameter `character`.
+city,False,Geography,,The city from which the user activity originated.
+cityId,False,Geography,,"The geographic ID of the city from which the user activity originated, derived from their IP address."
+cm360AccountId,False,Attribution,,The CM360 Account ID that led to the key event. Identifies the CM360 Account.
+cm360AccountName,False,Attribution,,"The CM360 Account Name that led to the key event. A CM360 account consists of advertisers, sites, campaigns, and user profiles."
+cm360AdvertiserId,False,Attribution,,"The CM360 Advertiser ID that led to the key event. A CM360 Advertiser contains a group of campaigns, creative assets, and other settings."
+cm360AdvertiserName,False,Attribution,,"The CM360 Advertiser Name that led to the key event. A CM360 Advertiser contains a group of campaigns, creative assets, and other settings."
+cm360CampaignId,False,Attribution,,"The CM360 Campaign ID that led to the key event. A CM360 campaign can be configured to specify when your ads run, what landing pages are used, and other properties."
+cm360CampaignName,False,Attribution,,"The CM360 Campaign Name that led to the key event. A CM360 campaign can be configured to specify when your ads run, what landing pages are used, and other properties."
+cm360CreativeFormat,False,Attribution,,The CM360 Creative Format that led to the key event. CM360 creative formats are also referred to as creative types.
+cm360CreativeId,False,Attribution,,The CM360 Creative ID that led to the key event. Identifies a CM360 creative.
+cm360CreativeName,False,Attribution,,The CM360 Creative Name that led to the key event. The name given to a CM360 creative.
+cm360CreativeType,False,Attribution,,"The CM360 Creative Type that led to the key event. A category of CM360 creatives like 'Display' or 'Tracking'. To learn more, see [manage creatives](https://support.google.com/campaignmanager/answer/3068258)"
+cm360CreativeTypeId,False,Attribution,,The CM360 Creative Type ID that led to the key event. Identifies a CM360 creative type.
+cm360CreativeVersion,False,Attribution,,"The CM360 Creative Version that led to the key event. The version number helps you keep track of multiple versions of your creative in your reports. If you upload a new asset to an existing creative, the version number is increased by one."
+cm360Medium,False,Attribution,,The CM360 Medium that led to the key event. The CM360 medium is also referred to as the placement cost structure.
+cm360PlacementCostStructure,False,Attribution,,The CM360 Placement Cost Structure that led to the key event. Placement cost structures regulate how media cost will be calculated. For example 'CPM'.
+cm360PlacementId,False,Attribution,,The CM360 Placement ID that led to the key event. Identifies a CM360 placement. A placement is the part of a website where your ad appears.
+cm360PlacementName,False,Attribution,,The CM360 Placement Name that led to the key event. The given name for a CM360 placement. A placement is the part of a website where your ad appears.
+cm360RenderingId,False,Attribution,,The CM360 Rendering ID that led to the key event. Identifies a CM360 creative.
+cm360SiteId,False,Attribution,,The CM360 Site ID that led to the key event. Identifies a CM360 site.
+cm360SiteName,False,Attribution,,The CM360 Site Name that led to the key event. The CM360 Site name from which the ad space was purchased.
+cm360Source,False,Attribution,,The CM360 Source that led to the key event. The CM360 source is also referred to as the site name.
+cm360SourceMedium,False,Attribution,,The CM360 Source Medium that led to the key event. A combination of the source and medium.
+cohort,False,Cohort,,"The cohort's name in the request. A cohort is a set of users who started using your website or app in any consecutive group of days. If a cohort name is not specified in the request, cohorts are named by their zero based index such as cohort_0 and cohort_1."
+cohortNthDay,False,Cohort,,"Day offset relative to the firstSessionDate for the users in the cohort. For example, if a cohort is selected with the start and end date of 2020-03-01, then for the date 2020-03-02, cohortNthDay will be 0001."
+cohortNthMonth,False,Cohort,,"Month offset relative to the firstSessionDate for the users in the cohort. Month boundaries align with calendar month boundaries. For example, if a cohort is selected with the start and end date in March 2020, then for any date in April 2020, cohortNthMonth will be 0001."
+cohortNthWeek,False,Cohort,,"Week offset relative to the firstSessionDate for the users in the cohort. Weeks start on Sunday and end on Saturday. For example, if a cohort is selected with the start and end date in the range 2020-11-08 to 2020-11-14, then for the dates in the range 2020-11-15 to 2020-11-21, cohortNthWeek will be 0001."
+comparison,False,Other,,"Comparisons enable you to evaluate subsets of your data side by side. For report requests, the comparisons column is automatically added to the response. For pivot report requests, the requested dimension must be used."
+contentGroup,False,Page / Screen,,A category that applies to items of published content. Populated by the event parameter `content_group`.
+contentId,False,Page / Screen,,The identifier of the selected content. Populated by the event parameter `content_id`.
+contentType,False,Page / Screen,,The category of the selected content. Populated by the event parameter `content_type`.
+continent,False,Geography,,"The continent from which the user activity originated. For example, `Americas` or `Asia`."
+continentId,False,Geography,,"The geographic ID of the continent from which the user activity originated, derived from their IP address."
+country,False,Geography,,The country from which the user activity originated.
+countryId,False,Geography,countryIsoCode,"The geographic ID of the country from which the user activity originated, derived from their IP address. Formatted according to ISO 3166-1 alpha-2 standard."
+currencyCode,False,Ecommerce,,"The local currency code (based on ISO 4217 standard) of the eCommerce event. For example, `USD` or `GBP`. Currency is specified in tagging by the `currency` parameter. Businesses that transact in more than one currency can specify a local currency code when sending eCommerce events to Analytics, and this dimension shows those currencies. To Learn more, See [Currency reference](https://support.google.com/analytics/answer/9796179)."
+date,False,Time,,"The date of the event, formatted as YYYYMMDD."
+dateHour,False,Time,,The combined values of date and hour formatted as YYYYMMDDHH.
+dateHourMinute,False,Time,,"The combined values of date, hour, and minute formatted as YYYYMMDDHHMM."
+day,False,Time,,"The day of the month, a two-digit number from 01 to 31."
+dayOfWeek,False,Time,dayOfWeekZero,The integer day of the week. It returns values in the range 0 to 6 with Sunday as the first day of the week.
+dayOfWeekName,False,Time,,The day of the week in English. This dimension has values such as Sunday or Monday.
+defaultChannelGroup,False,Attribution,defaultChannelGrouping,"The key event's default channel group is based primarily on source and medium. An enumeration which includes `Direct`, `Organic Search`, `Paid Social`, `Organic Social`, `Email`, `Affiliates`, `Referral`, `Paid Search`, `Video`, and `Display`."
+deviceCategory,False,Platform / Device,,"The type of device: Desktop, Tablet, or Mobile."
+deviceModel,False,Platform / Device,,"The mobile device model (example: iPhone 10,6)."
+dv360AdvertiserId,False,Attribution,,The DV360 Advertiser ID that led to the key event. Identifies the DV360 advertiser.
+dv360AdvertiserName,False,Attribution,,The DV360 Advertiser Name that led to the key event. DV360 advertisers represent real-life businesses that run advertising campaigns.
+dv360CampaignId,False,Attribution,,The DV360 Campaign ID that led to the key event. Identifies the DV360 campaign.
+dv360CampaignName,False,Attribution,,The DV360 Campaign Name that led to the key event. DV360 campaigns group together related insertion orders with a common business goal.
+dv360CreativeFormat,False,Attribution,,"The DV360 Creative Format that led to the key event. Also referred to as the creative type. For example, expandable, video, or native."
+dv360CreativeId,False,Attribution,,The DV360 Creative ID that led to the key event. Identifies the DV360 creative.
+dv360CreativeName,False,Attribution,,The DV360 Creative Name that led to the key event. The name given to a DV360 creative.
+dv360ExchangeId,False,Attribution,,The DV360 Exchange ID that led to the key event. Identifies the DV360 exchange.
+dv360ExchangeName,False,Attribution,,"The DV360 Exchange Name that led to the key event. The DV360 ad exchange involved in the ad click. To learn more, see [managing exchanges](https://support.google.com/displayvideo/answer/9230278)."
+dv360InsertionOrderId,False,Attribution,,The DV360 Insertion Order ID that led to the key event. Identifies the DV360 insertion order.
+dv360InsertionOrderName,False,Attribution,,The DV360 Insertion Order Name that led to the key event. A DV360 insertion order contains a set of line items that are related to the same advertising campaign.
+dv360LineItemId,False,Attribution,,The DV360 Line Item ID that led to the key event. Identifies the DV360 line item.
+dv360LineItemName,False,Attribution,,The DV360 Line Item Name that led to the key event. A DV360 line item bids on impressions and serves creatives to inventory sources.
+dv360Medium,False,Attribution,,"The DV360 Medium that led to the key event. The billable outcome of the insertion order. For example, `cpm`."
+dv360PartnerId,False,Attribution,,The DV360 Partner ID that led to the key event. Identifies the DV360 partner.
+dv360PartnerName,False,Attribution,,"The DV360 Partner Name that led to the key event. DV360 partners represent agencies, trading desks, or large individual advertisers."
+dv360Source,False,Attribution,,The DV360 Source that led to the key event. The DV360 site name where your ad was displayed.
+dv360SourceMedium,False,Attribution,,The DV360 Source Medium that led to the key event. A combination of the source and medium.
+eventName,False,Event,,The name of the event.
+fileExtension,False,Other,,"The extension of the downloaded file (for example, `pdf` or `txt`). Automatically populated if Enhanced Measurement is enabled. Populated by the event parameter `file_extension`."
+fileName,False,Other,,"The page path of the downloaded file (for example, `/menus/dinner-menu.pdf`). Automatically populated if Enhanced Measurement is enabled. Populated by the event parameter `file_name`."
+firstSessionDate,False,User Lifetime,firstTouchDate,"The date the user's first session occurred, formatted as YYYYMMDD."
+firstUserCampaignId,False,Traffic Source,,"Identifier of the marketing campaign that first acquired the user. Includes Google Ads Campaigns, Manual Campaigns, & other Campaigns."
+firstUserCampaignName,False,Traffic Source,,"Name of the marketing campaign that first acquired the user. Includes Google Ads Campaigns, Manual Campaigns, & other Campaigns."
+firstUserCm360AccountId,False,Traffic Source,,The CM360 Account ID that originally acquired the user. Identifies the CM360 account.
+firstUserCm360AccountName,False,Traffic Source,,"The CM360 Account Name that originally acquired the user. A CM360 account consists of advertisers, sites, campaigns, and user profiles."
+firstUserCm360AdvertiserId,False,Traffic Source,,The CM360 Advertiser ID that originally acquired the user. Identifies the CM360 advertiser.
+firstUserCm360AdvertiserName,False,Traffic Source,,"The CM360 Advertiser Name that originally acquired the user. A CM360 Advertiser contains a group of campaigns, creative assets, and other settings."
+firstUserCm360CampaignId,False,Traffic Source,,The CM360 Campaign ID that originally acquired the user. Identifies the CM360 campaign.
+firstUserCm360CampaignName,False,Traffic Source,,"The CM360 Campaign Name that originally acquired the user. A CM360 campaign can be configured to specify when your ads run, what landing pages are used, and other properties."
+firstUserCm360CreativeFormat,False,Traffic Source,,The CM360 Creative Format that originally acquired the user. CM360 creative formats are also referred to as creative types.
+firstUserCm360CreativeId,False,Traffic Source,,The CM360 Creative ID that originally acquired the user. Identifies a CM360 creative.
+firstUserCm360CreativeName,False,Traffic Source,,The CM360 Creative Name that originally acquired the user. The name given to a CM360 creative.
+firstUserCm360CreativeType,False,Traffic Source,,"The CM360 Creative Type that originally acquired the user. A category of CM360 creatives like 'Display' or 'Tracking'. To learn more, see [manage creatives](https://support.google.com/campaignmanager/answer/3068258)"
+firstUserCm360CreativeTypeId,False,Traffic Source,,The CM360 Creative Type ID that originally acquired the user. Identifies a CM360 creative type.
+firstUserCm360CreativeVersion,False,Traffic Source,,"The CM360 Creative Version that originally acquired the user. The version number helps you keep track of multiple versions of your creative in your reports. If you upload a new asset to an existing creative, the version number is increased by one."
+firstUserCm360Medium,False,Traffic Source,,The CM360 Medium that originally acquired the user. The CM360 medium is also referred to as the placement cost structure.
+firstUserCm360PlacementCostStructure,False,Traffic Source,,The CM360 Placement Cost Structure that originally acquired the user. Placement cost structures regulate how media cost will be calculated. For example 'CPM'.
+firstUserCm360PlacementId,False,Traffic Source,,The CM360 Placement ID that originally acquired the user. Identifies a CM360 placement. A placement is the part of a website where your ad appears.
+firstUserCm360PlacementName,False,Traffic Source,,The CM360 Placement Name that originally acquired the user. The given name for a CM360 placement. A placement is the part of a website where your ad appears.
+firstUserCm360RenderingId,False,Traffic Source,,The CM360 Rendering ID that originally acquired the user. Identifies a CM360 creative.
+firstUserCm360SiteId,False,Traffic Source,,The CM360 Site ID that originally acquired the user. Identifies a CM360 site.
+firstUserCm360SiteName,False,Traffic Source,,The CM360 Site Name that originally acquired the user. The CM360 Site name from which the ad space was purchased.
+firstUserCm360Source,False,Traffic Source,,The CM360 Source that originally acquired the user. The CM360 source is also referred to as the site name.
+firstUserCm360SourceMedium,False,Traffic Source,,The CM360 Source Medium that originally acquired the user. A combination of the source and medium.
+firstUserDefaultChannelGroup,False,Traffic Source,firstUserDefaultChannelGrouping,"The default channel group that first acquired the user. Default channel group is based primarily on source and medium. An enumeration which includes `Direct`, `Organic Search`, `Paid Social`, `Organic Social`, `Email`, `Affiliates`, `Referral`, `Paid Search`, `Video`, and `Display`."
+firstUserDv360AdvertiserId,False,Traffic Source,,The DV360 Advertiser ID that originally acquired the user. Identifies the DV360 advertiser.
+firstUserDv360AdvertiserName,False,Traffic Source,,The DV360 Advertiser Name that originally acquired the user. DV360 advertisers represent real-life businesses that run advertising campaigns.
+firstUserDv360CampaignId,False,Traffic Source,,The DV360 Campaign ID that originally acquired the user. Identifies the DV360 campaign.
+firstUserDv360CampaignName,False,Traffic Source,,The DV360 Campaign Name that originally acquired the user. DV360 campaigns group together related insertion orders with a common business goal.
+firstUserDv360CreativeFormat,False,Traffic Source,,"The DV360 Creative Format that originally acquired the user. Also referred to as the creative type. For example, expandable, video, or native."
+firstUserDv360CreativeId,False,Traffic Source,,The DV360 Creative ID that originally acquired the user. Identifies the DV360 creative.
+firstUserDv360CreativeName,False,Traffic Source,,The DV360 Creative Name that originally acquired the user. The name given to a DV360 creative.
+firstUserDv360ExchangeId,False,Traffic Source,,The DV360 Exchange ID that originally acquired the user. Identifies the DV360 exchange.
+firstUserDv360ExchangeName,False,Traffic Source,,"The DV360 Exchange Name that originally acquired the user. The DV360 ad exchange involved in the ad click. To learn more, see [managing exchanges](https://support.google.com/displayvideo/answer/9230278)."
+firstUserDv360InsertionOrderId,False,Traffic Source,,The DV360 Insertion Order ID that originally acquired the user. Identifies the DV360 insertion order.
+firstUserDv360InsertionOrderName,False,Traffic Source,,The DV360 Insertion Order Name that originally acquired the user. A DV360 insertion order contains a set of line items that are related to the same advertising campaign.
+firstUserDv360LineItemId,False,Traffic Source,,The DV360 Line Item ID that originally acquired the user. Identifies the DV360 line item.
+firstUserDv360LineItemName,False,Traffic Source,firstUserDv360LinteItemName,The DV360 Line Item Name that originally acquired the user. A DV360 line item bids on impressions and serves creatives to inventory sources.
+firstUserDv360Medium,False,Traffic Source,,"The DV360 Medium that originally acquired the user. The billable outcome of the insertion order. For example, `cpm`."
+firstUserDv360PartnerId,False,Traffic Source,,The DV360 Partner ID that originally acquired the user. Identifies the DV360 partner.
+firstUserDv360PartnerName,False,Traffic Source,,"The DV360 Partner Name that originally acquired the user. DV360 partners represent agencies, trading desks, or large individual advertisers."
+firstUserDv360Source,False,Traffic Source,,The DV360 Source that originally acquired the user. The DV360 site name where your ad was displayed.
+firstUserDv360SourceMedium,False,Traffic Source,,The DV360 Source Medium that originally acquired the user. A combination of the source and medium.
+firstUserGoogleAdsAccountName,False,Traffic Source,,The Account name from Google Ads that first acquired the user.
+firstUserGoogleAdsAdGroupId,False,Traffic Source,,The Ad Group Id in Google Ads that first acquired the user.
+firstUserGoogleAdsAdGroupName,False,Traffic Source,,The Ad Group Name in Google Ads that first acquired the user.
+firstUserGoogleAdsAdNetworkType,False,Traffic Source,,"The advertising network that first acquired the user. An enumeration which includes `Google search`, `Search partners`, `Google Display Network`, `Youtube Search`, `Youtube Videos`, `Cross-network`, `Social`, and `(universal campaign)`."
+firstUserGoogleAdsCampaignId,False,Traffic Source,,Identifier of the Google Ads marketing campaign that first acquired the user.
+firstUserGoogleAdsCampaignName,False,Traffic Source,,Name of the Google Ads marketing campaign that first acquired the user.
+firstUserGoogleAdsCampaignType,False,Traffic Source,,"The campaign type of the Google Ads campaign that first acquired the user. Campaign types determine where customers see your ads and the settings and options available to you in Google Ads. Campaign type is an enumeration that includes: Search, Display, Shopping, Video, Demand Gen, App, Smart, Hotel, Local, and Performance Max. To learn more, see [Choose the right campaign type](https://support.google.com/google-ads/answer/2567043)."
+firstUserGoogleAdsCreativeId,False,Traffic Source,firstUserCreativeId,The ID of the Google Ads creative that first acquired the user. Creative IDs identify individual ads.
+firstUserGoogleAdsCustomerId,False,Traffic Source,,The Customer ID from Google Ads that first acquired the user. Customer IDs in Google Ads uniquely identify Google Ads accounts.
+firstUserGoogleAdsKeyword,False,Traffic Source,,"First user Google Ads keyword text | The matched keyword that first acquired the user. Keywords are words or phrases describing your product or service that you choose to get your ad in front of the right customers. To learn more about Keywords, see [Keywords: Definition](https://support.google.com/google-ads/answer/6323)."
+firstUserGoogleAdsQuery,False,Traffic Source,,The search query that first acquired the user.
+firstUserManualAdContent,False,Traffic Source,,The ad content that first acquired the user. Populated by the utm_content parameter.
+firstUserManualCampaignId,False,Traffic Source,,The manual Campaign ID that originally acquired the user. Identifies the manual campaign. Populated by `utm_id` URL parameter.
+firstUserManualCampaignName,False,Traffic Source,,"The manual Campaign Name that originally acquired the user. The name of the manual campaign. Populated by `utm_campaign` URL parameter. To learn more, see [Collect campaign data with custom URLs](https://support.google.com/analytics/answer/10917952)."
+firstUserManualCreativeFormat,False,Traffic Source,,The manual Creative Format that originally acquired the user. Identifies the creative format used in the ad. Populated by `utm_creative_format` URL parameter.
+firstUserManualMarketingTactic,False,Traffic Source,,"The manual Marketing Tactic that originally acquired the user. The targeting criteria applied to a campaign. For example, remarketing or prospecting. Populated by `utm_marketing_tactic` URL parameter."
+firstUserManualMedium,False,Traffic Source,,"The manual Medium that originally acquired the user. The marketing medium used in the referral. For example, `cpc`. Populated by `utm_medium` URL parameter."
+firstUserManualSource,False,Traffic Source,,The manual Source that originally acquired the user. The referrer. Populated by `utm_source` URL parameter.
+firstUserManualSourceMedium,False,Traffic Source,,The manual Source Medium that originally acquired the user. A combination of the source and medium.
+firstUserManualSourcePlatform,False,Traffic Source,,The manual Source Platform that originally acquired the user. The platform responsible for directing traffic to a given Analytics property. Populated by `utm_source_platform` URL parameter.
+firstUserManualTerm,False,Traffic Source,,The term that first acquired the user. Populated by the utm_term parameter.
+firstUserMedium,False,Traffic Source,,The medium that first acquired the user to your website or app.
+firstUserPrimaryChannelGroup,False,Traffic Source,,"The primary channel group that originally acquired a user. Primary channel groups are the channel groups used in standard reports in Google Analytics and serve as an active record of your property's data in alignment with channel grouping over time. To learn more, see [Custom channel groups](https://support.google.com/analytics/answer/13051316)."
+firstUserSa360AdGroupId,False,Traffic Source,,The SA360 Ad Group ID that originally acquired the user. Identifies the SA360 ad group.
+firstUserSa360AdGroupName,False,Traffic Source,,The SA360 Ad Group Name that originally acquired the user. SA360 Ad groups contain ads and keywords that relate to each other.
+firstUserSa360CampaignId,False,Traffic Source,,The SA360 Campaign ID that originally acquired the user. Identifies the SA360 campaign.
+firstUserSa360CampaignName,False,Traffic Source,,The SA360 Campaign Name that originally acquired the user. A SA360 campaign lets you organize your ads and define a goal for your advertising.
+firstUserSa360CreativeFormat,False,Traffic Source,,The SA360 Creative Format that originally acquired the user. The creative format is the specific layout or design of the advertisement used in a campaign.
+firstUserSa360EngineAccountId,False,Traffic Source,,The SA360 Engine Account ID that originally acquired the user. Identifies the SA360 engine account.
+firstUserSa360EngineAccountName,False,Traffic Source,,"The SA360 Engine Account Name that originally acquired the user. A SA360 engine account contains campaigns, ad groups, and other items from an advertising account."
+firstUserSa360EngineAccountType,False,Traffic Source,,The SA360 Engine Account Type that originally acquired the user. The type of engine used by the search engine account.
+firstUserSa360KeywordText,False,Traffic Source,,The SA360 Keyword Text that originally acquired the user. The keywords that matched the search query.
+firstUserSa360ManagerAccountId,False,Traffic Source,,The SA360 Manager Account ID that originally acquired the user. Identifies the SA360 manager account.
+firstUserSa360ManagerAccountName,False,Traffic Source,,The SA360 Manager Account Name that originally acquired the user. The top level of the Search Ads 360 account hierarchy and is used for administration and reporting across the lower-level sub-manager and client accounts.
+firstUserSa360Medium,False,Traffic Source,,"The SA360 Medium that originally acquired the user. The payment mode used in ad buying. For example, `cpc`."
+firstUserSa360Query,False,Traffic Source,,The SA360 Query that originally acquired the user. The search query typed by the user.
+firstUserSa360Source,False,Traffic Source,,The SA360 Source that originally acquired the user. The search query happened on this site.
+firstUserSa360SourceMedium,False,Traffic Source,,The SA360 Source Medium that originally acquired the user. A combination of the source and medium.
+firstUserSource,False,Traffic Source,,The source that first acquired the user to your website or app.
+firstUserSourceMedium,False,Traffic Source,,The combined values of the dimensions `firstUserSource` and `firstUserMedium`.
+firstUserSourcePlatform,False,Traffic Source,firstUserTrafficOrigin,The source platform that first acquired the user. Don't depend on this field returning `Manual` for traffic that uses UTMs; this field will update from returning `Manual` to returning `(not set)` for an upcoming feature launch.
+fullPageUrl,False,Page / Screen,,"The hostname, page path, and query string for web pages visited; for example, the `fullPageUrl` portion of `https://www.example.com/store/contact-us?query_string=true` is `www.example.com/store/contact-us?query_string=true`."
+googleAdsAccountName,False,Attribution,,The Account name from Google Ads for the campaign that led to the key event. Corresponds to `customer.descriptive_name` in the Google Ads API.
+googleAdsAdGroupId,False,Attribution,,The Google Ads ad group ID attributed to the key event.
+googleAdsAdGroupName,False,Attribution,,The ad group name attributed to the key event.
+googleAdsAdNetworkType,False,Attribution,,"The advertising network type of the key event. An enumeration which includes `Google search`, `Search partners`, `Google Display Network`, `Youtube Search`, `Youtube Videos`, `Cross-network`, `Social`, and `(universal campaign)`."
+googleAdsCampaignId,False,Attribution,,The campaign ID for the Google Ads campaign attributed to the key event.
+googleAdsCampaignName,False,Attribution,,The campaign name for the Google Ads campaign attributed to the key event.
+googleAdsCampaignType,False,Attribution,,"The campaign type for the Google Ads campaign attributed to the key event. Campaign types determine where customers see your ads and the settings and options available to you in Google Ads. Campaign type is an enumeration that includes: Search, Display, Shopping, Video, Demand Gen, App, Smart, Hotel, Local, and Performance Max. To learn more, see [Choose the right campaign type](https://support.google.com/google-ads/answer/2567043)."
+googleAdsCreativeId,False,Attribution,,The ID of the Google Ads creative attributed to the key event. Creative IDs identify individual ads.
+googleAdsCustomerId,False,Attribution,,The Customer ID from Google Ads for the campaign that led to key event. Customer IDs in Google Ads uniquely identify Google Ads accounts.
+googleAdsKeyword,False,Attribution,,"The matched keyword that led to the key event. Keywords are words or phrases describing your product or service that you choose to get your ad in front of the right customers. To learn more about Keywords, see [Keywords: Definition](https://support.google.com/google-ads/answer/6323)."
+googleAdsQuery,False,Attribution,,The search query that led to the key event.
+groupId,False,Other,,The player group ID in a game for an event. Populated by the event parameter `group_id`.
+hostName,False,Page / Screen,,"Includes the subdomain and domain names of a URL; for example, the Host Name of www.example.com/contact.html is www.example.com."
+hour,False,Time,,The two-digit hour of the day that the event was logged. This dimension ranges from 0-23 and is reported in your property's timezone.
+isKeyEvent,False,Event,isConversionEvent,"The string `true` if the event is a key event. Marking an event as a key event affects reports from time of creation. It doesn't change historic data. You can mark any event as key in Google Analytics, and some events (such as `first_open` or `purchase`) are marked as key events by default."
+isoWeek,False,Time,,"ISO week number, where each week starts on Monday. For details, see http://en.wikipedia.org/wiki/ISO_week_date. Example values include 01, 02, & 53."
+isoYear,False,Time,,"The ISO year of the event. For details, see http://en.wikipedia.org/wiki/ISO_week_date. Example values include 2022 & 2023."
+isoYearIsoWeek,False,Time,,The combined values of isoWeek and isoYear. Example values include 201652 & 201701.
+itemAffiliation,False,Ecommerce,,The name or code of the affiliate (partner/vendor; if any) associated with an individual item. Populated by the `affiliation` item parameter.
+itemBrand,False,Ecommerce,,Brand name of the item.
+itemCategory,False,Ecommerce,,"The hierarchical category in which the item is classified. For example, in Apparel/Mens/Summer/Shirts/T-shirts, Apparel is the item category."
+itemCategory2,False,Ecommerce,,"The hierarchical category in which the item is classified. For example, in Apparel/Mens/Summer/Shirts/T-shirts, Mens is the item category 2."
+itemCategory3,False,Ecommerce,,"The hierarchical category in which the item is classified. For example, in Apparel/Mens/Summer/Shirts/T-shirts, Summer is the item category 3."
+itemCategory4,False,Ecommerce,,"The hierarchical category in which the item is classified. For example, in Apparel/Mens/Summer/Shirts/T-shirts, Shirts is the item category 4."
+itemCategory5,False,Ecommerce,,"The hierarchical category in which the item is classified. For example, in Apparel/Mens/Summer/Shirts/T-shirts, T-shirts is the item category 5."
+itemId,False,Ecommerce,,The ID of the item.
+itemListId,False,Ecommerce,,The ID of the item list.
+itemListName,False,Ecommerce,,The name of the item list.
+itemListPosition,False,Ecommerce,,"The position of an item in a list. For example, a product you sell in a list. This dimension is populated in tagging by the `index` parameter in the items array."
+itemLocationID,False,Ecommerce,,"The physical location associated with the item. For example, the physical store location. It's recommended to use the [Google Place ID](https://developers.google.com/maps/documentation/places/web-service/place-id) that corresponds to the associated item. A custom location ID can also be used. This field is populated in tagging by the `location_id` parameter in the items array."
+itemName,False,Ecommerce,,The name of the item.
+itemPromotionCreativeName,False,Ecommerce,,The name of the item-promotion creative.
+itemPromotionCreativeSlot,False,Ecommerce,,"The name of the promotional creative slot associated with the item. This dimension can be specified in tagging by the `creative_slot` parameter at the event or item level. If the parameter is specified at both the event & item level, the item-level parameter is used."
+itemPromotionId,False,Ecommerce,,The ID of the item promotion.
+itemPromotionName,False,Ecommerce,,The name of the promotion for the item.
+itemVariant,False,Ecommerce,,"The specific variation of a product. For example, XS, S, M, or L for size; or Red, Blue, Green, or Black for color. Populated by the `item_variant` parameter."
+landingPage,False,Page / Screen,,The page path associated with the first pageview in a session.
+landingPagePlusQueryString,False,Page / Screen,,The page path + query string associated with the first pageview in a session.
+language,False,Platform / Device,,"The language setting of the user's browser or device. For example, `English`."
+languageCode,False,Platform / Device,,"The language setting (ISO 639) of the user's browser or device. For example, `en-us`."
+level,False,Other,,The player's level in a game. Populated by the event parameter `level`.
+linkClasses,False,Other,,"The HTML class attribute for an outbound link. For example if a user clicks a link `<a class=""center"" href=""www.youtube.com"">`, this dimension will return `center`. Automatically populated if Enhanced Measurement is enabled. Populated by the event parameter `link_classes`."
+linkDomain,False,Other,,"The destination domain of the outbound link. For example if a user clicks a link `<a href=""www.youtube.com"">`, this dimension will return `youtube.com`. Automatically populated if Enhanced Measurement is enabled. Populated by the event parameter `link_domain`."
+linkId,False,Other,,"The HTML ID attribute for an outbound link or file download. For example if a user clicks a link `<a id=""socialLinks"" href=""www.youtube.com"">`, this dimension will return `socialLinks`. Automatically populated if Enhanced Measurement is enabled. Populated by the event parameter `link_id`."
+linkText,False,Other,,The link text of the file download. Automatically populated if Enhanced Measurement is enabled. Populated by the event parameter `link_text`.
+linkUrl,False,Other,,"The full URL for an outbound link or file download. For example if a user clicks a link `<a href=""https://www.youtube.com/results?search_query=analytics"">`, this dimension will return `https://www.youtube.com/results?search_query=analytics`. Automatically populated if Enhanced Measurement is enabled. Populated by the event parameter `link_url`."
+manualAdContent,False,Attribution,,The ad content attributed to the key event. Populated by the utm_content parameter.
+manualCampaignId,False,Attribution,,The manual Campaign ID that led to the key event. Identifies the manual campaign. Populated by `utm_id` URL parameter.
+manualCampaignName,False,Attribution,,"The manual Campaign Name that led to the key event. The name of the manual campaign. Populated by `utm_campaign` URL parameter. To learn more, see [Collect campaign data with custom URLs](https://support.google.com/analytics/answer/10917952)."
+manualCreativeFormat,False,Attribution,,The manual Creative Format that led to the key event. Identifies the creative format used in the ad. Populated by `utm_creative_format` URL parameter.
+manualMarketingTactic,False,Attribution,,"The manual Marketing Tactic that led to the key event. The targeting criteria applied to a campaign. For example, remarketing or prospecting. Populated by `utm_marketing_tactic` URL parameter."
+manualMedium,False,Attribution,,"The manual Medium that led to the key event. The marketing medium used in the referral. For example, `cpc`. Populated by `utm_medium` URL parameter."
+manualSource,False,Attribution,,The manual Source that led to the key event. The referrer. Populated by `utm_source` URL parameter.
+manualSourceMedium,False,Attribution,,The manual Source Medium that led to the key event. A combination of the source and medium.
+manualSourcePlatform,False,Attribution,,The manual Source Platform that led to the key event. The platform responsible for directing traffic to a given Analytics property. Populated by `utm_source_platform` URL parameter.
+manualTerm,False,Attribution,,The term attributed to the key event. Populated by the utm_term parameter.
+medium,False,Attribution,,The medium attributed to the key event.
+method,False,Other,,The method by which an event was triggered. Populated by the event parameter `method`.
+minute,False,Time,,The two-digit minute of the hour that the event was logged. This dimension ranges from 0-59 and is reported in your property's timezone.
+mobileDeviceBranding,False,Platform / Device,,"Manufacturer or branded name (examples: Samsung, HTC, Verizon, T-Mobile)."
+mobileDeviceMarketingName,False,Platform / Device,,The branded device name (examples: Galaxy S10 or P30 Pro).
+mobileDeviceModel,False,Platform / Device,,The mobile device model name (examples: iPhone X or SM-G950F).
+month,False,Time,,"The month of the event, a two digit integer from 01 to 12."
+newVsReturning,False,User,,"New users have 0 previous sessions, and returning users have 1 or more previous sessions. This dimension returns two values: `new` or `returning`."
+nthDay,False,Time,,The number of days since the start of the date range.
+nthHour,False,Time,,The number of hours since the start of the date range. The starting hour is 0000.
+nthMinute,False,Time,,The number of minutes since the start of the date range. The starting minute is 0000.
+nthMonth,False,Time,,The number of months since the start of a date range. The starting month is 0000.
+nthWeek,False,Time,,A number representing the number of weeks since the start of a date range.
+nthYear,False,Time,,The number of years since the start of the date range. The starting year is 0000.
+operatingSystem,False,Platform / Device,,The operating systems used by visitors to your app or website. Includes desktop and mobile operating systems such as Windows and Android.
+operatingSystemVersion,False,Platform / Device,,"The operating system versions used by visitors to your website or app. For example, Android 10's version is 10, and iOS 13.5.1's version is 13.5.1."
+operatingSystemWithVersion,False,Platform / Device,,"The operating system and version. For example, Android 10 or Windows 7."
+orderCoupon,False,Ecommerce,,Code for the order-level coupon.
+outbound,False,Other,,Returns `true` if the link led to a site that is not a part of the property's domain. Automatically populated if Enhanced Measurement is enabled. Populated by the event parameter `outbound`.
+pageLocation,False,Page / Screen,,"The protocol, hostname, page path, and query string for web pages visited; for example, the `pageLocation` portion of `https://www.example.com/store/contact-us?query_string=true` is `https://www.example.com/store/contact-us?query_string=true`. Populated by the event parameter `page_location`."
+pagePath,False,Page / Screen,,"The portion of the URL between the hostname and query string for web pages visited; for example, the pagePath portion of `https://www.example.com/store/contact-us?query_string=true` is `/store/contact-us`."
+pagePathPlusQueryString,False,Page / Screen,,"The portion of the URL following the hostname for web pages visited; for example, the `pagePathPlusQueryString` portion of `https://www.example.com/store/contact-us?query_string=true` is `/store/contact-us?query_string=true`."
+pageReferrer,False,Page / Screen,,The full referring URL including the hostname and path. This referring URL is the user's previous URL and can be this website's domain or other domains. Populated by the event parameter `page_referrer`.
+pageTitle,False,Page / Screen,,The web page titles used on your site.
+percentScrolled,False,Other,,"The percentage down the page that the user has scrolled (for example, `90`). Automatically populated if Enhanced Measurement is enabled. Populated by the event parameter `percent_scrolled`."
+platform,False,Platform / Device,,"The platform on which your app or website ran; for example, web, iOS, or Android. To determine a stream's type in a report, use both platform and streamId."
+platformDeviceCategory,False,Platform / Device,,The platform and type of device on which your website or mobile app ran. (example: Android / mobile)
+primaryChannelGroup,False,Attribution,,"The primary channel group attributed to the key event. Primary channel groups are the channel groups used in standard reports in Google Analytics and serve as an active record of your property's data in alignment with channel grouping over time. To learn more, see [Custom channel groups](https://support.google.com/analytics/answer/13051316)."
+region,False,Geography,,"The geographic region from which the user activity originated, derived from their IP address."
+sa360AdGroupId,False,Attribution,,The SA360 Ad Group ID that led to the key event. Identifies the SA360 ad group.
+sa360AdGroupName,False,Attribution,,The SA360 Ad Group Name that led to the key event. SA360 Ad groups contain ads and keywords that relate to each other.
+sa360CampaignId,False,Attribution,,The SA360 Campaign ID that led to the key event. Identifies the SA360 campaign.
+sa360CampaignName,False,Attribution,,The SA360 Campaign Name that led to the key event. A SA360 campaign lets you organize your ads and define a goal for your advertising.
+sa360CreativeFormat,False,Attribution,,The SA360 Creative Format that led to the key event. The creative format is the specific layout or design of the advertisement used in a campaign.
+sa360EngineAccountId,False,Attribution,,The SA360 Engine Account ID that led to the key event. Identifies the SA360 engine account.
+sa360EngineAccountName,False,Attribution,,"The SA360 Engine Account Name that led to the key event. A SA360 engine account contains campaigns, ad groups, and other items from an advertising account."
+sa360EngineAccountType,False,Attribution,,The SA360 Engine Account Type that led to the key event. The type of engine used by the search engine account.
+sa360KeywordText,False,Attribution,,The SA360 Keyword Text that led to the key event. The keywords that matched the search query.
+sa360ManagerAccountId,False,Attribution,,The SA360 Manager Account ID that led to the key event. Identifies the SA360 manager account.
+sa360ManagerAccountName,False,Attribution,,The SA360 Manager Account Name that led to the key event. The top level of the Search Ads 360 account hierarchy and is used for administration and reporting across the lower-level sub-manager and client accounts.
+sa360Medium,False,Attribution,,"The SA360 Medium that led to the key event. The payment mode used in ad buying. For example, `cpc`."
+sa360Query,False,Attribution,,The SA360 Query that led to the key event. The search query typed by the user.
+sa360Source,False,Attribution,,The SA360 Source that led to the key event. The search query happened on this site.
+sa360SourceMedium,False,Attribution,,The SA360 Source Medium that led to the key event. A combination of the source and medium.
+screenResolution,False,Platform / Device,,"The screen resolution of the user's monitor. For example, 1920x1080."
+searchTerm,False,Other,,"The term searched by the user. For example if the user visits `/some-page.html?q=some-term`, this dimension returns `some-term`. Automatically populated if Enhanced Measurement is enabled. Populated by the event parameter `search_term`."
+sessionCampaignId,False,Traffic Source,,"The marketing campaign ID for a session. Includes Google Ads Campaigns, Manual Campaigns, & other Campaigns."
+sessionCampaignName,False,Traffic Source,,"The marketing campaign name for a session. Includes Google Ads Campaigns, Manual Campaigns, & other Campaigns."
+sessionCm360AccountId,False,Traffic Source,,The CM360 Account ID that led to the session. Identifies the CM360 account.
+sessionCm360AccountName,False,Traffic Source,,"The CM360 Account Name that led to the session. A CM360 account consists of advertisers, sites, campaigns, and user profiles."
+sessionCm360AdvertiserId,False,Traffic Source,,The CM360 Advertiser ID that led to the session. Identifies the CM360 advertiser.
+sessionCm360AdvertiserName,False,Traffic Source,,"The CM360 Advertiser Name that led to the session. A CM360 Advertiser contains a group of campaigns, creative assets, and other settings."
+sessionCm360CampaignId,False,Traffic Source,,The CM360 Campaign ID that led to the session. Identifies the CM360 campaign.
+sessionCm360CampaignName,False,Traffic Source,,"The CM360 Campaign Name that led to the session. A CM360 campaign can be configured to specify when your ads run, what landing pages are used, and other properties."
+sessionCm360CreativeFormat,False,Traffic Source,,The CM360 Creative Format that led to the session. CM360 creative formats are also referred to as creative types.
+sessionCm360CreativeId,False,Traffic Source,,The CM360 Creative ID that led to the session. Identifies a CM360 creative.
+sessionCm360CreativeName,False,Traffic Source,,The CM360 Creative Name that led to the session. The name given to a CM360 creative.
+sessionCm360CreativeType,False,Traffic Source,,"The CM360 Creative Type that led to the session. A category of CM360 creatives like 'Display' or 'Tracking'. To learn more, see [manage creatives](https://support.google.com/campaignmanager/answer/3068258)"
+sessionCm360CreativeTypeId,False,Traffic Source,,The CM360 Creative Type ID that led to the session. Identifies a CM360 creative type.
+sessionCm360CreativeVersion,False,Traffic Source,,"The CM360 Creative Version that led to the session. The version number helps you keep track of multiple versions of your creative in your reports. If you upload a new asset to an existing creative, the version number is increased by one."
+sessionCm360Medium,False,Traffic Source,,The CM360 Medium that led to the session. The CM360 medium is also referred to as the placement cost structure.
+sessionCm360PlacementCostStructure,False,Traffic Source,,The CM360 Placement Cost Structure that led to the session. Placement cost structures regulate how media cost will be calculated. For example 'CPM'.
+sessionCm360PlacementId,False,Traffic Source,,The CM360 Placement ID that led to the session. Identifies a CM360 placement. A placement is the part of a website where your ad appears.
+sessionCm360PlacementName,False,Traffic Source,,The CM360 Placement Name that led to the session. The given name for a CM360 placement. A placement is the part of a website where your ad appears.
+sessionCm360RenderingId,False,Traffic Source,,The CM360 Rendering ID that led to the session. Identifies a CM360 creative.
+sessionCm360SiteId,False,Traffic Source,,The CM360 Site ID that led to the session. Identifies a CM360 site.
+sessionCm360SiteName,False,Traffic Source,,The CM360 Site Name that led to the session. The CM360 Site name from which the ad space was purchased.
+sessionCm360Source,False,Traffic Source,,The CM360 Source that led to the session. The CM360 source is also referred to as the site name.
+sessionCm360SourceMedium,False,Traffic Source,,The CM360 Source Medium that led to the session. A combination of the source and medium.
+sessionDefaultChannelGroup,False,Traffic Source,sessionDefaultChannelGrouping,"The session's default channel group is based primarily on source and medium. An enumeration which includes `Direct`, `Organic Search`, `Paid Social`, `Organic Social`, `Email`, `Affiliates`, `Referral`, `Paid Search`, `Video`, and `Display`."
+sessionDv360AdvertiserId,False,Traffic Source,,The DV360 Advertiser ID that led to the session. Identifies the DV360 advertiser.
+sessionDv360AdvertiserName,False,Traffic Source,,The DV360 Advertiser Name that led to the session. DV360 advertisers represent real-life businesses that run advertising campaigns.
+sessionDv360CampaignId,False,Traffic Source,,The DV360 Campaign ID that led to the session. Identifies the DV360 campaign.
+sessionDv360CampaignName,False,Traffic Source,,The DV360 Campaign Name that led to the session. DV360 campaigns group together related insertion orders with a common business goal.
+sessionDv360CreativeFormat,False,Traffic Source,,"The DV360 Creative Format that led to the session. Also referred to as the creative type. For example, expandable, video, or native."
+sessionDv360CreativeId,False,Traffic Source,,The DV360 Creative ID that led to the session. Identifies the DV360 creative.
+sessionDv360CreativeName,False,Traffic Source,,The DV360 Creative Name that led to the session. The name given to a DV360 creative.
+sessionDv360ExchangeId,False,Traffic Source,,The DV360 Exchange ID that led to the session. Identifies the DV360 exchange.
+sessionDv360ExchangeName,False,Traffic Source,,"The DV360 Exchange Name that led to the session. The DV360 ad exchange involved in the ad click. To learn more, see [managing exchanges](https://support.google.com/displayvideo/answer/9230278)."
+sessionDv360InsertionOrderId,False,Traffic Source,,The DV360 Insertion Order ID that led to the session. Identifies the DV360 insertion order.
+sessionDv360InsertionOrderName,False,Traffic Source,,The DV360 Insertion Order Name that led to the session. A DV360 insertion order contains a set of line items that are related to the same advertising campaign.
+sessionDv360LineItemId,False,Traffic Source,,The DV360 Line Item ID that led to the session. Identifies the DV360 line item.
+sessionDv360LineItemName,False,Traffic Source,,The DV360 Line Item Name that led to the session. A DV360 line item bids on impressions and serves creatives to inventory sources.
+sessionDv360Medium,False,Traffic Source,,"The DV360 Medium that led to the session. The billable outcome of the insertion order. For example, `cpm`."
+sessionDv360PartnerId,False,Traffic Source,,The DV360 Partner ID that led to the session. Identifies the DV360 partner.
+sessionDv360PartnerName,False,Traffic Source,,"The DV360 Partner Name that led to the session. DV360 partners represent agencies, trading desks, or large individual advertisers."
+sessionDv360Source,False,Traffic Source,,The DV360 Source that led to the session. The DV360 site name where your ad was displayed.
+sessionDv360SourceMedium,False,Traffic Source,,The DV360 Source Medium that led to the session. A combination of the source and medium.
+sessionGoogleAdsAccountName,False,Traffic Source,,The Account name from Google Ads that led to the session. Corresponds to customer.descriptive_name in the Google Ads API.
+sessionGoogleAdsAdGroupId,False,Traffic Source,,The Ad Group Id in Google Ads for a session.
+sessionGoogleAdsAdGroupName,False,Traffic Source,,The Ad Group Name in Google Ads for a session.
+sessionGoogleAdsAdNetworkType,False,Traffic Source,,"The advertising network that led to the session. An enumeration which includes `Google search`, `Search partners`, `Google Display Network`, `Youtube Search`, `Youtube Videos`, `Cross-network`, `Social`, and `(universal campaign)`."
+sessionGoogleAdsCampaignId,False,Traffic Source,,The Campaign ID for the Google Ads Campaign that led to this session.
+sessionGoogleAdsCampaignName,False,Traffic Source,,The Campaign name for the Google Ads Campaign that led to this session.
+sessionGoogleAdsCampaignType,False,Traffic Source,,"The campaign type for the Google Ads campaign that led to this session. Campaign types determine where customers see your ads and the settings and options available to you in Google Ads. Campaign type is an enumeration that includes: Search, Display, Shopping, Video, Demand Gen, App, Smart, Hotel, Local, and Performance Max. To learn more, see [Choose the right campaign type](https://support.google.com/google-ads/answer/2567043)."
+sessionGoogleAdsCreativeId,False,Traffic Source,,The ID of the Google Ads creative that led to a session on your website or app. Creative IDs identify individual ads.
+sessionGoogleAdsCustomerId,False,Traffic Source,,The Customer ID from Google Ads that led to the session. Customer IDs in Google Ads uniquely identify Google Ads accounts.
+sessionGoogleAdsKeyword,False,Traffic Source,,"The matched keyword that led to the session. Keywords are words or phrases describing your product or service that you choose to get your ad in front of the right customers. To learn more about Keywords, see [Keywords: Definition](https://support.google.com/google-ads/answer/6323)."
+sessionGoogleAdsQuery,False,Traffic Source,,The search query that led to the session.
+sessionManualAdContent,False,Traffic Source,,The ad content that led to a session. Populated by the utm_content parameter.
+sessionManualCampaignId,False,Traffic Source,,The manual Campaign ID that led to the session. Identifies the manual campaign. Populated by `utm_id` URL parameter.
+sessionManualCampaignName,False,Traffic Source,,"The manual Campaign Name that led to the session. The name of the manual campaign. Populated by `utm_campaign` URL parameter. To learn more, see [Collect campaign data with custom URLs](https://support.google.com/analytics/answer/10917952)."
+sessionManualCreativeFormat,False,Traffic Source,,The manual Creative Format that led to the session. Identifies the creative format used in the ad. Populated by `utm_creative_format` URL parameter.
+sessionManualMarketingTactic,False,Traffic Source,,"The manual Marketing Tactic that led to the session. The targeting criteria applied to a campaign. For example, remarketing or prospecting. Populated by `utm_marketing_tactic` URL parameter."
+sessionManualMedium,False,Traffic Source,,"The manual Medium that led to the session. The marketing medium used in the referral. For example, `cpc`. Populated by `utm_medium` URL parameter."
+sessionManualSource,False,Traffic Source,,The manual Source that led to the session. The referrer. Populated by `utm_source` URL parameter.
+sessionManualSourceMedium,False,Traffic Source,,The manual Source Medium that led to the session. A combination of the source and medium.
+sessionManualSourcePlatform,False,Traffic Source,,The manual Source Platform that led to the session. The platform responsible for directing traffic to a given Analytics property. Populated by `utm_source_platform` URL parameter.
+sessionManualTerm,False,Traffic Source,,The term that led to a session. Populated by the utm_term parameter.
+sessionMedium,False,Traffic Source,,The medium that initiated a session on your website or app.
+sessionPrimaryChannelGroup,False,Traffic Source,,"The primary channel group that led to the session. Primary channel groups are the channel groups used in standard reports in Google Analytics and serve as an active record of your property's data in alignment with channel grouping over time. To learn more, see [Custom channel groups](https://support.google.com/analytics/answer/13051316)."
+sessionSa360AdGroupId,False,Traffic Source,,The SA360 Ad Group ID that led to the session. Identifies the SA360 ad group.
+sessionSa360AdGroupName,False,Traffic Source,,The SA360 Ad Group Name that led to the session. SA360 Ad groups contain ads and keywords that relate to each other.
+sessionSa360CampaignId,False,Traffic Source,,The SA360 Campaign ID that led to the session. Identifies the SA360 campaign.
+sessionSa360CampaignName,False,Traffic Source,,The SA360 Campaign Name that led to the session. A SA360 campaign lets you organize your ads and define a goal for your advertising.
+sessionSa360CreativeFormat,False,Traffic Source,,The SA360 Creative Format that led to the session. The creative format is the specific layout or design of the advertisement used in a campaign.
+sessionSa360EngineAccountId,False,Traffic Source,,The SA360 Engine Account ID that led to the session. Identifies the SA360 engine account.
+sessionSa360EngineAccountName,False,Traffic Source,,"The SA360 Engine Account Name that led to the session. A SA360 engine account contains campaigns, ad groups, and other items from an advertising account."
+sessionSa360EngineAccountType,False,Traffic Source,,"The SA360 Engine Account Type that led to the session. The type of engine used by the search engine account. For example, `google ads`, `bing`, or `baidu`."
+sessionSa360Keyword,False,Traffic Source,,The SA360 Keyword Text that led to the session. The keywords that matched the search query.
+sessionSa360ManagerAccountId,False,Traffic Source,,The SA360 Manager Account ID that led to the session. Identifies the SA360 manager account.
+sessionSa360ManagerAccountName,False,Traffic Source,,The SA360 Manager Account Name that led to the session. The top level of the Search Ads 360 account hierarchy and is used for administration and reporting across the lower-level sub-manager and client accounts.
+sessionSa360Medium,False,Traffic Source,,"The SA360 Medium that led to the session. The payment mode used in ad buying. For example, `cpc`."
+sessionSa360Query,False,Traffic Source,,The SA360 Query that led to the session. The search query typed by the user.
+sessionSa360Source,False,Traffic Source,,The SA360 Source that led to the session. The search query happened on this site.
+sessionSa360SourceMedium,False,Traffic Source,,The SA360 Source Medium that led to the session. A combination of the source and medium.
+sessionSource,False,Traffic Source,,The source that initiated a session on your website or app.
+sessionSourceMedium,False,Traffic Source,,The combined values of the dimensions `sessionSource` and `sessionMedium`.
+sessionSourcePlatform,False,Traffic Source,sessionTrafficOrigin,The source platform of the session's campaign. Don't depend on this field returning `Manual` for traffic that uses UTMs; this field will update from returning `Manual` to returning `(not set)` for an upcoming feature launch.
+shippingTier,False,Ecommerce,,"The shipping tier selected for delivery of the purchased item. For example, `Ground`, `Air`, or `Next-day`. Populated by the `shipping_tier` event parameter."
+signedInWithUserId,False,User,,"The string `yes` if the user signed in with the User-ID feature. To learn more about User-ID, see [Measure activity across platforms with User-ID](https://support.google.com/analytics/answer/9213390)."
+source,False,Attribution,,The source attributed to the key event.
+sourceMedium,False,Attribution,,The combined values of the dimensions `source` and `medium`.
+sourcePlatform,False,Attribution,trafficOrigin,The source platform of the key event's campaign. Don't depend on this field returning `Manual` for traffic that uses UTMs; this field will update from returning `Manual` to returning `(not set)` for an upcoming feature launch.
+streamId,False,Platform / Device,,The numeric data stream identifier for your app or website.
+streamName,False,Platform / Device,,The data stream name for your app or website.
+testDataFilterId,False,Other,,"The numeric identifier of a data filter in testing state. You use data filters to include or exclude event data from your reports based on event-parameter values. To learn more, see [Data filters](https://support.google.com/analytics/answer/10108813)."
+testDataFilterName,False,Other,,"The name of data filters in testing state. You use data filters to include or exclude event data from your reports based on event-parameter values. To learn more, see [Data filters](https://support.google.com/analytics/answer/10108813)."
+transactionId,False,Ecommerce,,The ID of the ecommerce transaction.
+unifiedPagePathScreen,False,Page / Screen,,The page path (web) or screen class (app) on which the event was logged.
+unifiedPageScreen,False,Page / Screen,,The page path and query string (web) or screen class (app) on which the event was logged.
+unifiedScreenClass,False,Page / Screen,,The page title (web) or screen class (app) on which the event was logged.
+unifiedScreenName,False,Page / Screen,,The page title (web) or screen name (app) on which the event was logged.
+userAgeBracket,False,Demographics,,User age brackets.
+userGender,False,Demographics,,User gender.
+videoProvider,False,Other,,"The source of the video (for example, `youtube`). Automatically populated for embedded videos if Enhanced Measurement is enabled. Populated by the event parameter `video_provider`."
+videoTitle,False,Other,,The title of the video. Automatically populated for embedded videos if Enhanced Measurement is enabled. Populated by the event parameter `video_title`.
+videoUrl,False,Other,,The URL of the video. Automatically populated for embedded videos if Enhanced Measurement is enabled. Populated by the event parameter `video_url`.
+virtualCurrencyName,False,Other,,The name of a virtual currency with which the user is interacting. Such as spending or purchasing gems in a game. Populated by the `virtual_currency_name` event parameter.
+visible,False,Other,,Returns `true` if the content is visible. Automatically populated for embedded videos if Enhanced Measurement is enabled. Populated by the event parameter `visible`.
+week,False,Time,,"The week of the event, a two-digit number from 01 to 53. Each week starts on Sunday. January 1st is always in week 01. The first and last week of the year have fewer than 7 days in most years. Weeks other than the first and the last week of the year always have 7 days. For years where January 1st is a Sunday, the first week of that year and the last week of the prior year have 7 days."
+year,False,Time,,"The four-digit year of the event. For example, 2020 or 2024."
+yearMonth,False,Time,,The combined values of year and month. Example values include 202212 or 202301.
+yearWeek,False,Time,,The combined values of year and week. Example values include 202253 or 202301.
+customEvent:book_button_id,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:book_button_name,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:city_id,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:city_name,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:event_category,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:event_label,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:item_id,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:item_list_name,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:item_name[select_content],True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:payment_provider,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:payment_type,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:screen[open],True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customEvent:transaction_id,True,Event-scoped Custom Dimension,,An event scoped custom dimension for your Analytics property.
+customUser:AppLanguage,True,User-scoped Custom Dimension,,A user scoped custom dimension for your Analytics property.
+customUser:firebase_last_notification,True,User-scoped Custom Dimension,,A user scoped custom dimension for your Analytics property.
