@@ -464,229 +464,141 @@ CRM_feaebb10014f,7.0,7.0,0.0,CRM,4463.0,2025-06-29 15:00:00,2025-07-01 15:00:00,
 CRM_ff7db6139614,16.0,22.0,-6.0,CRM,1826.0,2025-07-07 15:15:00,2025-07-09 15:15:00,TH_BKK_ctnoti_netcore_single_N_N_active_20250704_1700_57th-street-marriott-jul25,57th-street-marriott-jul25,single,,,,,,
 CRM_ffb80908c092,2.0,3.0,-1.0,CRM,3111.0,2025-06-14 11:00:00,2025-06-16 11:00:00,TH_BKK_ctnoti_netcore_group_N_N_active_20250614_1100_11th-you-i-premium-suki-buffet-jun25,11th-you-i-premium-suki-buffet-jun25,group,,,,,,
 CRM_ffd93a0a6f21,2.0,1.0,1.0,CRM,3629.0,2025-01-19 11:00:00,2025-01-21 11:00:00,TH_BKK_ctnoti_netcore_single_N_N_active_20250119_1100_savio-at-chatrium-grand-jan25,savio-at-chatrium-grand-jan25,single,,,,,,
-FB_031fb7e97014,2.0,3.0,-1.0,FB,3990.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-hgj_brn_3990_chef-thanom-the-street-ratchada,661.94,-1.5107109405686314
-FB_0338b7575b05,6.0,7.0,-1.0,FB,4749.0,2024-10-10 00:00:00,2024-10-17 00:00:00,,,,,,,kol-fd_hh-dmpk_res_4749_saneh-jaan-one-michelin-star-bangkok,999.7,-1.000300090027008
-FB_034681348ba2,2.0,2.0,0.0,FB,4413.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_4413_flow-at-millennium-hilton-bangkok,415.36,0.0
-FB_03f6e0d1204b,5.0,4.0,1.0,FB,2102.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-aj_brn_2102_jumbo-seafood,1247.84,0.8013847929221696
-FB_045c0fbdbad7,14.0,36.0,-22.0,FB,5149.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,album_hh_res_5149_nama-japanese-and-seafood-buffet-hungry-hub-bangkok,84.92,-259.0673575129534
-FB_06bc62fdf9bf,1.0,7.0,-6.0,FB,3164.0,2024-08-27 00:00:00,2024-08-30 00:00:00,,,,,,,kol-fd_hh-rvst_3164_bangkok sky baiyoke sky (76/78th floor)_key – Copy,19644.17,-0.3054341313478757
-FB_06c657ef5701,5.0,2.0,3.0,FB,2421.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-bt_hh-obb_res_2421_rib-room-bar-steakhouse-the-landmark-bangkok-michelin-guide,986.74,3.0403145712143016
-FB_06e067c89c4c,4.0,15.0,-11.0,FB,3564.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,SRC=HH|RID=3564|RNAME=S_CAF_AT_S31_SUKHUMVIT_HOTEL|PLAT=FB|DATE=2025-10-24 - Copy,127.16,-86.50519031141869
-FB_079e39fbf66b,10.0,3.0,7.0,FB,1063.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-ewp_brn_1063_boon-tong-kee-central-eastville,0.18,38888.88888888889
-FB_08ebcec7629b,1.0,0.0,1.0,FB,3905.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-ucd_3905_man fu yuan_key,1027.22,0.973501294756722
-FB_0934cb9212dd,107.0,170.0,-63.0,FB,5149.0,2025-01-16 00:00:00,2025-01-23 00:00:00,,,,,,,vdo_hh_res_5149_nama-japanese-and-seafood-buffet-hungry-hub - Copy 2,63095.0,-0.9984943339408828
-FB_09885cc4e42c,3.0,5.0,-2.0,FB,1153.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_1153_the-kitchen-table-buffet-at-w-bangkok-hotel,905.69,-2.2082611047930305
-FB_09bb7f05566e,7.0,4.0,3.0,FB,2049.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-uncle_res_2049_don-giovanni-centara-grand-at-central-plaza-ladprao-bangkok,294.29,10.194026300587856
-FB_0a130caa0ecf,1.0,3.0,-2.0,FB,3674.0,2024-11-29 00:00:00,2024-12-02 00:00:00,,,,,,,kol-pfd_hh-mp_3674_hagi,722.7,-2.7674000276740003
-FB_0d2de7ac2aee,2.0,3.0,-1.0,FB,4463.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-hht_res_4463_ancient-tea-house-asiatique-the-riverfront-bangkok,3.9,-256.4102564102564
-FB_0dae410ba02d,37.0,23.0,14.0,FB,3901.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-snh_3901_vantage point_sal,48.06,291.3025384935497
-FB_0df26f0b1e26,2.0,2.0,0.0,FB,3649.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-bt_hh-obb_res_3649_chatuchak-cafe-centara-grand-at-central-plaza-ladprao-bangkok,12.29,0.0
-FB_0f5d54a6b72e,1.0,1.0,0.0,FB,3181.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-plk_brn_3181_beef-express-buffet,2.26,0.0
-FB_11667875402b,41.0,90.0,-49.0,FB,3901.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_rhoireview_3901_vantage point_sal – Copy - Copy,23532.86,-2.082194854344096
-FB_1174a604386f,16.0,7.0,9.0,FB,2681.0,2024-08-28 00:00:00,2024-08-31 00:00:00,,,,,,,album_hh_res_2681_na-klongwan-vibhavadi-20-bangkok,31.84,282.66331658291455
-FB_118d01f5bcb6,32.0,28.0,4.0,FB,3828.0,2024-12-18 00:00:00,2024-12-25 00:00:00,,,,,,,kol-fd_hh-ebf_res_3828_topgolf-megacity,10148.41,0.394150413710128
-FB_118fa5ee77b9,1.0,0.0,1.0,FB,4077.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-ucd_4077_red lobster_sal,101.47,9.855129594954173
-FB_1257a0a3d116,1.0,0.0,1.0,FB,4109.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-ott_res_4109_hangetsu-omakase,508.88,1.9650998270712152
-FB_12e4ef0a0078,1.0,1.0,0.0,FB,4992.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-mlt_res_4992_the-crystal-grill-house-at-asiatique-the-riverfront,9.59,0.0
-FB_1335e12848a3,4.0,0.0,4.0,FB,4801.0,2024-09-26 00:00:00,2024-09-29 00:00:00,,,,,,,vdo_hh_brn_4801_charoen-rung-rueang,6229.89,0.642065911276122
-FB_143532b0b965,1.0,0.0,1.0,FB,1353.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-ucd_res_1353_kuang-seafood-ratchada-bangkok-thailand - Copy,279.05,3.5835871707579283
-FB_1504f7553c87,11.0,15.0,-4.0,FB,426.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-lzb_brn_426_audrey-cafe – Copy,2259.74,-1.7701151459902469
-FB_15a11bfeff02,1.0,2.0,-1.0,FB,4227.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-mcr_res_4227_korea-house-gold-the-fourth-bangkok,192.88,-5.184570717544587
-FB_15f3121bff9f,3.0,1.0,2.0,FB,5233.0,2025-01-08 00:00:00,2025-01-15 00:00:00,,,,,,,album_hh_res_5233_ichi-meshi-rangsit-bangkok,998.39,2.0032251925600217
-FB_18e58a254d00,1.0,1.0,0.0,FB,1673.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-ucd_1673_soshi so/ bangkok,153.07,0.0
-FB_1a3c5f130db2,7.0,12.0,-5.0,FB,222.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_bearducktravel_222_rain tree cafe_key – Copy,9160.99,-0.5457925398892478
-FB_1d386d1ae725,1.0,1.0,0.0,FB,4576.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-ltmm_res_4576_house-of-tango-bangkok,159.03,0.0
-FB_211e2ea1e474,4.0,10.0,-6.0,FB,1656.0,2024-11-29 00:00:00,2024-12-02 00:00:00,,,,,,,kol-ls_hh-sou_1656_fallabella,3201.62,-1.8740512615488412
-FB_217838b97a1e,1.0,1.0,0.0,FB,3990.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-fad_brn_3990_chef-thanom-the-street-ratchada,2.45,0.0
-FB_250423e0fd06,1.0,6.0,-5.0,FB,1433.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_paigingun_1433_the seafood cafe_key,122.84,-40.703353956366
-FB_266b4428cdbb,3.0,1.0,2.0,FB,843.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-gpm_res_843_seafresh-riverside-buffet-bangkok-thailand,3.76,531.9148936170213
-FB_2904ff19b9d5,5.0,3.0,2.0,FB,982.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-sc_res_982_prince-cafe-at-prince-palace-hotel-bangkok,5628.91,0.3553085766160767
-FB_291752948361,13.0,26.0,-13.0,FB,222.0,2025-01-16 00:00:00,2025-01-23 00:00:00,,,,,,,kol-pfd_bearducktravel_222_rain tree cafe_key – Copy - Copy,16558.76,-0.7850829409931662
-FB_29bcf373e5da,1.0,11.0,-10.0,FB,4655.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,vdo_hh_res_4655_sushi-koge-omakase-bangkok,12.9,-775.1937984496124
-FB_2a1d293883a5,9.0,5.0,4.0,FB,3905.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-bljn_res_3905_man-fu-yuan-qsncc,361.29,11.071438456641479
-FB_2c43300b2d0d,2.0,2.0,0.0,FB,1684.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-hht_brn_1684_the-coffee-club-river-city-bangkok-thailand,71.26,0.0
-FB_2c73150110bc,12.0,21.0,-9.0,FB,3619.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,album_hh_res_3619_tenyuu-grand-omakase - Copy,19220.98,-0.4682383520507279
-FB_2d1a6bce53ab,2.0,2.0,0.0,FB,4463.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-fad_res_4463_ancient-tea-house-asiatique-the-riverfront-bangkok,1.32,0.0
-FB_30ea0292e061,1.0,1.0,0.0,FB,3949.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-gbm_res_3949_man-chan-korean-bbq-buffet-seacon-square-srinagarindra,1520.58,0.0
-FB_31f270742f2e,6.0,13.0,-7.0,FB,1747.0,2025-06-10 00:00:00,2025-06-13 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=1747+2102|RNAME=JUMBO-SEAFOOD|TYPE=IMG|KOLID=HH|PLAT=FB|DATE=2025-10-30,115.17,-60.77971694017539
-FB_31f85b767734,22.0,38.0,-16.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-pyb_res_4889_gentle-butcher-by-bangkok-butcher,13763.45,-1.1624992280278563
-FB_3276cf9897a4,2.0,2.0,0.0,FB,4930.0,2024-11-14 00:00:00,2024-11-21 00:00:00,,,,,,,kol-ls_hh-gego_res_4930_jibcharoen-bar-bistro-bangkok,748.95,0.0
-FB_340cb2f89428,1.0,1.0,0.0,FB,2252.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-uncle_brn_2252_beef-express-buffet,712.69,0.0
-FB_3450c4b5f625,39.0,29.0,10.0,FB,3005.0,2024-11-27 00:00:00,2024-11-30 00:00:00,,,,,,,kol-ls_hh-easw_res_3005_great-harbour-international-buffet,2.4,4166.666666666667
-FB_35d720e47e95,2.0,1.0,1.0,FB,3908.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-fad_brn_3908_you-i-premium-suki-buffet,423.04,2.363842662632375
-FB_3719b3a8c674,2.0,0.0,2.0,FB,2072.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=2072|RNAME=KONGJU_RESTAURANT_AT_PATHUMWAN_PRINCESS_HOTEL|TYPE=IMG|KOLID=HH-CTH|PLAT=FB|DATE=2025-12-03,7.08,282.4858757062147
-FB_377a10fd4358,3.0,2.0,1.0,FB,2749.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-hmrp_res_2749_atrium-restaurant-the-landmark-bangkok-hotel,5.0,200.0
-FB_37bcb4c003ff,2.0,3.0,-1.0,FB,4470.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-kmg_res_4470_khaan-bangkok-michelin-guide,12517.92,-0.07988547618134642
-FB_391eab9ec8cd,9.0,5.0,4.0,FB,33.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,album_hh_brn_33_ruen-petch-suki - Copy 2,2.86,1398.6013986013988
-FB_3a21d7aaa739,4.0,4.0,0.0,FB,3674.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-hht_res_3674_hagi-centara-grand-at-central-plaza-ladprao-bangkok,30.29,0.0
-FB_3e51de49553b,4.0,1.0,3.0,FB,2294.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-fd_bossonlydeliciousfood_2294_market cafe_key,51.02,58.80047040376323
-FB_3eed1ec0d924,1.0,2.0,-1.0,FB,3492.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-ffrv_3492_knock-knock-cafe-bar,4.33,-230.9468822170901
-FB_3f60fb41013b,42.0,80.0,-38.0,FB,2536.0,2025-01-16 00:00:00,2025-01-23 00:00:00,,,,,,,kol-ls_hh-sou_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel – Copy - Copy,26572.12,-1.4300703142993485
-FB_3f829b8df903,1.0,1.0,0.0,FB,4751.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-gpm_res_4751_about-beef-lava-grill,262.61,0.0
-FB_4147350269f9,1.0,1.0,0.0,FB,1594.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=1594|RNAME=FLAVORS_AT_RENAISSANCE_BANGKOK|TYPE=VDO|KOLID=HH-FAD|PLAT=FB|DATE=2025-11-28,144.98,0.0
-FB_41c2fc71552f,6.0,7.0,-1.0,FB,835.0,2024-11-29 00:00:00,2024-12-02 00:00:00,,,,,,,kol-ls_hh-sou_res_835_red-oven-so-bangkok,7.67,-130.3780964797914
-FB_41dcc4e2c3f4,14.0,10.0,4.0,FB,4710.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-pyb_brn_4710_zaap-classic-seacon-square-srinagarindra - Copy,3538.88,1.1303011122162943
-FB_439717eff07c,1.0,0.0,1.0,FB,4777.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_res_4777_caper-by-dan-bark-bangkok,81.95,12.202562538133007
-FB_43a1607d7a01,3.0,1.0,2.0,FB,3949.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-td_res_3949_the-siam-tea-room-asiatique-the-riverfront-branch-bangkok-thailand,401.53,4.980947874380495
-FB_43b9e01f08d6,35.0,32.0,3.0,FB,3005.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-swt_res_3005_great-harbour-international-buffet-bangkok-thailand,76.54,39.19519205644107
-FB_4554469a62c1,5.0,2.0,3.0,FB,4763.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-hmrp_res_4763_chon-som-at-courtyard-by-marriott-suvarnabhumi-airport,2354.33,1.2742478751916682
-FB_45ae40ffe655,1.0,0.0,1.0,FB,4046.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_painaigun_4046_mr.park bbq_sma,614.57,1.6271539450347396
-FB_481d4ff7853f,1.0,2.0,-1.0,FB,3596.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-nbt_res_3596_deja-brew-lifestyle-cafe-at-centra-by-centara-hotel-bangkok-phra-nakhon,307.69,-3.2500243751828135
-FB_48ed723c3919,2.0,2.0,0.0,FB,3854.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-snh_res_3854_suan-bua-centara-grand-ladprao-bangkok,636.09,0.0
-FB_4a85e6105b4b,3.0,2.0,1.0,FB,3377.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-ott_res_3377_guilty-anantara-siam-bangkok,3254.53,0.3072640289073998
-FB_4a8ba5d1ed96,6.0,10.0,-4.0,FB,4302.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-fdr_brn_4302_zaap-classic-emquartier-bangkok,291.15,-13.738622703074018
-FB_4ba7262ba1b9,2.0,5.0,-3.0,FB,3076.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,hh-cth_closetoheavenblog_3076_the-coffee-club-best-buffet-promotion-the-coffee-club_fb_20102025,30.2,-99.33774834437087
-FB_5050775fdcd4,22.0,12.0,10.0,FB,712.0,2024-10-15 00:00:00,2024-10-18 00:00:00,,,,,,,INF_jernaan.journey_712_Vertigo too_KEY,3742.53,2.6719892692910943
-FB_50c8ce4e4f8e,13.0,4.0,9.0,FB,2001.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-ejls_res_2001_the-dining-room-at-grand-hyatt-erawan-bangkok-thailand,0.52,17307.692307692305
-FB_519e85cff251,1.0,5.0,-4.0,FB,3166.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_res_3166_koko-japanese-omakase-bangkok,419.53,-9.534479059900365
-FB_51c71dd48b34,1.0,2.0,-1.0,FB,1594.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-uncle_res_1594_flavors-at-renaissance-bangkok,10.01,-99.9000999000999
-FB_527b57436e9c,6.0,3.0,3.0,FB,1767.0,2024-08-27 00:00:00,2024-08-30 00:00:00,,,,,,,kol-fd_hh-pls_res_1767_stella-palace-baiyoke-sky-hotel – Copy,280.03,10.713137878084494
-FB_53e7c6dd1133,4.0,3.0,1.0,FB,1483.0,2025-10-08 00:00:00,2025-10-11 00:00:00,,,,,,,SRC=HH|RID=1483+6460+701+6483+6507|RNAME=TOP_NEW_RESTAURANTS_FOR_EXISTING|PLAT=FB|DATE=2025-10-22,3017.67,0.3313814963200085
-FB_56174cfdec94,4.0,3.0,1.0,FB,1433.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-fd_hungryjug_1433_the seafood cafe_key,414.87,2.4103936172777014
-FB_564b49cefbbd,2.0,1.0,1.0,FB,2749.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-pgm_res_2749_atrium-restaurant-the-landmark-bangkok-hotel,4028.11,0.2482553852799452
-FB_57089df9dbc9,3.0,3.0,0.0,FB,1768.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-snh_1768_the map mestyle museum hotel_grw,643.75,0.0
-FB_571ceed45531,3.0,2.0,1.0,FB,4598.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-cvtp_brn_4598_ruen-petch-suki-ratchaphruek-road - Copy 2,4604.59,0.21717460186466114
-FB_580d0ed68ccd,4.0,11.0,-7.0,FB,425.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_brn_425_audrey-cafe-emquartier-bangkok,565.37,-12.381272441056298
-FB_580e52d36f44,6.0,9.0,-3.0,FB,4655.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-ebf_res_4655_sushi-koge-omakase - Copy,12922.29,-0.23215699384551808
-FB_591aad53be2b,4.0,4.0,0.0,FB,3854.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-ucd_3854_suan bua_key,2736.32,0.0
-FB_5939ac9a9954,1.0,9.0,-8.0,FB,1767.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-pls_res_1767_stella-palace-baiyoke-sky-hotel – Copy - Copy,15092.7,-0.5300575775043563
-FB_5b2a17fa97ab,6.0,7.0,-1.0,FB,3564.0,2024-10-15 00:00:00,2024-10-18 00:00:00,,,,,,,kol-fd_hh-hmrp_res_3564_s-cafe-at-s31-sukhumvit-hotel - Copy,7724.45,-0.1294590553372732
-FB_5b2b65b142de,1.0,0.0,1.0,FB,3618.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_travelkanuman_3618_takumi at swissotel_grw,640.78,1.5605980211617092
-FB_5b391510604b,12.0,9.0,3.0,FB,2001.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-ucd_2001_the dining room,7.21,416.0887656033287
-FB_5bcf61ed0479,3.0,4.0,-1.0,FB,2749.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,vdo_hh_res_2749_atrium-restaurant-the-landmark-bangkok-hotel,5.77,-173.3102253032929
-FB_5be575a02ca8,79.0,249.0,-170.0,FB,4889.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-kjt_res_4889_gentle-butcher-by-bangkok-butcher - Copy,29624.55,-5.738483791314974
-FB_5c1ddbf80327,9.0,9.0,0.0,FB,4598.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,hh_hungryhub_4598_ruen-petch-suki(all)_fb_06102026 - Copy,4077.2,0.0
-FB_5de7f701fb36,1.0,0.0,1.0,FB,2434.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-kjt_res_2434_the-district-grill-room-bar-bangkok-marriott-hotel-sukhumvit,25.91,38.595137012736394
-FB_614cb9e9ab25,33.0,34.0,-1.0,FB,4889.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-rhoi_res_4889_gentle-butcher-by-bangkok-butcher,11.02,-90.74410163339383
-FB_61595c732bdf,6.0,18.0,-12.0,FB,3629.0,2025-01-16 00:00:00,2025-01-23 00:00:00,,,,,,,kol-fd_hh-kmg_res_3629_savio-at-chatrium-grand-bangkok - Copy,51327.83,-0.23379129801513138
-FB_6290d5ccdef2,2.0,1.0,1.0,FB,3908.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,vdo_hh_brn_3908_you-i-premium-suki-buffet - Copy,52.8,18.93939393939394
-FB_6398a6919a77,5.0,9.0,-4.0,FB,1856.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-fdn_res_1856_spectrum-rooftop-at-hyatt-regency-bangkok-sukhumvit,17.59,-227.40193291642976
-FB_63aca1055907,9.0,6.0,3.0,FB,3934.0,2024-11-27 00:00:00,2024-11-30 00:00:00,,,,,,,kol-ls_hh-easw_res_3934_cielo-sky-bar-restaurant-rooftop,19.3,155.440414507772
-FB_645cdccac6fd,5.0,3.0,2.0,FB,2749.0,2024-12-06 00:00:00,2024-12-13 00:00:00,,,,,,,album_hh_res_2749_atrium-restaurant-the-landmark-bangkok-hotel,0.0,
-FB_645f3c2ef474,2.0,3.0,-1.0,FB,3649.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-hht_res_3649_chatuchak-cafe-centara-grand-at-central-plaza-ladprao-bangkok,78.82,-12.687135244861713
-FB_66a5bebab9d2,49.0,34.0,15.0,FB,3596.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-moo_res_3596_deja-brew-lifestyle-cafe-at-centara-life-hotel-bangkok-phra-nakhon,9831.78,1.5256647321237864
-FB_6af8224e8bd6,21.0,19.0,2.0,FB,5845.0,2025-06-16 00:00:00,2025-06-23 00:00:00,,,,,,,SRC=HH|COUNTRY=TH|RID=5845+4350+3905|RNAME=MAN_FU_YUAN|TYPE=IMG|PLAT=FB|DATE=2025-12-15 - Copy,1.15,1739.1304347826087
-FB_6b11ae7dc899,3.0,3.0,0.0,FB,3619.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-ott_res_3619_tenyuu-grand-omakase,1742.2,0.0
-FB_6bf3ace5291d,1.0,3.0,-2.0,FB,2072.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=2072|RNAME=KONGJU_RESTAURANT_AT_PATHUMWAN_PRINCESS_HOTEL|TYPE=IMG|KOLID=HH-CVTP|PLAT=FB|DATE=2025-11-28,28.67,-69.75933031042902
-FB_70bde2b3b39b,7.0,2.0,5.0,FB,280.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,Album_HH_280_Vertigo Rooftop_KEY,121.05,41.30524576621231
-FB_717220fbe161,2.0,2.0,0.0,FB,1003.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_jernaan.journey_1003_greenhouse avani sukhumvit,1009.45,0.0
-FB_71c8945f3f1d,35.0,37.0,-2.0,FB,2536.0,2024-11-22 00:00:00,2024-11-29 00:00:00,,,,,,,kol-ls_hh-nbt_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel-bangkok,1999.79,-1.0001050110261578
-FB_732da41709ef,4.0,6.0,-2.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-uncle_res_894_romsai-banyan-tree-hotel,6420.14,-0.3115196864865875
-FB_7372c92b6b0e,2.0,0.0,2.0,FB,902.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_902_the-berkeley-dining-room,211.01,9.478223780863466
-FB_73e4a8cc178d,6.0,1.0,5.0,FB,3949.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-mlt_res_3949_the-siam-tea-room-asiatique-the-riverfront-branch,1141.46,4.380354983967901
-FB_7720616f0672,4.0,1.0,3.0,FB,3905.0,2024-11-29 00:00:00,2024-12-02 00:00:00,,,,,,,kol-ls_hh-sou_res_3905_man-fu-yuan-qsncc,3999.03,0.7501819191153855
-FB_78418731601e,10.0,11.0,-1.0,FB,1856.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-yrv_res_1856_spectrum-rooftop-at-hyatt-regency-bangkok-sukhumvit,482.24,-2.0736562707365627
-FB_78eacaff11b9,5.0,4.0,1.0,FB,928.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-gbm_928_the mulberry_grw,394.52,2.5347257426746426
-FB_79ef935f6841,5.0,4.0,1.0,FB,222.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-ls_hh-mlt_222_rain tree cafe_key,0.0,
-FB_7b00917f2e4b,10.0,2.0,8.0,FB,1063.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-ucd_brn_1063_boon-tong-kee-buffet-starting-at-599,5787.92,1.3821891111141826
-FB_7bd6f2918d04,4.0,2.0,2.0,FB,3620.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-bed_res_3620_loong-foong-at-swissotel-bangkok-ratchada,34.53,57.92064871126557
-FB_7dbe7c4f7d5a,2.0,2.0,0.0,FB,3024.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-hspz_3024_pesto_grw,7.94,0.0
-FB_7ee5df4d03ca,16.0,10.0,6.0,FB,4263.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-tvkn_res_4263_feast-at-royal-orchid-sheraton-towers,1432.51,4.188452436632205
-FB_81933668d220,2.0,0.0,2.0,FB,4685.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-ott_res_4685_chu-grill-shabu,382.03,5.235190953590032
-FB_856410fda737,2.0,0.0,2.0,FB,3990.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-pyb_brn_3990_chef-thanom-the-street-ratchada,1408.6,1.4198494959534291
-FB_860b85d1d910,3.0,1.0,2.0,FB,1767.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-pls_res_1767_stella-palace-baiyoke-sky-hotel,5.41,369.68576709796673
-FB_861e98504af0,61.0,126.0,-65.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_hh-easw_res_3005_great-harbour-international-buffet - Copy,11510.93,-5.646806991268299
-FB_86401b78a5ef,2.0,2.0,0.0,FB,3990.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_brn_3990_chef-thanom-the-street-ratchada-bangkok,108.82,0.0
-FB_8869c71d7a0a,6.0,9.0,-3.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_hh-cth_res_3905_man-fu-yuan-qsncc,1096.94,-2.7348806680401845
-FB_8a46e488f09e,20.0,11.0,9.0,FB,4302.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-cvtp_brn_4302_zaap-classic-emquartier-bangkok,1044.56,8.616068009496821
-FB_8b1ad3b0e769,2.0,9.0,-7.0,FB,1433.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_1433_the-seafood-cafe-restaurant-bangkok-thailand,48.05,-145.68158168574402
-FB_923c877e6ae6,3.0,1.0,2.0,FB,4089.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-png_brn_4089_kunshine-hotpot-asok,607.16,3.2940246393043022
-FB_943de805292e,1.0,0.0,1.0,FB,4947.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-mlt_res_4947_nabezo-premium,0.62,1612.9032258064517
-FB_94bebadfad28,8.0,6.0,2.0,FB,5845.0,2025-06-10 00:00:00,2025-06-13 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=5845+3905|RNAME=MAN_FU_YUAN|TYPE=IMG|KOLID=HH-RHOI|PLAT=FB|DATE=2025-12-15,2.4,833.3333333333334
-FB_95138ac80c03,1.0,0.0,1.0,FB,5078.0,2025-01-02 00:00:00,2025-01-09 00:00:00,,,,,,,kol-fd_hh-ucd_res_5078_wanwaan-bkk,1986.14,0.5034891800175214
-FB_9664ec3fa9c2,2.0,13.0,-11.0,FB,4178.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-ucd_res_4178_butcher-factory-by-bangkok-butcher,1443.39,-7.620947907356985
-FB_97033be57cc1,6.0,8.0,-2.0,FB,425.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-ucd_brn_425_audrey-cafe-emquartier-bangkok,1012.28,-1.9757379381198876
-FB_97384613f9e7,1.0,0.0,1.0,FB,4195.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-he_res_4195_jim-thompson-a-thai-restaurant-bangkok,2.3,434.7826086956522
-FB_9a50b2bc2daf,6.0,4.0,2.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-kmg_res_3629_savio-at-chatrium-grand-bangkok,7363.02,0.27162767451399017
-FB_9a94c05447e7,2.0,2.0,0.0,FB,4291.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-nbt_brn_4291_camin-cuisine-cafe-central-rama-9,12.47,0.0
-FB_9b132dd7d657,1.0,3.0,-2.0,FB,4749.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-kmg_res_4749_saneh-jaan-one-michelin-star,0.98,-2040.8163265306123
-FB_9ec35c416987,1.0,3.0,-2.0,FB,4740.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-pantip_brn_4740_ma-nee-me-more,1441.95,-1.3870106453067026
-FB_a3912e6e75ba,41.0,33.0,8.0,FB,4889.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-ott_res_4889_gentle-butcher-by-bangkok-butcher,3.89,2056.5552699228792
-FB_a59dd793926e,3.0,1.0,2.0,FB,955.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-tjk_res_955_krua-nai-noi-seafood,77.0,25.974025974025974
-FB_a76d40282a00,10.0,4.0,6.0,FB,3862.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-pls_3862_siam yacht club,3762.98,1.5944809698696245
-FB_a9b51d4807df,27.0,17.0,10.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-bed_res_3005_great-harbour-international-buffet,9765.94,1.0239669709213859
-FB_aa217977785d,13.0,18.0,-5.0,FB,1747.0,2025-06-16 00:00:00,2025-06-23 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=1747+2102|RNAME=JUMBO-SEAFOOD|TYPE=IMG|KOLID=HH|PLAT=FB|DATE=2025-10-30 - Copy,41.76,-119.73180076628353
-FB_aa42d058e5bd,3.0,3.0,0.0,FB,4912.0,2025-01-03 00:00:00,2025-01-10 00:00:00,,,,,,,kol-fd_hh-kjt_res_4912_mix-beef-club-restaurant-bkk-bangkok,2000.0,0.0
-FB_aa5aaea2b567,21.0,30.0,-9.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-pls_res_3901_vantage-point – Copy,1823.34,-4.93599657770904
-FB_aa72a559e84d,7.0,5.0,2.0,FB,2429.0,2024-09-26 00:00:00,2024-09-29 00:00:00,,,,,,,vdo_hh_res_2429_sui-sian-restaurant-the-landmark-bangkok-hotel,8067.49,0.24790858123158507
-FB_abe70e56c584,7.0,11.0,-4.0,FB,3181.0,2025-11-13 00:00:00,2025-11-20 00:00:00,,,,,,,SRC=MP|COUNTRY=TH|RID=3181+2447+2252|RNAME=BEEF_EXPRESS_BUFFET|TYPE=IMG|CAMP=MP - NOV'25|KOLID=HH-UNCLE|PLAT=FB|DATE=2025-11-27,146.85,-27.238678924072186
-FB_ac25661110b1,8.0,15.0,-7.0,FB,5082.0,2025-01-03 00:00:00,2025-01-10 00:00:00,,,,,,,album_hh_brn_5082_gyu-en-siam-yakiniku,2561.49,-2.732784434059864
-FB_af71c2ffd76c,1.0,2.0,-1.0,FB,3600.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-sou_3600_throwback rooftop_lon,275.18,-3.633985027981685
-FB_b074ff3f94ad,5.0,16.0,-11.0,FB,4263.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-bt_hh-obb_res_4263_feast-at-royal-orchid-sheraton-towers,138.39,-79.48551195895658
-FB_b1c80aa74b04,1.0,2.0,-1.0,FB,3674.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-ewp_3674_hagi_key,58.2,-17.18213058419244
-FB_b3844cce503f,3.0,15.0,-12.0,FB,4749.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-kmg_res_4749_saneh-jaan-one-michelin-star - Copy,15450.53,-0.7766723859958202
-FB_b42a548091f2,1.0,0.0,1.0,FB,902.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,album_hh_res_902_the-berkeley-dining-room,89.77,11.139578923916675
-FB_b5540fc0b4a7,7.0,5.0,2.0,FB,5082.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,album_hh_res_5082_gyu-en-siam-yakiniku-bangkok,5613.27,0.35629855681269557
-FB_b76d3b64e498,9.0,7.0,2.0,FB,1856.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,hh-ltmm_littlemermine_1856_spectrum-rooftop-at-hyatt-regency-bangkok-sukhumvit_fb_07102025,38.06,52.54860746190226
-FB_b7cbad557f9d,11.0,4.0,7.0,FB,3564.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=3564|RNAME=S_CAF_AT_S31_SUKHUMVIT_HOTEL|TYPE=IMG|KOLID=HH-UNCLE|PLAT=FB|DATE=2025-11-28,373.67,18.733106751946906
-FB_b93841c55c46,2.0,2.0,0.0,FB,4621.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-ewp_res_4621_napha-emsphere,2.05,0.0
-FB_ba2b51514039,9.0,3.0,6.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-pyb_3905_man fu yuan_key – Copy,4213.03,1.4241531629254955
-FB_bb6e432d95a2,1.0,0.0,1.0,FB,1003.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-tft_res_1003_greenhouse-avani-sukhumvit,80.27,12.457954403886882
-FB_bbcf73430211,34.0,32.0,2.0,FB,4763.0,2025-01-16 00:00:00,2025-01-23 00:00:00,,,,,,,kol-fd_hh-hmrp_res_4763_chon-som-at-courtyard-by-marriott-suvarnabhumi-airport - Copy,32736.03,0.061094763170732674
-FB_bd23e1511802,4.0,0.0,4.0,FB,3619.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-bt_hh-obb_res_3619_tenyuu-grand-omakase-bangkok,4351.19,0.9192887462969901
-FB_bd918d906646,2.0,2.0,0.0,FB,3295.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,vdo_hh_res_3295_place-bangkok,1.32,0.0
-FB_beb1654e4842,1.0,0.0,1.0,FB,1937.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-ls_hh-rhoi_brn_1937_chatrium-residence-sathon-bangkok-staycation,0.15,6666.666666666667
-FB_bf84dfe67e4e,3.0,0.0,3.0,FB,1841.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-ewp_1841_river barge _key,24.89,120.53033346725593
-FB_c096d6dcaa69,2.0,0.0,2.0,FB,4763.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-jj_res_4763_chon-som-at-courtyard-by-marriott-suvarnabhumi-airport,143.71,13.916916011411871
-FB_c1b692026b8f,2.0,3.0,-1.0,FB,928.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-yrv_res_928_the-mulberry-chinese-cuisine-the-berkeley-hotel,46.86,-21.340162185232607
-FB_c1b82de24392,1.0,0.0,1.0,FB,915.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-hmrp_brn_915_neta-grill-seacon-square-srinagarindra-bangkok,2.44,409.8360655737705
-FB_c304b951bc2d,4.0,24.0,-20.0,FB,4258.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fm_hh-boy_brn_4258_oishi-grand – Copy - Copy,35768.81,-0.5591463624314033
-FB_c32b76806d5d,14.0,21.0,-7.0,FB,5845.0,2025-10-07 00:00:00,2025-10-10 00:00:00,,,,,,,SRC=HH|COUNTRY=TH|RID=5845+4350+3905|RNAME=MAN_FU_YUAN|TYPE=IMG|PLAT=FB|DATE=2025-12-15 - Copy,7.12,-983.1460674157303
-FB_c6479e30311a,3.0,0.0,3.0,FB,1579.0,2024-11-29 00:00:00,2024-12-02 00:00:00,,,,,,,kol-ls_hh-sou_1579_seen rooftop_key,990.72,3.0281007751937983
-FB_c6a80c39d374,1.0,3.0,-2.0,FB,4655.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-aj_res_4655_sushi-koge-omakase-bangkok,5.62,-355.87188612099646
-FB_cb29ecee3fe0,1.0,2.0,-1.0,FB,5684.0,2025-08-20 00:00:00,2025-08-23 00:00:00,,,,,,,SRC=KOL|RID=5684+5685|RNAME=PENGYOU_CUISINE__SPECIALTY_BAR|KOLID=HH-KJT|PLAT=FB,35.06,-28.52253280091272
-FB_cb741b9d8781,2.0,6.0,-4.0,FB,33.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_brn_33_audrey-cafe – Copy,64.88,-61.65228113440198
-FB_cd17b25ba9d3,7.0,8.0,-1.0,FB,1433.0,2024-11-29 00:00:00,2024-12-02 00:00:00,,,,,,,kol-pfd_hh-mp_1433_the seafood cafe,18.46,-54.17118093174431
-FB_ceb080d6fca2,18.0,20.0,-2.0,FB,1747.0,2025-06-06 00:00:00,2025-06-13 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=1747+2102|RNAME=JUMBO-SEAFOOD|TYPE=IMG|KOLID=HH|PLAT=FB|DATE=2025-10-30 - Copy,22.78,-87.79631255487269
-FB_d018c164e5e1,5.0,3.0,2.0,FB,3934.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-yrv_res_3934_cielo-sky-bar-restaurant-rooftop-bangkok-thailand,65.03,30.75503613716746
-FB_d131f1c0069a,3.0,3.0,0.0,FB,1747.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-pyb_brn_1747_jumbo-seafood-iconsiam-bangkok,1092.1,0.0
-FB_d21106632f50,4.0,3.0,1.0,FB,835.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-ls_hh-sou_res_835_red-oven-so-bangkok - Copy,6211.54,0.1609906722004527
-FB_d2765d111c27,6.0,4.0,2.0,FB,1433.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-uncle_res_1433_the-seafood-cafe-restaurant-bangkok-thailand,162.93,12.275210212974896
-FB_d3883e4e7cba,1.0,1.0,0.0,FB,4740.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-ucd_brn_4740_ma-nee-me-more,2133.25,0.0
-FB_d412a9b92e89,7.0,11.0,-4.0,FB,3646.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-tjnm_res_3646_axis-spin-sky-lounge-bar-rooftop-at-the-continent-boutique-hotel,0.07,-57142.85714285714
-FB_d459ef4c2ce3,16.0,4.0,12.0,FB,894.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-snh_894_romsai banyan tree bangkok_key,1677.22,7.1546964620026
-FB_d5ace0f936f3,17.0,2.0,15.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-fd_hh-hmrp_res_4263_feast-at-royal-orchid-sheraton-towers,5917.18,2.53499133032965
-FB_d651ab53f34b,17.0,34.0,-17.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-sou_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel – Copy,13102.51,-1.297461326112325
-FB_d680d6922b25,12.0,8.0,4.0,FB,3649.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,album_hh_res_3649_chatuchak-cafe-centara-grand-at-central-plaza-ladprao-bangkok,11.36,352.11267605633805
-FB_d7d028af0f56,7.0,7.0,0.0,FB,4178.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-kt_res_4178_butcher-factory-by-bangkok-butcher,289.8,0.0
-FB_d82904c5e292,6.0,4.0,2.0,FB,4178.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-gbm_res_4178_butcher-factory-by-bangkok-butcher,1998.91,1.0005452971869668
-FB_d908b98a74c5,22.0,105.0,-83.0,FB,2001.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-pyb_res_2001_the-dining-room-at-grand-hyatt-erawan - Copy,34924.04,-2.376586443034655
-FB_db2539e1258f,3.0,7.0,-4.0,FB,2294.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-hmrp_res_2294_market-cafe-by-khao-at-hyatt-regency-bangkok-sukhumvit,473.75,-8.443271767810026
-FB_dc8174b57edb,1.0,5.0,-4.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-ott_res_2001_the-dining-room-at-grand-hyatt-erawan-bangkok-thailand,14667.4,-0.27271363704542045
-FB_dd1bd366e269,2.0,1.0,1.0,FB,4463.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-plk_res_4463_ancient-tea-house-asiatique-the-riverfront-bangkok,1284.51,0.7785069793150695
-FB_dee2f7ab6260,1.0,0.0,1.0,FB,3908.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,vdo_hh_brn_3908_you-i-premium-suki-buffet,12084.28,0.08275213748771129
-FB_df32d655ba47,2.0,2.0,0.0,FB,3618.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-bed_res_3618_takumi-at-swissotel-bangkok-ratchada,1236.83,0.0
-FB_e0394d08ba3e,2.0,1.0,1.0,FB,1582.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-fd_hh-dmpk_res_1582_benihana-at-riverside-plaza,0.24,4166.666666666667
-FB_e0a8c32031f3,2.0,1.0,1.0,FB,4228.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-ucd_res_4228_one-ratchada-avani-ratchada-bangkok,14.62,68.39945280437757
-FB_e1666a749930,3.0,0.0,3.0,FB,2925.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_2925_jw-cafe-at-jw-marriott-hotel-bangkok,155.65,19.274012206874396
-FB_e31a4a5cfb6e,1.0,2.0,-1.0,FB,4603.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-wdl_brn_4603_ma-nee-me-more,18.07,-55.340343110127286
-FB_e377223fa0be,1.0,1.0,0.0,FB,1613.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-td_res_1613_moom-muum-park-terminal-21-asok,4.3,0.0
-FB_e3a9888c3b72,6.0,18.0,-12.0,FB,5845.0,2025-06-06 00:00:00,2025-06-13 00:00:00,,,,,,,SRC=HH|COUNTRY=TH|RID=5845+4350+3905|RNAME=MAN_FU_YUAN|TYPE=IMG|PLAT=FB|DATE=2025-12-15 - Copy,1.05,-11428.571428571428
-FB_e58da93a42f5,3.0,2.0,1.0,FB,835.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_res_835_red-oven-so-bangkok,420.56,2.3777820049457867
-FB_e60c40bd1feb,15.0,0.0,15.0,FB,5149.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-ott_res_5149_nama-japanese-and-seafood-buffet-hungry-hub,2304.32,6.5095125676989305
-FB_e798f4b82d6d,1.0,1.0,0.0,FB,1003.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-ucd_1003_greenhouse avani sukhumvit,90.04,0.0
-FB_e7fe5e05b040,4.0,2.0,2.0,FB,4089.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,album_hh_brn_4089_kunshine-hotpot-asok-bangkok - Copy,0.11,18181.81818181818
-FB_e8176dc84219,1.0,0.0,1.0,FB,5245.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,album_hh_res_5245_meat-sumpan-bangkok,151.66,6.593696426216537
-FB_e98cdfa93c2a,3.0,1.0,2.0,FB,2615.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_hh-sou_2615_sky box baiyoke sky (81st floor)_key – Copy - Copy,38537.4,0.051897637100582816
-FB_ebc5017cacf2,1.0,0.0,1.0,FB,4850.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-pls_res_4850_je-khai-seafood,293.92,3.4022863364180727
-FB_f12db830af36,1.0,6.0,-5.0,FB,3030.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-mon_3030_yakiniku shotaian_grw,383.22,-13.047335734043108
-FB_f199e358d38a,3.0,2.0,1.0,FB,4735.0,2024-09-19 00:00:00,2024-09-26 00:00:00,,,,,,,album_hh_res_4735_shaloba-eatery,34.34,29.120559114735002
-FB_f19fdba24092,8.0,6.0,2.0,FB,3649.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-hmrp_res_3649_chatuchak-cafe-centara-grand-at-central-plaza-ladprao,6.69,298.9536621823617
-FB_f28a981e099b,2.0,5.0,-3.0,FB,1244.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-bed_brn_1244_earw-thai-suki-boran-central-plaza-westgate,944.26,-3.1770910554296488
-FB_f2fac0280870,1.0,0.0,1.0,FB,4774.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,album_hh_res_4774_thong-kee-restaurant-bangkok,4131.19,0.24206100421428212
-FB_f34b8bed2743,9.0,4.0,5.0,FB,1433.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-mcr_res_1433_the-seafood-cafe-restaurant-bangkok-thailand,22.45,222.71714922049
-FB_f357f5058a78,4.0,5.0,-1.0,FB,4801.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-gbm_brn_4801_charoen-rung-rueang-international-buffet-rama-2-bangkok - Copy,3965.87,-0.25215148252464153
-FB_f3fa11bc94ad,9.0,2.0,7.0,FB,4227.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-hspz_res_4227_korea-house-gold-the-fourth-bangkok - Copy,5359.78,1.30602375470635
-FB_f8958262e1fd,5.0,1.0,4.0,FB,2959.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-tmd_res_2959_bluespice-grande-centre-point-sukhumvit-55,8382.4,0.477190303493033
-FB_f91cd9c6bdaa,3.0,8.0,-5.0,FB,4141.0,2024-11-22 00:00:00,2024-11-29 00:00:00,,,,,,,kol-ls_hh-gpm_res_4141_lyon-french-cuisine-bangkok,749.97,-6.666933344000427
-FB_f9ef06901a79,7.0,2.0,5.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-ls_tukkae2hua_3717_orbit (pattaya)_lca – Copy,11386.46,0.4391180401986219
-FB_fa3272211ed3,19.0,14.0,5.0,FB,2681.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,album_hh_res_2681_na-klongwan-vibhavadi-20-bangkok - Copy,14607.84,0.3422819527048489
-FB_fad0831ff967,6.0,4.0,2.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hungryjug_1433_the seafood cafe_key – Copy,672.95,2.971989003640686
-FB_fcc2cc17d20a,1.0,0.0,1.0,FB,5046.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,album_hh_res_5046_copper-aquarium-bangkok,82.16,12.171372930866601
-FB_fd8357f739a6,3.0,8.0,-5.0,FB,5939.0,2025-11-14 00:00:00,2025-11-17 00:00:00,,,,,,,SRC=HH|COUNTRY=TH|RID=5939+5940|RNAME=HOTARU_119_OMAKASE|TYPE=IMG|CAMP=TOURIST-KOREA|PLAT=FB|DATE=2025-11-28,295.84,-16.901027582477013
-FB_fd8700ab6bb6,3.0,2.0,1.0,FB,4258.0,2024-09-03 00:00:00,2024-09-06 00:00:00,,,,,,,kol-fm_hh-boy_brn_4258_oishi-grand – Copy,1894.81,0.5277574004781482
-FB_fe75e4dc31ba,3.0,5.0,-2.0,FB,3619.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-sou_res_3619_tenyuu-grand-omakase-bangkok,1035.5,-1.931434089811685
-FB_ffdc37acf678,1.0,2.0,-1.0,FB,3117.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_ninebatieww_3117_bangkok'78 at sindhorn,5.72,-174.82517482517486
+FB_03a6c4a5dc7b,11.0,15.0,-4.0,FB,426.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-lzb_brn_426_audrey-cafe – Copy,2259.74,-1.7701151459902469
+FB_05c01f947801,41.0,90.0,-49.0,FB,3901.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_rhoireview_3901_vantage point_sal – Copy - Copy,23532.86,-2.082194854344096
+FB_16b9a89d18ab,2.0,0.0,2.0,FB,4685.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-ott_res_4685_chu-grill-shabu,382.03,5.235190953590032
+FB_187d5fd7f44a,4.0,4.0,0.0,FB,3674.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-hht_res_3674_hagi-centara-grand-at-central-plaza-ladprao-bangkok,30.29,0.0
+FB_19ce33a8a976,2.0,1.0,1.0,FB,3908.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,vdo_hh_brn_3908_you-i-premium-suki-buffet - Copy,52.8,18.93939393939394
+FB_1bd01c86e802,2.0,0.0,2.0,FB,4763.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-jj_res_4763_chon-som-at-courtyard-by-marriott-suvarnabhumi-airport,143.71,13.916916011411871
+FB_1cc2ace90424,3.0,2.0,1.0,FB,4258.0,2024-09-03 00:00:00,2024-09-06 00:00:00,,,,,,,kol-fm_hh-boy_brn_4258_oishi-grand – Copy,1894.81,0.5277574004781482
+FB_1d70bde2f7b6,41.0,33.0,8.0,FB,4889.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-ott_res_4889_gentle-butcher-by-bangkok-butcher,3.89,2056.5552699228792
+FB_2b4a8a8af05b,13.0,4.0,9.0,FB,2001.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-ejls_res_2001_the-dining-room-at-grand-hyatt-erawan-bangkok-thailand,0.52,17307.692307692305
+FB_2d1110ab34b5,61.0,126.0,-65.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_hh-easw_res_3005_great-harbour-international-buffet - Copy,11510.93,-5.646806991268299
+FB_2d1903536b51,1.0,0.0,1.0,FB,1003.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-tft_res_1003_greenhouse-avani-sukhumvit,80.27,12.457954403886882
+FB_2d6ecfc24aa6,2.0,6.0,-4.0,FB,33.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_brn_33_audrey-cafe – Copy,64.88,-61.65228113440198
+FB_2fe8d3b3d236,4.0,3.0,1.0,FB,1433.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-fd_hungryjug_1433_the seafood cafe_key,414.87,2.4103936172777014
+FB_3031f4f49547,4.0,15.0,-11.0,FB,3564.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,SRC=HH|RID=3564|RNAME=S_CAF_AT_S31_SUKHUMVIT_HOTEL|PLAT=FB|DATE=2025-10-24 - Copy,127.16,-86.50519031141869
+FB_306255191938,19.0,14.0,5.0,FB,2681.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,album_hh_res_2681_na-klongwan-vibhavadi-20-bangkok - Copy,14607.84,0.3422819527048489
+FB_30c55b03e2dd,4.0,2.0,2.0,FB,4089.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,album_hh_brn_4089_kunshine-hotpot-asok-bangkok - Copy,0.11,18181.81818181818
+FB_31effaf3224a,4.0,3.0,1.0,FB,1483.0,2025-10-08 00:00:00,2025-10-11 00:00:00,,,,,,,SRC=HH|RID=1483+6460+701+6483+6507|RNAME=TOP_NEW_RESTAURANTS_FOR_EXISTING|PLAT=FB|DATE=2025-10-22,3017.67,0.3313814963200085
+FB_357d3e0971e7,10.0,3.0,7.0,FB,1063.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-ewp_brn_1063_boon-tong-kee-central-eastville,0.18,38888.88888888889
+FB_37bd8aa3040d,3.0,2.0,1.0,FB,4598.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-cvtp_brn_4598_ruen-petch-suki-ratchaphruek-road - Copy 2,4604.59,0.21717460186466114
+FB_38d92f9e95c0,1.0,7.0,-6.0,FB,3164.0,2024-08-27 00:00:00,2024-08-30 00:00:00,,,,,,,kol-fd_hh-rvst_3164_bangkok sky baiyoke sky (76/78th floor)_key – Copy,19644.17,-0.3054341313478757
+FB_395338f04f7f,2.0,9.0,-7.0,FB,1433.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_1433_the-seafood-cafe-restaurant-bangkok-thailand,48.05,-145.68158168574402
+FB_3b886addb9d2,9.0,4.0,5.0,FB,1433.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-mcr_res_1433_the-seafood-cafe-restaurant-bangkok-thailand,22.45,222.71714922049
+FB_3c1293af042f,4.0,11.0,-7.0,FB,425.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_brn_425_audrey-cafe-emquartier-bangkok,565.37,-12.381272441056298
+FB_3c358ca900ba,7.0,11.0,-4.0,FB,3181.0,2025-11-13 00:00:00,2025-11-20 00:00:00,,,,,,,SRC=MP|COUNTRY=TH|RID=3181+2447+2252|RNAME=BEEF_EXPRESS_BUFFET|TYPE=IMG|CAMP=MP - NOV'25|KOLID=HH-UNCLE|PLAT=FB|DATE=2025-11-27,146.85,-27.238678924072186
+FB_3cda6dfdb6fe,3.0,1.0,2.0,FB,2615.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_hh-sou_2615_sky box baiyoke sky (81st floor)_key – Copy - Copy,38537.4,0.051897637100582816
+FB_3d1fe609de0a,1.0,0.0,1.0,FB,4195.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-he_res_4195_jim-thompson-a-thai-restaurant-bangkok,2.3,434.7826086956522
+FB_3e1333a8792c,2.0,0.0,2.0,FB,2072.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=2072|RNAME=KONGJU_RESTAURANT_AT_PATHUMWAN_PRINCESS_HOTEL|TYPE=IMG|KOLID=HH-CTH|PLAT=FB|DATE=2025-12-03,7.08,282.4858757062147
+FB_404ff1f0a694,2.0,5.0,-3.0,FB,3076.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,hh-cth_closetoheavenblog_3076_the-coffee-club-best-buffet-promotion-the-coffee-club_fb_20102025,30.2,-99.33774834437087
+FB_40934b45e51d,7.0,7.0,0.0,FB,4178.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-kt_res_4178_butcher-factory-by-bangkok-butcher,289.8,0.0
+FB_40a402d5a2f3,2.0,3.0,-1.0,FB,4463.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-hht_res_4463_ancient-tea-house-asiatique-the-riverfront-bangkok,3.9,-256.4102564102564
+FB_40b0c6f90c3e,5.0,16.0,-11.0,FB,4263.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-bt_hh-obb_res_4263_feast-at-royal-orchid-sheraton-towers,138.39,-79.48551195895658
+FB_41a0b3aea49a,2.0,2.0,0.0,FB,1003.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_jernaan.journey_1003_greenhouse avani sukhumvit,1009.45,0.0
+FB_433f071ee301,2.0,2.0,0.0,FB,1684.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-hht_brn_1684_the-coffee-club-river-city-bangkok-thailand,71.26,0.0
+FB_47a53b6ace21,16.0,10.0,6.0,FB,4263.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-tvkn_res_4263_feast-at-royal-orchid-sheraton-towers,1432.51,4.188452436632205
+FB_4cd575f82750,1.0,0.0,1.0,FB,4046.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_painaigun_4046_mr.park bbq_sma,614.57,1.6271539450347396
+FB_4f67745ab3be,2.0,3.0,-1.0,FB,928.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-yrv_res_928_the-mulberry-chinese-cuisine-the-berkeley-hotel,46.86,-21.340162185232607
+FB_51ce32497135,12.0,21.0,-9.0,FB,3619.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,album_hh_res_3619_tenyuu-grand-omakase - Copy,19220.98,-0.4682383520507279
+FB_51f09e384f4e,1.0,5.0,-4.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-ott_res_2001_the-dining-room-at-grand-hyatt-erawan-bangkok-thailand,14667.4,-0.27271363704542045
+FB_5269737a4ff5,9.0,9.0,0.0,FB,4598.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,hh_hungryhub_4598_ruen-petch-suki(all)_fb_06102026 - Copy,4077.2,0.0
+FB_56c48e2a132b,1.0,2.0,-1.0,FB,4227.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-mcr_res_4227_korea-house-gold-the-fourth-bangkok,192.88,-5.184570717544587
+FB_56ec094b73de,4.0,6.0,-2.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-uncle_res_894_romsai-banyan-tree-hotel,6420.14,-0.3115196864865875
+FB_595d2a56ac69,1.0,1.0,0.0,FB,4576.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-ltmm_res_4576_house-of-tango-bangkok,159.03,0.0
+FB_61f25b1754f8,16.0,7.0,9.0,FB,2681.0,2024-08-28 00:00:00,2024-08-31 00:00:00,,,,,,,album_hh_res_2681_na-klongwan-vibhavadi-20-bangkok,31.84,282.66331658291455
+FB_61fee06c9ce6,2.0,2.0,0.0,FB,4413.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_4413_flow-at-millennium-hilton-bangkok,415.36,0.0
+FB_63c97dccb387,1.0,1.0,0.0,FB,2252.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-uncle_brn_2252_beef-express-buffet,712.69,0.0
+FB_64158c902a69,1.0,2.0,-1.0,FB,5684.0,2025-08-20 00:00:00,2025-08-23 00:00:00,,,,,,,SRC=KOL|RID=5684+5685|RNAME=PENGYOU_CUISINE__SPECIALTY_BAR|KOLID=HH-KJT|PLAT=FB,35.06,-28.52253280091272
+FB_6544b3e591c2,20.0,11.0,9.0,FB,4302.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-cvtp_brn_4302_zaap-classic-emquartier-bangkok,1044.56,8.616068009496821
+FB_66cac52466d9,6.0,9.0,-3.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_hh-cth_res_3905_man-fu-yuan-qsncc,1096.94,-2.7348806680401845
+FB_69def7e4c71b,4.0,24.0,-20.0,FB,4258.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fm_hh-boy_brn_4258_oishi-grand – Copy - Copy,35768.81,-0.5591463624314033
+FB_6a8a7d0199cc,2.0,2.0,0.0,FB,3649.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-bt_hh-obb_res_3649_chatuchak-cafe-centara-grand-at-central-plaza-ladprao-bangkok,12.29,0.0
+FB_6c847df7fbce,1.0,2.0,-1.0,FB,4603.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-wdl_brn_4603_ma-nee-me-more,18.07,-55.340343110127286
+FB_6e2ba63c59fc,1.0,5.0,-4.0,FB,3166.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_res_3166_koko-japanese-omakase-bangkok,419.53,-9.534479059900365
+FB_6e6a3c72e475,1.0,2.0,-1.0,FB,3600.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-sou_3600_throwback rooftop_lon,275.18,-3.633985027981685
+FB_6f9d86aa2bdd,2.0,3.0,-1.0,FB,3649.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-hht_res_3649_chatuchak-cafe-centara-grand-at-central-plaza-ladprao-bangkok,78.82,-12.687135244861713
+FB_6fd5b08eb8c7,6.0,9.0,-3.0,FB,4655.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-ebf_res_4655_sushi-koge-omakase - Copy,12922.29,-0.23215699384551808
+FB_7119cf650e5a,9.0,3.0,6.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-pyb_3905_man fu yuan_key – Copy,4213.03,1.4241531629254955
+FB_75c3f2e5420b,9.0,5.0,4.0,FB,3905.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-bljn_res_3905_man-fu-yuan-qsncc,361.29,11.071438456641479
+FB_7644c6b6ddc4,35.0,32.0,3.0,FB,3005.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-swt_res_3005_great-harbour-international-buffet-bangkok-thailand,76.54,39.19519205644107
+FB_7a7f9bd2d510,5.0,2.0,3.0,FB,4763.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-hmrp_res_4763_chon-som-at-courtyard-by-marriott-suvarnabhumi-airport,2354.33,1.2742478751916682
+FB_7da3ef614bdf,27.0,17.0,10.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-bed_res_3005_great-harbour-international-buffet,9765.94,1.0239669709213859
+FB_7f85fc28ac58,1.0,2.0,-1.0,FB,3596.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-nbt_res_3596_deja-brew-lifestyle-cafe-at-centra-by-centara-hotel-bangkok-phra-nakhon,307.69,-3.2500243751828135
+FB_80f63ab03c9b,4.0,2.0,2.0,FB,3620.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-bed_res_3620_loong-foong-at-swissotel-bangkok-ratchada,34.53,57.92064871126557
+FB_822f47865042,2.0,3.0,-1.0,FB,4470.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-kmg_res_4470_khaan-bangkok-michelin-guide,12517.92,-0.07988547618134642
+FB_823c923a45a9,2.0,2.0,0.0,FB,4621.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-ewp_res_4621_napha-emsphere,2.05,0.0
+FB_826aecade68f,6.0,18.0,-12.0,FB,5845.0,2025-06-06 00:00:00,2025-06-13 00:00:00,,,,,,,SRC=HH|COUNTRY=TH|RID=5845+4350+3905|RNAME=MAN_FU_YUAN|TYPE=IMG|PLAT=FB|DATE=2025-12-15 - Copy,1.05,-11428.571428571428
+FB_84f8fe6cee39,1.0,0.0,1.0,FB,3618.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_travelkanuman_3618_takumi at swissotel_grw,640.78,1.5605980211617092
+FB_8676b00478f7,21.0,30.0,-9.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-pls_res_3901_vantage-point – Copy,1823.34,-4.93599657770904
+FB_876ca37b0e29,2.0,1.0,1.0,FB,1582.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-fd_hh-dmpk_res_1582_benihana-at-riverside-plaza,0.24,4166.666666666667
+FB_89440d1f75c2,9.0,2.0,7.0,FB,4227.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-hspz_res_4227_korea-house-gold-the-fourth-bangkok - Copy,5359.78,1.30602375470635
+FB_896022c8e88d,22.0,38.0,-16.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-pyb_res_4889_gentle-butcher-by-bangkok-butcher,13763.45,-1.1624992280278563
+FB_8d3611e018a9,7.0,11.0,-4.0,FB,3646.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-tjnm_res_3646_axis-spin-sky-lounge-bar-rooftop-at-the-continent-boutique-hotel,0.07,-57142.85714285714
+FB_8eb0bf25c358,6.0,7.0,-1.0,FB,4749.0,2024-10-10 00:00:00,2024-10-17 00:00:00,,,,,,,kol-fd_hh-dmpk_res_4749_saneh-jaan-one-michelin-star-bangkok,999.7,-1.000300090027008
+FB_942de9273271,6.0,8.0,-2.0,FB,425.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-ucd_brn_425_audrey-cafe-emquartier-bangkok,1012.28,-1.9757379381198876
+FB_95d5d814841a,1.0,6.0,-5.0,FB,1433.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_paigingun_1433_the seafood cafe_key,122.84,-40.703353956366
+FB_95da9c53d258,7.0,2.0,5.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-ls_tukkae2hua_3717_orbit (pattaya)_lca – Copy,11386.46,0.4391180401986219
+FB_976703e02515,2.0,13.0,-11.0,FB,4178.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-ucd_res_4178_butcher-factory-by-bangkok-butcher,1443.39,-7.620947907356985
+FB_97680a84b7d2,1.0,3.0,-2.0,FB,2072.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=2072|RNAME=KONGJU_RESTAURANT_AT_PATHUMWAN_PRINCESS_HOTEL|TYPE=IMG|KOLID=HH-CVTP|PLAT=FB|DATE=2025-11-28,28.67,-69.75933031042902
+FB_9923485af462,2.0,0.0,2.0,FB,902.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_902_the-berkeley-dining-room,211.01,9.478223780863466
+FB_9932245d1e6c,4.0,0.0,4.0,FB,3619.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-bt_hh-obb_res_3619_tenyuu-grand-omakase-bangkok,4351.19,0.9192887462969901
+FB_9a175bc7df02,1.0,2.0,-1.0,FB,3492.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-ffrv_3492_knock-knock-cafe-bar,4.33,-230.9468822170901
+FB_9c4be4d93e56,5.0,9.0,-4.0,FB,1856.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-fdn_res_1856_spectrum-rooftop-at-hyatt-regency-bangkok-sukhumvit,17.59,-227.40193291642976
+FB_a0e030d5c27f,6.0,3.0,3.0,FB,1767.0,2024-08-27 00:00:00,2024-08-30 00:00:00,,,,,,,kol-fd_hh-pls_res_1767_stella-palace-baiyoke-sky-hotel – Copy,280.03,10.713137878084494
+FB_a611ee74aefe,6.0,4.0,2.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hungryjug_1433_the seafood cafe_key – Copy,672.95,2.971989003640686
+FB_a64bb3979b9e,6.0,4.0,2.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-kmg_res_3629_savio-at-chatrium-grand-bangkok,7363.02,0.27162767451399017
+FB_a6e93e593cb0,3.0,8.0,-5.0,FB,5939.0,2025-11-14 00:00:00,2025-11-17 00:00:00,,,,,,,SRC=HH|COUNTRY=TH|RID=5939+5940|RNAME=HOTARU_119_OMAKASE|TYPE=IMG|CAMP=TOURIST-KOREA|PLAT=FB|DATE=2025-11-28,295.84,-16.901027582477013
+FB_b1ff9daf7dd4,3.0,7.0,-4.0,FB,2294.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-hmrp_res_2294_market-cafe-by-khao-at-hyatt-regency-bangkok-sukhumvit,473.75,-8.443271767810026
+FB_b31621f630cb,1.0,0.0,1.0,FB,4109.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-ott_res_4109_hangetsu-omakase,508.88,1.9650998270712152
+FB_b34029ad229d,2.0,2.0,0.0,FB,4291.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-nbt_brn_4291_camin-cuisine-cafe-central-rama-9,12.47,0.0
+FB_b3a41f151bd0,17.0,2.0,15.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-fd_hh-hmrp_res_4263_feast-at-royal-orchid-sheraton-towers,5917.18,2.53499133032965
+FB_b3e4eda2c7cd,5.0,3.0,2.0,FB,982.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-sc_res_982_prince-cafe-at-prince-palace-hotel-bangkok,5628.91,0.3553085766160767
+FB_b4cb60c286b3,1.0,6.0,-5.0,FB,3030.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-mon_3030_yakiniku shotaian_grw,383.22,-13.047335734043108
+FB_b4fd8e689d31,5.0,2.0,3.0,FB,2421.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-bt_hh-obb_res_2421_rib-room-bar-steakhouse-the-landmark-bangkok-michelin-guide,986.74,3.0403145712143016
+FB_b5d5b15f048d,4.0,5.0,-1.0,FB,4801.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-gbm_brn_4801_charoen-rung-rueang-international-buffet-rama-2-bangkok - Copy,3965.87,-0.25215148252464153
+FB_b6ab2008b93e,2.0,3.0,-1.0,FB,3990.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-hgj_brn_3990_chef-thanom-the-street-ratchada,661.94,-1.5107109405686314
+FB_b6f831a7763e,21.0,19.0,2.0,FB,5845.0,2025-06-16 00:00:00,2025-06-23 00:00:00,,,,,,,SRC=HH|COUNTRY=TH|RID=5845+4350+3905|RNAME=MAN_FU_YUAN|TYPE=IMG|PLAT=FB|DATE=2025-12-15 - Copy,1.15,1739.1304347826087
+FB_baea65d6ea50,3.0,2.0,1.0,FB,4735.0,2024-09-19 00:00:00,2024-09-26 00:00:00,,,,,,,album_hh_res_4735_shaloba-eatery,34.34,29.120559114735002
+FB_bcd680f386a1,2.0,2.0,0.0,FB,3618.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-bed_res_3618_takumi-at-swissotel-bangkok-ratchada,1236.83,0.0
+FB_bf7e16c5700a,11.0,4.0,7.0,FB,3564.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=3564|RNAME=S_CAF_AT_S31_SUKHUMVIT_HOTEL|TYPE=IMG|KOLID=HH-UNCLE|PLAT=FB|DATE=2025-11-28,373.67,18.733106751946906
+FB_c1c9c469ab87,3.0,2.0,1.0,FB,835.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_res_835_red-oven-so-bangkok,420.56,2.3777820049457867
+FB_c3b8590f8e9a,17.0,34.0,-17.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-sou_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel – Copy,13102.51,-1.297461326112325
+FB_c3c9b5d07823,79.0,249.0,-170.0,FB,4889.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-kjt_res_4889_gentle-butcher-by-bangkok-butcher - Copy,29624.55,-5.738483791314974
+FB_c43469b0b479,10.0,2.0,8.0,FB,1063.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-ucd_brn_1063_boon-tong-kee-buffet-starting-at-599,5787.92,1.3821891111141826
+FB_c4c9f9737e5b,1.0,0.0,1.0,FB,1353.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-ucd_res_1353_kuang-seafood-ratchada-bangkok-thailand - Copy,279.05,3.5835871707579283
+FB_c6e4abb1f355,4.0,3.0,1.0,FB,835.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-ls_hh-sou_res_835_red-oven-so-bangkok - Copy,6211.54,0.1609906722004527
+FB_c7acf581fa0c,7.0,2.0,5.0,FB,280.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,Album_HH_280_Vertigo Rooftop_KEY,121.05,41.30524576621231
+FB_c8ea7b641ac4,7.0,5.0,2.0,FB,2429.0,2024-09-26 00:00:00,2024-09-29 00:00:00,,,,,,,vdo_hh_res_2429_sui-sian-restaurant-the-landmark-bangkok-hotel,8067.49,0.24790858123158507
+FB_d048d2810311,1.0,1.0,0.0,FB,1594.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=1594|RNAME=FLAVORS_AT_RENAISSANCE_BANGKOK|TYPE=VDO|KOLID=HH-FAD|PLAT=FB|DATE=2025-11-28,144.98,0.0
+FB_d343749513d7,1.0,3.0,-2.0,FB,4749.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-kmg_res_4749_saneh-jaan-one-michelin-star,0.98,-2040.8163265306123
+FB_d49678a89402,3.0,15.0,-12.0,FB,4749.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-kmg_res_4749_saneh-jaan-one-michelin-star - Copy,15450.53,-0.7766723859958202
+FB_d5911775fb25,5.0,1.0,4.0,FB,2959.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-tmd_res_2959_bluespice-grande-centre-point-sukhumvit-55,8382.4,0.477190303493033
+FB_d82ac819134f,13.0,18.0,-5.0,FB,1747.0,2025-06-16 00:00:00,2025-06-23 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=1747+2102|RNAME=JUMBO-SEAFOOD|TYPE=IMG|KOLID=HH|PLAT=FB|DATE=2025-10-30 - Copy,41.76,-119.73180076628353
+FB_d8665207eae9,4.0,0.0,4.0,FB,4801.0,2024-09-26 00:00:00,2024-09-29 00:00:00,,,,,,,vdo_hh_brn_4801_charoen-rung-rueang,6229.89,0.642065911276122
+FB_db27a1a9c78f,18.0,20.0,-2.0,FB,1747.0,2025-06-06 00:00:00,2025-06-13 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=1747+2102|RNAME=JUMBO-SEAFOOD|TYPE=IMG|KOLID=HH|PLAT=FB|DATE=2025-10-30 - Copy,22.78,-87.79631255487269
+FB_dd308199137b,3.0,1.0,2.0,FB,4089.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-png_brn_4089_kunshine-hotpot-asok,607.16,3.2940246393043022
+FB_df55c3e9cb27,1.0,0.0,1.0,FB,902.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,album_hh_res_902_the-berkeley-dining-room,89.77,11.139578923916675
+FB_dfa6f064b51e,1.0,1.0,0.0,FB,3949.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-gbm_res_3949_man-chan-korean-bbq-buffet-seacon-square-srinagarindra,1520.58,0.0
+FB_e042fc72aa1f,2.0,2.0,0.0,FB,3990.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_brn_3990_chef-thanom-the-street-ratchada-bangkok,108.82,0.0
+FB_e0a3833c0b6e,3.0,5.0,-2.0,FB,1153.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_1153_the-kitchen-table-buffet-at-w-bangkok-hotel,905.69,-2.2082611047930305
+FB_e1feaf885613,2.0,0.0,2.0,FB,3990.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-fd_hh-pyb_brn_3990_chef-thanom-the-street-ratchada,1408.6,1.4198494959534291
+FB_e36aeb308ada,1.0,9.0,-8.0,FB,1767.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-pls_res_1767_stella-palace-baiyoke-sky-hotel – Copy - Copy,15092.7,-0.5300575775043563
+FB_e5b6c3b417c9,6.0,1.0,5.0,FB,3949.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-mlt_res_3949_the-siam-tea-room-asiatique-the-riverfront-branch,1141.46,4.380354983967901
+FB_e5d62188fb80,14.0,10.0,4.0,FB,4710.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-pyb_brn_4710_zaap-classic-seacon-square-srinagarindra - Copy,3538.88,1.1303011122162943
+FB_e6ebc06788bf,14.0,21.0,-7.0,FB,5845.0,2025-10-07 00:00:00,2025-10-10 00:00:00,,,,,,,SRC=HH|COUNTRY=TH|RID=5845+4350+3905|RNAME=MAN_FU_YUAN|TYPE=IMG|PLAT=FB|DATE=2025-12-15 - Copy,7.12,-983.1460674157303
+FB_ec169a444da5,22.0,105.0,-83.0,FB,2001.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-pyb_res_2001_the-dining-room-at-grand-hyatt-erawan - Copy,34924.04,-2.376586443034655
+FB_f16097867288,8.0,6.0,2.0,FB,5845.0,2025-06-10 00:00:00,2025-06-13 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=5845+3905|RNAME=MAN_FU_YUAN|TYPE=IMG|KOLID=HH-RHOI|PLAT=FB|DATE=2025-12-15,2.4,833.3333333333334
+FB_f2eafc9342f9,7.0,12.0,-5.0,FB,222.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_bearducktravel_222_rain tree cafe_key – Copy,9160.99,-0.5457925398892478
+FB_f3519e1a0da9,1.0,0.0,1.0,FB,4777.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_res_4777_caper-by-dan-bark-bangkok,81.95,12.202562538133007
+FB_f37cb12fd62a,4.0,1.0,3.0,FB,2294.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-fd_bossonlydeliciousfood_2294_market cafe_key,51.02,58.80047040376323
+FB_f462213127bc,49.0,34.0,15.0,FB,3596.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-moo_res_3596_deja-brew-lifestyle-cafe-at-centara-life-hotel-bangkok-phra-nakhon,9831.78,1.5256647321237864
+FB_f5830856f6b7,2.0,1.0,1.0,FB,2749.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-pgm_res_2749_atrium-restaurant-the-landmark-bangkok-hotel,4028.11,0.2482553852799452
+FB_f6b1c2915c3f,3.0,0.0,3.0,FB,2925.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_2925_jw-cafe-at-jw-marriott-hotel-bangkok,155.65,19.274012206874396
+FB_f7c640cf02a7,6.0,13.0,-7.0,FB,1747.0,2025-06-10 00:00:00,2025-06-13 00:00:00,,,,,,,SRC=KOL|COUNTRY=TH|RID=1747+2102|RNAME=JUMBO-SEAFOOD|TYPE=IMG|KOLID=HH|PLAT=FB|DATE=2025-10-30,115.17,-60.77971694017539
+FB_fd0f653f59cc,9.0,7.0,2.0,FB,1856.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,hh-ltmm_littlemermine_1856_spectrum-rooftop-at-hyatt-regency-bangkok-sukhumvit_fb_07102025,38.06,52.54860746190226
+FB_fd95ccae7aa6,1.0,0.0,1.0,FB,4850.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-pls_res_4850_je-khai-seafood,293.92,3.4022863364180727
+FB_febe0775ec06,1.0,2.0,-1.0,FB,3117.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_ninebatieww_3117_bangkok'78 at sindhorn,5.72,-174.82517482517486
 KOL_0086ea8ac541,4.0,3.0,1.0,KOL,2451.0,2025-08-21 00:00:00,2025-08-26 00:00:00,,,,Instagram,liburan_thailand,Instagram.com/liburan_thailand,,,
 KOL_00d5cc741bee,1.0,2.0,-1.0,KOL,1198.0,2025-09-18 00:00:00,2025-09-23 00:00:00,,,,Instagram,randomtravelll,Instagram.com/randomtravelll,,,
 KOL_00d6bb54a8ae,3.0,9.0,-6.0,KOL,4751.0,2025-09-14 00:00:00,2025-09-19 00:00:00,,,,Tiktok,wannafoodie_,Tiktok.com/@wannafoodie_,,,
@@ -1048,238 +960,193 @@ CRM_f08cf8ce583e,0.0,4.0,-4.0,CRM,1365.0,2025-12-31 15:00:00,2026-01-02 15:00:00
 CRM_f215db5ffb95,0.0,3.0,-3.0,CRM,3908.0,2025-01-05 13:00:00,2025-01-07 13:00:00,TH_BKK_ctnoti_netcore_group_N_N_active_20250105_1300_you-i-premium-suki-buffet-jan25,you-i-premium-suki-buffet-jan25,group,,,,,,
 CRM_f50fc1120924,0.0,1.0,-1.0,CRM,2884.0,2025-01-05 13:00:00,2025-01-07 13:00:00,TH_BKK_ctnoti_netcore_group_N_N_active_20250105_1300_you-i-premium-suki-buffet-jan25,you-i-premium-suki-buffet-jan25,group,,,,,,
 CRM_fd20a4d54801,0.0,3.0,-3.0,CRM,2928.0,2025-11-09 11:00:00,2025-11-11 11:00:00,TH_BKK_ctnoti_netcore_single_N_N_active_20251109_1100_seasonal-tastes-nov25,seasonal-tastes-nov25,single,,,,,,
-FB_010959ca4f3b,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-nnn_res_3905_man-fu-yuan-qsncc,16.4,-548.7804878048781
-FB_013d69f002ed,0.0,85.0,-85.0,FB,5149.0,2025-01-16 00:00:00,2025-01-23 00:00:00,,,,,,,kol-fd_hh-ott_res_5149_nama-japanese-and-seafood-buffet-hungry-hub - Copy 2,47877.86,-1.7753508615464435
-FB_01a0353230e9,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-ott_res_1433_the-seafood-cafe-restaurant,20.96,-190.83969465648855
-FB_036901f70e96,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-plk_res_894_romsai-banyan-tree-hotel-bangkok,222.62,-26.95175635612254
-FB_039c476fbe55,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-png_3905_man fu yuan_key,14.73,-610.9979633401222
-FB_078b53b16fab,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-tbf_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel-bangkok - Copy,51.86,-655.6112610875434
-FB_08d870a25048,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_hh-chim_res_2536_giorgio's_key – Copy,2807.01,-12.112532552431235
-FB_09fbfd112234,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,INF_UncleDeng_1433_The Seafood Cafe & Restaurant _KEY_ – Copy,34.99,-114.31837667905116
-FB_0a3a78ae672d,0.0,1.0,-1.0,FB,3181.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-wdl_brn_3181_beef-express-buffet,199.57,-5.010773162298943
-FB_0dd163f0bee2,0.0,1.0,-1.0,FB,2749.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-tjk_res_2749_atrium-restaurant-the-landmark-bangkok-hotel,0.39,-2564.102564102564
-FB_0eb16a2674b0,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_hh-rhoi_res_3629_savio-at-chatrium-grand-bangkok – Copy,1475.34,-2.7112394431114186
-FB_0fdfe540778f,0.0,4.0,-4.0,FB,894.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-ls_hh-rhoi_res_894_romsai-banyan-tree-hotel,0.01,-399999.99999999994
-FB_10264e6c309f,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-kjt_res_3629_savio-at-chatrium-grand-bangkok – Copy,243.7,-16.413623307345098
-FB_10b549e44cfd,0.0,12.0,-12.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,album_hh_res_894_romsai-banyan-tree-hotel,1266.66,-9.47373407228459
-FB_10c1948e6ebd,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,INF_ChillJourney_1433_The Seafood Cafe&Restaurant_KEY_ – Copy,10.98,-364.29872495446267
-FB_11841a0ab59d,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-nbt_res_2001_the-dining-room-at-grand-hyatt-erawan-bangkok-thailand,247.64,-20.190599256985948
-FB_11bdc8a1920c,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-nnn_3901_vantage point_key – Copy,159.7,-187.85222291797123
-FB_11fdfb77b9bb,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-kjt_1433_the seafood cafe_key – Copy,88.7,-45.095828635851184
-FB_1207d3929b50,0.0,3.0,-3.0,FB,1003.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-dmpk_res_1003_greenhouse-avani-sukhumvit,0.36,-8333.333333333334
-FB_124d26c6acf0,0.0,3.0,-3.0,FB,1767.0,2024-08-27 00:00:00,2024-08-30 00:00:00,,,,,,,album_hh_res_1767_stella-palace-baiyoke-sky-hotel – Copy,567.51,-5.286250462546916
-FB_12b734608a81,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-pfd_hh-fdn_brn_3905_man-fu-yuan-qsncc-bangkok,145.27,-20.651201211537135
-FB_143bdfde40e2,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-pfd_donotsaywhatever_894_romsai banyan tree_key – Copy,1887.79,-3.178319622415629
-FB_14e859afeba6,0.0,8.0,-8.0,FB,425.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-td_brn_425_audrey-cafe-emquartier-bangkok,98.89,-80.8979674385681
-FB_15edca1a19bf,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-ls_hh-nbt_res_4889_gentle-butcher-by-bangkok-butcher,288.32,-131.79800221975583
-FB_16c36ceb8ae9,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-tv_hh-ejls_res_4263_feast-at-royal-orchid-sheraton-towers,1324.12,-1.5104371205026734
-FB_17c1209a0429,0.0,7.0,-7.0,FB,2294.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-pgm_res_2294_market-cafe-by-khao-at-hyatt-regency-bangkok-sukhumvit,0.17,-41176.470588235294
-FB_18729992046e,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-tv_maichuanrok_3717_orbit (pattaya)_lca – Copy,25.56,-78.24726134585289
-FB_1c1cb7ac05d3,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-ebf_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel – Copy,208.81,-162.82745079258657
-FB_1c4f7a64b95b,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-jnjn_res_3901_vantage-point,110.94,-270.4164413196322
-FB_23b9e0bc104a,0.0,2.0,-2.0,FB,4258.0,2024-09-03 00:00:00,2024-09-06 00:00:00,,,,,,,kol-tv_hh-mcr_brn_4258_oishi-grand-mega-bangna,2019.84,-0.9901774397972117
-FB_23cbb28eb92f,0.0,4.0,-4.0,FB,1878.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-snh_res_1878_hong-teh-chinese-restaurant,2059.7,-1.942030392775647
-FB_25fb12b8d962,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-cnlv_3905_man fu yuan_key – Copy,57.49,-52.18298834579927
-FB_261898882c93,0.0,1.0,-1.0,FB,5233.0,2025-01-08 00:00:00,2025-01-15 00:00:00,,,,,,,kol-ls_hh-plk_brn_5233_ichi-meshi-rangsit-bangkok,1.6,-625.0
-FB_274e3c6359f0,0.0,2.0,-2.0,FB,4763.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_4763_chon-som-at-courtyard-by-marriott-suvarnabhumi-airport-bangkok,81.96,-24.40214738897023
-FB_2a117d0ab813,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-ttd_res_3005_great-harbour-international-buffet,314.05,-54.131507721700366
-FB_2bc0d42c46d5,0.0,23.0,-23.0,FB,3901.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-pls_res_3901_vantage-point,26.12,-880.5513016845329
-FB_2e0d00994a0a,0.0,1.0,-1.0,FB,2188.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-kjt_res_2188_fei-ya-at-renaissance-bangkok,579.04,-1.7269964078474718
-FB_2e498955e452,0.0,1.0,-1.0,FB,3949.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-td_res_3949_the-siam-tea-room-asiatique-the-riverfront-branch,440.19,-2.2717462913741793
-FB_2ee5139c7461,0.0,126.0,-126.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-tv_hh-swt_res_3005_great-harbour-international-buffet - Copy,3298.14,-38.20335097964307
-FB_32148834d375,0.0,2.0,-2.0,FB,4735.0,2024-09-19 00:00:00,2024-09-26 00:00:00,,,,,,,kol-fd_hh-kmg_res_4735_shaloba-eatery,50.6,-39.52569169960474
-FB_3231c7162b9e,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-ls_hh-uncle_res_4889_gentle-butcher-by-bangkok-butcher,147.44,-257.7319587628866
-FB_32fcae750d7f,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_rhoireview_3629_savio_key – Copy,2530.66,-1.580615333549351
-FB_332161f7b8de,0.0,42.0,-42.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-khs_res_3005_great-harbour-international-buffet - Copy,4833.6,-8.68917576961271
-FB_34172f6776d6,0.0,1.0,-1.0,FB,3949.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_res_3949_the-siam-tea-room-asiatique-the-riverfront-branch-bangkok-thailand,71.29,-14.027212792818066
-FB_353a8b396e5a,0.0,1.0,-1.0,FB,3180.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-fad_res_3180_riverside-terrace-at-anantara-riverside,10.78,-92.7643784786642
-FB_364ee2884ec4,0.0,33.0,-33.0,FB,4889.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-kjt_res_4889_gentle-butcher-by-bangkok-butcher,0.79,-41772.15189873418
-FB_3682de35fbdf,0.0,28.0,-28.0,FB,2681.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-kkn_res_2681_na-klongwan-vibhavadi-20-bangkok - Copy,13192.99,-2.122339211960291
-FB_368f7a3ee482,0.0,1.0,-1.0,FB,273.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-dmpk_273_skyline_key,12.45,-80.32128514056225
-FB_38c5436b8efa,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-pyb_3905_man fu yuan_key,161.11,-55.86245422382223
-FB_396076bd4b3d,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-swt_res_3005_great-harbour-international-buffet,1190.79,-14.276236783983741
-FB_3a31d4d6a538,0.0,11.0,-11.0,FB,425.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_brn_425_audrey-cafe-emquartier-bangkok,167.04,-65.85249042145594
-FB_3d820fd80959,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,Boost_HH_1433_The Seafood Cafe&Restaurant_KEY_ – Copy,25.39,-157.54233950374163
-FB_42b51a52adb3,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-pls_3905_man fu yuan_key – Copy,148.02,-20.26753141467369
-FB_441b387ce87d,0.0,3.0,-3.0,FB,1728.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-ltmm_res_1728_albricias-at-chatrium-residence-sathorn-bangkok-thailand-1728,14.9,-201.34228187919464
-FB_45a6fe3ace25,0.0,3.0,-3.0,FB,1747.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-fad_brn_1747_jumbo-seafood-iconsiam-bangkok,6.96,-431.0344827586207
-FB_45f7d24a0922,0.0,4.0,-4.0,FB,3877.0,2024-11-29 00:00:00,2024-12-02 00:00:00,,,,,,,kol-ls_hh-sou_3877_away bangkok riverside kene staycation_grw,316.8,-12.626262626262625
-FB_46021579c794,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-nbt_res_3901_vantage-point,188.06,-159.52355631181538
-FB_46df709f65b8,0.0,1.0,-1.0,FB,3786.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_brn_3786_neta-grill,3.81,-262.4671916010499
-FB_480dc5b9dd42,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-tv_hh-mcr_res_4263_feast-at-royal-orchid-sheraton-towers,1790.06,-1.1172809849949163
-FB_4812312cf616,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-ott_res_4889_gentle-butcher-by-bangkok-butcher - Copy,2798.16,-13.580352803270722
-FB_487c3505f21c,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-kjt_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel – Copy,4226.24,-8.044976149011887
-FB_4a9df47fd0f2,0.0,1.0,-1.0,FB,4470.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-aj_res_4470_khaan-bangkok-michelin-guide,21.99,-45.47521600727604
-FB_4b095e902047,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_hh-jnjn_res_3629_savio-at-chatrium-grand-bangkok,1554.93,-2.5724630690770645
-FB_4c506e9e5797,0.0,3.0,-3.0,FB,4836.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,vdo_hh_res_4836_cutts-sathorn-omakase-bangkok,1.65,-1818.1818181818182
-FB_4cf5d9a1f78b,0.0,9.0,-9.0,FB,1433.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_res_1433_the-seafood-cafe-restaurant-bangkok-thailand,0.12,-75000.0
-FB_4d2e10c2262d,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-uncle_brn_3901_vantage-point-qsncc-bangkok,249.71,-120.13936165952504
-FB_4e462bd7d5d6,0.0,2.0,-2.0,FB,4621.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-ott_res_4621_napha-emsphere,21.4,-93.45794392523365
-FB_510b65d2a8b2,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-pfd_hh-mp_1433_the seafood cafe – Copy,32.35,-123.64760432766613
-FB_514e5db38e02,0.0,4.0,-4.0,FB,2102.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-fdn_brn_2102_jumbo-seafood-siam-paragon-bangkok,59.41,-67.32873253661
-FB_52982c2d8451,0.0,12.0,-12.0,FB,712.0,2024-10-15 00:00:00,2024-10-18 00:00:00,,,,,,,INF_onnbaby_712_Vertigo too_KEY_,4269.08,-2.8109100789865735
-FB_53fab14911da,0.0,3.0,-3.0,FB,3854.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_3854_suan-bua-centara-grand-ladprao-bangkok,70.94,-42.289258528333804
-FB_547b53d6fb46,0.0,1.0,-1.0,FB,2749.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-gpm_res_2749_atrium-restaurant-the-landmark-bangkok-hotel,6.64,-150.6024096385542
-FB_5549408c1b7f,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-cjn_3901_vantage point_key – Copy,257.62,-116.45058613461687
-FB_589b2988631f,0.0,1.0,-1.0,FB,949.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-pgm_res_949_amaya-food-gallery-amari-bangkok,36.13,-27.67783005812344
-FB_58c1d9d07d79,0.0,30.0,-30.0,FB,5149.0,2025-01-16 00:00:00,2025-01-19 00:00:00,,,,,,,kol-fd_hh-pyb_res_5149_nama-japanese-and-seafood-buffet-hungry-hub-bangkok,9346.63,-3.2097130195589214
-FB_59443db42ef2,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-bt_hh-obb_res_4263_feast-at-royal-orchid-sheraton-towers,495.87,-4.0333151834150085
-FB_5b788cc8d197,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_hh-rhoi_3629_savio_key – Copy,1420.07,-2.8167625539586076
-FB_5dcccfb4f219,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-tmd_res_3629_savio-at-chatrium-grand-bangkok,821.46,-4.869378910719937
-FB_5e9afa498beb,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-ucd_2001_the dining room,1145.58,-4.36460133731385
-FB_5ec1c38fcbaf,0.0,3.0,-3.0,FB,4470.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-tv_hh-sag_res_4470_khaan-bangkok-michelin-guide,5136.57,-0.5840473311957202
-FB_607b4363f8ad,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-ea_res_3005_great-harbour-international-buffe,1040.4,-16.33986928104575
-FB_609ce04fe07f,0.0,135.0,-135.0,FB,3901.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-khs_res_3901_vantage-point – Copy - Copy,14337.13,-9.416110476783011
-FB_60ea495e5810,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-pyb_res_1433_the-seafood-cafe-restaurant,16.5,-242.4242424242424
-FB_631369b77310,0.0,1.0,-1.0,FB,3944.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_eatchillwander_3944_sushi niwa omakase_sal,510.46,-1.959017356893782
-FB_63b52ed78f77,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-ls_hh-rhoi_res_4889_gentle-butcher-by-bangkok-butcher - Copy,298.44,-127.32877630344458
-FB_6454d3c539a7,0.0,68.0,-68.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_hh-fdn_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel,355.08,-191.50613946152978
-FB_657f9a88760c,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_3901_vantage point_key – Copy,7.37,-4070.5563093622795
-FB_66b9f7ca06e6,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-khs_res_3901_vantage-point – Copy,272.51,-110.08770320355217
-FB_66c9c21bd722,0.0,1.0,-1.0,FB,273.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-khs_273_skyline_key,9.98,-100.2004008016032
-FB_6a3ac7ac5aaf,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_immmheetv_3629_savio_key – Copy,1067.85,-3.7458444538090556
-FB_6b596e49c225,0.0,14.0,-14.0,FB,2681.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-pls_res_2681_na-klongwan-vibhavadi-20-bangkok – Copy - Copy,11263.48,-1.242955108012799
-FB_6bb453ed8f44,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-ejls_res_3005_great-harbour-international-buffet,104.66,-162.43072807185172
-FB_6d0a2224c47c,0.0,135.0,-135.0,FB,3901.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_hh-nbt_res_3901_vantage-point - Copy,9289.9,-14.53191100011841
-FB_6d8c491d63ad,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-nbt_3905_man fu yuan_key,4.95,-1818.181818181818
-FB_6e93e9dfb083,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_res_3901_vantage-point,3.4,-8823.529411764706
-FB_6ec7af555b6a,0.0,30.0,-30.0,FB,5149.0,2025-01-16 00:00:00,2025-01-19 00:00:00,,,,,,,kol-ls_hh-aj_res_5149_nama-japanese-and-seafood-buffet-hungry-hub-bangkok,4137.29,-7.2511233198543
-FB_7108e2e2690a,0.0,21.0,-21.0,FB,3619.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_aumjumma_3619_tenyuu grand omakase_grw – Copy - Copy,3159.96,-6.645653742452437
-FB_7251119b94f1,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-fd_hh-cvtp_res_894_romsai-banyan-tree-hotel-bangkok,451.03,-13.30288450879099
-FB_732e532eec53,0.0,11.0,-11.0,FB,4302.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-ls_hh-png_brn_4302_zaap-classic-emquartier - Copy,399.34,-27.545449992487608
-FB_747a401dca16,0.0,1.0,-1.0,FB,955.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-fd_enjoyeating.tidpung_955_krua nai noi_grw,909.32,-1.0997228698368011
-FB_74978908b5a7,0.0,2.0,-2.0,FB,3990.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_brn_3990_chef-thanom-the-street-ratchada,100.42,-19.916351324437365
-FB_760497a53e27,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-fad_res_3005_great-harbour-international-buffet,1193.32,-14.245969228706466
-FB_763f917c1c8e,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-ucd_3905_man fu yuan_key – Copy,1887.5,-1.589403973509934
-FB_7665e8352797,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-twt_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel,1129.36,-30.10554650421478
-FB_7669ac97002e,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-tv_hh-hht_res_894_romsai-banyan-tree-hotel,670.71,-8.945744062262378
-FB_76b8fd1adfb2,0.0,12.0,-12.0,FB,222.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_222_rain tree cafe_key – Copy,4.88,-2459.016393442623
-FB_77f6b938d0e1,0.0,4.0,-4.0,FB,1878.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-hgj_res_1878_hong-teh-chinese-restaurant,433.12,-9.235315847801994
-FB_784ffb6fba9d,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_res_3717_orbit-restaurant-grande-centre-point-space-pattaya – Copy,7.9,-253.1645569620253
-FB_7ab48f8fb060,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-jnjn_res_3005_great-harbour-international-buffet,242.0,-70.24793388429752
-FB_7af67901a344,0.0,126.0,-126.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-jpa_res_3005_great-harbour-international-buffet - Copy,6831.3,-18.444512757454657
-FB_7b5973b701a5,0.0,3.0,-3.0,FB,3854.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-boy_res_3854_suan-bua-centara-grand-ladprao,346.58,-8.65601015638525
-FB_7bd4ea764b4d,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-dmpk_res_4889_gentle-butcher-by-bangkok-butcher,795.38,-47.77590585632025
-FB_7cb22281eb2f,0.0,1.0,-1.0,FB,4483.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-td_brn_4483_taliew,342.47,-2.919963792448973
-FB_7f27623230f1,0.0,4.0,-4.0,FB,1433.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-hht_res_1433_the-seafood-cafe-restaurant-bangkok-thailand,1.58,-2531.645569620253
-FB_7ff14a4bb633,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_3901_vantage point (aug)_key – Copy,5.33,-5628.517823639775
-FB_805ad2d769fb,0.0,5.0,-5.0,FB,3619.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-lwp_res_3619_tenyuu-grand-omakase,0.27,-18518.51851851852
-FB_8559f4c1df34,0.0,4.0,-4.0,FB,4178.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-kjt_res_4178_butcher-factory-by-bangkok-butcher,88.12,-45.39264639128461
-FB_8574997ad581,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_brn_3905_man-fu-yuan,318.93,-9.406452826639075
-FB_857d4492a252,0.0,1.0,-1.0,FB,2382.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-aj_res_2382_khao-wireless-road-bangkok,10.46,-95.60229445506691
-FB_863b620f5e86,0.0,1.0,-1.0,FB,3988.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-kjt_res_3988_celadon-the-sukhothai-bangkok,489.9,-2.0412329046744233
-FB_86f0056c99a1,0.0,1.0,-1.0,FB,835.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-sou_res_835_red-oven-so-bangkok,0.59,-1694.9152542372883
-FB_8700e691500a,0.0,1.0,-1.0,FB,1003.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-ott_res_1003_greenhouse-avani-sukhumvit,836.4,-1.1956001912960306
-FB_870803525ea7,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-hgk_res_3905_man-fu-yuan-qsncc,631.34,-14.255393290461559
-FB_88c5bdc7222b,0.0,3.0,-3.0,FB,3990.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-hgj_brn_3990_chef-thanom-the-street-ratchada-vdo,314.85,-9.528346831824678
-FB_8a0eeed23d8c,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-ffrv_3901_vantage point_key – Copy,356.0,-84.26966292134831
-FB_8a5e3dc2a8e5,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_3905_man fu yuan_key – Copy,5.03,-596.4214711729621
-FB_8d667c744cd4,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_res_3005_great-harbour-international-buffet,34.56,-491.89814814814815
-FB_8f29d3c9c514,0.0,3.0,-3.0,FB,4751.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,album_hh_res_4751_about-beef-lava-grill,1522.17,-1.9708705335146535
-FB_90971fe76a0a,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,INF_jernoonjernee_3717_Orbit_LCA_ – Copy,0.56,-3571.428571428571
-FB_91b590d8f8a0,0.0,68.0,-68.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_2536_giorgio's_key – Copy,57.34,-1185.9086152772934
-FB_9219b5f74fd2,0.0,3.0,-3.0,FB,4463.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-lzb_res_4463_ancient-tea-house-asiatique-the-riverfront,0.43,-6976.7441860465115
-FB_94a2a18741fb,0.0,1.0,-1.0,FB,984.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-ucd_984_china-palace-at-prince-palace-hotel-bangkok,143.38,-6.974473427256242
-FB_951803fb683f,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-cnlv_3905_man fu yuan_key,19.09,-471.4510214772132
-FB_96ca9dcfdebe,0.0,12.0,-12.0,FB,222.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_mimlikesthis_222_rain tree cafe_key – Copy,182.16,-65.87615283267458
-FB_97ad1cb87de2,0.0,6.0,-6.0,FB,2381.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_hh-easw_res_2381_khao-ekkamai - Copy,5411.5,-1.1087498845052204
-FB_97fe53047766,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_suptanhappygirl_3629_savio_key – Copy,3049.36,-1.3117506624340844
-FB_988ab9b8d2b5,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-ls_hh-gpm_res_4889_gentle-butcher-by-bangkok-butcher,167.64,-226.67621092817944
-FB_99560b12d049,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-tv_hh-twt_res_2001_the-dining-room-at-grand-hyatt-erawan,2505.04,-1.9959761121578896
-FB_9a1474a91b19,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_stopworkgotravel_3005_great harbour_key,4307.89,-3.946247466857324
-FB_9bdbba9f7836,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-tv_hh-lzb_res_4263_feast-at-royal-orchid-sheraton-towers,239.84,-8.338892595063376
-FB_9ca3cf853a39,0.0,3.0,-3.0,FB,1747.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-ucd_brn_1747_jumbo-seafood,35.45,-84.62623413258109
-FB_9df8efbb7f7e,0.0,3.0,-3.0,FB,835.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-pfd_hh-cth_res_835_red-oven-so-bangkok - Copy,2854.49,-1.0509758310591386
-FB_9f0beb6b9993,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-fd_hh-kjt_res_4263_feast-at-royal-orchid-sheraton-towers – Copy,191.39,-10.449866764198758
-FB_9f7095ef05b4,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-rhoi_3901_vantage point_sal – Copy,231.16,-129.78023879563938
-FB_9fae11a55c62,0.0,14.0,-14.0,FB,3619.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_hh-aj_res_3619_tenyuu-grand-omakase - Copy 2,7155.21,-1.9566162278954775
-FB_9fc86a9879d6,0.0,3.0,-3.0,FB,4912.0,2025-01-03 00:00:00,2025-01-10 00:00:00,,,,,,,album_hh_res_4912_mix-beef-club-restaurant-bkk,2992.38,-1.002546468028793
-FB_a00523b07be1,0.0,3.0,-3.0,FB,835.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_hh-cth_res_835_red-oven-so-bangkok,5.24,-572.5190839694657
-FB_a2010bed5ef4,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,single_hh_3005_great-habour-buffet,9.43,-1802.757158006363
-FB_a212924ca099,0.0,15.0,-15.0,FB,5082.0,2025-01-03 00:00:00,2025-01-10 00:00:00,,,,,,,kol-fd_hh-rvst_res_5082_gyu-en-siam-yakiniku-bangkok,2000.0,-7.5
-FB_a4bbab6917c2,0.0,3.0,-3.0,FB,4912.0,2025-01-03 00:00:00,2025-01-10 00:00:00,,,,,,,kol-ls_hh-nbt_res_4912_mix-beef-club-restaurant-bkk,7.62,-393.7007874015748
-FB_a4ef41344d07,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-khs_res_3005_great-harbour-international-buffet,2314.69,-7.34439600983285
-FB_a54e09791d28,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,Album_HH_2001_The Dining Room at Grand Hyatt Erawan_KEY,1446.17,-3.4574081885255534
-FB_a5c2e431fc49,0.0,9.0,-9.0,FB,4655.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-ott_res_4655_sushi-koge-omakase - Copy,9219.76,-0.9761642385485088
-FB_a897869a8fbb,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-ls_hh-aj_res_3905_man-fu-yuan-qsncc-bangkok,2527.42,-1.1869811903047376
-FB_aa4f12e8599f,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-tv_hh-tvkn_res_4263_feast-at-royal-orchid-sheraton-towers,87.22,-22.93052052281587
-FB_aab2265bb0fa,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-hht_res_3005_great-harbour-international-buffet,3314.29,-5.129303712107268
-FB_ac6fc77078de,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_1433_the seafood cafe & restaurant_key – Copy,16.01,-249.84384759525298
-FB_ac852d17a60b,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-pyb_3901_vantage point _key – Copy,866.87,-34.60726521854488
-FB_ae9fc26a1231,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-easw_res_3005_great-harbour-international-buffet,1801.08,-9.438781175739
-FB_af095bb38553,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_hh-mlt_res_2001_the-dining-room-at-grand-hyatt-erawan,1156.3,-4.3241373346017475
-FB_af2a6b5b53d2,0.0,2.0,-2.0,FB,1538.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-fdn_res_1538_thara-thong-royal-orchid-sheraton,36.14,-55.340343110127286
-FB_b22d75ac6b74,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,Album_HH_3717_Orbit_LCA_ – Copy,2.4,-833.3333333333334
-FB_b2ecb0bf184a,0.0,4.0,-4.0,FB,1063.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-ewp_brn_1063_boon-tong-kee-central-eastville - Copy,5927.83,-0.6747831837282783
-FB_b308c7ac509f,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-pfd_hh-pnpk_res_4889_gentle-butcher-by-bangkok-butcher,5323.96,-7.137544233991239
-FB_b6899f3bb221,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-pyb_res_2001_the-dining-room-at-grand-hyatt-erawan,1611.22,-3.1032385397400724
-FB_b7606971968a,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,album_hh_res_3629_savio-at-chatrium-grand-bangkok – Copy,43.4,-92.16589861751152
-FB_b8ca2008d6f5,0.0,6.0,-6.0,FB,2381.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,album_hh_res_2381_khao-ekkamai - Copy,1557.28,-3.852871673687455
-FB_b928e8b097ea,0.0,9.0,-9.0,FB,3629.0,2025-01-16 00:00:00,2025-01-23 00:00:00,,,,,,,kol-ls_rhoireview_3629_savio_key – Copy - Copy,13340.41,-0.674641933793639
-FB_b9438b6d3ac6,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_3717_orbit (pattaya)_lca – Copy,1.82,-1098.901098901099
-FB_b9bed21810f1,0.0,1.0,-1.0,FB,2801.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-kjt_res_2801_sundance-dayclub-hua-hin,1036.89,-0.9644224556124564
-FB_b9f1e5fe02d4,0.0,3.0,-3.0,FB,1747.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-cvtp_brn_1747_jumbo-seafood-iconsiam-bangkok,127.32,-23.5626767200754
-FB_bb6730477869,0.0,1.0,-1.0,FB,1826.0,2025-01-10 00:00:00,2025-01-13 00:00:00,,,,,,,vdo_hh_res_1826_57th-street-marriott-sukhumvit-57-bangkok,4054.81,-0.24662068013051167
-FB_bbb07d44b7cf,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-dmpk_res_3005_great-harbour-international-buffet,80.1,-212.2347066167291
-FB_bc1d34eda6ce,0.0,11.0,-11.0,FB,425.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-bljn_brn_425_audrey-cafe-emquartier-bangkok,335.02,-32.833860665034926
-FB_bcf5890b2331,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_bearducktravel_3901_vantage point_key – Copy,590.69,-50.78806141969561
-FB_c0f09a3b79b8,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel,4168.25,-8.156900377856415
-FB_c2faae62765a,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_res_3901_vantage-point – Copy,6.4,-4687.5
-FB_c2fcb6b048ad,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-fad_res_4889_gentle-butcher-by-bangkok-butcher,121.52,-312.7057274522713
-FB_c457b9fdc583,0.0,2.0,-2.0,FB,4912.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-nbt_res_4912_mix-beef-club-restaurant-bkk,0.01,-199999.99999999997
-FB_c492c7eb5f47,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-odl_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel - Copy,304.68,-111.59249048181698
-FB_c5161b7cb7b1,0.0,7.0,-7.0,FB,3164.0,2024-08-27 00:00:00,2024-08-30 00:00:00,,,,,,,album_hh_res_3164_bangkok-sky-buffet-76-78th-floor-at-baiyoke-sky-hotel – Copy,30.37,-230.4906157392163
-FB_c52033b6b060,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_bossonlydeliciousfood_1433_the seafood cafe_key – Copy,32.09,-124.64942349641633
-FB_c52fae0d0ecb,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-tv_hh-lpt_res_1433_the-seafood-cafe-restaurant,0.97,-4123.711340206186
-FB_c5ea9cff7702,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-ls_hh-jnjn_brn_3905_man-fu-yuan-qsncc - Copy,21.82,-137.48854262144823
-FB_c761122e5d46,0.0,3.0,-3.0,FB,4470.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-hspz_res_4470_khaan-bangkok-michelin-guide,8743.59,-0.3431084943369943
-FB_c81338059b24,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-sou_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel,124.84,-272.3486062159564
-FB_ca04ce9c862d,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-tjnm_res_3005_great-harbour-international-buffet,54.34,-312.8450496871549
-FB_cba18f7ba874,0.0,2.0,-2.0,FB,280.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,INF_immmheeTV_280_Vertigo Rooftop_KEY,82.69,-24.186721489902045
-FB_cc0aec395a2b,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,album_hh_res_894_romsai-banyan-tree-hotel-bangkok,2713.5,-2.211166390270868
-FB_cd547cd979d9,0.0,4.0,-4.0,FB,1433.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-td_res_1433_the-seafood-cafe-restaurant,0.06,-66666.66666666667
-FB_cdaa21b4d0f1,0.0,3.0,-3.0,FB,835.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-sou_res_835_red-oven-so-bangkok,26.71,-112.31748408835642
-FB_ceca1067a2e4,0.0,1.0,-1.0,FB,1613.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-nbt_res_1613_moom-muum-park-terminal-21-asok,1.3,-769.2307692307693
-FB_cf9180181a72,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-hmrp_brn_3905_man-fu-yuan-qsncc,2641.04,-1.1359161542422682
-FB_d138a5382bed,0.0,2.0,-2.0,FB,2506.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-hmrp_res_2506_saffron-contemporary-thai-signature-rooftop-banyan-tree-bangkok,2902.14,-0.6891466297284073
-FB_d262980a7c4c,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_paigingun_1433_the seafood cafe_key – Copy,35.5,-112.67605633802818
-FB_d54a8314051d,0.0,3.0,-3.0,FB,1747.0,2024-11-13 00:00:00,2024-11-16 00:00:00,,,,,,,kol-fd_hh-pls_brn_1747_jumbo-seafood-iconsiam-bangkok,1149.76,-2.6092401892568886
-FB_db7e0462ff2c,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,single_hh_3005_great habour premium package_key,951.58,-17.865024485592382
-FB_dbdc79d865fd,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-twt_res_3005_great-harbour-international-buffet,291.05,-58.40920803985569
-FB_dccd9dca3a46,0.0,2.0,-2.0,FB,4603.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-nbt_brn_4603_manee-me-more-esplanade-ratchadaphisek,33.8,-59.1715976331361
-FB_de679c937584,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-ucd_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel-bangkok - Copy,41.77,-813.9813263107493
-FB_deaf7f722ee4,0.0,14.0,-14.0,FB,3828.0,2024-12-18 00:00:00,2024-12-25 00:00:00,,,,,,,album_hh_res_3828_topgolf-megacity,7234.5,-1.9351717464925013
-FB_dfb759b75082,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-ls_hh-nbt_3905_man fu yuan_key – Copy,183.12,-16.3826998689384
-FB_e0286ce71985,0.0,2.0,-2.0,FB,2250.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-ltmm_res_2250_viu-the-st-regis-bangkok,54.3,-36.83241252302026
-FB_e09479844345,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_bearducktravel_2536_giorgio's riverside royal orchid sheraton hotel_key – Copy,1227.19,-27.70557126443338
-FB_e19379a2988e,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_uncledeng_3629_savio_key – Copy,1028.84,-3.887873721861514
-FB_e1ec647f6955,0.0,2.0,-2.0,FB,3654.0,2024-11-28 00:00:00,2024-12-01 00:00:00,,,,,,,kol-fd_hh-kjt_res_3654_sindosegi,81.91,-24.417043096081066
-FB_e20f2d09b444,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-jpa_res_3629_savio-at-chatrium-grand-bangkok – Copy,1056.48,-3.786157807057398
-FB_e2ba3727f71c,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,album_hh_3629_savio_key – Copy,769.25,-5.199870003249919
-FB_e40cf3d2f39e,0.0,42.0,-42.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,single_hh_3005_great habour premium package_key - Copy,6237.95,-6.732981187729944
-FB_e66116e4bd3b,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-jpa_res_3005_great-harbour-international-buffet,2033.82,-8.358655141556284
-FB_e6f2a3b5b0bb,0.0,126.0,-126.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-tv_stopworkgotravel_3005_great harbour_key - Copy,13688.1,-9.20507594187652
-FB_e7b17fa9a733,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-ls_hh-sou_res_4263_feast-at-royal-orchid-sheraton-riverside-hotel-bangkok - Copy,14.87,-134.49899125756556
-FB_e8030802689b,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-rhoi_res_894_romsai-banyan-tree-hotel,566.06,-10.5995830830654
-FB_e88057807e68,0.0,10.0,-10.0,FB,4263.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-mcr_res_4263_feast-at-royal-orchid-sheraton-towers,0.06,-166666.6666666667
-FB_e9778dceffbc,0.0,7.0,-7.0,FB,3619.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,INF_onnbaby_3619_Tenyuu Omakase_SAL_ – Copy - Copy,4496.87,-1.556638283961956
-FB_e9f48a307126,0.0,70.0,-70.0,FB,2001.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-ucd_2001_the dining room - Copy,16027.55,-4.3674797458126795
-FB_ec093a3aee62,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-ls_hh-tlein_res_4889_gentle-butcher-by-bangkok-butcher,877.28,-43.315703082254245
-FB_ec9966af43c0,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_nonnunnee_3629_savio_key – Copy,799.09,-5.005693976898722
-FB_ed78eb832350,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-ls_rhoireview_3717_orbit (pattaya)_lca_ – Copy,5.99,-333.88981636060095
-FB_efea3e8d694e,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,album_hh_res_894_romsai-banyan-tree-hotel – Copy,17.32,-346.42032332563514
-FB_efffb5ffdfa1,0.0,84.0,-84.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,single_hh_3005_great-habour-buffet - Copy,168.33,-499.0197825699519
-FB_f05a4e541a89,0.0,10.0,-10.0,FB,4710.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-evg_brn_4710_zaap-classic-seacon-square-srinagarindra-bangkok,79.06,-126.48621300278269
-FB_f3209f25f329,0.0,15.0,-15.0,FB,5082.0,2025-01-03 00:00:00,2025-01-10 00:00:00,,,,,,,kol-ls_hh-gpm_res_5082_gyu-en-siam-yakiniku,438.51,-34.206745570226445
-FB_f4fd884aab02,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_rhoireview_3901_vantage point_sal – Copy,529.04,-56.706487222138215
-FB_f7262b66de01,0.0,1.0,-1.0,FB,2749.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh_res_2749_atrium-restaurant-the-landmark-bangkok-hotel,50.34,-19.864918553833927
-FB_f8149de4da83,0.0,1.0,-1.0,FB,3949.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_3949_the-siam-tea-room-asiatique-the-riverfront-branch-bangkok-thailand,108.26,-9.237021984112321
-FB_f937f91fb669,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_res_1433_the seafood cafe – Copy,6.75,-592.5925925925926
-FB_f96eb7956bdb,0.0,170.0,-170.0,FB,5149.0,2025-01-16 00:00:00,2025-01-23 00:00:00,,,,,,,kol-fd_hh-kt_res_5149_nama-japanese-and-seafood-buffet-hungry-hub-bangkok - Copy 2,52325.5,-3.248893942723911
-FB_fb7ce0c61d86,0.0,2.0,-2.0,FB,1236.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-tv_hh-swt_brn_1236_you-i-premium-suki-buffet-central-westgate - Copy,1666.32,-1.200249651927601
-FB_fba77fd9c43d,0.0,3.0,-3.0,FB,4740.0,2024-10-24 00:00:00,2024-10-27 00:00:00,,,,,,,kol-ls_hh-uncle_brn_4740_ma-nee-me-more,8.41,-356.718192627824
-FB_fd53070621e3,0.0,4.0,-4.0,FB,2102.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,SRC=KOL|RID=2102|RNAME=JUMBO_SEAFOOD_SIAM_PARAGON|KOLID=HH-CTH|PLAT=FB|DATE=2025-11-13,37.25,-107.38255033557047
-FB_ff59fae8a9b0,0.0,85.0,-85.0,FB,5149.0,2025-01-16 00:00:00,2025-01-23 00:00:00,,,,,,,album_hh_res_5149_nama-japanese-and-seafood-buffet-hungry-hub-bangkok - Copy 2,7708.36,-11.026988879606039
+FB_006af20efffa,0.0,4.0,-4.0,FB,2102.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,SRC=KOL|RID=2102|RNAME=JUMBO_SEAFOOD_SIAM_PARAGON|KOLID=HH-CTH|PLAT=FB|DATE=2025-11-13,37.25,-107.38255033557047
+FB_015d58af6403,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,INF_UncleDeng_1433_The Seafood Cafe & Restaurant _KEY_ – Copy,34.99,-114.31837667905116
+FB_0195365a1370,0.0,126.0,-126.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-tv_stopworkgotravel_3005_great harbour_key - Copy,13688.1,-9.20507594187652
+FB_01feaf91f321,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-easw_res_3005_great-harbour-international-buffet,1801.08,-9.438781175739
+FB_021d7758338a,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_bearducktravel_2536_giorgio's riverside royal orchid sheraton hotel_key – Copy,1227.19,-27.70557126443338
+FB_02ece889c31d,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-ttd_res_3005_great-harbour-international-buffet,314.05,-54.131507721700366
+FB_02fd5bfedba6,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-ls_hh-sou_res_4263_feast-at-royal-orchid-sheraton-riverside-hotel-bangkok - Copy,14.87,-134.49899125756556
+FB_0343e836c5bd,0.0,3.0,-3.0,FB,4463.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-lzb_res_4463_ancient-tea-house-asiatique-the-riverfront,0.43,-6976.7441860465115
+FB_041f115a787f,0.0,12.0,-12.0,FB,222.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_mimlikesthis_222_rain tree cafe_key – Copy,182.16,-65.87615283267458
+FB_06d7d334a1e6,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-pfd_hh-mp_1433_the seafood cafe – Copy,32.35,-123.64760432766613
+FB_07494e1243e3,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_hh-rhoi_res_3629_savio-at-chatrium-grand-bangkok – Copy,1475.34,-2.7112394431114186
+FB_07e502019c7e,0.0,2.0,-2.0,FB,1538.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-fdn_res_1538_thara-thong-royal-orchid-sheraton,36.14,-55.340343110127286
+FB_07e8d6852141,0.0,12.0,-12.0,FB,222.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_222_rain tree cafe_key – Copy,4.88,-2459.016393442623
+FB_08e074d1d79f,0.0,4.0,-4.0,FB,1433.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-hht_res_1433_the-seafood-cafe-restaurant-bangkok-thailand,1.58,-2531.645569620253
+FB_09e6a5e2486d,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,Album_HH_2001_The Dining Room at Grand Hyatt Erawan_KEY,1446.17,-3.4574081885255534
+FB_09ff34402bc4,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-ea_res_3005_great-harbour-international-buffe,1040.4,-16.33986928104575
+FB_0a6d4fce035b,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-tv_hh-tvkn_res_4263_feast-at-royal-orchid-sheraton-towers,87.22,-22.93052052281587
+FB_0b509154a956,0.0,1.0,-1.0,FB,955.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-fd_enjoyeating.tidpung_955_krua nai noi_grw,909.32,-1.0997228698368011
+FB_0eab678b0dfb,0.0,3.0,-3.0,FB,835.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-sou_res_835_red-oven-so-bangkok,26.71,-112.31748408835642
+FB_0ee6205a9849,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel,4168.25,-8.156900377856415
+FB_0f7261bb4e8f,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-cjn_3901_vantage point_key – Copy,257.62,-116.45058613461687
+FB_10987b60540c,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_res_3005_great-harbour-international-buffet,34.56,-491.89814814814815
+FB_11079c45918e,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-uncle_brn_3901_vantage-point-qsncc-bangkok,249.71,-120.13936165952504
+FB_1141a4acb3ae,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-nnn_res_3905_man-fu-yuan-qsncc,16.4,-548.7804878048781
+FB_1164657fc8b1,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_suptanhappygirl_3629_savio_key – Copy,3049.36,-1.3117506624340844
+FB_11b0449dcb5f,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,album_hh_3629_savio_key – Copy,769.25,-5.199870003249919
+FB_1495fce196ca,0.0,2.0,-2.0,FB,2250.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-ltmm_res_2250_viu-the-st-regis-bangkok,54.3,-36.83241252302026
+FB_14b002c39b96,0.0,4.0,-4.0,FB,1878.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-hgj_res_1878_hong-teh-chinese-restaurant,433.12,-9.235315847801994
+FB_14f645572faa,0.0,3.0,-3.0,FB,1003.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-dmpk_res_1003_greenhouse-avani-sukhumvit,0.36,-8333.333333333334
+FB_16982ec04653,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-kjt_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel – Copy,4226.24,-8.044976149011887
+FB_16d44ca3ce89,0.0,28.0,-28.0,FB,2681.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-kkn_res_2681_na-klongwan-vibhavadi-20-bangkok - Copy,13192.99,-2.122339211960291
+FB_1741e907bc79,0.0,3.0,-3.0,FB,4470.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-hspz_res_4470_khaan-bangkok-michelin-guide,8743.59,-0.3431084943369943
+FB_1c410ddb7057,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-sou_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel,124.84,-272.3486062159564
+FB_1c8e554bb522,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-pls_3905_man fu yuan_key – Copy,148.02,-20.26753141467369
+FB_1e217c76a1ae,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_res_3901_vantage-point,3.4,-8823.529411764706
+FB_1e21b7b97223,0.0,3.0,-3.0,FB,3990.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-hgj_brn_3990_chef-thanom-the-street-ratchada-vdo,314.85,-9.528346831824678
+FB_1e7a5ce3747a,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-ott_res_1433_the-seafood-cafe-restaurant,20.96,-190.83969465648855
+FB_1f68a89862a9,0.0,4.0,-4.0,FB,1063.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-ewp_brn_1063_boon-tong-kee-central-eastville - Copy,5927.83,-0.6747831837282783
+FB_20b509d209f0,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-png_3905_man fu yuan_key,14.73,-610.9979633401222
+FB_20b8494a93bf,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-tmd_res_3629_savio-at-chatrium-grand-bangkok,821.46,-4.869378910719937
+FB_20e452cc6e2b,0.0,12.0,-12.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,album_hh_res_894_romsai-banyan-tree-hotel,1266.66,-9.47373407228459
+FB_22261ba2c54b,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_hh-mlt_res_2001_the-dining-room-at-grand-hyatt-erawan,1156.3,-4.3241373346017475
+FB_2329e1cd583d,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_3901_vantage point (aug)_key – Copy,5.33,-5628.517823639775
+FB_23e5d2970f89,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-cnlv_3905_man fu yuan_key,19.09,-471.4510214772132
+FB_2495914ecd9d,0.0,4.0,-4.0,FB,1878.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-snh_res_1878_hong-teh-chinese-restaurant,2059.7,-1.942030392775647
+FB_24ce2bac20a3,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_rhoireview_3901_vantage point_sal – Copy,529.04,-56.706487222138215
+FB_268191c67945,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-hht_res_3005_great-harbour-international-buffet,3314.29,-5.129303712107268
+FB_26b1792eb47a,0.0,11.0,-11.0,FB,425.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_brn_425_audrey-cafe-emquartier-bangkok,167.04,-65.85249042145594
+FB_277ffb727b87,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-bt_hh-obb_res_4263_feast-at-royal-orchid-sheraton-towers,495.87,-4.0333151834150085
+FB_2a8bff8f91d9,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,Album_HH_3717_Orbit_LCA_ – Copy,2.4,-833.3333333333334
+FB_2e07c8ecc2f4,0.0,1.0,-1.0,FB,2188.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-kjt_res_2188_fei-ya-at-renaissance-bangkok,579.04,-1.7269964078474718
+FB_2e377a982991,0.0,9.0,-9.0,FB,1433.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_res_1433_the-seafood-cafe-restaurant-bangkok-thailand,0.12,-75000.0
+FB_333bb6a1107d,0.0,1.0,-1.0,FB,2749.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh_res_2749_atrium-restaurant-the-landmark-bangkok-hotel,50.34,-19.864918553833927
+FB_33ffbd8f070b,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-ls_rhoireview_3717_orbit (pattaya)_lca_ – Copy,5.99,-333.88981636060095
+FB_34d15a8a5959,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-tjnm_res_3005_great-harbour-international-buffet,54.34,-312.8450496871549
+FB_3611cc71a735,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-ucd_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel-bangkok - Copy,41.77,-813.9813263107493
+FB_364fe95c1d6c,0.0,2.0,-2.0,FB,4603.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-nbt_brn_4603_manee-me-more-esplanade-ratchadaphisek,33.8,-59.1715976331361
+FB_3844bda7ff16,0.0,1.0,-1.0,FB,835.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-sou_res_835_red-oven-so-bangkok,0.59,-1694.9152542372883
+FB_3b076e637449,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-ejls_res_3005_great-harbour-international-buffet,104.66,-162.43072807185172
+FB_3d2d3dc5f20e,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_3901_vantage point_key – Copy,7.37,-4070.5563093622795
+FB_3d7a01b20099,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-tbf_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel-bangkok - Copy,51.86,-655.6112610875434
+FB_40980734de1f,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-fd_hh-kjt_res_4263_feast-at-royal-orchid-sheraton-towers – Copy,191.39,-10.449866764198758
+FB_417087639db9,0.0,68.0,-68.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_2536_giorgio's_key – Copy,57.34,-1185.9086152772934
+FB_4369b103e66a,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_3717_orbit (pattaya)_lca – Copy,1.82,-1098.901098901099
+FB_43f77eb9640d,0.0,21.0,-21.0,FB,3619.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_aumjumma_3619_tenyuu grand omakase_grw – Copy - Copy,3159.96,-6.645653742452437
+FB_44c57fd8ea6a,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-ucd_2001_the dining room,1145.58,-4.36460133731385
+FB_4668f2e219f8,0.0,2.0,-2.0,FB,280.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,INF_immmheeTV_280_Vertigo Rooftop_KEY,82.69,-24.186721489902045
+FB_46efd1fc3b38,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-rhoi_3901_vantage point_sal – Copy,231.16,-129.78023879563938
+FB_474845655a48,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,album_hh_res_894_romsai-banyan-tree-hotel – Copy,17.32,-346.42032332563514
+FB_48b8aacb35f6,0.0,1.0,-1.0,FB,3180.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-fad_res_3180_riverside-terrace-at-anantara-riverside,10.78,-92.7643784786642
+FB_49b06b461699,0.0,1.0,-1.0,FB,3949.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_3949_the-siam-tea-room-asiatique-the-riverfront-branch-bangkok-thailand,108.26,-9.237021984112321
+FB_4a2124b7de39,0.0,42.0,-42.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-khs_res_3005_great-harbour-international-buffet - Copy,4833.6,-8.68917576961271
+FB_4d7e93abd2fc,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-ls_hh-jnjn_brn_3905_man-fu-yuan-qsncc - Copy,21.82,-137.48854262144823
+FB_4dd996eb6555,0.0,2.0,-2.0,FB,1236.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-tv_hh-swt_brn_1236_you-i-premium-suki-buffet-central-westgate - Copy,1666.32,-1.200249651927601
+FB_4deab868a0a2,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-twt_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel,1129.36,-30.10554650421478
+FB_508ae469c5a0,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,Boost_HH_1433_The Seafood Cafe&Restaurant_KEY_ – Copy,25.39,-157.54233950374163
+FB_51321776286f,0.0,70.0,-70.0,FB,2001.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-ucd_2001_the dining room - Copy,16027.55,-4.3674797458126795
+FB_51c82a61b9f6,0.0,7.0,-7.0,FB,3619.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,INF_onnbaby_3619_Tenyuu Omakase_SAL_ – Copy - Copy,4496.87,-1.556638283961956
+FB_5220ed2a7029,0.0,126.0,-126.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-tv_hh-swt_res_3005_great-harbour-international-buffet - Copy,3298.14,-38.20335097964307
+FB_548c0da1c118,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-pyb_res_2001_the-dining-room-at-grand-hyatt-erawan,1611.22,-3.1032385397400724
+FB_5515bd853b0e,0.0,11.0,-11.0,FB,425.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-bljn_brn_425_audrey-cafe-emquartier-bangkok,335.02,-32.833860665034926
+FB_55c5d91f6d8c,0.0,42.0,-42.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,single_hh_3005_great habour premium package_key - Copy,6237.95,-6.732981187729944
+FB_570d5b2d02ee,0.0,1.0,-1.0,FB,3949.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_res_3949_the-siam-tea-room-asiatique-the-riverfront-branch-bangkok-thailand,71.29,-14.027212792818066
+FB_5958fb712f24,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-tv_maichuanrok_3717_orbit (pattaya)_lca – Copy,25.56,-78.24726134585289
+FB_596d4b864c8c,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-fd_hh-cvtp_res_894_romsai-banyan-tree-hotel-bangkok,451.03,-13.30288450879099
+FB_5bbcaf1d5b92,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-dmpk_res_4889_gentle-butcher-by-bangkok-butcher,795.38,-47.77590585632025
+FB_5c61801260ed,0.0,2.0,-2.0,FB,4763.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_4763_chon-som-at-courtyard-by-marriott-suvarnabhumi-airport-bangkok,81.96,-24.40214738897023
+FB_605268f0e447,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_hh-jnjn_res_3629_savio-at-chatrium-grand-bangkok,1554.93,-2.5724630690770645
+FB_614158e38e13,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,album_hh_res_3901_vantage-point – Copy,6.4,-4687.5
+FB_649e90dde7d7,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,INF_ChillJourney_1433_The Seafood Cafe&Restaurant_KEY_ – Copy,10.98,-364.29872495446267
+FB_64bbaf63fe4d,0.0,1.0,-1.0,FB,3944.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_eatchillwander_3944_sushi niwa omakase_sal,510.46,-1.959017356893782
+FB_64d408d965f1,0.0,7.0,-7.0,FB,2294.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-pgm_res_2294_market-cafe-by-khao-at-hyatt-regency-bangkok-sukhumvit,0.17,-41176.470588235294
+FB_6579df7e88fd,0.0,84.0,-84.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,single_hh_3005_great-habour-buffet - Copy,168.33,-499.0197825699519
+FB_6736b23a286a,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-ls_hh-nbt_3905_man fu yuan_key – Copy,183.12,-16.3826998689384
+FB_6746668f23f7,0.0,1.0,-1.0,FB,3786.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-iuapp_brn_3786_neta-grill,3.81,-262.4671916010499
+FB_68fc19e0316c,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-tv_hh-lzb_res_4263_feast-at-royal-orchid-sheraton-towers,239.84,-8.338892595063376
+FB_6966afc558fd,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-ls_hh-tlein_res_4889_gentle-butcher-by-bangkok-butcher,877.28,-43.315703082254245
+FB_6c6e32b16e95,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-ebf_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel – Copy,208.81,-162.82745079258657
+FB_6d831bbc1aaf,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-pfd_donotsaywhatever_894_romsai banyan tree_key – Copy,1887.79,-3.178319622415629
+FB_6f9c88eeda46,0.0,1.0,-1.0,FB,3949.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-ls_hh-td_res_3949_the-siam-tea-room-asiatique-the-riverfront-branch,440.19,-2.2717462913741793
+FB_7217cc83a061,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-plk_res_894_romsai-banyan-tree-hotel-bangkok,222.62,-26.95175635612254
+FB_737dea0ac5f2,0.0,3.0,-3.0,FB,1728.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-ltmm_res_1728_albricias-at-chatrium-residence-sathorn-bangkok-thailand-1728,14.9,-201.34228187919464
+FB_76e758151288,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-dmpk_res_3005_great-harbour-international-buffet,80.1,-212.2347066167291
+FB_77f56571c83a,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_3905_man fu yuan_key – Copy,5.03,-596.4214711729621
+FB_7b3b48a7f044,0.0,2.0,-2.0,FB,2506.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-hmrp_res_2506_saffron-contemporary-thai-signature-rooftop-banyan-tree-bangkok,2902.14,-0.6891466297284073
+FB_7d610afb2084,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,single_hh_3005_great-habour-buffet,9.43,-1802.757158006363
+FB_7e4aed7bba12,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-jpa_res_3005_great-harbour-international-buffet,2033.82,-8.358655141556284
+FB_7ef164714da0,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-tv_hh-lpt_res_1433_the-seafood-cafe-restaurant,0.97,-4123.711340206186
+FB_83c8f79a36d3,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-ucd_3905_man fu yuan_key – Copy,1887.5,-1.589403973509934
+FB_845215fb111d,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-ls_hh-rhoi_res_894_romsai-banyan-tree-hotel,566.06,-10.5995830830654
+FB_846a0462a58a,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-khs_res_3005_great-harbour-international-buffet,2314.69,-7.34439600983285
+FB_869bd833eff2,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-nnn_3901_vantage point_key – Copy,159.7,-187.85222291797123
+FB_86fbc4099088,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-tv_hh-twt_res_2001_the-dining-room-at-grand-hyatt-erawan,2505.04,-1.9959761121578896
+FB_8813f92770cc,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,kol-tv_hh-hht_res_894_romsai-banyan-tree-hotel,670.71,-8.945744062262378
+FB_88987b0fed7c,0.0,1.0,-1.0,FB,273.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-khs_273_skyline_key,9.98,-100.2004008016032
+FB_896846f71ea6,0.0,5.0,-5.0,FB,2001.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-nbt_res_2001_the-dining-room-at-grand-hyatt-erawan-bangkok-thailand,247.64,-20.190599256985948
+FB_8cef247a7974,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-nbt_3905_man fu yuan_key,4.95,-1818.181818181818
+FB_9274f4322d63,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-odl_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel - Copy,304.68,-111.59249048181698
+FB_92c78034c385,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,INF_jernoonjernee_3717_Orbit_LCA_ – Copy,0.56,-3571.428571428571
+FB_94c92e7c2f2e,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_1433_the seafood cafe & restaurant_key – Copy,16.01,-249.84384759525298
+FB_9506ca2ed8c1,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_bearducktravel_3901_vantage point_key – Copy,590.69,-50.78806141969561
+FB_95389c3834ba,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-kjt_res_3629_savio-at-chatrium-grand-bangkok – Copy,243.7,-16.413623307345098
+FB_9551752cb2be,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_stopworkgotravel_3005_great harbour_key,4307.89,-3.946247466857324
+FB_9a90d9093158,0.0,68.0,-68.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_hh-fdn_res_2536_giorgio-s-riverside-royal-orchid-sheraton-hotel,355.08,-191.50613946152978
+FB_9ca35eebe479,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_rhoireview_3629_savio_key – Copy,2530.66,-1.580615333549351
+FB_a00d8d2a7c48,0.0,3.0,-3.0,FB,4751.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,album_hh_res_4751_about-beef-lava-grill,1522.17,-1.9708705335146535
+FB_a45927017605,0.0,3.0,-3.0,FB,3854.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_res_3854_suan-bua-centara-grand-ladprao-bangkok,70.94,-42.289258528333804
+FB_a4a55a72961c,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-jnjn_res_3901_vantage-point,110.94,-270.4164413196322
+FB_a5a3a8b1c7f1,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_hh-rhoi_3629_savio_key – Copy,1420.07,-2.8167625539586076
+FB_a8e0b18adcbd,0.0,2.0,-2.0,FB,3717.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_res_3717_orbit-restaurant-grande-centre-point-space-pattaya – Copy,7.9,-253.1645569620253
+FB_aa41d4d1f9bb,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-ls_nonnunnee_3629_savio_key – Copy,799.09,-5.005693976898722
+FB_aac407e47c22,0.0,14.0,-14.0,FB,3619.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_hh-aj_res_3619_tenyuu-grand-omakase - Copy 2,7155.21,-1.9566162278954775
+FB_ac7c7f158676,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-khs_res_3901_vantage-point – Copy,272.51,-110.08770320355217
+FB_afec7cbd0cc2,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_hh-jpa_res_3629_savio-at-chatrium-grand-bangkok – Copy,1056.48,-3.786157807057398
+FB_b10a5ceb2343,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-pyb_res_1433_the-seafood-cafe-restaurant,16.5,-242.4242424242424
+FB_b4530a589b07,0.0,1.0,-1.0,FB,949.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-pgm_res_949_amaya-food-gallery-amari-bangkok,36.13,-27.67783005812344
+FB_b5cbe782718a,0.0,33.0,-33.0,FB,4889.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-kjt_res_4889_gentle-butcher-by-bangkok-butcher,0.79,-41772.15189873418
+FB_b802ec057491,0.0,126.0,-126.0,FB,3005.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-jpa_res_3005_great-harbour-international-buffet - Copy,6831.3,-18.444512757454657
+FB_b8c446d1aea2,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_uncledeng_3629_savio_key – Copy,1028.84,-3.887873721861514
+FB_b90ea0f4d5e7,0.0,1.0,-1.0,FB,3181.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-wdl_brn_3181_beef-express-buffet,199.57,-5.010773162298943
+FB_c23a302adf44,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-pyb_3901_vantage point _key – Copy,866.87,-34.60726521854488
+FB_c26027df7e4a,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-hgk_res_3905_man-fu-yuan-qsncc,631.34,-14.255393290461559
+FB_c64f799754e3,0.0,6.0,-6.0,FB,2381.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_hh-easw_res_2381_khao-ekkamai - Copy,5411.5,-1.1087498845052204
+FB_c693a3d2e228,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-twt_res_3005_great-harbour-international-buffet,291.05,-58.40920803985569
+FB_c6db17f39651,0.0,7.0,-7.0,FB,3164.0,2024-08-27 00:00:00,2024-08-30 00:00:00,,,,,,,album_hh_res_3164_bangkok-sky-buffet-76-78th-floor-at-baiyoke-sky-hotel – Copy,30.37,-230.4906157392163
+FB_c7746df3ec98,0.0,3.0,-3.0,FB,835.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-pfd_hh-cth_res_835_red-oven-so-bangkok - Copy,2854.49,-1.0509758310591386
+FB_c7c8045aec08,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,single_hh_3005_great habour premium package_key,951.58,-17.865024485592382
+FB_c8cf1e9e0b9b,0.0,9.0,-9.0,FB,4655.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-ott_res_4655_sushi-koge-omakase - Copy,9219.76,-0.9761642385485088
+FB_c92e79eb8036,0.0,3.0,-3.0,FB,835.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_hh-cth_res_835_red-oven-so-bangkok,5.24,-572.5190839694657
+FB_c97ffe401282,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-nbt_res_3901_vantage-point,188.06,-159.52355631181538
+FB_c993e3572901,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-tv_hh-swt_res_3005_great-harbour-international-buffet,1190.79,-14.276236783983741
+FB_ca0a85116e96,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-ls_hh-aj_res_3905_man-fu-yuan-qsncc-bangkok,2527.42,-1.1869811903047376
+FB_cc9e080fc1dd,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-cnlv_3905_man fu yuan_key – Copy,57.49,-52.18298834579927
+FB_cd102b6f0010,0.0,10.0,-10.0,FB,4263.0,2024-08-23 00:00:00,2024-08-26 00:00:00,,,,,,,kol-tv_hh-mcr_res_4263_feast-at-royal-orchid-sheraton-towers,0.06,-166666.6666666667
+FB_ceb1e59012b2,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,kol-fd_immmheetv_3629_savio_key – Copy,1067.85,-3.7458444538090556
+FB_d0811d1e8e12,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-tv_hh-mcr_res_4263_feast-at-royal-orchid-sheraton-towers,1790.06,-1.1172809849949163
+FB_d092c01ca8d8,0.0,6.0,-6.0,FB,2381.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,album_hh_res_2381_khao-ekkamai - Copy,1557.28,-3.852871673687455
+FB_d0c3a5e93d08,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-jnjn_res_3005_great-harbour-international-buffet,242.0,-70.24793388429752
+FB_d1417167af9e,0.0,4.0,-4.0,FB,3629.0,2024-08-22 00:00:00,2024-08-25 00:00:00,,,,,,,album_hh_res_3629_savio-at-chatrium-grand-bangkok – Copy,43.4,-92.16589861751152
+FB_d43789b82dc8,0.0,2.0,-2.0,FB,3990.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-cth_brn_3990_chef-thanom-the-street-ratchada,100.42,-19.916351324437365
+FB_d566f6c1fed0,0.0,1.0,-1.0,FB,273.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-dmpk_273_skyline_key,12.45,-80.32128514056225
+FB_d5dd641d5a3f,0.0,17.0,-17.0,FB,3005.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-fad_res_3005_great-harbour-international-buffet,1193.32,-14.245969228706466
+FB_d6f404cc80f1,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-pfd_hh-fdn_brn_3905_man-fu-yuan-qsncc-bangkok,145.27,-20.651201211537135
+FB_d9a4f22f46ff,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-fd_hh-ott_res_4889_gentle-butcher-by-bangkok-butcher - Copy,2798.16,-13.580352803270722
+FB_db03cba5de9b,0.0,2.0,-2.0,FB,4263.0,2024-09-05 00:00:00,2024-09-08 00:00:00,,,,,,,kol-tv_hh-ejls_res_4263_feast-at-royal-orchid-sheraton-towers,1324.12,-1.5104371205026734
+FB_db4848e89783,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_paigingun_1433_the seafood cafe_key – Copy,35.5,-112.67605633802818
+FB_deed12ce4387,0.0,34.0,-34.0,FB,2536.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-pfd_hh-chim_res_2536_giorgio's_key – Copy,2807.01,-12.112532552431235
+FB_e2a2abb6f8ed,0.0,9.0,-9.0,FB,3905.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-fd_hh-pyb_3905_man fu yuan_key,161.11,-55.86245422382223
+FB_e59a3bfe32b5,0.0,4.0,-4.0,FB,2102.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-pfd_hh-fdn_brn_2102_jumbo-seafood-siam-paragon-bangkok,59.41,-67.32873253661
+FB_ea09cc48bfe7,0.0,2.0,-2.0,FB,4258.0,2024-09-03 00:00:00,2024-09-06 00:00:00,,,,,,,kol-tv_hh-mcr_brn_4258_oishi-grand-mega-bangna,2019.84,-0.9901774397972117
+FB_ea6d318a72ec,0.0,2.0,-2.0,FB,4735.0,2024-09-19 00:00:00,2024-09-26 00:00:00,,,,,,,kol-fd_hh-kmg_res_4735_shaloba-eatery,50.6,-39.52569169960474
+FB_eaf330514146,0.0,135.0,-135.0,FB,3901.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-ls_hh-nbt_res_3901_vantage-point - Copy,9289.9,-14.53191100011841
+FB_ebd6c23ccd33,0.0,30.0,-30.0,FB,3901.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-ffrv_3901_vantage point_key – Copy,356.0,-84.26966292134831
+FB_ecfe45a4bbed,0.0,3.0,-3.0,FB,4470.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-tv_hh-sag_res_4470_khaan-bangkok-michelin-guide,5136.57,-0.5840473311957202
+FB_f18d6f485ab7,0.0,6.0,-6.0,FB,894.0,2024-09-10 00:00:00,2024-09-13 00:00:00,,,,,,,album_hh_res_894_romsai-banyan-tree-hotel-bangkok,2713.5,-2.211166390270868
+FB_f41a34de5163,0.0,135.0,-135.0,FB,3901.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-khs_res_3901_vantage-point – Copy - Copy,14337.13,-9.416110476783011
+FB_f47e80d74ea3,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_bossonlydeliciousfood_1433_the seafood cafe_key – Copy,32.09,-124.64942349641633
+FB_f6498db73082,0.0,14.0,-14.0,FB,2681.0,2024-09-25 00:00:00,2024-10-02 00:00:00,,,,,,,kol-fd_hh-pls_res_2681_na-klongwan-vibhavadi-20-bangkok – Copy - Copy,11263.48,-1.242955108012799
+FB_f83d2460ee35,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-hmrp_brn_3905_man-fu-yuan-qsncc,2641.04,-1.1359161542422682
+FB_f844b3d3cf81,0.0,3.0,-3.0,FB,1767.0,2024-08-27 00:00:00,2024-08-30 00:00:00,,,,,,,album_hh_res_1767_stella-palace-baiyoke-sky-hotel – Copy,567.51,-5.286250462546916
+FB_fa7c142296c3,0.0,38.0,-38.0,FB,4889.0,2024-10-11 00:00:00,2024-10-14 00:00:00,,,,,,,kol-pfd_hh-pnpk_res_4889_gentle-butcher-by-bangkok-butcher,5323.96,-7.137544233991239
+FB_fd359a60e8ad,0.0,8.0,-8.0,FB,425.0,2024-09-09 00:00:00,2024-09-12 00:00:00,,,,,,,kol-ls_hh-td_brn_425_audrey-cafe-emquartier-bangkok,98.89,-80.8979674385681
+FB_fd6fd5b681a8,0.0,3.0,-3.0,FB,3854.0,2024-08-26 00:00:00,2024-08-29 00:00:00,,,,,,,kol-fm_hh-boy_res_3854_suan-bua-centara-grand-ladprao,346.58,-8.65601015638525
+FB_fdf7d6eafe9c,0.0,2.0,-2.0,FB,4621.0,2024-09-19 00:00:00,2024-09-22 00:00:00,,,,,,,kol-fd_hh-ott_res_4621_napha-emsphere,21.4,-93.45794392523365
+FB_fe5f6bc728e8,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_res_1433_the seafood cafe – Copy,6.75,-592.5925925925926
+FB_feadf7db458b,0.0,3.0,-3.0,FB,3905.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,album_hh_brn_3905_man-fu-yuan,318.93,-9.406452826639075
+FB_ff48663078ef,0.0,4.0,-4.0,FB,1433.0,2024-09-06 00:00:00,2024-09-09 00:00:00,,,,,,,kol-fd_hh-kjt_1433_the seafood cafe_key – Copy,88.7,-45.095828635851184
 KOL_048b1f24da68,0.0,28.0,-28.0,KOL,6464.0,2025-11-17 00:00:00,2025-11-22 00:00:00,,,,Tiktok,overoverrrr,https://tiktok.com/@overoverrrr,,,
 KOL_1a7683bb807d,0.0,1.0,-1.0,KOL,1157.0,2025-07-01 00:00:00,2025-07-06 00:00:00,,,,Instagram,intothethailand,Instagram.com/intothethailand,,,
 KOL_1dc67faae626,0.0,1.0,-1.0,KOL,4750.0,2025-04-09 00:00:00,2025-04-14 00:00:00,,,,Tiktok,jesszhengg,https://tiktok.com/@jesszhengg,,,
