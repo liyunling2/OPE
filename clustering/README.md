@@ -10,6 +10,8 @@
 
     - **`restaurant_theme_details.csv`** - Detailed breakdown showing the percentage distribution of each theme for every restaurant, useful for understanding restaurants with multiple theme associations.
 
+    - **`clustering_results.csv`** - Clustering results of all unique restaurants from kol_posts, placesapinew, restaurant_reviews (important columns: restaurant name, restaurant_id, cluster)
+
 # What is UMAP (Uniform Manifold Axpproximation & Projection) ?
 - Reduces high-dimensional data into 2D while keeping similar things close together
 - Preserves local structure
