@@ -11,8 +11,12 @@ import plotly.express as px
 import streamlit as st
 
 from data.loader import (
-    load_momentum, load_priority,
-    get_restaurant_history, get_restaurant_priority_row,
+    load_momentum,
+    load_priority,
+    load_momentum_raw_bookings,
+    get_restaurant_history,
+    get_restaurant_priority_row,
+    get_restaurant_booking_history,
     SEGMENT_COLORS,
 )
 
@@ -50,6 +54,7 @@ def segment_pill(segment: str) -> str:
 def render():
     momentum_df  = load_momentum()
     priority_df  = load_priority()
+    bookings_raw_df = load_momentum_raw_bookings()
 
     st.markdown("## Restaurant Explorer")
     st.markdown("<p style='color:#6b7280; margin-top:-0.5rem;'>Drill into any restaurant's performance, growth trajectory, and momentum segment.</p>", unsafe_allow_html=True)
@@ -164,7 +169,7 @@ def render():
             legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
             barmode="overlay",
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with tab2:
         fig2 = go.Figure()
@@ -177,7 +182,7 @@ def render():
             hovertemplate="<b>%{x|%b %Y}</b><br>฿%{y:,.0f}<extra></extra>"
         ))
         fig2.update_layout(**CHART_THEME, height=280)
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width="stretch")
 
     with tab3:
         fig3 = go.Figure()
@@ -206,7 +211,7 @@ def render():
             yaxis=dict(**CHART_THEME["yaxis"], tickformat=".0%"),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
         )
-        st.plotly_chart(fig3, use_container_width=True)
+        st.plotly_chart(fig3, width="stretch")
 
     st.markdown("---")
 
@@ -219,14 +224,34 @@ def render():
         .last()
     )
 
-    # Merge priority score if available
+    # Merge priority metadata only (keep segment source from momentum universe).
     if "priority_score" in priority_df.columns:
-        merge_cols = ["name", "priority_score", "priority_tier", "latest_segment", "recommended_channel"]
+        merge_cols = ["name", "priority_score", "priority_tier", "recommended_channel"]
         merge_cols = [c for c in merge_cols if c in priority_df.columns]
         latest_all = latest_all.merge(priority_df[merge_cols].drop_duplicates("name"), on="name", how="left")
 
+    # Fallback if momentum table has no segment column.
+    if "latest_segment" not in latest_all.columns and "latest_segment" in priority_df.columns:
+        latest_all = latest_all.merge(
+            priority_df[["name", "latest_segment"]].drop_duplicates("name"),
+            on="name",
+            how="left",
+        )
+
+    # Defensive handling in case an earlier merge produced suffixed segment columns.
+    if "latest_segment" not in latest_all.columns and (
+        "latest_segment_x" in latest_all.columns or "latest_segment_y" in latest_all.columns
+    ):
+        seg_x = latest_all["latest_segment_x"] if "latest_segment_x" in latest_all.columns else pd.Series([pd.NA] * len(latest_all))
+        seg_y = latest_all["latest_segment_y"] if "latest_segment_y" in latest_all.columns else pd.Series([pd.NA] * len(latest_all))
+        latest_all["latest_segment"] = seg_x.where(seg_x.notna(), seg_y)
+        latest_all = latest_all.drop(columns=[c for c in ["latest_segment_x", "latest_segment_y"] if c in latest_all.columns])
+
     if seg_filter != "All" and "latest_segment" in latest_all.columns:
-        latest_all = latest_all[latest_all["latest_segment"] == seg_filter]
+        latest_all = latest_all[latest_all["latest_segment"].fillna("Unknown") == seg_filter]
+
+    if "latest_segment" in latest_all.columns:
+        latest_all["latest_segment"] = latest_all["latest_segment"].fillna("Unknown")
 
     display_cols = [c for c in [
         "name", "latest_segment", "monthly_bookings", "monthly_revenue",
@@ -250,6 +275,100 @@ def render():
 
     st.dataframe(
         display_df.reset_index(drop=True),
-        use_container_width=True,
+        width="stretch",
         height=400,
     )
+
+    st.markdown("---")
+    st.markdown("### Historical Booking Records")
+
+    selected_restaurant_id = pd.to_numeric(pd.Series([latest.get("restaurant_id")]), errors="coerce").iloc[0]
+    booking_hist = get_restaurant_booking_history(
+        bookings_raw_df,
+        restaurant_name=selected,
+        restaurant_id=int(selected_restaurant_id) if pd.notna(selected_restaurant_id) else None,
+    )
+
+    if booking_hist.empty:
+        st.info("No raw booking records found for this restaurant.")
+    else:
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Raw Bookings", f"{len(booking_hist):,}")
+
+        min_dt = booking_hist["booking_date"].min() if "booking_date" in booking_hist.columns else pd.NaT
+        max_dt = booking_hist["booking_date"].max() if "booking_date" in booking_hist.columns else pd.NaT
+        c2.metric("First Booking", min_dt.strftime("%Y-%m-%d") if pd.notna(min_dt) else "-")
+        c3.metric("Latest Booking", max_dt.strftime("%Y-%m-%d") if pd.notna(max_dt) else "-")
+
+        rows_default = int(min(300, len(booking_hist)))
+        rows_step = 1 if len(booking_hist) < 50 else 50
+        rows_to_show = int(
+            st.number_input(
+                "Rows to display",
+                min_value=1,
+                max_value=int(len(booking_hist)),
+                value=rows_default,
+                step=rows_step,
+                key="overview_raw_booking_rows",
+            )
+        )
+
+        raw_display = booking_hist.head(rows_to_show).copy()
+        if "booking_date" in raw_display.columns:
+            raw_display["booking_date"] = pd.to_datetime(raw_display["booking_date"], errors="coerce").dt.strftime("%Y-%m-%d")
+        if "created_at" in raw_display.columns:
+            raw_display["created_at"] = pd.to_datetime(raw_display["created_at"], errors="coerce").dt.strftime("%Y-%m-%d %H:%M:%S")
+
+        if "revenue_thb" in raw_display.columns:
+            raw_display["revenue_thb"] = pd.to_numeric(raw_display["revenue_thb"], errors="coerce").apply(
+                lambda x: f"THB {x:,.0f}" if pd.notna(x) else "-"
+            )
+        if "revenue_dollars" in raw_display.columns:
+            raw_display["revenue_dollars"] = pd.to_numeric(raw_display["revenue_dollars"], errors="coerce").apply(
+                lambda x: f"${x:,.2f}" if pd.notna(x) else "-"
+            )
+
+        display_cols = [
+            c
+            for c in [
+                "booking_id",
+                "booking_date",
+                "created_at",
+                "start_time",
+                "end_time",
+                "channel",
+                "medium",
+                "adults",
+                "kids",
+                "total_guests",
+                "revenue_thb",
+                "revenue_dollars",
+                "arrived",
+                "no_show",
+                "refund",
+                "adjusted",
+            ]
+            if c in raw_display.columns
+        ]
+        raw_display = raw_display[display_cols].rename(
+            columns={
+                "booking_id": "Booking ID",
+                "booking_date": "Booking Date",
+                "created_at": "Created At",
+                "start_time": "Start Time",
+                "end_time": "End Time",
+                "channel": "Channel",
+                "medium": "Medium",
+                "adults": "Adults",
+                "kids": "Kids",
+                "total_guests": "Total Guests",
+                "revenue_thb": "Revenue (THB)",
+                "revenue_dollars": "Revenue (USD)",
+                "arrived": "Arrived",
+                "no_show": "No Show",
+                "refund": "Refund",
+                "adjusted": "Adjusted",
+            }
+        )
+
+        st.dataframe(raw_display, width="stretch", height=360)

@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 pages/momentum.py
 Page 2 - Momentum Dashboard
@@ -50,9 +50,55 @@ def render():
             on="name",
             how="left",
         )
+    if "location" not in latest_all.columns and "location" in priority_df.columns:
+        latest_all = latest_all.merge(
+            priority_df[["name", "location"]].drop_duplicates("name"),
+            on="name",
+            how="left",
+        )
 
     seg_col = "latest_segment" if "latest_segment" in latest_all.columns else "segment"
     has_segments = seg_col in latest_all.columns
+
+    st.markdown("### Restaurant Search Highlight")
+    s1, s2 = st.columns([1.4, 2.6])
+    with s1:
+        search_query = st.text_input(
+            "Search restaurant name",
+            placeholder="Type part of a restaurant name",
+            key="momentum_search_query",
+        )
+
+    if search_query.strip():
+        matched_restaurants = latest_all[
+            latest_all["name"].str.contains(search_query.strip(), case=False, na=False)
+        ]["name"].sort_values().tolist()
+    else:
+        matched_restaurants = latest_all["name"].sort_values().tolist()
+
+    restaurant_options = ["None"] + matched_restaurants
+    if "momentum_highlight_restaurant" not in st.session_state:
+        st.session_state["momentum_highlight_restaurant"] = "None"
+    if st.session_state["momentum_highlight_restaurant"] not in restaurant_options:
+        st.session_state["momentum_highlight_restaurant"] = "None"
+
+    with s2:
+        selected_restaurant = st.selectbox(
+            "Restaurant to highlight",
+            options=restaurant_options,
+            key="momentum_highlight_restaurant",
+        )
+
+    selected_row = (
+        latest_all[latest_all["name"] == selected_restaurant].head(1)
+        if selected_restaurant != "None"
+        else pd.DataFrame()
+    )
+    selected_segment = (
+        selected_row.iloc[0].get(seg_col)
+        if has_segments and not selected_row.empty
+        else None
+    )
 
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Total Active Restaurants", f"{latest_all['name'].nunique():,}")
@@ -76,27 +122,35 @@ def render():
             seg_counts = latest_all[seg_col].value_counts().reset_index()
             seg_counts.columns = ["segment", "count"]
             colors = [SEG_COLOR_LIST.get(s, "#7c82a0") for s in seg_counts["segment"]]
+            pull_vals = [
+                0.1 if selected_segment is not None and seg == selected_segment else 0
+                for seg in seg_counts["segment"]
+            ]
             fig_donut = go.Figure(
                 go.Pie(
                     labels=seg_counts["segment"],
                     values=seg_counts["count"],
                     hole=0.55,
+                    pull=pull_vals,
                     marker=dict(colors=colors, line=dict(color="#0f1117", width=3)),
                     textinfo="percent+label",
                     textfont=dict(size=11),
                     hovertemplate="<b>%{label}</b><br>%{value} restaurants (%{percent})<extra></extra>",
                 )
             )
+            center_text = (
+                f"<b>{latest_all['name'].nunique()}</b><br>"
+                "<span style='font-size:10px'>restaurants</span>"
+            )
+            if selected_segment is not None:
+                center_text += f"<br><span style='font-size:10px;color:#cc0000'>Selected segment: {selected_segment}</span>"
             fig_donut.update_layout(
                 **CHART_THEME,
                 height=300,
                 showlegend=False,
                 annotations=[
                     dict(
-                        text=(
-                            f"<b>{latest_all['name'].nunique()}</b><br>"
-                            "<span style='font-size:10px'>restaurants</span>"
-                        ),
+                        text=center_text,
                         x=0.5,
                         y=0.5,
                         font_size=14,
@@ -105,13 +159,17 @@ def render():
                     )
                 ],
             )
-            st.plotly_chart(fig_donut, use_container_width=True)
+            st.plotly_chart(fig_donut, width="stretch")
         else:
             st.info("Run notebooks to see segment distribution.")
 
     with col_right:
         st.markdown("### Performance vs Growth (Strategic Matrix)")
         scatter_df = latest_all.copy()
+        if "location" in scatter_df.columns:
+            scatter_df["location_plot"] = scatter_df["location"].fillna("Unknown")
+        else:
+            scatter_df["location_plot"] = "Unknown"
 
         fig_scatter = go.Figure()
         if has_segments:
@@ -130,8 +188,8 @@ def render():
                                 opacity=0.75,
                                 line=dict(color="#0f1117", width=1),
                             ),
-                            hovertemplate="<b>%{customdata}</b><br>Perf: %{x:.2f} | Growth: %{y:.2f}<extra></extra>",
-                            customdata=sub["name"],
+                            hovertemplate="<b>%{customdata[0]}</b><br>Location: %{customdata[1]}<br>Perf: %{x:.2f} | Growth: %{y:.2f}<extra></extra>",
+                            customdata=sub[["name", "location_plot"]].to_numpy(),
                         )
                     )
         else:
@@ -141,10 +199,31 @@ def render():
                     y=scatter_df["score_growth"],
                     mode="markers",
                     marker=dict(color="#3b82f6", size=7, opacity=0.7),
-                    hovertemplate="<b>%{customdata}</b><extra></extra>",
-                    customdata=scatter_df["name"],
+                    hovertemplate="<b>%{customdata[0]}</b><br>Location: %{customdata[1]}<br>Perf: %{x:.2f} | Growth: %{y:.2f}<extra></extra>",
+                    customdata=scatter_df[["name", "location_plot"]].to_numpy(),
                 )
             )
+
+        if not selected_row.empty:
+            hi = selected_row.iloc[0]
+            if pd.notna(hi.get("score_perf")) and pd.notna(hi.get("score_growth")):
+                fig_scatter.add_trace(
+                    go.Scatter(
+                        x=[hi["score_perf"]],
+                        y=[hi["score_growth"]],
+                        mode="markers+text",
+                        name="Selected Restaurant",
+                        marker=dict(color="#cc0000", size=16, symbol="diamond", line=dict(color="#111827", width=2)),
+                        text=[selected_restaurant],
+                        textposition="top center",
+                        hovertemplate=(
+                            f"<b>{selected_restaurant}</b><br>"
+                            f"Location: {hi.get('location_plot', 'Unknown')}<br>"
+                            "Perf: %{x:.2f} | Growth: %{y:.2f}<extra></extra>"
+                        ),
+                        showlegend=True,
+                    )
+                )
 
         p75_perf = scatter_df["score_perf"].quantile(0.75)
         p75_growth = scatter_df["score_growth"].quantile(0.75)
@@ -158,7 +237,18 @@ def render():
             yaxis=dict(**CHART_THEME["yaxis"], title="Growth Score"),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0, font_size=11),
         )
-        st.plotly_chart(fig_scatter, use_container_width=True)
+        st.plotly_chart(fig_scatter, width="stretch")
+        if not selected_row.empty:
+            perf_val = pd.to_numeric(pd.Series([hi.get("score_perf")]), errors="coerce").iloc[0]
+            growth_val = pd.to_numeric(pd.Series([hi.get("score_growth")]), errors="coerce").iloc[0]
+            st.caption(
+                f"Selected: {selected_restaurant} | Segment: {hi.get(seg_col, 'Unknown')} | "
+                f"Location: {hi.get('location_plot', 'Unknown')} | "
+                f"Strategic matrix position: Perf {perf_val:.2f} / Growth {growth_val:.2f}"
+                if pd.notna(perf_val) and pd.notna(growth_val)
+                else f"Strategic matrix position: Perf {'-' if pd.isna(perf_val) else f'{perf_val:.2f}'} / "
+                     f"Growth {'-' if pd.isna(growth_val) else f'{growth_val:.2f}'}"
+            )
 
     st.markdown("---")
 
@@ -186,7 +276,7 @@ def render():
                 xaxis=dict(**CHART_THEME["xaxis"], title="Signal"),
                 yaxis=dict(**CHART_THEME["yaxis"], title="Restaurants"),
             )
-            st.plotly_chart(fig_sig, use_container_width=True)
+            st.plotly_chart(fig_sig, width="stretch")
             st.caption("YoY = seasonality-adjusted (preferred) | MoM = fallback for <12 months history")
         else:
             st.info("growth_signal_used column not found - re-run momentum_seasonality.ipynb.")
@@ -213,7 +303,7 @@ def render():
                 xaxis=dict(**CHART_THEME["xaxis"], title="Consecutive growth months"),
                 yaxis=dict(**CHART_THEME["yaxis"], title="Restaurants"),
             )
-            st.plotly_chart(fig_stab, use_container_width=True)
+            st.plotly_chart(fig_stab, width="stretch")
             st.caption("Restaurants in green (2-3 months) form the stable-growth priority universe.")
         else:
             st.info("Stability data not found - run priority_scoring_seasonality.ipynb.")
@@ -269,7 +359,7 @@ def render():
             xaxis=dict(**CHART_THEME["xaxis"], tickangle=-45, tickfont=dict(size=10)),
             yaxis=dict(**CHART_THEME["yaxis"], tickfont=dict(size=10)),
         )
-        st.plotly_chart(fig_heat, use_container_width=True)
+        st.plotly_chart(fig_heat, width="stretch")
 
     st.markdown("---")
 
@@ -281,11 +371,63 @@ def render():
         top_growth = latest_all.nlargest(10, "booking_growth_rolling")[["name", "booking_growth_rolling", "monthly_bookings"]].copy()
         top_growth["booking_growth_rolling"] = top_growth["booking_growth_rolling"].apply(lambda x: f"{x:.1%}")
         top_growth.columns = ["Restaurant", "Growth (3m)", "Monthly Bookings"]
-        st.dataframe(top_growth.reset_index(drop=True), use_container_width=True, height=320)
+        st.dataframe(top_growth.reset_index(drop=True), width="stretch", height=320)
 
     with col3b:
         st.caption("Lowest Rolling Booking Growth")
         bot_growth = latest_all.nsmallest(10, "booking_growth_rolling")[["name", "booking_growth_rolling", "monthly_bookings"]].copy()
         bot_growth["booking_growth_rolling"] = bot_growth["booking_growth_rolling"].apply(lambda x: f"{x:.1%}")
         bot_growth.columns = ["Restaurant", "Growth (3m)", "Monthly Bookings"]
-        st.dataframe(bot_growth.reset_index(drop=True), use_container_width=True, height=320)
+        st.dataframe(bot_growth.reset_index(drop=True), width="stretch", height=320)
+
+    st.markdown("---")
+    st.markdown("### Full Restaurant Momentum List (Latest Snapshot)")
+
+    full_df = latest_all.copy()
+    full_df["selected"] = full_df["name"].eq(selected_restaurant).map({True: "Yes", False: ""})
+    if has_segments and seg_col in full_df.columns:
+        full_df = full_df.rename(columns={seg_col: "momentum_segment"})
+
+    display_cols = [
+        "selected",
+        "name",
+        "momentum_segment",
+        "location",
+        "monthly_bookings",
+        "monthly_revenue",
+        "booking_growth_rolling",
+        "score_perf",
+        "score_growth",
+        "growth_signal_used",
+    ]
+    display_cols = [c for c in display_cols if c in full_df.columns]
+    full_display = full_df[display_cols].copy()
+    if "booking_growth_rolling" in full_display.columns:
+        full_display["booking_growth_rolling"] = full_display["booking_growth_rolling"].apply(
+            lambda x: f"{x:.1%}" if pd.notna(x) else "-"
+        )
+    if "monthly_revenue" in full_display.columns:
+        full_display["monthly_revenue"] = full_display["monthly_revenue"].apply(
+            lambda x: f"THB {x:,.0f}" if pd.notna(x) else "-"
+        )
+    full_display = full_display.rename(
+        columns={
+            "selected": "Selected",
+            "name": "Restaurant",
+            "momentum_segment": "Momentum Segment",
+            "location": "Location",
+            "monthly_bookings": "Monthly Bookings",
+            "monthly_revenue": "Monthly Revenue",
+            "booking_growth_rolling": "Growth (3m)",
+            "score_perf": "Performance Score",
+            "score_growth": "Growth Score",
+            "growth_signal_used": "Growth Signal",
+        }
+    )
+
+    sort_cols = [c for c in ["Momentum Segment", "Monthly Bookings"] if c in full_display.columns]
+    if sort_cols:
+        ascending_vals = [True if c == "Momentum Segment" else False for c in sort_cols]
+        full_display = full_display.sort_values(sort_cols, ascending=ascending_vals)
+
+    st.dataframe(full_display.reset_index(drop=True), width="stretch", height=420)

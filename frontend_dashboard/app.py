@@ -111,7 +111,7 @@ st.markdown("""
 # Navigation as a Horizontal Top Bar
 page = st.radio(
     "Navigation",
-    ["Overview", "Momentum", "Priority", "Strategy"],
+    ["Overview", "Momentum", "Priority", "Clustering", "Strategy"],
     label_visibility="collapsed",
     horizontal=True
 )
@@ -129,6 +129,9 @@ elif page == "Momentum":
 elif page == "Priority":
     from pages import priority
     priority.render()
+elif page == "Clustering":
+    from pages import clustering
+    clustering.render()
 elif page == "Strategy":
     from pages import strategy
     strategy.render()

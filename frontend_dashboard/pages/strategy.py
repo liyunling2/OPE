@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
-import time
+import os
 import requests
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-from data.loader import load_priority, load_momentum, get_restaurant_history, get_restaurant_priority_row
+from data.loader import (
+    load_priority,
+    load_momentum,
+    get_restaurant_history,
+    get_restaurant_priority_row,
+    recommend_strategies_for_restaurant,
+)
 
 
 def layout(height=300, **kwargs):
@@ -28,7 +34,7 @@ def fmt_thb(val):
     return "%.0f THB" % val
 
 def fmt_pct(val):
-    if val is None or (isinstance(val, float) and pd.isna(val)): return "No data"
+    if val is None or pd.isna(val): return "No data"
     return "%.1f%%" % (val * 100)
 
 def get_tier_color(tier):
@@ -38,78 +44,179 @@ def get_tier_color(tier):
     if "review"   in t: return "#f1c40f"
     return "#7c82a0"
 
-def build_prompt(row, hist):
+def _playbook_actions(strategy_name: str) -> str:
+    text = str(strategy_name).lower()
+    if "reactivation" in text:
+        return "Target lapsed diners with return incentives, 7/14-day reminder flow, and table-time scarcity messaging."
+    if "retarget" in text:
+        return "Retarget menu viewers and past engagers with a 5-7 day conversion window and audience-frequency caps."
+    if "loyalty" in text or "retention" in text:
+        return "Launch member-only value bundles and repeat-visit nudges tied to 30-day revisit behavior."
+    if "prospecting" in text or "awareness" in text:
+        return "Run new-customer acquisition campaigns by lookalike audiences with strict CAC and first-booking targets."
+    if "creator" in text or "influencer" in text or "kol" in text:
+        return "Deploy creator-led social proof bursts with limited-time codes and track first-time bookings by creator."
+    if "promo" in text or "conversion" in text:
+        return "Use time-bound promotional offers with daily pacing controls and stop-loss rules on weak cohorts."
+    return "Execute controlled A/B testing with one clear CTA, strict audience split, and weekly budget reallocation."
+
+
+def build_grounded_brief(row: dict, hist: pd.DataFrame, recs: pd.DataFrame) -> str:
     recent = hist.sort_values("year_month").tail(3)
-    trend  = " -> ".join([
-        "%s: %d bookings" % (r["year_month"].strftime("%b %Y"), int(r["monthly_bookings"]))
-        for _, r in recent.iterrows()
-    ]) if len(recent) else "insufficient data"
+    score_val = pd.to_numeric(row.get("priority_score"), errors="coerce")
+    score_val = 0.0 if pd.isna(score_val) else float(score_val)
+    bookings_val = pd.to_numeric(row.get("monthly_bookings"), errors="coerce")
+    bookings_val = 0 if pd.isna(bookings_val) else int(bookings_val)
+    trend = " -> ".join(
+        [
+            "%s: %d bookings" % (
+                r["year_month"].strftime("%b %Y"),
+                int(
+                    0
+                    if pd.isna(pd.to_numeric(r.get("monthly_bookings"), errors="coerce"))
+                    else pd.to_numeric(r.get("monthly_bookings"), errors="coerce")
+                ),
+            )
+            for _, r in recent.iterrows()
+            if pd.notna(r.get("year_month"))
+        ]
+    ) if len(recent) else "insufficient data"
 
-    has_mkt = row.get("has_marketing", False)
-    lift    = row.get("avg_lift_per_day")
-    roi     = row.get("avg_roi")
-    n_camp  = row.get("n_campaigns", 0)
-
-    if has_mkt and lift is not None and pd.notna(lift):
-        lift_ctx = "Avg lift/day: %.2f | ROI: %s | Positive campaigns: %s/%s" % (
-            lift, fmt_pct(roi),
-            str(int(row.get("n_positive_lift",0))),
-            str(int(n_camp) if pd.notna(n_camp) else "?")
+    lines = []
+    lines.append("## Situation Summary")
+    lines.append(
+        "- **Restaurant:** {name}\n- **Segment:** {seg}\n- **Priority Tier:** {tier}\n- **Priority Score:** {score:.1f}/100".format(
+            name=row.get("name", "-"),
+            seg=row.get("latest_segment", "Unknown"),
+            tier=row.get("priority_tier", "Unknown"),
+            score=score_val,
         )
-    else:
-        lift_ctx = "No prior marketing campaigns."
-
-    return """You are a senior restaurant marketing strategist for a Southeast Asian dining platform.
-Write a specific, actionable marketing strategy brief based strictly on the data below.
-
-RESTAURANT: {name}
-Segment: {seg} | Tier: {tier} | Score: {score:.0f}/100
-Growth signal: {signal} | Stable months: {gm}
-
-PERFORMANCE
-Bookings: {bk:,} | Revenue: {rev} | Growth: {gr} | YoY: {yoy}
-3-month trend: {trend}
-
-MARKETING
-{lift_ctx}
-Channels used: {ch} | Best channel: {bc} | Recommended: {rec}
-
-Write the strategy in this structure (400-500 words):
-## Situation Summary
-## Recommended Channel: {rec}
-## Campaign Objective
-## Tactical Playbook (3-4 specific tactics with rationale)
-## Budget Guidance
-## Risks""".format(
-        name=row.get("name","-"), seg=row.get("latest_segment","-"),
-        tier=row.get("priority_tier","-"), score=row.get("priority_score",0),
-        signal=row.get("growth_signal_used","-"), gm=int(row.get("growth_months",0)),
-        bk=int(row.get("monthly_bookings",0)), rev=fmt_thb(row.get("monthly_revenue")),
-        gr=fmt_pct(row.get("booking_growth_rolling")), yoy=fmt_pct(row.get("booking_growth_yoy")),
-        trend=trend, lift_ctx=lift_ctx,
-        ch=row.get("channels_used","-"), bc=row.get("best_channel","-"),
-        rec=row.get("recommended_channel","-"),
+    )
+    lines.append(
+        "- **Latest performance:** {bk:,} bookings, {rev}, growth {gr}, YoY {yoy}\n- **Recent trend:** {trend}".format(
+            bk=bookings_val,
+            rev=fmt_thb(pd.to_numeric(row.get("monthly_revenue"), errors="coerce")),
+            gr=fmt_pct(pd.to_numeric(row.get("booking_growth_rolling"), errors="coerce")),
+            yoy=fmt_pct(pd.to_numeric(row.get("booking_growth_yoy"), errors="coerce")),
+            trend=trend,
+        )
     )
 
-def call_claude(prompt):
+    lines.append("## Data-Driven Recommended Playbook")
+    if recs.empty:
+        lines.append("- No robust historical strategy signal is available yet for this restaurant's context.")
+    else:
+        for idx, (_, rec) in enumerate(recs.head(3).iterrows(), start=1):
+            lines.append(
+                "{idx}. **{name}** ({scope})\n"
+                "- Expected revenue uplift: {rev_uplift}\n"
+                "- Expected bookings uplift: {book_uplift}\n"
+                "- Avg ROI: {roi}\n"
+                "- Evidence: {acts} activities, {rests} restaurants, {conf} confidence\n"
+                "- Action: {action}".format(
+                    idx=idx,
+                    name=rec.get("strategy_name", "-"),
+                    scope=str(rec.get("recommendation_scope", "historical")).title(),
+                    rev_uplift=fmt_pct(pd.to_numeric(rec.get("avg_revenue_uplift_pct"), errors="coerce")),
+                    book_uplift=fmt_pct(pd.to_numeric(rec.get("avg_bookings_uplift_pct"), errors="coerce")),
+                    roi="-" if pd.isna(rec.get("avg_roi")) else "%.2f" % rec.get("avg_roi"),
+                    acts=int(pd.to_numeric(rec.get("activities"), errors="coerce") or 0),
+                    rests=int(pd.to_numeric(rec.get("restaurants"), errors="coerce") or 0),
+                    conf=rec.get("confidence_level", "Unknown"),
+                    action=_playbook_actions(rec.get("strategy_name", "")),
+                )
+            )
+
+    lines.append("## Execution Guardrails")
+    lines.append("- Set weekly stop-loss on campaigns with negative incremental revenue after sufficient spend.")
+    lines.append("- Prioritize strategies with stronger sample size and confidence; treat low-sample tactics as experiments.")
+    lines.append("- Re-rank every month as new campaign outcomes are added.")
+    return "\n".join(lines)
+
+
+def build_prompt(row: dict, hist: pd.DataFrame, recs: pd.DataFrame, grounded_brief: str) -> str:
+    top_rows = []
+    for _, rec in recs.head(5).iterrows():
+        top_rows.append(
+            "- {name} | scope={scope} | rev_uplift={rev} | booking_uplift={book} | roi={roi} | n={n} | confidence={conf}".format(
+                name=rec.get("strategy_name", "-"),
+                scope=rec.get("recommendation_scope", "-"),
+                rev=fmt_pct(pd.to_numeric(rec.get("avg_revenue_uplift_pct"), errors="coerce")),
+                book=fmt_pct(pd.to_numeric(rec.get("avg_bookings_uplift_pct"), errors="coerce")),
+                roi="-" if pd.isna(rec.get("avg_roi")) else "%.2f" % rec.get("avg_roi"),
+                n=int(pd.to_numeric(rec.get("activities"), errors="coerce") or 0),
+                conf=rec.get("confidence_level", "Unknown"),
+            )
+        )
+    top_block = "\n".join(top_rows) if top_rows else "- No recommendation rows available"
+
+    return """You are a senior restaurant marketing strategist.
+Use only the provided data. Do not invent metrics.
+Improve and tighten the grounded strategy brief below.
+
+Restaurant: {name}
+Segment: {seg}
+Priority tier: {tier}
+Priority score: {score}
+Recommended channel (existing model): {channel}
+
+Top ranked strategies:
+{top}
+
+Grounded brief draft:
+{brief}
+
+Return concise markdown with sections:
+## Situation Summary
+## Recommended Strategy Mix
+## 30-Day Execution Plan
+## KPI Targets
+## Risks & Caveats""".format(
+        name=row.get("name", "-"),
+        seg=row.get("latest_segment", "Unknown"),
+        tier=row.get("priority_tier", "Unknown"),
+        score=row.get("priority_score", "-"),
+        channel=row.get("recommended_channel", "-"),
+        top=top_block,
+        brief=grounded_brief,
+    )
+
+
+def call_claude(prompt: str) -> str:
+    api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError("ANTHROPIC_API_KEY is not set.")
+
     r = requests.post(
         "https://api.anthropic.com/v1/messages",
-        headers={"Content-Type": "application/json"},
-        json={"model":"claude-sonnet-4-20250514","max_tokens":1000,
-              "messages":[{"role":"user","content":prompt}]},
-        timeout=60,
+        headers={
+            "Content-Type": "application/json",
+            "x-api-key": api_key,
+            "anthropic-version": "2023-06-01",
+        },
+        json={
+            "model": "claude-sonnet-4-20250514",
+            "max_tokens": 1200,
+            "messages": [{"role": "user", "content": prompt}],
+        },
+        timeout=90,
     )
     if r.status_code != 200:
         raise RuntimeError("API error %d: %s" % (r.status_code, r.text))
     data = r.json()
-    return "".join(b.get("text","") for b in data.get("content",[]))
+    return "".join(block.get("text", "") for block in data.get("content", []) if isinstance(block, dict))
 
 def render():
     priority_df = load_priority()
     momentum_df = load_momentum()
 
     st.markdown("## Strategy Engine")
-    st.markdown("<p style='color:#7c82a0;margin-top:-0.5rem;'>Select a restaurant to generate a tailored marketing strategy.</p>", unsafe_allow_html=True)
+    st.markdown(
+        "<p style='color:#6b7280;margin-top:-0.5rem;'>"
+        "Data-first recommendations are ranked by observed campaign outcomes, with fallback from cluster to segment to global evidence."
+        "</p>",
+        unsafe_allow_html=True,
+    )
     st.markdown("---")
 
     if len(priority_df) == 0:
@@ -120,14 +227,19 @@ def render():
     all_names   = priority_df.sort_values("priority_score", ascending=False)["name"].tolist()
     default_idx = all_names.index(preselected) if preselected and preselected in all_names else 0
 
-    col_sel, col_info = st.columns([2,3])
+    col_sel, col_cfg, col_info = st.columns([2, 1.2, 2.8])
     with col_sel:
         selected = st.selectbox("Restaurant", all_names, index=default_idx,
                                 format_func=lambda n: "#%d  %s" % (all_names.index(n)+1, n))
         st.session_state["strategy_restaurant"] = selected
 
+    with col_cfg:
+        min_sample_size = st.number_input("Min sample", min_value=1, max_value=20, value=3, step=1)
+        top_n = st.slider("Top strategies", min_value=1, max_value=6, value=3, step=1)
+
     row  = get_restaurant_priority_row(priority_df, selected)
     hist = get_restaurant_history(momentum_df, selected)
+    strategy_recs = recommend_strategies_for_restaurant(selected, top_n=int(top_n), min_sample_size=int(min_sample_size))
 
     tier_color = get_tier_color(row.get("priority_tier","-"))
     score      = row.get("priority_score", 0)
@@ -138,25 +250,32 @@ def render():
                 "border-left:4px solid {c};border-radius:8px;padding:1rem 1.4rem;box-shadow:0 1px 2px rgba(0,0,0,0.05);'>"
                 "<div style='display:flex;justify-content:space-between;align-items:center;'>"
                 "<div><div style='font-size:1.3rem;color:#111827;font-weight:700;'>{n}</div>"
-                "<div style='font-size:0.8rem;color:#6b7280;margin-top:4px;'>{tier}</div></div>"
+                "<div style='font-size:0.8rem;color:#6b7280;margin-top:4px;'>{tier}</div>"
+                "<div style='font-size:0.75rem;color:#6b7280;margin-top:2px;'>Segment: {seg}</div></div>"
                 "<div style='text-align:right;'><div style='font-size:1.8rem;color:#cc0000;font-weight:700;'>{s:.0f}</div>"
                 "<div style='font-size:0.7rem;color:#6b7280;'>SCORE</div></div>"
-                "</div></div>".format(c=tier_color, n=selected, tier=row.get("priority_tier","-"), s=score),
+                "</div></div>".format(
+                    c=tier_color,
+                    n=selected,
+                    tier=row.get("priority_tier","-"),
+                    seg=row.get("latest_segment", "Unknown"),
+                    s=score
+                ),
                 unsafe_allow_html=True
             )
-    
 
     if len(hist):
-        c1,c2,c3,c4,c5 = st.columns(5)
+        c1,c2,c3,c4,c5,c6 = st.columns(6)
         lat = hist.sort_values("year_month").iloc[-1]
         c1.metric("Bookings",      "%d" % int(lat.get("monthly_bookings",0)))
         c2.metric("Revenue",       fmt_thb(lat.get("monthly_revenue")))
         c3.metric("Rolling Growth",fmt_pct(lat.get("booking_growth_rolling")))
         c4.metric("YoY Growth",    fmt_pct(lat.get("booking_growth_yoy")))
         c5.metric("Campaigns",     "%d" % (int(row.get("n_campaigns",0)) if pd.notna(row.get("n_campaigns")) else 0))
+        c6.metric("Reco Signal",   "%d ranked" % len(strategy_recs))
 
     st.markdown("---")
-    chart_col, strat_col = st.columns([1,1])
+    chart_col, strat_col = st.columns([1.05,0.95])
 
     with chart_col:
         st.markdown("### Booking Trend")
@@ -181,16 +300,16 @@ def render():
             fig.update_layout(
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#e8eaf0", family="DM Sans"),
+                font=dict(color="#111827", family="DM Sans"),
                 margin=dict(l=0, r=0, t=30, b=0),
                 height=260,
-                xaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, tickangle=-30),
-                yaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False),
+                xaxis=dict(gridcolor="#e0e0e0", showline=False, zeroline=False, tickangle=-30),
+                yaxis=dict(gridcolor="#e0e0e0", showline=False, zeroline=False),
                 yaxis2=dict(overlaying="y", side="right", showgrid=False,
                             tickformat=".0%", tickfont=dict(color="#f0a500", size=9)),
                 legend=dict(orientation="h", y=1.02, x=0, font_size=10),
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
         st.markdown("### Campaign History")
         if row.get("has_marketing"):
@@ -203,57 +322,95 @@ def render():
             ]:
                 ca, cb = st.columns([2,3])
                 ca.markdown("<span style='color:#7c82a0;font-size:0.8rem;'>%s</span>" % k, unsafe_allow_html=True)
-                cb.markdown("<span style='color:#e8eaf0;font-size:0.85rem;font-weight:500;'>%s</span>" % v, unsafe_allow_html=True)
+                cb.markdown("<span style='color:#111827;font-size:0.85rem;font-weight:500;'>%s</span>" % v, unsafe_allow_html=True)
         else:
-            st.markdown("<div style='background:#ffffff;border:1px dashed #e0e0e0;border-radius:10px;padding:3rem;text-align:center;color:#6b7280;'>Click Generate Strategy to produce a data-grounded brief.</div>", unsafe_allow_html=True)
+            st.markdown("<div style='background:#ffffff;border:1px dashed #e0e0e0;border-radius:10px;padding:1.5rem;text-align:center;color:#6b7280;'>No campaign history available for this restaurant.</div>", unsafe_allow_html=True)
+
+        st.markdown("### Ranked Strategy Evidence")
+        st.caption(
+            "Ranking score = 100 x Revenue uplift component + 30 x Bookings uplift + 10 x ROI + 5 x success rate. "
+            "If revenue uplift % is missing, normalized incremental revenue is used."
+        )
+        if len(strategy_recs):
+            recs = strategy_recs[[
+                "strategy_name",
+                "recommendation_scope",
+                "recommendation_reason",
+                "activities",
+                "restaurants",
+                "confidence_level",
+                "avg_revenue_uplift_pct",
+                "avg_bookings_uplift_pct",
+                "avg_roi",
+                "ranking_score",
+                "context_adjusted_score",
+                "data_quality_note",
+            ]].copy()
+            recs.columns = [
+                "Strategy",
+                "Scope",
+                "Rationale",
+                "Activities",
+                "Restaurants",
+                "Confidence Level",
+                "Revenue Uplift",
+                "Bookings Uplift",
+                "Avg ROI",
+                "Base Score",
+                "Final Score",
+                "Data Quality",
+            ]
+            recs["Revenue Uplift"] = recs["Revenue Uplift"].apply(fmt_pct)
+            recs["Bookings Uplift"] = recs["Bookings Uplift"].apply(fmt_pct)
+            recs["Avg ROI"] = recs["Avg ROI"].apply(lambda v: "-" if pd.isna(v) else "%.2f" % v)
+            recs["Scope"] = recs["Scope"].str.title()
+            recs["Base Score"] = pd.to_numeric(recs["Base Score"], errors="coerce").round(2)
+            recs["Final Score"] = pd.to_numeric(recs["Final Score"], errors="coerce").round(2)
+            st.dataframe(recs, width="stretch", hide_index=True, height=260)
+        else:
+            st.info("No strategy recommendations available for this restaurant yet.")
 
     with strat_col:
-        st.markdown("### Marketing Strategy")
-        cache_key = "strategy_%s" % selected
+        st.markdown("### Grounded Strategy Brief")
+        grounded_key = "grounded_strategy_%s" % selected
+        ai_key = "ai_strategy_%s" % selected
+        grounded_brief = build_grounded_brief(row, hist, strategy_recs)
+        st.session_state[grounded_key] = grounded_brief
 
-        g_col, c_col = st.columns([2,1])
-        with g_col:
-            generate = st.button("Generate Strategy", key="gen_%s" % selected, use_container_width=True)
-        with c_col:
-            if st.button("Clear", key="clr_%s" % selected, use_container_width=True):
-                st.session_state[cache_key] = None
-                st.rerun()
+        st.markdown(st.session_state[grounded_key])
+        st.download_button(
+            label="Download Grounded Brief",
+            data="MARKETING STRATEGY\n%s\n\n%s" % (selected, st.session_state[grounded_key]),
+            file_name="grounded_strategy_%s.txt" % selected.replace(" ","_"),
+            mime="text/plain",
+            width="stretch",
+        )
 
-        if generate:
-            with st.spinner("Generating..."):
+        st.markdown("---")
+        st.markdown("### Optional AI Narrative")
+        st.caption("Uses `ANTHROPIC_API_KEY` if configured. Deterministic brief above is the source of truth.")
+        a_col, b_col = st.columns([2,1])
+        with a_col:
+            generate_ai = st.button("Generate AI Narrative", key="gen_ai_%s" % selected, width="stretch")
+        with b_col:
+            if st.button("Clear AI", key="clr_ai_%s" % selected, width="stretch"):
+                st.session_state[ai_key] = None
+
+        if generate_ai:
+            with st.spinner("Generating AI narrative..."):
                 try:
-                    st.session_state[cache_key] = call_claude(build_prompt(row, hist))
+                    prompt = build_prompt(row, hist, strategy_recs, grounded_brief)
+                    st.session_state[ai_key] = call_claude(prompt)
                 except Exception as e:
-                    st.error("API error: %s" % e)
-                    st.session_state[cache_key] = None
+                    st.error("AI generation failed: %s" % e)
+                    st.session_state[ai_key] = None
 
-        if st.session_state.get(cache_key):
-            txt = st.session_state[cache_key]
-            st.markdown(txt)
+        if st.session_state.get(ai_key):
+            st.markdown(st.session_state[ai_key])
             st.download_button(
-                label="Download Strategy Brief",
-                data="MARKETING STRATEGY\n%s\n\n%s" % (selected, txt),
-                file_name="strategy_%s.txt" % selected.replace(" ","_"),
-                mime="text/plain", use_container_width=True,
+                label="Download AI Narrative",
+                data="AI STRATEGY NARRATIVE\n%s\n\n%s" % (selected, st.session_state[ai_key]),
+                file_name="ai_strategy_%s.txt" % selected.replace(" ","_"),
+                mime="text/plain",
+                width="stretch",
             )
-        else:
-            st.markdown("<div style='background:#1a1d27;border:1px dashed #2e3350;border-radius:10px;padding:3rem;text-align:center;color:#7c82a0;'>Click Generate Strategy to produce a data-grounded brief.</div>", unsafe_allow_html=True)
-
-    st.markdown("---")
-    with st.expander("Batch Generate for Top N Restaurants"):
-        batch_n = st.slider("Number", 1, min(10, len(priority_df)), 5)
-        if st.button("Run Batch"):
-            batch_df = priority_df.sort_values("priority_score", ascending=False).head(batch_n)
-            prog = st.progress(0)
-            for i, (_, brow) in enumerate(batch_df.iterrows()):
-                bname = brow["name"]
-                bkey  = "strategy_%s" % bname
-                if not st.session_state.get(bkey):
-                    try:
-                        bhist = get_restaurant_history(momentum_df, bname)
-                        st.session_state[bkey] = call_claude(build_prompt(brow.to_dict(), bhist))
-                        time.sleep(0.5)
-                    except Exception as e:
-                        st.session_state[bkey] = "[Error: %s]" % e
-                prog.progress((i+1)/batch_n)
-            st.success("Batch complete.")
