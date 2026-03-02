@@ -1,0 +1,1564 @@
+,restaurant name,UMAP Component 1 (Semantic Similarity Axis),UMAP Component 2 (Theme Variation Axis),cluster,Primary Theme,Number of Posts,Primary Theme %,All Themes
+0,&T modern Thai grill,1.7609137,7.2853465,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1,'@RICE Restaurant by At Rice Resort (Nakhon Nayok),-0.26156652,8.148663,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+2,100 Degrees Hotpot Central Chaengwattana,3.642257,6.3215127,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+3,100 Degrees Hotpot Cosmo Bazaar,2.2812667,9.3165045,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+4,123 ICHI NI SAN Sathorn Soi 1,5.6030283,12.580779,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+5,13 Coins Ngamwongwan,2.6838703,10.711861,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+6,13 Coins Sukhumvit 49,-0.76597863,8.768492,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+7,130Sportcomplex,-0.11839684,12.782193,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+8,1823 Tea Lounge by Ronnefeldt,-0.03855208,9.386065,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+9,212 Rooftop Bar At Ibis Styles Bangkok Ratchada,-2.30989,9.438018,3,Good Location,1,100.0,Good Location
+10,224 Winesphere,-0.11820173,9.759127,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+11,24 Twenty-Four Food & Beverage,1.9837894,9.847276,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+12,28Ventotto,3.3458896,9.676407,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+13,298 Nikuya Yakiniku,5.6795683,9.248449,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+14,4K Cafe by Cross Vibe Decem (Chiang Mai),0.7659798,15.105907,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+15,501 Home Cook,2.4004953,9.5347,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+16,61 Bistro,0.56752616,7.988994,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+17,77 JET SIP JET,4.6419125,13.714762,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+18,7th Street Bar & Bistro Mega Bangna,0.4208098,8.355045,3,Good Location,1,100.0,Good Location
+19,82 Concept,1.7763996,9.704423,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+20,8855 Restaurant & Bar,0.037684668,10.862019,3,Good Location,1,100.0,Good Location
+21,A JUM MA Specialty Kimbap,6.177073,13.406923,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+22,A Seven at Davinia Resort (Hua Hin),-1.6783504,3.9414315,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+23,A'LA Craft Kiri Vari (Nan),1.2603542,8.401813,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+24,AB Indian Cuisine Asoke,0.308517,9.845823,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+25,AKATO BKK,1.8594868,8.880153,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+26,AKI Traditional Omakase,2.684383,1.1304603,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+27,ALRAY Fish & Chips,3.0339847,9.760488,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+28,AV izakaya Lat Phrao 71,1.4987772,12.087409,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+29,AV izakaya Saphan Khwai,5.1160417,14.123613,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+30,Above Eleven,4.187601,14.633586,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+31,Abushi,5.6343865,13.205886,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+32,AdHoc Bkk,1.5491589,10.9376335,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+33,Aey Seafood,8.632975,12.437194,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+34,Aha's Shabu & Grill,6.570007,5.708635,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+35,Aimée Petit Bistro,0.27515042,7.1780987,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+36,Akako Omakase,2.871623,1.0968382,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+37,Akase Shabu,7.233508,6.238264,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+38,Akimitsu Tendon Central Si Racha,4.2659607,5.3576813,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+39,Akimitsu Tendon Central World,4.417964,6.0174513,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+40,Akira Back at JW Marriott Hotel Singapore South Beach,-0.25560623,11.730408,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+41,Al Bahr Beach Bar @Marrakesh (Hua Hin),-2.1817656,3.6475341,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+42,Aladeen Restaurant,2.7789528,11.804574,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+43,Alangka Cruise,6.0902195,12.624063,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+44,Alangkarn Sushi Rama 2,5.1619644,3.1414967,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+45,Ale House - Riverside Bar at Millennium Hilton Bangkok,2.2767806,18.034037,3,Good Location,1,100.0,Good Location
+46,Aleenta Restaurant in Aleenta Hua Hin Resort & Spa (Hua hin),-2.3231213,2.912559,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+47,Alice’s Dining Hall,0.30929726,13.433319,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+48,All Day Fine,2.4041045,13.693926,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+49,Allora Ristorante and Bar,-0.8440772,12.463214,3,Good Location,1,100.0,Good Location
+50,Alpina Wine & Bistro,-0.047737263,8.839169,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+51,Amorretto Cafe & Bistro,-0.21494994,7.8636336,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+52,Amò,6.9539995,10.98178,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+53,An La Ghien,1.1209806,7.9027653,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+54,Anacot Revtaurant Si Phraya,5.3357534,9.935118,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+55,Ancient Tea House Asiatique the Riverfront,2.5084183,17.310017,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+56,Aneki × Paper Meal,5.258743,7.704975,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+57,Ang Sila Bangna Seafood,8.738258,12.288635,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+58,Angel Shabu Mala Bearing 17,8.084384,5.8974266,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+59,Annyeong Grill 안녕 그릴  Ozone One – Songprapha,2.0571914,6.051448,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+60,Annyeong Grill 안녕 그릴 Railway Station (Chiangmai),4.4967747,8.826199,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+61,Annyeong Grill 안녕 그릴 San Phi Suea (Chiangmai),2.0089006,6.2107005,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+62,Another Round,3.0485651,14.255023,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+63,Anya Authentic Thai Cuisine,0.7809894,10.506015,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+64,Anya's Place,4.2867217,10.009297,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+65,Ao Talay Theprak Saphan Mai,4.647269,11.386541,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+66,April64,4.586422,13.886214,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+67,Aqua Bar & Grill Springfield at Sea Resort & Spa (Hua Hin),-2.5339973,3.4219887,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+68,Aquario Rooftop Pool Bar & Restaurant The Sanctuary Resort (Pattaya),-3.2484338,7.182006,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+69,Ar Tee Mala Shabu Ping Yang,7.897446,5.3468127,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+70,Area Five Café and Eatery,1.705946,13.778158,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+71,Areeya Mookrata Chula-Banthat Thong,5.2174106,9.906698,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+72,Areeya Mookrata New Petchaburi,2.7431118,11.818052,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+73,Areeya Mookrata Pradiphat,4.6470957,15.480195,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+74,Arno's Naradhiwas Rajanagarindra Soi 20,4.4205446,10.844655,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+75,Arno's The Circle Ratchapruek,4.749908,11.165525,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+76,Assembly Point Thonglor @ One One Hotel Bkk,-2.3893082,10.953434,3,Good Location,1,100.0,Good Location
+77,Astro Ekkamai,6.396392,9.439346,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+78,At-Ta-Rote,4.5209575,12.951968,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+79,Atmos On Top Silom,3.787437,15.49174,3,Good Location,1,100.0,Good Location
+80,Audrey Cafe Central Ladprao,5.4753613,6.954585,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+81,Audrey Cafe Thonglor Soi 11,0.28348303,16.428204,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+82,Audrey Restaurant - A Chatrium Collection (Khao Yai),2.628867,11.251105,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+83,Aufu Bar,-2.7614913,12.4094,3,Good Location,1,100.0,Good Location
+84,Aunidin,5.523402,8.219431,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+85,Avalon Cafe & Restaurant (Phitsanulok),1.8866112,15.473388,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+86,Axis & Spin Sky Lounge & Bar Rooftop at The Continent Boutique Hotel,-2.0707443,9.654599,3,Good Location,1,100.0,Good Location
+87,Ayutthaya Retreat (Ayutthaya),2.2542388,15.497094,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+88,B.Burnt Bistro Central Si Racha (Chon Buri),0.9411362,7.0839205,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+89,BAY beach bar & cafe,-2.3694444,6.2154784,3,Good Location,1,100.0,Good Location
+90,BEACHSIDE BAR  บีชไซด์ บาร์ @ MASON,-1.8025805,10.970429,3,Good Location,1,100.0,Good Location
+91,BNP Cuisine,1.2130603,10.24351,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+92,BUCKS CAFE,0.33992493,15.834746,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+93,Baan Borneo Club by 137 Pillars,-2.2738967,14.656663,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+94,Baan Daeng by Methavalai Sorndaeng,5.970904,13.438254,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+95,Baan Dalaa by Angkana,2.3575757,12.367174,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+96,Baan Glom Gig,2.5207994,10.845755,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+97,Baan Itsara (Huahin),5.3281655,13.3063965,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+98,Baan Khanitha Thai Cuisine Sukhumvit 23,0.33695218,10.012634,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+99,Baan Khanitha and Gallery Sathorn,1.7144854,10.762571,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+100,Baan Moo Hun,3.0677967,10.908666,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+101,Baan Nhuer Nham,5.214332,14.851968,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+102,Baan Nuea Yaang,5.593388,14.844965,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+103,Baan Suan Rim Khlong Maha Sawat,2.614979,14.762231,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+104,Baan Suriyasai @ Surawongse,1.4958276,11.250458,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+105,Baantye,2.531731,10.785141,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+106,Baba Beach Restaurant at Baba Beach Club (Hua Hin),-2.317826,4.087845,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+107,Baba Hot Box at Sri Panwa (Phuket),0.5970852,5.058045,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+108,Baba IKI at Sri Panwa (Phuket),0.1617559,5.129876,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+109,Baba Poolclub at Sri Panwa (Phuket),0.20928687,4.7386837,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+110,Baba Soul Food Baba Beach Club (Hua Hin),-2.3174126,3.539532,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+111,Badasga Beach Club (Chonburi),-2.426328,4.769096,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+112,Bai Som farm&cafe,0.66204673,16.889866,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+113,Baia Rooftop Dining Lounge Bar,-2.5017288,10.175001,3,Good Location,1,100.0,Good Location
+114,Bajika Restaurant and Music,3.8224921,15.203523,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+115,Bake The Story (Phuket),0.13663006,3.9208682,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+116,Ballad Riverside Rooftop Bar & Restaurant,-2.9385934,9.503071,3,Good Location,1,100.0,Good Location
+117,Bangkok Trading Post Bistro & Bar by 137 Pillars,0.12973842,8.126746,3,Good Location,1,100.0,Good Location
+118,Bangrak Grill at Grande Centre Point Surawong,2.1559443,5.4944587,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+119,Banh Bistro @Ramada Plaza Sukhumvit 48,-0.3622995,7.6297283,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+120,Bann Rommai Mookata,1.9553081,9.766298,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+121,Banthat Thong Roast Duck,4.423236,14.931446,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+122,Bar Archive,-2.9901521,12.666661,3,Good Location,1,100.0,Good Location
+123,Bar Yang,-2.3161995,12.564098,3,Good Location,1,100.0,Good Location
+124,Bar.Yard at Kimpton Maa-Lai Bangkok,-3.1946568,11.388319,3,Good Location,1,100.0,Good Location
+125,Barracuda Rooftop Bar Akara Hotel Bangkok,-2.7549102,9.03952,3,Good Location,1,100.0,Good Location
+126,Bay Beach Resort Jomtien Pattaya Staycation (Pattaya),-3.4462047,5.96598,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+127,Bayan Seaside Terrace at Baan Bayan Beachfront Hotel (Hua Hin),-2.5740747,2.6714294,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+128,Beach Bar at Ibis Samui Bophut (Samui),-2.5033796,5.0689883,3,Good Location,1,100.0,Good Location
+129,Beach Kitchen by Avalon Beach Resort Pattaya (Pattaya),-3.6547377,5.6793623,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+130,Beach Road Kitchen at JW Marriott Singapore South Beach,-2.5411987,5.1501603,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+131,Beach Walk Cafe Bangsaen (Chonburi),-2.4208379,5.496007,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+132,Beauty in The Pot,1.5774037,8.850139,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+133,Beef Express Muangthong Nonthaburi,5.946699,10.5829,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+134,Beef Express Yothinpattana 3,5.991967,10.318739,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+135,Beer Collection,4.834102,10.80192,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+136,Beer Pradith,3.5954685,14.498153,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+137,Begin Again,2.4091067,14.630706,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+138,Behind Bars,5.967725,8.318538,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+139,Benihana JW Marriott (Phuket),-0.07741695,4.58724,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+140,Benihana at Avani Resort (Pattaya),-2.7203093,6.1723886,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+141,Best Western Plus Nexen Staycation (Pattaya),-4.4492264,5.948761,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+142,Big Bite Burger BKK,1.5701964,6.0441284,3,Good Location,1,100.0,Good Location
+143,Big Fish Siam At Siam (Pattaya),9.730588,3.8070645,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+144,Bigbeef Premium Halal Buffet,9.014016,8.267778,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+145,Bikuta Sushi & Teppan (Chonburi),3.505327,3.5777316,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+146,Bikuta Sushi & Teppan Rama 2,4.880424,3.3406208,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+147,Biscay at Best Western Plus Carapace Hotel (Hua Hin),-1.7048501,2.4657516,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+148,Bistro M - Marriott Sukhumvit 101,-0.3230644,7.345707,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+149,Bistro M - Marriott Sukhumvit 50,-0.26025364,7.4245167,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+150,Bite Restaurant & Gallery (Phuket),0.36651352,4.9834046,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+151,Bittersweet Mövenpick BDMS Wellness Resort,-1.7084695,6.7243466,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+152,Black Cherry,5.6820416,11.370017,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+153,Blackheath Bistro,0.46749404,7.328271,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+154,Blackyard Roast & Brew,5.614159,10.819617,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+155,Blue Elephant Sathorn,2.561487,13.101697,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+156,Blue Elephant Sukhumvit,-1.3953443,8.373232,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+157,Blue Sky Rooftop Bar Centara Grand at Central Plaza Ladprao,-3.1407583,9.294796,3,Good Location,1,100.0,Good Location
+158,BlueSpice Grande Centre Point Sukhumvit 55,-1.436147,8.654036,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+159,Blueraybar Rooftop,-3.4935255,9.085534,3,Good Location,1,100.0,Good Location
+160,Boat Seafood (Phuket),0.5736034,4.651836,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+161,Bodegas Wine,-0.43272346,10.067017,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+162,Bodhi Terrace at Anantara Chiang Mai Resort,-1.50652,6.6101384,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+163,Bombay 2 Beirut,4.8007274,8.510061,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+164,Bond Street Bar Café,-1.0255169,12.228232,3,Good Location,1,100.0,Good Location
+165,Bone Apple Tea Bistro,0.43426675,7.739555,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+166,Bonus shabu,8.066935,5.2294865,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+167,Boon Tong Kee Central Eastville,4.227746,6.3288307,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+168,Boon Tong Kee Central Pinklao,4.129694,5.496639,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+169,Boon Tong Kee Central Rama 2,5.2637568,4.2307687,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+170,Boon Tong Kee Central Rayong (Rayong),4.303716,5.8713145,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+171,Boon Tong Kee Central Westgate,3.8128448,5.7584586,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+172,Boon Tong Kee Future Park Rangsit,2.330773,7.8894024,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+173,Boon Tong Kee PTT Borommaratchachonnani 97,4.3919516,11.773338,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+174,Boon Tong Kee PTT Vibhavadi 62,3.1722653,8.595732,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+175,Boon Tong Kee Robinson Ratchaphruek,5.5388117,13.403204,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+176,Boon Tong Kee Seacon Square,3.716148,8.339578,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+177,Boon Tong Kee Sukhumvit 49,-1.4008157,8.229517,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+178,Boon Tong Kee Terminal 21 Rama 3,6.188382,2.9095297,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+179,Boon Tong Kee The Crystal Park,2.261844,7.639709,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+180,Boon Tong Kee The Mall Bangkapi,5.8842874,11.031957,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+181,Boon Tong Kee The Up Rama 3,6.2851377,3.17584,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+182,Booster's Bar,-1.2273091,12.41186,3,Good Location,1,100.0,Good Location
+183,Botanic Backyard Bar & Restaurant,-1.7333275,11.617208,3,Good Location,1,100.0,Good Location
+184,Bottega del Gusto,5.584932,7.9977546,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+185,Bottle Rockets,2.3133838,13.03976,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+186,Bounce Burger,2.886476,9.469942,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+187,Brewave Kanchanapisek,5.4417067,12.9399605,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+188,Brewave Pinklao,4.8053713,12.86896,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+189,Brewave Ratchada,2.7335188,14.024333,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+190,Brewski Rooftop Sports Bar Radisson Blu Plaza Bangkok (Indoor),-2.774686,9.5405035,3,Good Location,1,100.0,Good Location
+191,Bricks and Barrels (Pattaya),-4.748048,7.380721,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+192,Bright Side Brunch Bar,-2.6182227,12.523372,3,Good Location,1,100.0,Good Location
+193,Bro Smoke,3.4015293,9.675331,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+194,Bro's Grill & Beer,2.6866152,6.19913,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+195,Broccoli Revolution Sukhumvit 49,-1.569286,8.455661,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+196,Brown Burgundy,-1.4580954,14.563142,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+197,Bu Lan Dun Mek,4.992631,13.05463,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+198,Bua Terrace (Rayong),3.0658128,12.197401,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+199,Buenos Mexican Restaurant (Pattaya),-4.5755553,6.5187626,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+200,Bull Market Noodle Bar,-1.9507768,12.2055645,3,Good Location,1,100.0,Good Location
+201,Buonissimo Italian Restaurant & Pizzeria,3.3182683,12.382212,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+202,Burbrit Craft Beer Phra Khanong,0.7545617,9.212675,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+203,Burbrit Craft Beer Sukhumvit 22,-1.6870763,8.363031,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+204,Butter Steak Bistro,8.155018,10.341225,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+205,By The Pool Restaurant & Pool Bar,-1.2461138,12.234811,3,Good Location,1,100.0,Good Location
+206,"CALI, Novotel Singapore on Kitchener",0.04186932,12.715483,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+207,CHANAN Japanese Cuisine (Samut Sakhon),0.9082188,11.30179,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+208,CHOB Craft Beef & Beer,6.7113724,10.498219,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+209,CLAWS & CO - Anantara Mai Khao Phuket Villas (Phuket),0.3064723,4.532384,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+210,COAL Bake&Grill,2.1692047,5.7052984,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+211,COCOA XO Bar at Red Sky 57th Floor,-3.1490047,11.945022,3,Good Location,1,100.0,Good Location
+212,COMMU Rooftop Cafe,-3.632902,9.461478,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+213,CROW Craft & Cuisine,0.41876495,10.5483,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+214,CUTTS Sathorn Omakase,2.5982542,1.1926471,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+215,Caesa Delicious Bang Bon 3,7.4252887,11.235103,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+216,Cafe Chef WAN KL East Mall,0.7371425,15.536917,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+217,Cafe Chilli One Bangkok,0.85340345,16.874033,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+218,Cafe Chilli QSNCC,1.2569482,16.560234,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+219,Cafe Claire by Oriental Residence,0.17444098,16.185583,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+220,Cafe OSG - Zichar Tea Room + Wine Bar,-0.7271025,11.3267145,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+221,Cafe de Salil La Petite Salil Sukhumvit Thonglor 1,-0.9373809,8.077622,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+222,Cafe22 by Courtyard by Marriott North Pattaya (Pattaya),-4.8541627,6.6371083,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+223,CafeSlash,1.2839227,15.749758,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+224,Calm Kraam,4.9552507,13.422916,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+225,Camin Cuisine & Cafe Central Rama 9,5.3638415,4.5946493,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+226,Camin Cuisine & Cafe Seacon Square Srinagarindra,0.04969715,11.321522,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+227,Canale House,2.9180286,17.201508,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+228,Cantina Wine Bar & Italian Kitchen,-0.46233484,9.439026,3,Good Location,1,100.0,Good Location
+229,Caper by Dan Bark,4.3575063,8.622167,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+230,Carmina Restaurant & Bar Sukhumvit Soi 20,-1.9733508,9.06036,3,Good Location,1,100.0,Good Location
+231,Casa Pasta,4.914242,7.524531,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+232,"Castaway Restaurant, Café & Pool Bar (Pattaya)",-4.031994,7.105107,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+233,Caviar Café by Nai Lert,0.7245793,13.130626,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+234,Cha La Restaurant and Bar (Khao Yai),0.74533415,8.280003,3,Good Location,1,100.0,Good Location
+235,Chaan G,5.125664,13.829501,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+236,Chao Nua Thong,6.9295774,10.97671,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+237,Chao Xiang Restaurant,3.8763955,13.278514,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+238,Chaophraya Cruise,3.9983943,11.5460205,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+239,Charcoal Tandoor Grill & Mixology,2.4339564,5.822921,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+240,Charlie's by Tongpeng,5.936391,15.197838,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+241,Charm Cuisine at Oakwood Suites Tiwanon,0.3723396,9.966131,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+242,Charoen Ros Buffet (Chiang Mai),7.3627157,7.997859,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+243,Charoen Rung Rueang International Buffet MS Siam Tower Rama 3,8.53518,3.856285,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+244,Charoen Rung Rueang International Buffet Rama 2,7.275539,3.6980274,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+245,Charoen Rung Rueang International Buffet True Digital 101,7.5880547,8.383221,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+246,Charoenkrung Bar & Bistro,0.28240913,9.268799,3,Good Location,1,100.0,Good Location
+247,Chatuchak Cafe Centara Grand at Central Plaza Ladprao,5.056932,5.8747807,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+248,Chay Had Restaurant at Hilton Resort & Spa (Hua Hin),-1.7597222,3.1048186,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+249,Che'rie Cafe,0.6329095,16.633825,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+250,Cheat Day by Modish The PARQ Rama 4,6.2641892,3.3450358,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+251,Cheeky Signature’s (Bee Hoon),3.9264932,8.506463,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+252,Chef Station Omakase,3.1044483,1.6205366,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+253,Chef Thanom Att U Park Bangna,2.4281309,9.029927,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+254,Chef Thanom Seacon Square Srinagarindra,3.0425227,10.990983,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+255,Chef Thanom The Nine Center Tiwanon,3.9010239,10.818584,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+256,Chef Thanom The Street Ratchada,2.5180805,10.202183,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+257,Chef Yis,2.0580695,11.105038,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+258,Chiang Nua E-Saan And Grill,2.1403046,5.964751,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+259,Chibing Chicken and Bingsu Onnut 7,3.5562644,8.21582,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+260,Chibing Chicken and Bingsu Pattaya Beach (Pattaya),-4.4153223,6.1802588,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+261,Chim By Siam Wisdom,9.678807,3.8133097,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+262,Chim Chim,-0.5684695,14.307585,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+263,China Palace Restaurant (Chong Nonsi),4.701471,9.581403,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+264,China Rose at Maruay Garden Hotel,2.1321666,10.155688,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+265,Chinda Hotpot Lad Phrao 122,4.8819656,11.362721,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+266,Chinda Hotpot Nuanchan,6.402544,9.095759,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+267,Chinda Hotpot Porto Chino,4.272314,10.695608,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+268,Chinda Hotpot Saphan Mai,5.937903,14.678475,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+269,Chinda Hotpot The Walk Ratchaphruek,6.7595296,13.119891,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+270,Chinda Hotpot Udomsuk 58,5.7443686,9.486083,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+271,Chokchai SteakHouse (Rangsit),7.633138,10.881637,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+272,Chon Som at Courtyard by Marriott Suvarnabhumi Airport,7.267765,8.421659,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+273,Chopkeeper Butcher & Tap Bangna,6.94819,9.5674305,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+274,Chopkeeper Butcher & Tap Pattanakarn,4.522309,13.414227,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+275,Chow Mong Local Kitchen at The Peri Hotel (Hua Hin),-1.9712322,2.7221155,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+276,Chu Grill Shabu,6.2378,5.286555,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+277,Chuan Boy Malatang & Malaxiangguo MBK Center,5.249266,11.403527,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+278,Chuan Kitchen CentralWorld,2.8423157,7.4366093,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+279,Chy Bar Rooftop at Away Bangkok Riverside Kene,-3.4481592,9.684688,3,Good Location,1,100.0,Good Location
+280,CiTi BiSTRo Pathumwan Princess Hotel,0.22965854,7.606231,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+281,Clique & Cloud,0.99449414,9.138356,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+282,Clover Sky Bar & Restaurant at Hotel Clover Asok,-1.5672522,11.008927,3,Good Location,1,100.0,Good Location
+283,CoCo Chaophraya,4.822375,15.801586,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+284,Coast Beach Club & Bistro at Centara Grand Beach Resort & Villas (Hua Hin),-2.2570467,4.1576242,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+285,Coco Lima BKK,3.6408837,12.918606,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+286,Cocobee Chimaek Lasalle,3.5993752,10.509431,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+287,Coding Steak & Restaurant,7.511619,9.623676,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+288,Coffee@Sea Springfield at Sea Resort & Spa (Hua Hin),-2.069875,3.4552639,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+289,Cold Spring Cafe,0.004164207,15.151529,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+290,Com Nieu An La Ghien,1.5058368,8.013089,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+291,Cook Chom Chuan Chim,3.5168722,13.877005,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+292,Copacabana Rooftop diner (Chiang Mai),-3.351323,8.986128,3,Good Location,1,100.0,Good Location
+293,Copper Aquarium,4.229783,13.432327,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+294,Copper Chimney - Mandai Wildlife West,1.9385124,13.484248,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+295,Cozy Craft Room,1.9726695,12.693972,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+296,Cozy Space Homey Cafe & Dining,0.79412276,14.72623,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+297,Craftfiti BKK,-2.046731,11.284628,3,Good Location,1,100.0,Good Location
+298,Cross Pratamnak Staycation (Pattaya),-4.172072,6.063675,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+299,Crossroads Cafe at Singapore Marriott Tang Plaza Hotel,0.37871253,14.079034,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+300,Crystal Grill 82nd floor at Baiyoke Sky Hotel,2.5151951,5.844732,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+301,D Varee Jomtien Beach Staycation (Pattaya),-4.05629,5.6772776,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+302,D'tales Eatery,0.95847046,15.416025,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+303,DAKJIB,3.1052244,9.017294,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+304,DOTD BAR,-2.3247046,12.2843485,3,Good Location,1,100.0,Good Location
+305,Dailyfish Omakase (Chonburi),3.504403,0.862888,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+306,Dakshin Indian Restobar,5.451853,15.418486,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+307,Dark Waters Rooftop Bar & Riverside,-3.2604153,10.543846,3,Good Location,1,100.0,Good Location
+308,De Prime Rangnam,3.0077624,14.507687,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+309,Demijoe (Ratchaburi),3.0098867,11.594655,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+310,De’yong café and restaurant,3.0721226,13.187615,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+311,Dicey Reilly's at Avani Resort (Pattaya),-2.6813195,6.6259265,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+312,Din Restaurant & Jazz Bar,-1.1503228,11.742318,3,Good Location,1,100.0,Good Location
+313,Dino Mookrata Rama 3,6.197532,2.5049925,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+314,Dok Toh Dim Sum Bon Marché Market Park,2.129506,7.7648773,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+315,Dok Toh Dim Sum Chan Road,2.3848114,9.270908,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+316,Dok Toh Dim Sum Chokchai 4,3.1158566,9.842987,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+317,Dok Toh Dim Sum Yaowarat,3.8176672,10.750445,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+318,Dolcetto at Conrad Singapore Orchard,0.3531554,12.659738,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+319,Dolphin Restaurant at Bay Beach Resort Jomtien (Pattaya),-3.2348154,5.904233,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+320,Don Giovanni Centara Grand at Central Plaza Ladprao Bangkok,3.9203632,5.8818636,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+321,Dose Factory (Udon Thani),0.07939274,14.216566,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+322,Double U Cafe’&Bar,0.11311024,15.758464,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+323,Dough Bros Gaysorn Amarin,4.074352,7.3244333,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+324,Dough Bros Interchange 21,3.9525075,7.268791,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+325,Dough Bros Summer Point,4.768193,11.376574,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+326,Dragon Boat Rama 9,6.410066,2.6593935,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+327,Dragster Caffe,3.4681494,13.98657,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+328,Dream Premium Korean BBQ Buffet Ruea-bin - 드림 코리안 비비큐,8.537955,8.002353,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+329,Dream Premium Korean BBQ Buffet Talat Long Ma Si Er - 드림 코리안 비비큐,8.429545,8.12277,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+330,Durianism Cafe and NiTO Japanese restaurant Ayutthaya,0.9163491,15.702537,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+331,Dusit Gourmet at Baan Dusit Thani,0.88039887,13.952344,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+332,Dynasty Centara Grand Central Ladprao,4.295788,5.7607117,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+333,E-Cha Korean Craft Dining Bangsaen (Chonburi),1.1422914,13.44538,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+334,E-Cha Korean Craft Dining Ratchathewi,0.7541786,13.427917,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+335,EAT at OZO North Pattaya (Pattaya),-4.795732,7.146126,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+336,EKKA Indian Grill and Bar,1.487953,6.0287504,3,Good Location,1,100.0,Good Location
+337,EKKAR (Ang Thong),5.8936796,12.526008,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+338,ESAN Zaap Jueng,1.7183646,11.325923,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+339,Earthy Society,4.2798796,8.048643,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+340,Earw Thai Express Fashion Island,2.5437002,10.113267,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+341,Earw Thai Suki Boran Central Plaza Rama 3,5.240617,4.4792027,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+342,Earw Thai Suki Boran Central Plaza WestGate,4.1080747,6.1280394,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+343,Earw Thai Suki Boran K Village,1.4083177,11.278448,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+344,Earw Thai Suki Boran Kaset,1.3080529,11.31835,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+345,Earw Thai Suki Boran Terminal 21 (Nakhon Ratchasima),1.8261795,11.5190115,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+346,Earw Thai Suki Boran The Crystal SB Ratchapruek,2.2100089,11.065225,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+347,East & West Bangsaen (Chonburi),5.286095,10.805185,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+348,East Ocean Chinese Restaurant at SC Park Hotel,1.6867763,8.53577,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+349,Eat Drink Love Suvarnabhumi,3.5028248,11.422406,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+350,Eatter A-Han Khon Muang,1.4220808,11.056942,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+351,Eazy To Eat,4.4188437,10.786702,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+352,El Santo Restaurant and Bar,-1.7052507,11.775443,3,Good Location,1,100.0,Good Location
+353,Eldivino Thai (Phuket),0.5263331,5.4064393,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+354,Element Restaurant At Amara Singapore Hotel,0.17902024,12.79469,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+355,Elementi Rooftop Restaurant and Bar (Rayong),-3.4091854,9.510889,3,Good Location,1,100.0,Good Location
+356,En Hachi,2.51785,13.488463,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+357,Enjoy Eating Cafe,0.7849185,16.631382,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+358,Epia Ari,4.441126,11.312862,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+359,Epia Asiatique,5.861011,14.565724,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+360,Epicurean Fusion Restaurant,5.793527,10.750505,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+361,ErZab Hotpot Bangna,6.4921875,12.420586,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+362,Era-Izaan Ratchaphruek,3.622514,11.07058,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+363,Erzab Chaewhon Ladprao,5.1716905,14.209606,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+364,Erzab Chaewhon Onnut,4.3054376,10.025988,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+365,Esan Kampang Kitchen Chinnakhet,2.211157,6.5378723,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+366,Esan Kampang Kitchen Sri Racha (Chonburi),2.533054,6.909911,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+367,Esanlongbok,5.217552,14.062547,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+368,Escape Bangkok Emquartier,-3.2072144,11.015759,3,Good Location,1,100.0,Good Location
+369,Escape Pool Club At Centara Karon Resort (Phuket),-0.91406363,5.7053423,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+370,Est.33 at Crystal Design Center (CDC),5.48416,14.183416,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+371,Est.33 at The Nine Center Rama 9,6.5670905,2.819354,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+372,Estrela Rooftop Bar & Restaurant (Phuket),-0.99061966,6.5892153,3,Good Location,1,100.0,Good Location
+373,Everbean Pizzeria (Phuket),0.1555654,4.7984905,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+374,FLNT,3.7914963,11.03185,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+375,FUKU In Sky,3.86661,14.627553,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+376,Fairy Garden BKK,3.2540402,14.178476,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+377,Fak Marum Liap Duan Ram Inthra,5.1628447,12.323895,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+378,Fak Marum Phutthamonthon Sai 4,3.6063342,10.802291,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+379,Fak Marum Town In Town,6.4441857,12.409217,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+380,Fallabella River Front Iconsiam,3.8896954,14.004465,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+381,Famust.cnx (Chiang Mai),5.02006,15.577661,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+382,Fat Belly (Pattaya),-4.73495,6.894144,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+383,Fatboy Izakaya Ekkamai,3.023211,12.876559,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+384,Feed the beast,3.5460792,12.568608,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+385,Fighto Izakaya,2.877192,6.248385,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+386,FigureGround Wine Bar,-0.89057565,10.501514,3,Good Location,1,100.0,Good Location
+387,Fish Club Andaz Pattaya Jomtien Beach (Pattaya),-4.2687874,5.91074,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+388,Five Crossing Eatery & Winery,3.810155,7.80069,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+389,Flann O'Brien's Irish Pub,5.790369,14.781144,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+390,Flashback Rooftop Bar,-3.3179107,9.445542,3,Good Location,1,100.0,Good Location
+391,Flower Mala Hotpot,6.2805986,13.180805,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+392,Fomo Brunch & Dining (Chonburi),0.71310574,13.723602,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+393,Fook Kin 福劲,5.671609,11.789757,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+394,Frame Cafe & Restaurant,1.4933184,16.006044,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+395,Friend Station On Nut 44-46,5.921032,11.917503,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+396,Fu Lin Bar & Kitchen (Clarke Quay),-2.8442292,11.360532,3,Good Location,1,100.0,Good Location
+397,Fueng Fah at Mövenpick Suriwongse Hotel (Chiang Mai),0.5117036,11.050807,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+398,Fufu Shabu Ari,7.589952,5.3004346,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+399,Fufu Shabu G Tower Grand Rama 9,6.836486,3.8844063,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+400,Fufu Shabu Rama 4,7.13679,4.286198,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+401,Fujiyama Sashimi & Shabu Buffet,7.889788,7.1556754,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+402,Fungpls,4.4794807,15.223396,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+403,GINGER FARM kitchen at Central Phuket,1.8845416,5.16129,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+404,GaGa Udon House Thong Lor,2.755272,18.140806,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+405,Garden Salad by Ms.Chu,3.349705,9.96868,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+406,Garret Fish & Chips Ari,3.031998,9.125154,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+407,Garret Fish & Chips Sammakorn,2.971823,8.739679,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+408,Gekka,3.4681802,12.397041,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+409,Ginger Farm Kitchen 101 True Digital Park,2.1958575,7.089177,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+410,Ginger Farm Kitchen Central Westville,3.0254042,5.9171987,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+411,Ginger Farm Kitchen Centralworld,2.3244915,7.169439,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+412,Ginger Farm kitchen Terminal 21 (Pattaya),-3.7076442,6.8570952,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+413,GingerBowl Cafe,0.28099838,16.249762,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+414,Gingerbread House,3.3548102,17.749922,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+415,Ginpao Phochana,3.0131867,10.142621,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+416,Ginprik,2.88539,10.057183,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+417,Glai Hwor,3.3351986,11.414365,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+418,Gluttony by The Sin,3.4028933,13.179403,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+419,Gogilang,5.25194,13.141698,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+420,Goji Kitchen Grill & Bar at Pattaya Marriott Resort and Spa (Pattaya),-3.5146825,6.8259006,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+421,Golden State Vegan,3.1509657,3.7951777,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+422,Goodie Steak @ Bang Phlat,8.235116,10.204565,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+423,Goodie Steak @ Fai Chai – Phran Nok,7.967148,10.047562,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+424,Goodie Steak @ Wutthakat,7.589655,9.888424,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+425,Got to Grill,2.301301,5.4513936,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+426,Gotoku by Shabu King,7.7674546,5.778447,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+427,Great&Grand Sweet Destination (Pattaya),-4.7684636,7.2938585,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+428,Green House Bistro,0.29761076,7.6083384,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+429,Greenhouse Congee & Noodles by Landmark,2.1657228,12.971188,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+430,Grilled Station,5.150751,8.918885,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+431,Grok 1970,2.2355225,11.602725,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+432,Gui Ratchayo,4.994111,12.126886,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+433,Guzadrift Izakaya,2.4404166,15.460013,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+434,Gyu En Siam Yakiniku,9.937944,4.3936243,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+435,Gyu-Ya Yakiniku Rama 3,6.3370266,3.416711,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+436,GyuBei Yakiniku,3.4597802,7.121063,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+437,Gyunobi Yakiniku,4.4339533,9.040018,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+438,HAJI land,3.4151723,9.707542,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+439,HAN ROLL BKK,4.636997,13.034592,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+440,HANJI Taiwanese Hot Pot Sala Daeng,2.9631288,11.518496,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+441,HANJI Taiwanese Hot Pot Thonglor,0.44430265,9.998591,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+442,HEY Mookrata - Charoen Nakhon,4.627105,9.417598,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+443,HOUSE of TANGO,3.1978948,17.256884,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+444,HUA SENG HONG Central Plaza Chaengwattana,3.5716767,5.4279914,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+445,Habitat Hotel Staycation (Hua Hin),-2.3960397,2.746816,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+446,Hagi Centara Grand at Central Plaza Ladprao Bangkok,4.485415,6.18134,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+447,Hagi at Centara Grand Beach Resort & Villas (Hua Hin),-2.156447,3.276665,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+448,Hagow Yaowarat,4.0743613,8.947633,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+449,Hainanese Chicken Rice C.P Tower Silom,2.8856158,8.494325,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+450,Hanbab Korean Restaurant,2.2683249,11.474202,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+451,Hangetsu Omakase,2.9798248,0.5430114,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+452,Hannari Cafe de Kyoto Thonglor,0.11427057,16.274988,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+453,Happening Dine and Bar,-2.1111395,12.390092,3,Good Location,1,100.0,Good Location
+454,Haps - Brunch & More,3.052437,14.350326,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+455,Hard Rock Cafe Bangkok,0.2503178,16.660883,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+456,Heights At BKK,2.2827697,14.251213,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+457,Hen Hao Ma La Sai Phan,1.3947885,7.6800857,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+458,Heng Heng Lao Suthisan,5.397916,12.819535,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+459,Hiateeyai @ Samyan,3.868587,11.905129,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+460,Hidden House Cafe & Bistro (Samut Sakhon),1.2271159,14.952856,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+461,High River Café (Ratchaburi),1.3667706,16.175686,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+462,High Tea by Pickaboo,-0.54509777,10.112625,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+463,HighHouse,3.91761,14.270568,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+464,"Hmmmm, Grilled Pork Udomsuk",4.5085535,8.872316,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+465,Ho Kitchen Rama 3,5.9416223,3.0087986,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+466,Hogar bar,-1.788857,11.999777,3,Good Location,1,100.0,Good Location
+467,Hokkaido Yakidon,4.309255,8.7562,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+468,Holli Bolli Rooftop Bar @ Radisson Suites Bangkok Sukhumvit,-3.8848088,10.273196,3,Good Location,1,100.0,Good Location
+469,Hom Cham,3.7323117,11.580348,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+470,Hom Duan,2.055193,10.742258,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+471,Homie Bar & Restaurant,-1.504207,12.323605,3,Good Location,1,100.0,Good Location
+472,Hong Kong Fisherman,1.8242278,9.21404,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+473,Hong Teh Chinese Restaurant,1.7291012,8.876301,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+474,Honomi Shabu & Omakase,3.458592,0.69700766,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+475,Hooligan by Apache,-2.71785,5.119364,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+476,House of Chandra Nakhon Pathom,2.5225224,18.24176,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+477,House of Kin KORAT Centara Korat (Nakhon Ratchasima),2.8290892,18.251354,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+478,Hoy Mahachon,2.9029477,13.86154,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+479,Huajai Siam Square One,9.987817,4.2273073,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+480,Huaron Mookrata,3.7103798,12.4543295,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+481,Hump zaabb,4.341188,14.810125,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+482,Hunger Bear (Nakhon Sawan),5.181252,12.501074,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+483,Hungry Brown Eat and Coffee Roasters,-1.362538,14.385525,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+484,Huolong Chinese Mala HotPot & Grill,3.0562825,7.4239526,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+485,Hyde & Seek Athenee Tower,4.9505267,15.114249,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+486,Hyde & Seek Silom Edge,-3.0429606,8.661583,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+487,IDYLL Bistro Rama 3,0.15552606,6.96928,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+488,IKKI IZAKAYA,1.7148641,13.036763,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+489,IMM Restaurant,2.3477373,12.878435,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+490,IMPACT Lakefront,4.6464663,14.928052,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+491,ISEA Sky & The Jetty At Veranda Resort Na Jomtien (Pattaya),-2.793727,6.729804,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+492,Ichi-Meshi Rangsit,5.0796113,11.963291,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+493,Ichi-Meshi Salaya,6.3001256,11.975324,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+494,Im Pla Phao Prannok,3.549027,10.150181,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+495,Im-Erb Rama2,5.651506,6.296961,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+496,Indigo Bar at Bay Beach Resort Jomtien (Pattaya),-2.9873807,5.7480226,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+497,Indigo Rooftop Bar (Pattaya),-3.683618,8.236019,3,Good Location,1,100.0,Good Location
+498,Iron Pan Suanplern Market,2.8644536,12.267639,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+499,Isea Beach Bar at Veranda Resort & Villas (Hua Hin),-2.0358639,3.5086854,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+500,Itaewon class (Khaoyai),5.5160294,12.864271,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+501,Izakaya Goichi 51,4.9041963,14.328119,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+502,Izakaya Naihua,4.899869,13.124834,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+503,Izumidai The Alley Ram Inthra,6.3834486,13.479582,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+504,JAO Ping River Cruise at Anantara Chiang Mai Resort,-1.8662962,6.320612,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+505,JC Stars Cafe,-0.12245087,16.3492,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+506,JHOL Coastal Indian Cuisine,0.61238277,10.168469,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+507,JP French,1.3270009,9.20689,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+508,JPteres at Grand Hyatt Kuala Lumpur,1.6117401,11.704572,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+509,JUBANG Premium Aged BBQ Bangna,9.222221,7.951006,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+510,JUMBO Seafood Siam Paragon,10.26949,4.3695602,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+511,Jaan Joor (Chiang Mai),2.6588948,11.798745,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+512,Jackson,4.7158318,14.12711,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+513,Jacob Barn,6.7251086,9.949717,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+514,Jade At The Fullerton Hotel Singapore,0.83806986,12.3153515,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+515,Jade Garden Pinklao,7.4559226,6.943165,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+516,Jae Keang Banthat Thong,5.0950527,9.20616,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+517,Jaekoy Isaan Seafood Kingpetch Phetchaburi 10,7.694666,12.625843,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+518,Jakkrawad Chill Restrobar,3.590427,13.823103,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+519,Jao By KRUA JIANG MAI,2.899657,12.163237,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+520,Jao Samut Seafood Buffet (Pattaya),-5.414524,6.464239,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+521,Jarn Nee Plaum Pasta & Bistro,3.830268,7.1791854,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+522,Jaspe At Wyndham Singapore Hotel,0.53425974,12.784845,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+523,Jass Bar & Bistro at Jasmine Resort Hotel,-0.7083519,8.664342,3,Good Location,1,100.0,Good Location
+524,Je Khai Seafood,8.429779,12.426992,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+525,Jeawhonphrayalae,2.3771403,13.877701,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+526,Jenn's - PARC Bangna,3.484169,11.655172,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+527,Jibcharoen Bar & Bistro 酒狂,0.03552726,8.158116,3,Good Location,1,100.0,Good Location
+528,Jimmy BBQ & Grill Grand Palazzo Hotel (Pattaya),-3.7207465,6.919466,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+529,Jim​ Sa​ Jui​ Station (Ayutthaya),0.2259251,15.402828,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+530,Jindarin Cafe (Nakhon Ratchasima),0.27393287,16.349531,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+531,Jinshin Omakase,3.2612696,0.88513595,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+532,Jobteeyum Ladprao,3.856941,9.450558,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+533,Jojo Soba,2.521309,10.785464,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+534,Jok Jab Sen Banthat Thong,4.331645,9.836856,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+535,Journey Café - A Chatrium Collection (Khao Yai),-0.101695985,15.630346,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+536,JuadJaad Ratchaphruek,3.8237545,10.09841,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+537,Junichi Japanese Restaurant,0.41740516,12.0343685,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+538,KAWA Izakaya On Nut,5.6722226,13.8694105,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+539,KBBQ Lad Phrao,4.7566257,9.083382,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+540,KBBQ Nawamin,5.5671926,11.892868,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+541,KBBQ Rangsit,5.836502,8.820468,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+542,KBBQ Sukhumvit,-1.2651234,8.237014,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+543,KBBQ The Street Ratchada,5.4823813,9.542018,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+544,KIN Steak,7.99055,10.282952,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+545,KO-YA Yakiniku,3.3980258,1.1678824,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+546,KORATA Siam Square,9.652055,3.9940274,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+547,KROK-A-CAFÉ ESPRESSO BAR ครก อะ คาเฟ เอสเปรสโซ บาร์ @ MASON,-1.5998281,11.910153,3,Good Location,1,100.0,Good Location
+548,Kaarla Wood-Fire Grill & Bar,1.6638781,5.4791985,3,Good Location,1,100.0,Good Location
+549,Kaen,8.405678,8.937951,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+550,Kaenkrung,3.6721895,9.277596,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+551,Kagonoya Central Rama 3,5.114124,3.8271372,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+552,Kagonoya Central Rama 9,5.5394726,4.525223,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+553,Kagonoya Mega Bangna,7.232546,6.546162,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+554,Kagonoya Mercury Ville,6.2258625,7.2836833,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+555,Kagonoya Siam Discovery,9.7098675,4.1067224,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+556,Kai Maeng-da Ta-lay Phao,0.6970427,12.629979,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+557,Kai Yang Samanong Phattanakan 53,5.0981812,9.299586,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+558,Kaikatok Wutthakat,3.9830768,11.050908,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+559,Kaiwa,2.7213051,10.130692,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+560,Kalanan Riverside Resort Staycation,-1.9768585,6.14258,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+561,Kam's Roast Central World,4.6637225,6.7352567,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+562,Kam's Roast ICONSIAM,4.094986,8.279058,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+563,Kam's Roast Mega Bangna,3.617719,12.854467,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+564,Kang Ban Phe (Rayong),4.2784557,9.953141,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+565,Kanomjeenyoksod,2.7041152,12.211335,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+566,Kanpai Omakase,3.2631822,0.82260376,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+567,Kapi (Surat Thani),4.021447,9.904897,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+568,Kapitan Bar & Restaurant,-1.938224,11.358035,3,Good Location,1,100.0,Good Location
+569,Kappou Nihon Ratchapruek,4.1762853,11.664286,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+570,Karawa Omakase,2.7027113,1.1059563,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+571,Karayama Cosmo Bazaar,3.8354793,12.677764,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+572,Karayama Future Park Rangsit,1.9265054,7.9980974,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+573,Karayama Samyan Mitrtown,6.729261,13.259194,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+574,Karayama Siam Square One,9.395048,4.312753,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+575,Karayama Terminal 21 Rama 3,6.2004995,3.2560616,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+576,Kato Omakase,2.866655,1.1959103,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+577,Katsuya Central Rama 2,5.441964,4.2057486,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+578,Katsuya Central Westgate,4.1287675,5.2285075,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+579,Katsuya CentralWorld,2.8459044,8.590965,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+580,Katsuya Cosmo Bazaar,6.1487694,11.042038,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+581,Katsuya Fashion Island,6.1249495,11.585572,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+582,Katsuya Fortune Town,4.08703,9.847634,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+583,Katsuya Future Park Rangsit,2.37226,7.526954,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+584,Katsuya Gateway Ekamai,3.2692595,8.412106,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+585,Katsuya Imperial World Samrong,4.314021,10.354113,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+586,Katsuya Mega Bangna,4.9133825,9.482741,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+587,Katsuya Siam Square One,9.861569,4.2836385,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+588,Katsuya Union Mall,5.9389234,11.146582,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+589,Kazama,6.2642355,14.144342,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+590,Kem-Kon (Pahurat),4.2817583,12.819293,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+591,Kenny’s BKK Sukhumvit 31,-0.6494421,8.383166,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+592,Kensington English Garden Resort Staycation (Khao Yai),-2.3247004,5.946051,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+593,Keyaki at Pan Pacific Hotel Singapore,0.011959058,12.441727,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+594,Khanom Jeen Phuket Baan A-Ma,0.053012684,4.1288557,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+595,Khao Ekkamai,2.9822073,10.735502,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+596,Khao Yai Art Tree,1.6643451,14.385256,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+597,Khaodongmoodaeng Siriraj Wang Lang,3.4747553,11.883166,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+598,Khrua Baan Suan,2.3843803,11.659863,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+599,Khun Rose Cuisine (Pattaya),-4.129724,7.6618023,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+600,Khun Toom Kitchen Saimai Avenue,3.3815055,8.20976,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+601,Kichi Omakase,3.2519715,1.0723561,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+602,Kin A Rai Dee Cafe and Restaurant,1.348359,16.017515,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+603,Kin Chan Si Grilled FISH & ISAAN Thai Food,3.432322,9.080202,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+604,Kindee Bistro (Phuket),0.28449222,6.2996173,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+605,Kindee Cafe,1.101193,15.998959,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+606,King Seafood (Pattaya),-5.5826607,6.735495,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+607,Kinnaree Restaurant Sukhumvit 8,-1.295549,8.693771,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+608,Kinsaru,6.985904,10.829702,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+609,Kintub Thai Mookata,1.6262478,11.622779,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+610,Kisekhi Craft and Fusion Buffet,7.1588945,8.448631,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+611,Kisso at The Westin Grande Sukhumvit,-1.211546,8.00274,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+612,Kitchen Yu Pin,2.827316,7.118902,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+613,Kizuna Shabu & Hand Roll,7.611324,6.235357,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+614,Klindin Cafe & Restaurant,1.284724,16.089998,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+615,Knock Knock Cafe & Bar,0.27808404,15.577114,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+616,Koko Japanese Omakase,3.468012,1.0650365,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+617,Kokoro Omakase & Hand Roll Bar - Central Eastville,2.3783016,0.94197583,3,Good Location,1,100.0,Good Location
+618,KongJu Grill & Shabu Lotus's Rangsit Klong 4,5.984413,5.6969023,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+619,Kongju Restaurant at Pathumwan Princess Hotel,2.2597919,12.157623,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+620,Konlamoh,4.493172,12.634422,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+621,Koong Tung Seafood At Banthat Thong Road,8.364112,12.170727,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+622,Koong Tung Seafood At Ram Intra Expressway Market,8.623464,11.834495,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+623,Koong Tung Seafood At Srinakarin Train Market (Entrance Zone),8.702091,12.3548565,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+624,Koong Tung Seafood At Srinakarin Train Market (Main Square),8.791398,12.099183,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+625,Korat BaanAng Khaoyai,6.4390883,13.431882,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+626,Korea House Gold - The Fourth,3.0794427,17.97386,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+627,Kozen Sushi Bar & Restaurant,3.2404826,2.0823798,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+628,Kraft Cafe At Mowa Bangkok,1.1996346,16.550318,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+629,Krua Ban Pa Boon 3 (Sriracha),5.6422844,14.926449,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+630,Krua Ban Pa Boon 5 (Pattaya),-4.6879063,7.1977897,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+631,Krua Ban Pa Boon 6 (Rayong),5.75735,14.161283,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+632,Krua Ban Pa Boon 7 (Bangsaen),6.3873076,14.471933,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+633,Krua Khun Ein Rama 3,6.245721,3.0649095,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+634,Krua Khun Ein Ratchada 32,6.1182227,13.757117,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+635,Krua Klang Bueng – Yo Yak Khiew Yai Mookrata,3.0499191,10.913243,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+636,Krua Kratare,1.8617843,11.952166,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+637,Krua Muang Ve Lao Yuan at Robinson Lifestyle Srisamarn,5.619924,11.850432,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+638,Krua Nai Noi Seafood,8.290911,12.7645645,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+639,Krua Pa Ya,4.2954125,11.947506,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+640,Krua Piam Ros,1.8511695,12.575009,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+641,Krua Prik Nam Pla,1.6173568,11.702216,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+642,Krua Rim Wang (Samut Sakhon),6.557322,12.570701,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+643,Krua Suan View Pla Mae Num,2.9972165,14.021278,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+644,Krua Talad Yai by Courtyard Marriott (Phuket),0.24522434,4.246681,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+645,Krua-Ka-Min,3.6707084,14.105233,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+646,Kruajiangmai Thonglor,3.06956,12.051229,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+647,Kuma no Yakitori,3.0330055,12.637771,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+648,Kumpoy,2.2663598,11.400507,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+649,Kunlin Restaurant (Ranong),2.8928118,12.065905,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+650,Kunshine Hotpot Huai Khwang,4.1090746,13.051749,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+651,Kunshine Hotpot Yaowarat,6.9069314,9.360669,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+652,Kushiro Omakase and Japanese Dining,3.1919386,0.53097945,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+653,Kwankamon Cafe and Restaurant,1.3896643,15.608339,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+654,Kyo Roll En - Cafe & Meal Avenue Ratchayothin,0.3029723,15.569063,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+655,Kyo Roll En - Cafe & Meal Central Eastville,1.0103604,14.7709875,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+656,Kyo Roll En - Cafe & Meal Central Rama 9,5.1746073,4.657841,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+657,Kyo Roll En - Cafe & Meal Gateway Ekamai,0.049549956,15.843662,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+658,Kyo Roll En - Cafe & Meal Mega Bangna,0.42334154,15.585902,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+659,Kyo Zen,-0.8787692,14.070912,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+660,Kyoto Uji Saryo Iconsiam,4.1420236,11.512022,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+661,Kyushu Yatai Kyutarou,6.24454,13.848431,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+662,L'Aperitif At Mercure on Stevens,4.498584,12.97567,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+663,L'Entrecôte The Steak and Fries Bistro (Customs House),7.3701215,10.071036,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+664,L'Escargot Bistro,0.042058203,8.2475605,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+665,L'Escargot at MONOPOLE,4.436491,12.339016,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+666,LA JimJum Lat Phrao 101 Yeak 38,1.3064374,7.8386893,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+667,LEE Cafe' Central Silom Tower,4.9920564,6.345885,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+668,LEE Cafe' Phloenchit Center,0.06759632,16.2289,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+669,LEE Cafe' Q House Lumpini,1.848513,17.30324,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+670,LIBI HOME,5.4830103,10.428392,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+671,LUNA 48 Rooftop Bar at Ramada Bangkok Sukhumvit 48,-3.8697917,9.78813,3,Good Location,1,100.0,Good Location
+672,La Bisque at Le Bali Resort & Spa (Pattaya),-2.3720329,7.163484,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+673,La Cucina Andaz Pattaya Jomtien Beach (Pattaya),-4.04893,6.2048206,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+674,La Luna,1.2033718,8.119249,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+675,Lab Ped Rama 4,6.2225595,3.2194037,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+676,Laciana By The Sea,-2.1633573,2.17113,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+677,Lacol Khaoyai - A Chatrium Collection (Khao Yai),3.364191,10.195403,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+678,Lacol Khaoyai - A Chatrium Collection Staycation (Khao Yai),-3.1526093,5.340839,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+679,Lady Butcher,2.3811555,12.055141,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+680,Lahnyai,0.36604145,10.452846,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+681,Lamaya (Khao Yai),2.6309094,13.292857,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+682,Lannua Zaab In The Garden,4.2989507,11.43956,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+683,Laohu Shabu Buffet,7.9912915,6.3539658,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+684,Lau Nuong An La Ghien,1.5861801,7.493887,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+685,Lay and Lu,1.5987937,14.682363,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+686,Le Boeuf,0.36094692,9.276708,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+687,Le' Bali Resort And Spa Staycation (Pattaya),-2.6718004,6.5590057,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+688,Learksen Lennam,3.017025,10.00088,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+689,Leela Cheva Restaurant (Pattaya),-4.9923763,7.126555,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+690,Legend Roof Bar,-2.5907624,11.611108,3,Good Location,1,100.0,Good Location
+691,Lhong Khao 廊 饭 (Phuket),0.6229229,4.701311,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+692,Lhong Lhao Yingcharoen Square,4.372826,14.007159,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+693,Lhong Ma Lhao,2.1701398,10.683585,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+694,Lhor Liang Farm,6.0195694,10.572651,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+695,"Lido Restaurant at The Standard, Hua Hin (Hua Hin)",-2.4837022,2.3064716,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+696,Lighthouse Cafe & Restaurant,1.94344,15.829742,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+697,Lilit Café & Eatery,-0.85576475,13.761576,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+698,Lily Fu's Asian Bistro,0.5041251,7.1696053,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+699,Lim Kwong Meng Restaurant,4.35161,11.30252,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+700,Lim Tom Luead Moo (Pattaya),-5.343311,6.860601,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+701,Lim Tom Luead Moo Sriracha (Chonburi),5.1659365,13.354494,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+702,Lion Suki Mala,5.8719425,11.558357,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+703,Lion's Tale (Trang),-1.6558554,12.713639,3,Good Location,1,100.0,Good Location
+704,Little Lazy Lizard,4.783402,11.483267,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+705,Little Stove,4.062331,11.915988,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+706,Liu Liu Hotpot 六六火锅 Rangsit Khlong 3,4.599781,11.134063,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+707,LoLo Bar Grill,1.6885592,5.760917,3,Good Location,1,100.0,Good Location
+708,Long Jim Shabu,8.214006,5.91884,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+709,Long Lai,3.2090693,8.550345,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+710,Long Pasta,5.3306217,7.230254,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+711,Longpao Dimsum Hong Kong Hua Mak,-1.3536879,2.9345226,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+712,Longpao Dimsum Hong Kong Market Place Theprak,5.0017915,10.57871,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+713,Longpao Dimsum Hong Kong Panya Indra,5.8046,11.605816,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+714,Loong Foong at Jubilee Prestige Hotel Ratchadapisek,0.9821511,10.257232,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+715,Loong Mala,5.2296443,9.884464,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+716,Louk In Louk Jaan,2.328438,11.500664,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+717,Loulou.bkk,5.2433867,12.669376,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+718,Love Me Cafe and Bar,-0.15843952,15.388211,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+719,Luna Lanai Restaurant at Sheraton (Hua Hin),-2.1444964,2.0489683,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+720,M Café M Hotel (Pattaya),-4.3181505,7.578688,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+721,M Thai Restaurant & Bar,0.1337895,11.499549,3,Good Location,1,100.0,Good Location
+722,MAKI Brunch Izakaya,5.4714894,14.6434555,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+723,MJ Hotpot,5.5122766,13.081622,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+724,MUGI,-1.0504123,14.514943,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+725,Ma La Kor Robinson Lat Krabang,1.842584,8.128499,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+726,Ma La Kor Seacon Square Srinagarindra,1.3219317,7.7393017,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+727,Ma La Kor The Mall Bang Kapi,2.0496912,7.950737,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+728,Ma Maison,3.2321355,12.404812,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+729,Machew's Roast,4.2730637,12.031957,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+730,Mad Moa Asok,4.3268085,9.780681,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+731,Madame Musur,3.8471603,14.025214,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+732,Mae Oil Soijuu,1.6179032,12.691292,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+733,Maesriruen The Mall Bangkapi,4.4113894,9.259579,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+734,Mahasawat Cafe & Restaurant,2.032174,15.315821,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+735,Mai Restaurant & Bar at Meliá Chiang Mai Hotel (Chiang Mai),-1.6218107,10.664864,3,Good Location,1,100.0,Good Location
+736,Maison de Siri Cafe & Eatery,0.7283683,16.043678,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+737,Makhaen Kitchen – Northern Thai Cuisine,0.8855359,10.000917,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+738,Makin bar & restaurant,-0.9318723,11.941833,3,Good Location,1,100.0,Good Location
+739,Mala X,5.226839,10.737927,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+740,Mama Dolores,3.0321906,13.165971,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+741,Mama Yaya,3.2448347,11.13876,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+742,Mamamia (Pattaya),-4.67701,6.6345696,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+743,Mami's Tamales,2.9263494,14.171047,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+744,Man & Machine Cafe,1.2757653,16.356123,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+745,Man Chan Korean BBQ Buffet Seacon Square Srinagarindra,7.083262,8.608392,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+746,Man Fu Yuan Kitchen Samyan Mitrtown,2.52931,8.219448,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+747,Mana Garden Cafe & Restaurant,1.8573314,15.508624,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+748,Manam Seafood,8.841177,12.565624,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+749,Manee Me More Central Westgate,4.0340104,5.525075,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+750,Manee Me More Esplanade Ratchadaphisek,4.1067095,9.8303175,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+751,Manee Me More Fashion Island,7.0707417,6.5962496,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+752,Manee Me More Homepro Charan Sanit Wong,5.3316555,9.891052,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+753,Manee Me More Homepro Rama 3,6.6960344,4.1877184,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+754,Masaru Sushi,3.2808924,3.5758266,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+755,Mashita Grill Kanchanaphisek,2.3213668,5.573496,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+756,Mashita Grill Ram Inthra,2.2161424,5.701033,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+757,Masons Craft Bar,-2.0381424,12.682715,3,Good Location,1,100.0,Good Location
+758,Mata Garden,3.5074272,14.455037,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+759,Matane Shabu&Sushi Premium Buffet (Kratumbaen Branch),7.99633,6.9638906,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+760,Matsuo Izakaya,4.2711215,15.07894,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+761,Mayraya Wine Bar at Villa Deva Resort and Hotel,-1.3965518,7.4918356,3,Good Location,1,100.0,Good Location
+762,Meat Sumpan,6.7878823,9.894401,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+763,Medici Kitchen & Bar Bangkok,1.5440559,6.8286014,3,Good Location,1,100.0,Good Location
+764,Mee-Seoul Korean BBQ Buffet Sugoi Eat,6.8789897,8.902332,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+765,Mee-Seoul Korean BBQ Buffet Victoria Garden,7.3541408,8.404165,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+766,Meepla Numyapu Cafe,1.504756,15.341272,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+767,Meisaku Premium Yakiniku,9.294829,8.11893,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+768,Mekiki no Ginji,4.1320047,12.343421,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+769,Mellow Thonglor,4.582124,14.133478,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+770,Memories Cafe & Restaurant By Sara De Cafe,0.9028459,16.260572,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+771,Meng Pu Dong Phran Nok Phutthamonthon Sai 4 Road,5.7914295,14.750791,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+772,Meng Pu Dong Pracha Chuen,5.522433,14.459482,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+773,Mercy Republic,4.272918,15.707846,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+774,Meridian Cruise 2,5.623446,9.341146,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+775,Merry Vibes Privacy Craft,3.6767814,13.413346,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+776,Mexicano Restaurante Autentico,6.819606,13.292299,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+777,Mia,3.911873,8.461282,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+778,Micasa Bar & Restaurant,-1.3213513,11.645993,3,Good Location,1,100.0,Good Location
+779,Miche Boulangerie and Coffee Bar,-1.1147263,14.290871,3,Good Location,1,100.0,Good Location
+780,Michelle Gourmet,5.4755673,11.589497,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+781,Midori Sushi Ratchapruek,3.226163,3.8121939,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+782,Mimosa Modern Italian Restaurant,3.0536523,12.820873,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+783,Ming Xing Restaurant at Cape Dara Resort (Pattaya),-2.6676095,6.5478206,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+784,Mingle Eatery and Poolside (Phuket),-0.162216,4.6582284,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+785,Mingle The Crystal,4.2435355,15.519923,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+786,Ministry Of Crab,2.1705408,10.272706,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+787,Ministry of Spicy,2.6073086,10.09345,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+788,MissMe Craft Bar,-2.547708,12.469065,3,Good Location,1,100.0,Good Location
+789,Mitt Restaurant & Space,2.5590212,12.891236,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+790,Mix Beef Club & Restaurant BKK,-1.6364183,14.050499,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+791,Mizuki Omakase,3.5125215,1.1394819,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+792,MoVida BKK,3.6819434,10.561603,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+793,Moana Cafe,0.59666413,16.706514,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+794,Modan Japanese Restaurant Muang Thong,0.82827455,11.845792,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+795,Mojjo Rooftop Lounge & Bar Skyview Hotel,-2.5321486,10.184985,3,Good Location,1,100.0,Good Location
+796,Moment's Notice Jazz Club (Chiang Mai),-2.3729167,14.45861,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+797,Momono Omakase,2.7737885,0.712572,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+798,Monkey King Izakaya,5.5968456,15.08047,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+799,Mono Sei Omakase,2.8044443,0.7248131,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+800,Mont Calzone at Habito Mall,3.504239,11.656331,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+801,Mookatanaimuang,5.781775,8.927253,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+802,Moom Muum Park Terminal 21 Asok,2.3399432,7.655061,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+803,More Than a Game Cafe,0.13622533,16.596306,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+804,More than Wine Ratchaphruek,-0.3145161,10.547598,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+805,Moreganic Restaurant Away Thapae Resort (Chiang Mai),-1.7053617,6.774698,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+806,Morning Moon Cafe & Restaurant,1.2826405,15.944997,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+807,Morton's the Steakhouse,1.5711882,13.300721,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+808,Mosby BKK,5.6273546,14.288389,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+809,Mother May I,2.5657623,11.201034,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+810,Moxy Bar & Restaurant At Moxy Bangkok Ratchaprasong,-3.1042619,11.002837,3,Good Location,1,100.0,Good Location
+811,Mr. Enzo,4.3041735,11.628633,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+812,Mr. Mala Hotpot Chaeng Watthana-Pak Kret 29,6.8205566,10.886736,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+813,Mr. Mala Hotpot Charn Avenue Chaeng Watthana,6.824834,10.738504,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+814,Mr.Park BBQ Sukhumvit,5.2344923,8.630226,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+815,Mulligans Irish Bar,-2.3859298,11.338295,3,Good Location,1,100.0,Good Location
+816,Musuko Shabu&Grill,6.622725,5.514731,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+817,Muteki by Mugendai Samyan Mitrtown,5.6562195,10.252629,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+818,My Daddy’s Home,6.3319216,13.509408,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+819,N/A Cafe & Homemade Pasta (Rayong),4.860101,7.517218,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+820,NJ Shabu Shabu Pattaya,8.292485,5.2019224,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+821,NOVA,-3.670079,11.143098,3,Good Location,1,100.0,Good Location
+822,Na Krua - Thai Cuisine Ros Mue Mae,1.1103652,10.313224,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+823,Na-nang restaurant,2.630425,12.897924,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+824,Nabezo Premium,8.942333,7.6269646,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+825,Nai Kaew Kor Moo Yang Cafe​ & Bistro,-0.15114103,7.6973605,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+826,Naiades Wine Cafe,-0.48318434,10.827719,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+827,Namba Shabu Banthat thong,7.72444,5.7319026,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+828,Namba Shabu Saimai,8.006084,5.275657,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+829,Namba Shabu The Mall Lifestore Tha Phra,8.177375,6.2799726,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+830,Nami Sushi (Phuket),1.5642245,4.07514,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+831,Nammaejip Rama 3,6.7848034,3.7598028,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+832,Nammaejip Seacon Square Srinagarindra,2.1847436,8.265273,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+833,Nan Yuan Chinese Restaurant Avani Ratchada Bangkok,2.3098795,9.0538435,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+834,Napha Dusit Central Park,3.220767,6.8528624,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+835,Napha Emsphere,1.7657012,10.698596,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+836,Narnia Steak & Seafood (Pattaya),-5.59277,7.151702,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+837,Nava 6,4.928104,12.458599,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+838,Nen (念) Rama 9,6.676522,3.5019007,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+839,Neta Grill Central Rama 2,4.456712,4.448325,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+840,Neta Grill Central Westgate,3.3638594,5.2522655,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+841,Neta Grill Market Village Rangsit,2.475101,5.3669863,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+842,Neta Grill Thonburi Market Place,2.2578773,5.543678,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+843,Neua Camp Fire,6.166948,10.490827,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+844,Nevergiveup (Pattaya),-5.278694,7.2992516,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+845,New Horizon Cruise Terminal 21 Rama 3,6.2858696,2.6749554,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+846,Ngan MooKraTa,5.5454726,11.539761,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+847,Nhuer Nham Non,5.0055265,14.745968,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+848,Nigiwai Shabu & Sushi Buffet Saimai,7.057235,6.4196534,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+849,Niku Machi,6.574281,10.094988,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+850,Nikuro Yakiniku,5.768466,8.884654,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+851,Ninja Izakaya,3.227017,8.026225,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+852,Nippon Yokocho,4.1180305,10.919824,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+853,Niwa Cafe By Rangnok Land,0.44193867,15.646934,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+854,Niyomkom,3.5958617,9.786045,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+855,No more Mondays Café&Bar,-1.6882528,12.567654,3,Good Location,1,100.0,Good Location
+856,Noah Cruise,4.196915,15.446429,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+857,Nong Khai Pa Su Kalpapruek,1.241897,11.2789345,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+858,Nong Khai Pa Su Ratchaphruek,2.6085808,10.695182,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+859,North Restaurant,1.4841392,14.554983,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+860,Nourish Mövenpick BDMS Wellness Resort,-1.5606587,6.5495896,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+861,Nowhere BKK,5.4552794,13.990105,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+862,O'pazzo,4.3613358,7.6010613,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+863,O.neul Korean Bar 오늘,-1.6882991,12.233354,3,Good Location,1,100.0,Good Location
+864,OJI Omakase Sathorn,3.1534812,1.0065926,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+865,OPEN Bar at DoubleTree by Hilton Bangkok Ploenchit,-2.5644183,10.944389,3,Good Location,1,100.0,Good Location
+866,Oaker Steak,7.877277,10.679298,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+867,Ocean bistro at Cross Pattaya Oceanphere (Pattaya),-4.768793,7.110468,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+868,Oceanside Beach Club & Restaurant (Hua Hin),-2.29355,3.4063153,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+869,Oishi Buffet The Mall Bangkapi (New Concept),6.800667,8.112337,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+870,Oishi Eaterium Central Korat (Nakhon Ratchasima),4.4766016,5.9591255,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+871,Oishi Eaterium Central Rama 9,5.062924,4.07429,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+872,Oishi Eaterium Central Westgate,4.650672,6.402019,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+873,Oishi Eaterium Fashion Island,6.0321865,10.879758,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+874,Oishi Eaterium Future Park Rangsit,2.375347,8.055015,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+875,Oishi Grand Mega Bangna,5.505068,9.9848175,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+876,Okina Izakaya,3.3721402,4.445792,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+877,Okinawa Restaurant Kinjo,2.297584,12.656378,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+878,Okuna Sushi Jungceylon (Phuket),1.9919074,3.854255,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+879,Okura Cruise,-2.1391535,9.848718,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+880,Omar Shariff Authentic Indian Cuisine,0.31911966,10.249978,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+881,Omoide Yakiniku,6.226766,12.365545,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+882,One Prawn & Co,4.1891985,11.527855,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+883,One to taste Homemade Pasta,4.8855505,7.877374,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+884,Oort Cloud Tea Room at Grande Centre Point Space (Pattaya),-3.0955293,7.903314,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+885,Opium Bar,-3.1371367,11.690817,3,Good Location,1,100.0,Good Location
+886,Oppa Tteok - 오빠떡,5.5678124,12.835755,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+887,Ora Dining,0.6869667,12.991002,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+888,Orbit Restaurant Grande Centre Point Space (Pattaya),-5.0452514,6.757387,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+889,Oriental Bar by Oriental Residence,-2.958713,12.073647,3,Good Location,1,100.0,Good Location
+890,Otter in The Rain (Phuket),-0.013996115,4.295731,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+891,Otto's Steakhouse,4.671233,12.478702,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+892,Ouleng Cafe,0.5751544,15.891519,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+893,PAUL Bakery CentralWorld,-0.54972094,14.204577,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+894,PAUL Bakery The Emporium,4.2135835,13.511245,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+895,PAWAN Restaurant (Hua Hin),-2.2852545,2.5307312,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+896,PESTO - Pasta and Espresso Osteria,4.9555926,7.064254,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+897,PHALA (Thai Esan Gathering),1.7221535,11.964963,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+898,Pacific Emporium at Pan Pacific Hotel Singapore,-0.008732484,11.895352,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+899,Pae Shabu & Grill House Ramkhamhaeng 26/1,6.6519365,5.4583516,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+900,Pae Shabu & Grill House Ramkhamhaeng Housing,6.7892337,5.310525,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+901,Pak-Pla Kitchen,2.2869003,6.8439264,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+902,Pal Cafe & Bistro,0.12838107,8.149805,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+903,Panda Suki Mala Muangthong,4.6924906,8.77879,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+904,Panda Suki Mala Theprak,6.520231,12.073149,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+905,Panna Sourdough Craft Cafe,-0.15500532,16.002768,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+906,Pasta AMA Ratchathewi,5.200285,7.305043,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+907,Pasta AMA Sala Daeng,5.3847103,7.4341097,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+908,Pasta AMA Siam Center,9.316714,4.574686,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+909,Pastel Rooftop Bar & Mediterranean Dining,-2.6380615,9.483283,3,Good Location,1,100.0,Good Location
+910,Pasto by Patta,4.8345428,12.493527,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+911,Patong Bay Hill Resort (Phuket),-1.2789923,5.5972505,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+912,Pebbles Bar and Grill Restaurant at Renaissance Pattaya Resort & Spa (Pattaya),-3.490749,6.95536,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+913,PengYou Cuisine & Specialty Bar Ekkamai,1.6944911,9.715152,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+914,PengYou Cuisine & Specialty Bar Rama 9,6.448101,3.577694,3,Good Location,1,100.0,Good Location
+915,Penlaos,5.80607,15.463669,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+916,Penthouse Bar + Grill Cocktail Bar at Park Hyatt Bangkok (Level 35),1.2184643,6.2208924,3,Good Location,1,100.0,Good Location
+917,Penthouse Bar + Grill Rooftop at Park Hyatt Bangkok (level 36),0.844723,6.346633,3,Good Location,1,100.0,Good Location
+918,Penthouse Bar + Grill at Park Hyatt Bangkok (level 34),1.0040537,6.2490525,3,Good Location,1,100.0,Good Location
+919,Peter's Pan Kitchen,3.697803,7.0646296,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+920,Phahon View - Khao Ngu (Ratchaburi),2.6570675,14.453478,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+921,Phahon View Watcharapol,2.2492208,13.206949,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+922,Phoenix,5.0219088,13.025694,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+923,Phrikkhua Kapihom HomePro Future Park Rangsit,2.6731493,8.328791,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+924,Phrikkhua Kapihom Robinson Lifestyle Ratchaphruek,4.5802345,11.064822,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+925,Phrikkhua Kapihom The Market Village Rangsit,4.346812,11.338979,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+926,Phrikkhua Kapihom The Nine Tiwanon,1.4963875,10.584077,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+927,Phrompoon,-0.99973714,14.3530035,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+928,Piano Bar at VIE Hotel,-1.997014,10.768367,3,Good Location,1,100.0,Good Location
+929,Picante At Centara Korat (Nakhon Ratchasima),2.426641,14.220955,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+930,Pilot Brewery,3.7770605,10.041815,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+931,Pimkaew,3.49514,11.014077,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+932,Ping Buffet,7.1686997,7.909539,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+933,Ping Yang Krub Pom,2.2246866,9.943692,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+934,Pink Typhoon Creative Pasta & Steak Ari,5.4988465,7.907076,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+935,Pinnic at Cape Dara Resort (Pattaya),-2.9444122,6.6478915,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+936,Pizza Maru Korean Pizza & Chicken Central World,4.029717,7.2387805,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+937,Pizza Maru Korean Pizza & Chicken Future Park Rangsit,3.792744,7.5421906,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+938,Plamong at Holiday Inn (Hua Hin),-1.9541217,2.194397,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+939,Plearn - Rooftop Restaurant & Bar (Phuket),-0.58042806,5.769963,3,Good Location,1,100.0,Good Location
+940,Ploen Restaurant,3.3935997,12.189333,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+941,Plooklaewprung,4.585596,13.652324,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+942,PlukRak Pretty Healthy,3.113962,11.836073,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+943,PokiHolic Bangna.,3.7087908,12.200228,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+944,Pool Bar by Maitria Mode Sukhumvit 15,-2.197414,9.167623,3,Good Location,1,100.0,Good Location
+945,Porkitchen,7.1551547,12.030147,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+946,Porsh Dining (Si Racha),0.45158678,13.622682,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+947,Praca at The Standard Hua Hin,-2.1362598,2.7197118,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+948,Prakai Fire Suki & Craft,4.517446,13.300467,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+949,Praram 9 Kaiyang The Promenade,3.6124015,8.892658,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+950,Preda CookHouse - by บ้านสวนปรีดา (Nakhon Pathom),6.078231,13.753947,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+951,Prego Amari Pattaya (Pattaya),-4.389286,6.9084396,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+952,Prego Kata (Phuket),0.21770044,4.993998,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+953,Prodpraan Eatery (Hua Hin),-2.708156,2.3533092,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+954,Pulsii Woodfire & Bar,-2.3324685,11.764009,3,Good Location,1,100.0,Good Location
+955,Pura Brasa,3.0615838,12.410929,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+956,Putahracsa Staycation (Hua Hin),-2.354153,3.0260317,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+957,RIVA At Ocean Marina Resort Jomtien (Pattaya),-2.5369458,6.2925954,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+958,Ra Biang Na,6.6638603,14.133111,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+959,Rabbit Hole at Phuket (Phuket),0.32283148,4.902603,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+960,Rabiengview Ayutthaya,6.1340294,14.634122,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+961,Radicle Beer Company,5.000836,14.321563,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+962,Radius Restaurant at Cape Dara Resort (Pattaya),-2.9598916,6.6104827,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+963,Raffles Courtyard at Raffles Hotel Singapore,1.1656774,12.848304,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+964,Rain Tree Cafe at The Athenee Hotel,0.64233243,15.2562685,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+965,Rak to Eat (Phuket),0.2113582,4.392482,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+966,Ralph House,2.5971231,18.22043,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+967,Rama at Furama Silom Hotel,7.008806,2.9848814,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+968,Ramayana Water Park (Chonburi),2.500674,7.778593,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+969,Raynue Gaysorn Amarin,-0.06874252,11.573473,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+970,Realpork Korean Pub & Grill Groove at Central World,3.698745,5.308898,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+971,Red Lobster Emsphere,3.8067186,12.545729,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+972,Red Rose Chinese Restaurant & Jazz Lounge at Shanghai Mansion,-0.46401614,9.337219,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+973,Red Sky Restaurant 55th Floor,-2.7590353,11.08783,3,Good Location,1,100.0,Good Location
+974,Red Sky Rooftop & Bar 56th Floor,-3.2918403,10.809921,3,Good Location,1,100.0,Good Location
+975,RedSquare Rooftop Bar at Novotel Bangkok Sukhumvit 4,-3.1020873,10.2845955,3,Good Location,1,100.0,Good Location
+976,RedTail Bar by Zouk,-2.3394046,11.971247,3,Good Location,1,100.0,Good Location
+977,"Republic Bar and Lounge At The Ritz-Carlton, Millenia Singapore",-1.3166201,10.350964,3,Good Location,1,100.0,Good Location
+978,Rern,1.7619233,10.808415,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+979,Reun Rom Bar,-1.916164,13.234107,3,Good Location,1,100.0,Good Location
+980,Ricci Italian Restaurant and Crudo Bar,-1.2187171,12.108963,3,Good Location,1,100.0,Good Location
+981,Rice Restaurant (Phuket),0.6684711,4.1373334,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+982,Riedel Restaurant & Wine Cellar,-0.7084467,10.477752,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+983,Rim Klong Café Mövenpick BDMS Wellness Resort,-1.6155628,6.608331,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+984,Rim Talay @ Amari Patong (Phuket),0.9953814,4.139016,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+985,Rimbungsounprig Bar&Restaurants (Ayutthaya),-1.3800677,12.331151,3,Good Location,1,100.0,Good Location
+986,Ripple sea (Chonburi),5.2062955,13.606287,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+987,Roam Bar Joy,-2.2744842,12.861915,3,Good Location,1,100.0,Good Location
+988,Roccabkk,6.1658173,12.961344,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+989,Romsai Banyan Tree Hotel,0.4103914,10.961834,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+990,Roof 70,3.7440226,12.436414,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+991,Ros charoen by Kuang seafood (Pattaya),-5.5848927,6.5998554,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+992,Rosded BBQ International Buffet On Nut 90,7.7285123,7.9940033,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+993,Rosded BBQ International Buffet Ramkhamhaeng 187,7.1312957,8.2241745,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+994,Rosemary,4.446986,8.581441,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+995,Rosprod Central Westgate,4.0695877,5.609033,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+996,Rossiwalee,3.288056,10.587546,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+997,Roy Sen Pad Thai Go Wholesale Ramkhamhaeng,1.7002167,11.061572,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+998,Roy Sen Pad Thai Go Wholesale Rangsit,3.000166,10.689819,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+999,Roy Sen Pad Thai Sukhumvit 71,-0.9604112,8.875336,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1000,Royal Princess Cruise,6.4312644,14.493411,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1001,Ruedooron by Liyang Lat Krabang,5.07047,15.050485,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1002,Ruedooron by Liyang Town in Town,4.6424174,12.116912,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1003,Ruen Petch Suki - Ratchaphruek Road,6.1439524,12.214383,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1004,Ruen Petch Suki Nonthaburi Bypass Road,4.675928,9.050349,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1005,Ruen Sakhon Cafe & Restaurant,1.5256857,16.436638,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1006,Ruenglalynn Skybar Rooftop,-3.53843,9.125639,3,Good Location,1,100.0,Good Location
+1007,Ruk Num Cafe (Nakhon Pathom),1.2195805,15.527423,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1008,Rum&Orange Rooftop Tapas Bar,-2.730472,9.700784,3,Good Location,1,100.0,Good Location
+1009,Rusty.Bkk,-3.4605732,11.396805,3,Good Location,1,100.0,Good Location
+1010,Ryoku Cafe,0.31562984,15.896375,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1011,Ryota Shabu Buffet Central Airport (Chiang Mai),6.4968495,6.2767305,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1012,Ryota Shabu Buffet Central Westgate,7.0194516,6.6974587,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1013,Ryota Shabu Buffet Lotus Kum Tiang (Chiang Mai),7.4507504,6.7309146,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1014,Ryota Shabu Buffet MAYA (Chiang Mai),7.658198,6.47391,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1015,S'More Beach Restaurant and Bar (Pattaya),-3.3683708,5.5615416,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1016,SEEN Rooftop Avani Riverside,-2.9403698,9.175454,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1017,SERVE ZAAB TUM YUM YANG,4.0863547,13.758681,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1018,SINSA Korean BBQ & Bar,-2.6008427,12.147826,3,Good Location,1,100.0,Good Location
+1019,"SKOSH Cafe | Coffee, Matcha, Onigiri and Sandos",-0.3616146,15.348317,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1020,SM168 Restaurant & Bar,-1.4558053,11.508358,3,Good Location,1,100.0,Good Location
+1021,SOS Shabu Bangchak,7.22217,5.585008,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1022,SOS Shabu Bearing,7.2993994,5.4711943,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1023,SOS Shabu Big C Rama 4,7.3002653,4.5833387,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1024,SPICE Thai Cuisine and Bar,0.28075188,10.818719,3,Good Location,1,100.0,Good Location
+1025,STOP BAR V.2,-2.7967143,12.083037,3,Good Location,1,100.0,Good Location
+1026,Sabio Spanish Tapas,2.8947341,13.606313,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1027,Sai Bistro Restaurant at The Sinae (Phuket),0.110899076,5.469766,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1028,Sailom Restaurant (Hua Hin),-2.079744,2.0253425,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1029,Sakuldee Thai Cuisine,1.0498705,10.938766,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1030,Sala Lakorn at Anantara Riverside,6.520299,8.892621,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1031,Salada Organic Kitchen HomePro Bangna,2.1106415,6.6187253,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1032,Salada Organic Kitchen HomePro Rama9,2.6197433,6.808102,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1033,Salada Organic Kitchen La Salle's Avenue,1.6635351,7.175075,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1034,Salada Organic Kitchen Tops Nak Niwat,2.6097825,6.822025,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1035,Salmon Inari by My home,3.6043582,9.356541,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1036,Saloon Ari,4.215439,15.399509,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1037,Samkaew Craft Beer,5.307346,11.046593,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1038,Samsuan Dessert & Dining,0.31939837,13.305072,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1039,San Aroi Pochana,4.767946,11.277384,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1040,Sand Box Beachfront Bar & Eatery Phuket,-0.4101185,5.429117,3,Good Location,1,100.0,Good Location
+1041,Sandee Homey Thai Restaurant (Pattaya),-5.0598574,7.4537144,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1042,Saneh Jaan,0.64113694,12.618839,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1043,Saneh Mookrata,3.5330162,13.311367,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1044,Sanitwong Bites & Brews,2.4314191,11.326597,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1045,Sannin No Sushi,3.147582,3.7068484,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1046,Saon,2.007581,12.130768,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1047,Sapparos by Chef Zetrong,1.7426888,11.042264,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1048,Sarnies Cantina,0.92361104,14.126305,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1049,Savelberg Thailand,2.0551069,12.25591,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1050,Savoey Café & Restaurant,2.888182,10.653849,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1051,Savoey Riverview Rama 3,6.7802505,3.0081692,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1052,Sawasdee Chaophraya Cruise,2.7669106,11.925028,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1053,Scene Amatara Welleisureᵀᴹ Resort (Phuket),-0.98202515,5.8252573,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1054,Sdutta Eatery & Bar,-2.8995876,12.029796,3,Good Location,1,100.0,Good Location
+1055,Sea Talay (Pattaya),-5.183264,7.065272,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1056,Seasonal Tastes The Westin Grande Sukhumvit,-1.3598496,8.087442,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1057,Sen Sai Isan Bangsaen,4.7590604,13.506793,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1058,Sen Sai Isan Suvarnabhumi,5.3958325,10.305369,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1059,Sensai Japanese Restaurant Muangthong,0.98514557,11.824739,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1060,Senses Amatara Welleisureᵀᴹ Resort (Phuket),-1.0596957,5.41688,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1061,Seoul by Soul Bangna - Bearing,5.5343523,13.710821,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1062,Seoul by Soul Theparak - Saphan Mai,6.205937,9.455317,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1063,Seoulful 서울풀,5.7139235,8.973154,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1064,Shabeebee House,2.5460706,18.332012,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1065,Shabu & Co.,8.053768,5.517905,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1066,Shabu 81,7.640757,5.292108,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1067,Shabu Henmee Watcharapol,7.374366,5.886856,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1068,Shabu King,8.48185,5.7126718,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1069,Shabu Puko Muang Mai (Chonburi),7.2387424,6.2811666,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1070,Shabu Puko Sri Racha (Chonburi),7.417991,6.287712,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1071,Shabu Shabu Nangnai – Ramintra 5,7.643355,5.951759,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1072,Shabu-Suki Izakaya,7.6722326,5.2050133,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1073,Shabuku Lam Luk Ka,4.4249845,10.444759,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1074,Shabushi Central Changwattana,4.591015,5.4809723,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1075,Shabushi Central Ladprao,4.921216,5.7747273,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1076,Shabushi Central Rama 2,5.2588387,4.0854263,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1077,Shabushi Central Rama 3,5.477559,4.0161343,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1078,Shabushi Central Rama 9,5.8910995,4.3798833,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1079,Shabushi Central Ramindra,4.694343,5.7720766,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1080,Shabushi Central Westgate,4.9805408,6.1112137,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1081,Shabushi Central Westville,4.1186066,5.2157145,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1082,Shabushi CentralWorld,5.5801682,10.553282,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1083,Shabushi Fashion Island,5.182626,8.969724,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1084,Shabushi Future Park Rangsit Floor 2,4.523084,8.3033695,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1085,Shabushi Future Park Rangsit Floor B,3.1821415,7.612299,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1086,Shabushi Mega Bangna,8.1317625,5.042924,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1087,Shabushi Robinson Ratchaphruek,4.5001855,10.089085,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1088,Shabushi Seacon Square,7.8550234,6.036034,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1089,Shabushi Siam Center,9.686956,3.745252,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1090,Shabushi Terminal 21 Rama 3,6.3928714,3.591368,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1091,Shabushi The Mall Bangkae,7.2049074,6.5241814,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1092,Shabushi The Mall Bangkapi,3.7792833,4.3051753,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1093,Shabushi The Mall Tha Phra,6.815084,7.443031,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1094,Shakariki432 Major Ratchayothin,4.523625,10.036117,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1095,Shakariki432 Riabduan Ekkamai-Ramintra,2.5093157,13.808114,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1096,Shakariki432 The Nine Center Rama 9,6.7234874,2.7123973,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1097,Shaloba Eatery,-0.9125403,14.562068,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1098,Shark Bite Restaurant,2.4461443,10.507381,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1099,Shibuya Shabu Ekkamai,8.008975,5.4523163,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1100,Shida Yakiniku & Izakaya Chaengwattana 14,4.82497,12.885414,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1101,Shida Yakiniku & Izakaya Prachanukoon,3.7777562,11.786898,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1102,Shidai Kushiyaki,4.6878567,14.412232,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1103,Shiguma Japanese Restaurant Bangna,4.9507155,8.639148,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1104,Shining Taste,4.463316,12.423587,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1105,Shizen Machi Omakase,2.81687,0.6347171,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1106,Sho Japanese Dining,0.38577935,12.621402,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1107,ShoSha,4.3006988,7.8823485,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1108,Shore Kitchen & Rooftop bar at Hotel clover Patong (Phuket),-0.6293449,6.235069,3,Good Location,1,100.0,Good Location
+1109,ShouSushi,3.2206707,11.258932,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1110,Show Nuea,2.1576033,12.589509,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1111,Shui Xin Chinese Restaurant Novotel Bangkok Bangna,1.8447751,9.187138,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1112,Siam India Asiatique the Riverfront,9.836873,3.9332476,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1113,Siam77 Vintage Home & Restaurant,3.0722053,12.63559,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1114,Sichuan Restuarant Silom,3.8463795,10.212936,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1115,Signaturebkk Design Village Bangna,5.3012404,10.456344,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1116,Signaturebkk Kanchanaphisek,5.793938,10.33941,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1117,Sindosegi Mega Bangna,4.987194,9.139137,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1118,Sindosegi Ratchapruek,6.483465,8.545868,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1119,Sindosegi Siam Square,9.939878,4.246264,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1120,Sip Wine Shop and Bistro,-0.24625292,9.38467,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1121,Sips Café & Bar,-2.6807475,12.050606,3,Good Location,1,100.0,Good Location
+1122,Siri Amatara Welleisure Resort (Phuket),-0.8055128,5.51787,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1123,Siri Nhemneaung,6.014667,15.368091,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1124,Sky Vibe Rooftop Bar at Cross Vibe Pattaya Seaphere (Pattaya),-4.3862166,7.653649,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1125,Sky on 20 Rooftop Bar at Novotel Bangkok Sukhumvit 20,-3.7269063,10.165433,3,Good Location,1,100.0,Good Location
+1126,Sliding Doors,3.5667744,13.760036,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1127,Sloth Sukiyaki Central Rama 2,5.046155,4.215092,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1128,Sloth Sukiyaki Jas Urban Srinakarin,6.4487095,11.617529,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1129,Smokestack BBQ & Grill (Phuket),1.071421,4.8628573,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1130,Snobbish Restaurant & Bar,-1.8319935,11.680245,3,Good Location,1,100.0,Good Location
+1131,Snuggery,2.4952629,14.951609,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1132,So Asean Cafe & Restaurant - FYI Center,1.7363832,16.101143,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1133,So Asean Cafe & Restaurant - Samyan Mitrtown,1.516054,15.72708,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1134,So Asean Cafe & Restaurant - The Street Ratchada,1.4899778,13.882676,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1135,So STORY @Kingkaew Coffee Bar & Cafe,-0.87717235,14.789062,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1136,So asean Cafe & Restaurant - CW Tower,1.404419,15.388433,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1137,SoiSeoul RuamChok (Chiang Mai),5.5183535,13.792654,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1138,Sola Luna Rooftop at Grande Centre Point Space (Pattaya),-4.169033,7.6790347,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1139,Soleh Esan Fusion,3.2736125,10.411372,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1140,Solo Beach (Hua Hin),-2.3085332,3.3768587,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1141,Sompohnpak Isaan So Good,3.1081357,10.12087,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1142,Somsak,4.166872,12.3682785,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1143,Somtum Der Tha Tien,2.8607647,10.914663,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1144,Somtum Villa (Pattaya),-5.3640933,6.7478027,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1145,Sonkram Huahin,6.132586,12.697898,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1146,Sook Samraan - Cafe Mookrata,0.5925024,16.7334,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1147,Sook Zaap 56 Asiatique,3.3588238,8.574176,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1148,Sopa,4.4417324,11.042475,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1149,Sorsi & Morsi,7.619816,11.722254,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1150,SoulBrew Café & Bistro,0.64708686,7.370682,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1151,South Side Keppel | All Day Cafe & Dining,0.9997564,14.6862755,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1152,Spaghetti - Italian Food,3.7025824,13.275368,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1153,Spectrum Rooftop at Hyatt Regency Bangkok Sukhumvit,-3.8899522,10.225785,3,Good Location,1,100.0,Good Location
+1154,Spoon cafe Jungceylon (Phuket),0.86827976,4.8790827,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1155,Sports Bar by Topgolf Megacity,-1.1544546,11.37712,3,Good Location,1,100.0,Good Location
+1156,Sram Sai Mai,1.5274295,11.842281,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1157,Sri Kamin Soi Chulalonkorn 5,5.0713234,12.42722,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1158,Sri Thai Restaurant Chaengwattana Laksi,1.5993547,11.607746,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1159,Stark Food,4.954671,11.203506,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1160,Starlight Rooftop Bar,-3.2473884,9.277684,3,Good Location,1,100.0,Good Location
+1161,Steak 700 Rais (Sattahip),8.0297165,10.43731,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1162,Stirling Steaks Capitol,7.752976,10.428367,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1163,StrackYum Central Khon Kaen,4.1826677,6.3601284,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1164,StrackYum Central Rama 9,5.1749115,3.9164538,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1165,StrackYum Central Westgate,4.752715,5.6451263,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1166,StrackYum New Phran Nok,2.7878838,9.422023,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1167,Suan Bua Centara Grand Ladprao,2.0693526,10.625308,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1168,Suan Paruj Thai Cuisine,0.5457584,10.64398,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1169,Suki Danang Bangyai,4.6552186,12.169291,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1170,Suki Mungon Union Mall,5.453839,9.00925,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1171,Suki Nangphaya Seacon Bangkae,6.2200384,9.851923,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1172,Suki Nihao Ratchaphruek,4.906808,11.838379,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1173,Sukjai by Pata Obasan (Chiang Mai),3.6681695,12.878659,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1174,Summer Rain Cafe & Casual Dining,0.62363225,15.609685,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1175,Sumo 888 Izakaya Ari,6.1362543,10.681043,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1176,Sundance Dayclub (Hua Hin),-2.7410724,2.6547902,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1177,Sundance Dayclub Staycation (Hua Hin),-2.6219356,2.8913844,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1178,Sunny Beach House (Pattaya),-3.9333465,5.256132,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1179,Sunya Bar l Dinso Resort & Villas Phuket (Phuket),-0.68783593,5.113871,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1180,Sunyo Izakaya,5.0565906,13.979679,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1181,Suparos Thai - Italian Restaurant,1.9430063,11.818855,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1182,Supatra River House,2.9635367,18.095915,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1183,Super Thai by Soi Aroy Upper Aljunied Rd,1.4266986,11.828655,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1184,Super Thai by Soi Aroy l Pasir Panjang,1.1533145,11.173385,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1185,Sura Bar Wine and Restaurant,-1.1400775,10.479729,3,Good Location,1,100.0,Good Location
+1186,Surf Bar at Courtyard by Marriott North (Pattaya),-4.239175,7.2402673,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1187,Sushi Hiro Shabu Buffet Central Rama 2,5.884939,7.4704285,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1188,Sushi Hiro Shabu Buffet The Crystal SB Ratchapruek,6.83112,6.618372,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1189,Sushi Ken Ken,3.8065042,3.530123,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1190,Sushi Koge Omakase,3.387811,1.8435297,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1191,Sushi Niwa Bangkok Omakase,3.228363,2.088848,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1192,Sushi Olderchef Serithai,3.5867882,3.2848203,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1193,Sushina Fortune Town,6.093298,12.824859,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1194,Sushina Rama 3,6.845121,3.1204975,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1195,Sweet Pista Ekkamai,3.1649675,11.002452,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1196,Synthesis 食拿酒稳 Chinese Cuisine,0.936729,9.274943,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1197,T and T Restaurant,2.454598,12.183511,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1198,TAK TUANG,4.8932223,11.665776,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1199,TANG TOA DAENG,3.8042276,9.900193,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1200,TANOKE,3.7748008,8.89772,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1201,THINK Cafe @ The BLOC,0.13753878,15.630163,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1202,THIRST at OZO North Pattaya,-5.2104177,7.1010256,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1203,TORA Yakiniku x Café Crystal Design Center,7.758791,8.878429,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1204,TORA Yakiniku x Café The City Connect,7.7705727,8.900822,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1205,TOT.ladphrao,4.0899143,13.278626,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1206,TUM PAK PERT (Phra Ram 9),3.9336398,12.445782,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1207,TaTonYon NorthernFood,2.3262556,10.39782,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1208,Tachinomiya Japanese Izakaya & Bar,-0.7988476,12.089992,3,Good Location,1,100.0,Good Location
+1209,Tai Soon Bar,-2.2792275,11.943609,3,Good Location,1,100.0,Good Location
+1210,Tai Thun Tuek Bar and Restaurant,-1.8335059,11.660027,3,Good Location,1,100.0,Good Location
+1211,Tairyo Sushi - Ari,3.4950233,3.436782,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1212,Tairyo Sushi - Ladprao,2.9853382,3.9225535,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1213,Tairyo Sushi - Market Village Rangsit,3.4422846,3.4211605,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1214,Taisho-Tei,3.1351907,11.690885,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1215,Take a Breath - café & eatery,-0.43856722,14.3374,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1216,Takieng at Renaissance Resort & Spa (Phuket),-1.2016124,5.436516,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1217,Takumi at Jubilee Prestige Hotel Ratchadapisek,0.83932495,10.896442,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1218,Taliew Big C Kanlapaphruek,5.287191,12.293641,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1219,Taliew Imperial Samrong,4.365695,8.730197,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1220,Taliew Lotus's : Bang Kruai - Sai Noi,0.87204856,9.10888,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1221,Taliew Lotus's Rangsit,6.2604275,13.20529,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1222,Taliew Lotus's Sukhaphiban 3,5.0153255,10.49097,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1223,Taliew Lotus’s Rama 4,6.5347314,2.4141839,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1224,Taliew MBK Center,3.6011353,9.971337,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1225,Tam Zab 195,5.3227577,12.032808,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1226,Tamade Sake Bar,-2.2155805,12.332495,3,Good Location,1,100.0,Good Location
+1227,Tandoori Junction,3.8003845,13.973657,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1228,Tantitium (Phuket),0.5010977,4.3132443,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1229,Tanuki Izakaya,5.590126,9.59124,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1230,Tap Yard,3.54878,15.380548,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1231,Tapori,2.0282815,12.620873,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1232,Tarn Ayutthaya (Ayutthaya),0.87168413,10.966636,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1233,Taro Izakaya Rama 9,6.613001,2.7242603,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1234,Taste and Toast,4.571744,12.853536,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1235,Taurus Lake-taurant & Cafe Ramkhamhaeng 110,0.84998727,16.461813,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1236,Tawan Cafe • Bistro,0.074048825,8.69037,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1237,Tea Factory and More,-1.0244075,10.2921915,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1238,Tea Factory and More (Pattaya),-3.6948617,7.966177,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1239,Teeshot Bar At Bangkok Marriott Marquis Queen’s Park,1.1432296,7.3332233,3,Good Location,1,100.0,Good Location
+1240,Temmor Shabu,7.658018,5.693511,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1241,Tensai Buffet at The Paseo Kanchanaphisek,6.985027,7.9318643,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1242,Tenyuu Grand Omakase,2.6749656,0.5900947,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1243,Teraoka Gyoza Central Ladprao,4.00238,5.480091,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1244,Teraoka Gyoza Emsphere,5.3641047,11.265561,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1245,Teraoka Gyoza Siam Paragon,9.997849,3.6789653,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1246,Terra Nova The Crystal,5.659046,11.812003,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1247,Terre Grounding Eatery (Phuket),0.4838242,4.024669,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1248,Tha Siam Authentic Thai Kitchen(Orchard Plaza),9.478173,3.80364,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1249,Tha Siam Mookata,9.410611,3.6620436,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1250,Thaan Fai Restaurant Rama 9,6.9342685,3.0641813,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1251,Thachang At Bugis Junction,1.2753568,11.545448,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1252,Thachang At Telok Ayer,4.2318616,9.9010515,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1253,Thai Me Up Restaurant & Bar Eleven Hotel Sukhumvit 11,-1.6251345,9.378901,3,Good Location,1,100.0,Good Location
+1254,ThailaoS Bar Grill,1.6490505,5.5286913,3,Good Location,1,100.0,Good Location
+1255,Thale at Akara Hotel (Pattaya),-3.8566298,7.7331424,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1256,Tham-Me Bantadthong,3.772958,11.193054,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1257,Tham-Me Sammakorn,2.754525,11.68002,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1258,Than Rice Bowl & Coffee Eakkamai 12,-1.0739022,14.0115385,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1259,Than Rice Bowl & Coffee Komfort Place Ratchayothin,-1.1566367,14.05028,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1260,Than.sa.mai Room,-0.1928898,12.562221,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1261,Thanankarn Cafe (Pattaya),-4.434087,8.414598,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1262,Thara Thong Royal Orchid Sheraton,4.1575847,14.085864,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1263,That 1 Place,2.9394403,13.518329,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1264,Thaveechai Pochana Kallapaphruek,5.440164,11.909898,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1265,Thaveechai Pochana Rama 3,6.595283,3.3756366,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1266,Thaveechai Pochana Suan Mali,2.8821435,9.349149,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1267,The Alkaff Mansion,1.8247731,13.064523,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1268,The Bakery at The Athenee Hotel,-0.42899448,11.420665,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1269,The Barracuda Sky Gala at Akara (Pattaya),-4.765985,7.4775434,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1270,The Beach Phuket,-0.9487637,4.5383806,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1271,The Beef Master MBK Center,6.7618346,10.930056,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1272,The Beef Master Nana,6.574911,10.799509,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1273,The Berkeley Dining Room,0.58169395,13.528747,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1274,The Best Veggie Khaoyai,3.5991979,13.447699,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1275,The Blooming Gallery,0.72240657,14.974781,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1276,The Bottleman Wine Bar,-0.7558224,9.920015,3,Good Location,1,100.0,Good Location
+1277,The Brasserie l Holiday Inn Rayong,7.1056976,12.685525,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1278,The Bre-Eze Restaurant at Fair House Villas & Spa (Samui),2.4656055,18.042074,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1279,The Bull (Pattaya),-4.7377477,6.5080786,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1280,The Cafe Mookata Ari,1.4509068,15.834412,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1281,The Chocolate Factory Pattanakarn,5.9549885,12.412388,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1282,The Coffee Academics Gaysorn Village,-0.999225,14.036747,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1283,The Coffee Club Ashlee Hub Hotel Patong (Phuket),-2.354311,15.717764,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1284,The Coffee Club Avani Sukhumvit,-1.9941794,14.890586,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1285,The Coffee Club Boat Avenue (Phuket),-2.7808335,15.70956,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1286,The Coffee Club Boat Lagoon (Phuket),-2.5336597,15.54456,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1287,The Coffee Club Central (Pattaya),-3.027139,15.059533,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1288,The Coffee Club Chatrium Sathorn Narathiwas 24,-2.85479,14.804871,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1289,The Coffee Club Day Inn (Phuket),-2.9591265,15.726357,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1290,The Coffee Club Holiday Inn Express Sathorn,-2.174089,14.775245,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1291,The Coffee Club Kokotel Hotel (Krabi),-1.8407389,14.8864975,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1292,The Coffee Club Maitria Hotel,-2.2000058,14.768622,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1293,The Coffee Club Mode Sathorn BTS Surasak,-1.9563948,15.166473,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1294,The Coffee Club River City,-2.5909665,14.594034,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1295,The Coffee Club Riverside Plaza,-2.643387,14.816334,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1296,The Coffee Club Royal Garden Plaza (Pattaya),-2.8408327,14.699715,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1297,The Coffee Club Samyan Mitrtown,-2.7279696,14.927378,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1298,The Coffee Club Singha Complex,-2.4738195,14.570959,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1299,The Coffee Club Staybridge Thonglor,-2.3716698,14.869622,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1300,The Coffee Club TCC OZO Kata (Phuket),-2.5423763,15.468626,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1301,The Coffee Club Tha Maharaj,-2.68838,14.434371,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1302,The Coffee Club The Coast (Phuket),-3.127427,15.459725,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1303,The Coffee Club Turtle Village (Phuket),-2.8711326,15.841169,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1304,The Coffee Club Wireless Road,-2.4344661,14.472185,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1305,The Coral Cosmo Lounge Suvarnabhumi Airport,-1.3384069,9.586581,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1306,The Coral Lounge Don Mueang,-1.3185325,9.873145,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1307,The Coral Lounge Don Mueang - International Departure Lounge,-1.2011209,9.793163,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1308,The Coral Lounge Phuket,-1.108747,9.190239,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1309,The Coral Premium Lounge Suvarnabhumi (Domestic),-0.92657626,9.231791,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1310,The Cradle At Ayara Kamala Resort & Spa (Phuket),-0.8683759,5.644507,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1311,The Dim Sun Bar at Avista Grande Phuket Karon - M Gallery Collection (Phuket),-0.08351004,4.9228683,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1312,The Dining Room at Grand Hyatt Erawan,-0.00840529,13.118218,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1313,The Factory Corner,5.0496154,14.326765,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1314,The Farmer and The Fisherman (Phuket),0.7034352,4.4805713,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1315,The Garden Eatery,1.2664073,14.920934,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1316,The Garden at Grande Central Point Prestige Bangkok,4.9169917,6.5231485,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1317,The Grill House Rooftop (Khaoyai),-2.2090728,8.205595,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1318,The Grille & Picolo Eatery,3.9856458,13.231857,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1319,The Hilltop Aonang (Krabi),3.4907255,14.838201,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1320,The House by Hongkong House,3.2145886,17.883293,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1321,The Hub Cafe and Eatery,0.9096008,15.19045,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1322,The Hungry Duck Central Embassy,4.2614813,5.4791174,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1323,The Karaked Siam Square One,9.734128,4.371391,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1324,The Karaked Sukhumvit 36,-1.7943513,8.068723,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1325,The Kinopolis,1.1717381,12.0178795,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1326,The Letter Press Cafe & Restaurant at The Printing House Poshtel Bangkok,1.9669906,17.141874,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1327,The Local Restaurant Don Mueang - Rangsit,3.8173475,11.476728,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1328,The Mayflower Restaurant at Dusit Princess Srinakarin,2.2068686,9.182183,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1329,The Mulberry Chinese Cuisine The Berkeley Hotel,1.0359792,9.631195,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1330,The O.S.S by Jim Thompson,2.5679743,13.743172,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1331,The Oyster Bay 101 True Digital Park,2.4108307,8.096725,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1332,The Park Restaurant & Cafe Si Racha (Chonburi),1.2606936,14.960373,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1333,The Pasta Apartment Silom,5.2365665,8.141763,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1334,The Pinnacle Haus,2.3381588,14.520561,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1335,The Planet Cruise,2.3622372,13.345431,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1336,The Red Door BKK,-1.3383983,14.263586,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1337,"The Sanctuary Resort Pattaya, BW Signature Collection Staycation (Pattaya)",-3.4582682,6.282431,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1338,The Seafood Market by House of White Bee Hoon,3.355564,17.65555,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1339,The Second BKK,5.6081033,9.100086,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1340,The Sky 32 at Grande CentrePoint Hotel (Pattaya),-4.363191,7.0886407,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1341,The Speakeasy Rooftop Bar Bangkok,-3.345952,9.838083,3,Good Location,1,100.0,Good Location
+1342,The St. Regis Bar and The Drawing Room,-1.3172944,12.209389,3,Good Location,1,100.0,Good Location
+1343,"The Tram Restaurant, Bar & Wine Cellar (Pattaya)",-3.431337,7.8094006,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1344,The Urban Deck Cafe I Bistro I Bar,-0.011857715,8.362886,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1345,The Vue Bar Rooftop at Mercure Bangkok Sukhumvit 24,-3.4836376,9.878192,3,Good Location,1,100.0,Good Location
+1346,The White House,2.7851179,17.792072,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1347,The White Tiffin (Changi City Point),9.467399,4.7323966,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1348,The White Tiffin (Woods Square Mall),5.7310896,15.007377,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1349,The' Tea House FN Outlet (Hua Hin),-2.615878,2.2344084,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1350,Theatre Riverside,0.0072522955,14.44217,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1351,Thien Duong at Baan Dusit Thani,6.6908846,12.660386,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1352,Thirteen BBQ Bar 十三烤吧,-2.9370956,11.35564,3,Good Location,1,100.0,Good Location
+1353,Thong Dang Southern Thai Cuisine,1.5580659,10.365116,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1354,Thong Kee Restaurant,3.1481786,11.190692,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1355,Thong Nua Kao Premium Thai BBQ Banthat Thong,9.679617,8.15535,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1356,Thong Nua Kao Premium Thai BBQ Crystal Design Center,9.336238,7.768348,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1357,ThreeSixty Rooftop Bar at Millennium Hilton Bangkok,-3.1892567,9.729052,3,Good Location,1,100.0,Good Location
+1358,Throwback Rooftop Bangkok at Silom Edge,-3.5040464,10.026927,3,Good Location,1,100.0,Good Location
+1359,Tibet Gate,4.1310635,9.242759,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1360,Tiger Gyu Moo-krata,6.1606045,13.390032,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1361,Tiger Hotpot,4.2197804,9.292178,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1362,Tikishi Paradise Park,2.6982641,7.7916374,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1363,Tikishi Suksawat,3.972998,10.14484,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1364,Tillie Bar,-2.1552896,11.995156,3,Good Location,1,100.0,Good Location
+1365,Timber & Toast at Le Bali Resort & Spa (Pattaya),-2.4687474,7.1201744,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1366,Time's Dining Gateway At Bang Sue,4.996324,9.671245,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1367,Ting Tai Fu,6.2149396,13.669097,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1368,Toast Brunch & Brew (Pattaya),-4.7084293,6.540869,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1369,Tokyo Kushiyaki lzakaya & Bar,-1.4622409,12.525579,3,Good Location,1,100.0,Good Location
+1370,Tom Paa,4.1668367,10.531951,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1371,Tomo Izakaya,3.7935266,15.065996,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1372,Tong Tong Haan Kanlapaphruek,4.2681947,9.742376,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1373,Tong Tong Haan Thanon Chan,2.9776576,6.7711473,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1374,Tongnorth Express Sai Mai,4.9942546,9.539692,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1375,Toni Toni-Eat Drink Workshop,4.451925,12.340509,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1376,Tony's Sukhumvit 11,-1.4466043,8.307054,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1377,Top Knot Rooftop Bar & Restaurant at Hotel Once Bangkok,-2.5382657,9.098076,3,Good Location,1,100.0,Good Location
+1378,Topazio Bar at La Miniera Pool Villas (Pattaya),-3.30861,7.1214504,3,Good Location,1,100.0,Good Location
+1379,Toplofty Cafe (Khao Yai),0.87256306,16.500044,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1380,Tops EATERY Central Chidlom,4.7457542,6.287084,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1381,Tops EATERY Central Ladprao,4.4677067,5.706945,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1382,Tops EATERY Central Patong (Phuket),2.86786,5.116117,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1383,Tops EATERY CentralWorld,4.7414827,10.613824,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1384,Tops EATERY Porto de Phuket,0.5015363,4.2185287,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1385,Tops EATERY Rama 2,6.170381,4.2731533,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1386,Tora-San At CentrePoint Orchard,3.131297,13.071494,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1387,Totonoi Sauna & Onsen整,2.6822896,13.546249,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1388,Treehouse Health Bar,-2.5293841,12.458336,3,Good Location,1,100.0,Good Location
+1389,Tsubohachi Beehive,6.0978847,11.6345825,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1390,Tsubohachi Cosmo Bazaar,6.240824,12.49012,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1391,Tsubohachi Robinson Ratchaphruek,5.415931,12.200081,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1392,Tsubohachi The Promenade,4.587688,11.812674,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1393,Tsubohachi Zpell Future Park,2.134437,8.275759,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1394,Tsuru Saru イザカヤ,3.7137983,13.664531,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1395,Tu Bar Rooftop at Sri Panwa (Phuket),-1.2187632,6.9180856,3,Good Location,1,100.0,Good Location
+1396,Tuengnua Tuengtua Sathon,5.610493,10.677405,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1397,Tukabkhao by Jerajaras Don Mueang,3.8510637,11.812517,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1398,Tum 20 Donmueang,5.0996065,14.516897,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1399,Tum 20 Ratchada-Sutthisan,3.4340305,9.780395,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1400,Tum 20 Saimai,3.9339802,9.75947,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1401,Tum Surin,3.2256477,10.147853,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1402,Tum-Pak-Pert Cafe’ & Restaurant,1.6508156,16.405462,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1403,Tunu Tarnar,5.574741,14.020069,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1404,Twelve Flavours,1.3210548,12.181534,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1405,UGO Ristorante Italiano,4.95436,15.309656,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1406,UNO MAS at Centara Grand Central World,4.168025,5.5792255,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1407,Umai Shabu Shabu Twin Town,8.029865,5.366389,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1408,Unicorn Cruise,6.7091246,13.948668,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1409,Untill Today Coffee,-0.7406141,15.091562,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1410,Up & Above Restaurant and Bar (Rooftop) at The Okura Prestige Bangkok,-3.3981578,10.512845,3,Good Location,1,100.0,Good Location
+1411,VIVIN Asok,5.1097584,15.332913,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1412,VIVIN Sukhumvit 22,-1.324625,8.032325,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1413,Va Presto,5.5386014,7.477265,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1414,Vamps Cuisine,0.7720865,9.86201,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1415,Vana Nava Sky Bar Rooftop at Holiday Inn (Hua Hin),-2.028116,2.4093564,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1416,Vana Nava Water Jungle (Hua Hin),-2.6179047,2.809142,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1417,Vantage Point QSNCC,4.9999638,10.048727,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1418,Vasco's At Hilton Kuala Lumpur,3.461168,14.455912,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1419,Veganerie Grand Palace,3.5188844,14.025999,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1420,Veganerie Lasalle,2.9728491,9.5414295,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1421,Veganerie Nana,4.1979403,14.595603,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1422,Veganerie Ratchathewi,3.3140497,12.485515,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1423,Veganerie Silom,3.1797225,13.564128,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1424,Vegas Cafe & Gallery,0.64679885,15.736293,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1425,Vela - Low&Slow Cooked Phet Kasem,5.84156,9.589403,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1426,Vela - Low&Slow Cooked Phutthamonthon Sai 2,5.775941,9.605229,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1427,Vela - Low&Slow Cooked Rattanathibet,5.059773,9.79011,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1428,Ventisi Restaurant Centara Grand at CentralWorld,3.4206762,13.439005,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1429,Verandah Rooftop Rotisserie At Momentus Hotel Alexandra,-3.0874565,8.8471775,3,Good Location,1,100.0,Good Location
+1430,Verde - Café & Restaurant,2.3412259,13.9339,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1431,Versailles Palace Jaransanitwong,4.4949393,9.826235,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1432,Versailles Palace Nonthaburi,4.611741,9.784836,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1433,Vertigo Rooftop Banyan Tree,-3.2895315,9.92079,3,Good Location,1,100.0,Good Location
+1434,View & Grill Rooftop Bar-B-Q,-2.6459017,8.752347,3,Good Location,1,100.0,Good Location
+1435,View Tiew Mai,2.1531305,13.983498,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1436,Vincere La Pizza,2.8419857,7.403441,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1437,Vinifera Wine Bar & Restaurant,-0.3933026,10.189498,3,Good Location,1,100.0,Good Location
+1438,Virgin Rooftop (Pattaya),-4.4251947,8.029415,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1439,Vision Bistro,0.20527126,7.2609673,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1440,Viva Alangka Cruise,5.9108515,12.334245,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1441,W Omakase Pradit Manutham,2.8500664,1.3953716,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1442,WINESTONE Mercure on Steven SG,1.9378833,12.901938,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1443,WYWS Cocktail Bar,-2.209071,11.873068,3,Good Location,1,100.0,Good Location
+1444,Waa Cow! Vivocity,5.0671453,10.972291,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1445,Wagyu Kurabu Premium Yakiniku,9.248967,7.9135733,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1446,Wagyu Volcano,6.3262825,10.798682,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1447,Wagyu Yakiniku Ken,6.950268,12.203013,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1448,Wagyusun Sukhumvit 22,-1.4997452,8.173795,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1449,Wahn Jeab,4.3647437,14.97026,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1450,Wake Me Up Café & Bistro,0.039305612,7.4399548,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1451,Walala Beach Bar at Cape Dara Resort (Pattaya),-3.2454023,6.1045113,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1452,Walk Rooftop Bar at Centara Watergate Pavilion Hotel Bangkok,-2.7784846,9.211571,3,Good Location,1,100.0,Good Location
+1453,Wander BKK,0.6951689,12.22511,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1454,Wangluang,6.3189507,11.806804,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1455,Wanwaan.BKK,1.0442113,9.011771,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1456,Washo Japanese Restaurant,0.77028495,12.367137,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1457,Waves & Wind Grande Centre Point (Pattaya),-5.0808463,7.2940955,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1458,Weaver Experience Dining at SILQ Hotel & Residence,0.74554867,12.441153,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1459,West Coast Thailand,5.1264873,14.0771265,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1460,Whale Klang Krung by Na Klongwan,2.6682916,10.856774,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1461,White House Cafe & Restaurant,2.128477,17.129868,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1462,White Lotus Restaurant and Rooftop at Hilton Resort & Spa (Hua Hin),-1.7803651,2.9643219,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1463,Whole Gain Changmoi (Chiangmai),6.4236526,10.780663,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1464,Whole Gain Old Town (Chiangmai),4.3642545,12.988073,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1465,Wine DE' Suu,-0.5727265,10.154625,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1466,Wine I Love You Asiatique The Riverfront,-0.18129897,10.025756,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1467,Wine Society,-0.76894534,9.990102,3,Good Location,1,100.0,Good Location
+1468,Wine Universe Singapore,-0.15809084,11.112157,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1469,Winner House Vietnamese Cuisine,2.6598024,17.607784,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1470,Witch Luck Cafe & Restaurants,0.18586078,16.154913,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1471,Wok Wok Andaz Pattaya Jomtien Beach (Pattaya),-4.3537006,6.2864733,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1472,Wonderful Pearl Cruise,3.880974,14.178907,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1473,Wuunwine,-0.1744884,10.325797,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1474,XSO Kitchen at Best Western Plus Nexen (Pattaya),-4.27628,7.13194,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1475,XYZ Pinklao,5.3241634,9.621908,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1476,Xi An Yiam  Banthat Thong,0.5283354,10.080985,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1477,Xi An Yiam New Petchaburi,5.6560483,9.731556,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1478,Xiao Fuwang Hotpot (Central Westville),5.542792,7.255166,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1479,YANKII- Robatayaki & Bar,-2.8281078,12.293663,3,Good Location,1,100.0,Good Location
+1480,YAWA Modern Japanese Cuisine,0.26139626,11.042624,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1481,Yakiniku En,2.8172033,13.518205,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1482,Yakiniku Marukyu Ito 焼肉丸久伊藤,5.8015075,10.489267,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1483,Yakiniku Tan & Shabushabu,6.9646707,7.910558,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1484,Yang Gao Gorn,2.0803833,10.514361,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1485,Yanghin Seuton Geulil Rama 4,6.083172,3.0935485,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1486,Yao Rooftop Bar Bangkok Marriott Hotel The Surawongse,-2.6431527,8.750421,3,Good Location,1,100.0,Good Location
+1487,Ye Lai Xiang 夜来香 Huai Khwang,6.8774295,13.816918,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1488,Ye Lai Xiang 夜来香 Mrt Huai Khwang,1.178764,9.361482,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1489,Ye Lai Xiang 夜来香 Ratchada Soi 13,1.2788633,9.679567,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1490,Ye Lai Xiang 夜来香 Rca 2,2.7413468,9.1145115,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1491,Yelo Osha,3.4269042,10.89879,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1492,Yenney,3.476339,8.971755,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1493,Yeon,1.1408685,16.014345,4,Extensive Alcohol Beverage Options,1,100.0,Extensive Alcohol Beverage Options
+1494,Yi Lu Lingxian Seafood Hotpot,8.093414,11.947022,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1495,Yi Pin Xiang Bang Rak,2.2975109,9.403364,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1496,Yin D House (Chonburi),3.0362895,17.923521,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1497,Yoki Niku よきにく (Chonburi),6.792813,10.130947,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1498,Yokkrok Zabzone,3.6998656,10.47434,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1499,You & I Restaurant and Bar at We Hotel Riverfront,-0.89494413,11.062669,3,Good Location,1,100.0,Good Location
+1500,You&I Premium Suki Buffet Central Eastville,8.516003,7.4974055,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1501,You&I Premium Suki Buffet Central Phuket (Phuket),1.1171831,4.535275,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1502,You&I Premium Suki Buffet Central Westgate,8.1608925,7.6261783,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1503,You&I Premium Suki Buffet CentralWorld,9.093069,7.934539,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1504,You&I Premium Suki Buffet Marche Thonglor,8.209328,8.224377,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1505,You&I Premium Suki Buffet Mega Bangna,8.593631,8.355871,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1506,You&I Premium Suki Buffet Passione Shopping Destination (Rayong),8.897619,7.951772,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1507,You&I Premium Suki Buffet Samyan Mitrtown,8.687446,8.315648,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1508,You&I Premium Suki Buffet Siam Center,9.13497,6.9497857,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1509,You&I Premium Suki Buffet Terminal 21 Rama 3,8.577822,7.243766,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1510,You&I Premium Suki Buffet The Crystal Ratchapruek,9.041431,7.85642,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1511,You&I Premium Suki Buffet The EmQuartier,8.416037,8.343415,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1512,You&I Premium Suki Buffet The Mall Bangkae,8.669609,8.7201805,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1513,You&I Premium Suki Buffet The Mall Ngamwongwan,8.829659,8.559283,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1514,You&I Premium Suki Buffet The Nine Center,8.707298,8.491294,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1515,You&I Premium Suki Buffet Zpell Future Park Rangsit,8.4215,8.19852,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1516,Yu Gu Xiang 遇故湘,1.8508384,9.809782,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1517,Yuki Wagyu Shabu Izakaya,7.4101257,5.7300987,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1518,Yum&Tum K-Village,3.9074848,10.631943,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1519,Yume and Mellow Izakaya,5.241281,10.269339,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1520,Yummhee Yummy,4.62333,10.749894,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1521,Yunnan (Chon buri),2.5215168,9.233516,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1522,Yunnan (Rayong),2.5781486,12.28835,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1523,Yunnan Bangpoon,3.6649415,11.014486,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1524,Yunnan Renjia,1.299999,8.880229,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1525,Yuppies’ Yummies,5.139795,13.286702,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1526,Yurijin Izakaya & Japanese Dining Ekkamai,0.250611,12.279298,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1527,Yurijin Izakaya & Japanese Dining Ratchada,0.32570106,12.139176,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1528,YuuPot Shabu and Grill  Wayra Ramkhamhaen,6.4422374,5.328831,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1529,Yuufuku Japanese Food,1.4614968,12.171743,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1530,Yuzu Suki ゆずすき - ICONSIAM,4.8413014,10.239645,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1531,ZILA STREET BISTRO & BAR @MASON,0.2067996,8.028205,3,Good Location,1,100.0,Good Location
+1532,Zaap Classic Emquartier,3.5468583,9.3779335,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1533,Zaap Classic Lotus’s Sukhaphiban 3,6.6049237,13.097715,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1534,Zaap Classic Phahon Yothin,6.97127,13.475747,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1535,Zaap Classic Pridi Banomyong,4.8686404,10.576555,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1536,Zaap Classic Seacon Square Srinagarindra,6.0384903,10.162933,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1537,Zaap Classic The Mall Bangkhae,5.007474,10.109899,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1538,Zaap Classic The Mall Thapra,5.1718707,10.78822,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1539,Zab Siam,10.151783,3.8602467,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1540,Zabzone,3.408085,14.727758,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1541,Zaozen The Mall Lifestore Ngamwongwan,5.1451597,12.821265,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1542,Zeascape at Zenmaya Oceanfront (Phuket),0.2612018,4.3869715,1,Restaurant with Good View,1,100.0,Restaurant with Good View
+1543,Zest Bar & Terrace @ The Westin Grande Sukhumvit,-2.0858068,9.958445,3,Good Location,1,100.0,Good Location
+1544,Zhang Restaurant (Rama Gardens Hotel),7.031313,2.9271424,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1545,Zheng Huang Qi Dumpling King,2.1484969,9.644558,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1546,Zhong Ped Pa Low Wanghin,5.742145,13.444123,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1547,Zio Aldo Pizza and Spaghetteria,4.4711237,7.484674,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1548,Zodiac Bar at Oakwood Suites Tiwanon,-1.1384029,12.761424,3,Good Location,1,100.0,Good Location
+1549,Zong Zi Pad Pad Rustic Cuisine • Lounge (Koh Chang),-0.7275888,9.797279,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1550,edm,5.872185,12.836606,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1551,nice two Meat u Central Eastville,5.6608186,7.7060003,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1552,nice two Meat u Central World,6.3356814,8.524878,2,Attentive Service but Pricey,1,100.0,Attentive Service but Pricey
+1553,nice two Meat u EmQuartier,7.0733886,9.268105,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1554,nice two Meat u Future Park Rangsit,5.188891,8.872548,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1555,nice two Meat u ICONSIAM,6.459249,9.48139,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1556,nice two Meat u Mega Bangna,6.5825987,9.555647,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1557,nice two Meat u Siam Square Soi 3,9.572105,4.8670073,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1558,nice two Meat u The Mall Bangkhae,6.0098524,8.987829,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1559,nice two Meat u The Mall Ngamwongwan,6.3379498,9.647565,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1560,nice two Meat u The Promenade,6.747973,8.96043,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1561,อร่อย Together,6.1637797,13.6931,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
+1562,馥苑 Fu Yuan Teochew Dining,0.494106,13.072342,0,Various Menus & Quality Food,1,100.0,Various Menus & Quality Food
