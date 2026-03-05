@@ -64,8 +64,33 @@ def render():
     col_f1, col_f2, col_f3 = st.columns([2, 1, 1])
 
     all_names = sorted(momentum_df["name"].unique())
+
+    # ── Shared restaurant selection ────────────────────────────────────────────
+    # "selected_restaurant" in session_state is the single source of truth
+    # that all pages read. Changing it here propagates to Momentum, Strategy, etc.
+    DEFAULT_RESTAURANT = "JW Cafe at JW Marriott Hotel Bangkok"
+
+    # Initialise to default on first load if not already set
+    if "selected_restaurant" not in st.session_state:
+        # Try exact match first, then partial, then fall back to index 0
+        if DEFAULT_RESTAURANT in all_names:
+            st.session_state["selected_restaurant"] = DEFAULT_RESTAURANT
+        else:
+            partial = [n for n in all_names if "JW" in n and "Marriott" in n]
+            st.session_state["selected_restaurant"] = partial[0] if partial else all_names[0]
+
+    current = st.session_state["selected_restaurant"]
+    default_idx = all_names.index(current) if current in all_names else 0
+
     with col_f1:
-        selected = st.selectbox("Select Restaurant", all_names)
+        selected = st.selectbox(
+            "Select Restaurant",
+            all_names,
+            index=default_idx,
+            key="overview_restaurant_select",
+        )
+        # Write back to shared state so other pages pick it up
+        st.session_state["selected_restaurant"] = selected
 
     # Segment filter for the summary table at the bottom
     segments_available = sorted(momentum_df["latest_segment"].dropna().unique()) if "latest_segment" in momentum_df.columns else []

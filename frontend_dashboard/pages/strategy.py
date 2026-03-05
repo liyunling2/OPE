@@ -223,7 +223,13 @@ def render():
         st.warning("No priority data. Run priority_scoring_seasonality.ipynb first.")
         return
 
-    preselected = st.session_state.get("strategy_restaurant", None)
+    # Pull from shared restaurant selection (set on Overview page)
+    # "strategy_restaurant" (set via Priority List button) takes precedence
+    preselected = (
+        st.session_state.get("strategy_restaurant")
+        or st.session_state.get("selected_restaurant")
+        or None
+    )
     all_names   = priority_df.sort_values("priority_score", ascending=False)["name"].tolist()
     default_idx = all_names.index(preselected) if preselected and preselected in all_names else 0
 

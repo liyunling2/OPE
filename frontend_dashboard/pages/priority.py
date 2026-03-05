@@ -344,6 +344,19 @@ def render():
     st.markdown("---")
     st.markdown("### Full Ranked List")
 
+    # Highlight if the globally selected restaurant appears in this list
+    _sel = st.session_state.get("selected_restaurant")
+    if _sel and _sel in df["name"].values:
+        _sel_score = df[df["name"] == _sel]["priority_score"].iloc[0]
+        _sel_rank  = df[df["name"] == _sel].index[0] + 1
+        st.success(
+            "Currently selected restaurant **%s** appears at rank #%d "
+            "with a priority score of **%.0f / 100**." % (_sel, _sel_rank, _sel_score)
+        )
+    elif _sel:
+        st.warning("Currently selected restaurant **%s** is not in the filtered list." % _sel)
+
+
     for idx, row in df.iterrows():
         rank    = idx + 1
         name    = row["name"]
