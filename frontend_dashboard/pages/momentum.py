@@ -14,9 +14,9 @@ from data.loader import load_momentum, load_priority
 CHART_THEME = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(color="#111827", family="DM Sans"),
-    xaxis=dict(gridcolor="#e0e0e0", showline=False, zeroline=False),
-    yaxis=dict(gridcolor="#e0e0e0", showline=False, zeroline=False),
+    font=dict(color="#e8eaf0", family="DM Sans"),
+    xaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
+    yaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
     margin=dict(l=0, r=0, t=30, b=0),
 )
 BASE_LAYOUT = {k: v for k, v in CHART_THEME.items() if k not in ("xaxis", "yaxis")}
@@ -35,7 +35,7 @@ def render():
 
     st.markdown("## Momentum Dashboard")
     st.markdown(
-        "<p style='color:#6b7280; margin-top:-0.5rem;'>"
+        "<p style='color:#9ca3c4; margin-top:-0.5rem;'>"
         "Segment distribution, growth trajectories, and seasonality-adjusted momentum signals."
         "</p>",
         unsafe_allow_html=True,
@@ -111,6 +111,10 @@ def render():
         k4.metric("Rising Stars", f"{rising}", f"+ Emerging: {emerging}")
     else:
         k4.metric("Avg Growth (3m)", f"{latest_all['booking_growth_rolling'].mean():.1%}")
+
+    if "is_seasonal" in latest_all.columns:
+        n_seas = int(latest_all["is_seasonal"].fillna(False).sum())
+        st.caption(f"🌊 {n_seas} restaurants flagged Seasonal — strong MoM but weak YoY. Timing-sensitive activation.")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -258,108 +262,117 @@ def render():
         st.markdown("### Growth Signal Used (YoY vs MoM)")
         if "growth_signal_used" in latest_all.columns:
             sig_counts = latest_all["growth_signal_used"].value_counts()
-            fig_sig = go.Figure(
-                go.Bar(
-                    x=sig_counts.index,
-                    y=sig_counts.values,
-                    marker_color=["#f0a500", "#3b82f6"],
-                    text=sig_counts.values,
-                    textposition="outside",
-                    textfont=dict(color="#e8eaf0"),
-                    hovertemplate="%{x}: %{y} restaurants<extra></extra>",
-                )
-            )
-            fig_sig.update_layout(
-                **BASE_LAYOUT,
-                height=260,
-                showlegend=False,
+            fig_sig = go.Figure(go.Bar(
+                x=sig_counts.index, y=sig_counts.values,
+                marker_color=["#f0a500" if x == "YoY" else "#3b82f6" for x in sig_counts.index],
+                text=sig_counts.values, textposition="outside",
+                textfont=dict(color="#e8eaf0"),
+                hovertemplate="%{x}: %{y} restaurants<extra></extra>",
+            ))
+            fig_sig.update_layout(**BASE_LAYOUT, height=240, showlegend=False,
                 xaxis=dict(**CHART_THEME["xaxis"], title="Signal"),
-                yaxis=dict(**CHART_THEME["yaxis"], title="Restaurants"),
-            )
+                yaxis=dict(**CHART_THEME["yaxis"], title="Restaurants"))
             st.plotly_chart(fig_sig, width="stretch")
-            st.caption("YoY = seasonality-adjusted (preferred) | MoM = fallback for <12 months history")
+            st.caption("YoY = seasonality-adjusted (≥12 months + ≥2 valid YoY months in last 3m) | MoM = fallback")
         else:
-            st.info("growth_signal_used column not found - re-run momentum_seasonality.ipynb.")
+            st.info("growth_signal_used column not found — re-run momentum_seasonality.ipynb.")
 
     with col2b:
-        st.markdown("### Segment Stability (last 3 months)")
-        if "growth_months" in priority_df.columns:
-            stab = priority_df["growth_months"].value_counts().sort_index()
-            fig_stab = go.Figure(
-                go.Bar(
-                    x=[f"{v} month{'s' if v != 1 else ''}" for v in stab.index],
-                    y=stab.values,
-                    marker_color=["#e74c3c", "#e67e22", "#2ecc71"],
-                    text=stab.values,
-                    textposition="outside",
-                    textfont=dict(color="#e8eaf0"),
-                    hovertemplate="In growth segment %{x}: %{y} restaurants<extra></extra>",
-                )
-            )
-            fig_stab.update_layout(
-                **BASE_LAYOUT,
-                height=260,
-                showlegend=False,
-                xaxis=dict(**CHART_THEME["xaxis"], title="Consecutive growth months"),
+        st.markdown("### MoM vs YoY Score Distribution")
+        has_mom_sc = "score_growth_mom" in latest_all.columns
+        has_yoy_sc = "score_growth_yoy" in latest_all.columns
+        if has_mom_sc or has_yoy_sc:
+            fig_dist = go.Figure()
+            if has_mom_sc:
+                fig_dist.add_trace(go.Histogram(
+                    x=latest_all["score_growth_mom"].dropna(), nbinsx=25,
+                    name="MoM score", marker_color="#3b82f6", opacity=0.65,
+                    hovertemplate="MoM: %{x:.2f} | %{y} restaurants<extra></extra>"))
+            if has_yoy_sc:
+                fig_dist.add_trace(go.Histogram(
+                    x=latest_all["score_growth_yoy"].dropna(), nbinsx=25,
+                    name="YoY score", marker_color="#f0a500", opacity=0.65,
+                    hovertemplate="YoY: %{x:.2f} | %{y} restaurants<extra></extra>"))
+            fig_dist.update_layout(**BASE_LAYOUT, height=240, barmode="overlay",
+                xaxis=dict(**CHART_THEME["xaxis"], title="Score (0–1)"),
                 yaxis=dict(**CHART_THEME["yaxis"], title="Restaurants"),
-            )
-            st.plotly_chart(fig_stab, width="stretch")
-            st.caption("Restaurants in green (2-3 months) form the stable-growth priority universe.")
+                legend=dict(orientation="h", y=1.05, x=0, font_size=10))
+            st.plotly_chart(fig_dist, width="stretch")
+            st.caption("Where both overlap, YoY (amber) strips out seasonal timing effects.")
         else:
-            st.info("Stability data not found - run priority_scoring_seasonality.ipynb.")
+            # Fallback: stability chart
+            if "growth_months" in priority_df.columns:
+                stab = priority_df["growth_months"].value_counts().sort_index()
+                n = len(stab)
+                bar_colors = (["#e74c3c"] * max(0, n-2) + ["#e67e22", "#2ecc71"])[:n]
+                fig_stab = go.Figure(go.Bar(
+                    x=[f"{v}m" for v in stab.index], y=stab.values,
+                    marker_color=bar_colors, text=stab.values, textposition="outside",
+                    textfont=dict(color="#e8eaf0"),
+                    hovertemplate="Positive MoM growth %{x}: %{y} restaurants<extra></extra>"))
+                fig_stab.update_layout(**BASE_LAYOUT, height=240, showlegend=False,
+                    xaxis=dict(**CHART_THEME["xaxis"], title="Positive-growth months"),
+                    yaxis=dict(**CHART_THEME["yaxis"], title="Restaurants"))
+                st.plotly_chart(fig_stab, width="stretch")
+                st.caption("Re-run momentum_seasonality.ipynb to see MoM vs YoY score distribution.")
+            else:
+                st.info("Stability data not found — run priority_scoring_seasonality.ipynb.")
 
     st.markdown("---")
 
-    st.markdown("### Growth Rate Heatmap - Top 20 Restaurants by Volume")
+    st.markdown("### Growth Heatmap — Top 20 Restaurants by Volume")
 
     top20_names = (
         latest_all.nlargest(20, "monthly_bookings")["name"].tolist()
         if "monthly_bookings" in latest_all.columns
         else latest_all["name"].tolist()[:20]
     )
-
     heatmap_df = momentum_df[momentum_df["name"].isin(top20_names)].copy()
     heatmap_df["ym_label"] = heatmap_df["year_month"].dt.strftime("%b %Y")
-
-    pivot = heatmap_df.pivot_table(
-        index="name", columns="ym_label", values="booking_growth_rolling", aggfunc="mean"
-    )
-
-    all_months = sorted(heatmap_df["year_month"].unique())
+    all_months   = sorted(heatmap_df["year_month"].unique())
     month_labels = [pd.Timestamp(m).strftime("%b %Y") for m in all_months]
-    pivot = pivot.reindex(columns=[m for m in month_labels if m in pivot.columns])
 
-    if not pivot.empty:
-        fig_heat = go.Figure(
-            go.Heatmap(
-                z=pivot.values,
-                x=pivot.columns.tolist(),
-                y=pivot.index.tolist(),
-                colorscale=[
-                    [0.0, "#e74c3c"],
-                    [0.4, "#1a1d27"],
-                    [0.6, "#1a1d27"],
-                    [1.0, "#2ecc71"],
-                ],
-                zmid=0,
-                text=[[f"{v:.0%}" if pd.notna(v) else "-" for v in row] for row in pivot.values],
-                texttemplate="%{text}",
-                textfont=dict(size=9),
-                hovertemplate="<b>%{y}</b><br>%{x}: %{z:.1%}<extra></extra>",
-                colorbar=dict(
-                    title=dict(text="Growth", font=dict(color="#7c82a0")),
-                    tickformat=".0%",
-                    tickfont=dict(color="#7c82a0"),
-                ),
-            )
-        )
-        fig_heat.update_layout(
-            **BASE_LAYOUT,
-            height=500,
+    def _make_heatmap(values_col):
+        pv = heatmap_df.pivot_table(index="name", columns="ym_label",
+                                    values=values_col, aggfunc="mean")
+        pv = pv.reindex(columns=[m for m in month_labels if m in pv.columns])
+        if pv.empty:
+            return None
+        fig = go.Figure(go.Heatmap(
+            z=pv.values, x=pv.columns.tolist(), y=pv.index.tolist(),
+            colorscale=[[0.0,"#e74c3c"],[0.4,"#1a1d27"],[0.6,"#1a1d27"],[1.0,"#2ecc71"]],
+            zmid=0,
+            text=[[f"{v:.0%}" if pd.notna(v) else "–" for v in row] for row in pv.values],
+            texttemplate="%{text}", textfont=dict(size=9),
+            hovertemplate="<b>%{y}</b><br>%{x}: %{z:.1%}<extra></extra>",
+            colorbar=dict(title=dict(text="Growth", font=dict(color="#9ca3c4")),
+                          tickformat=".0%", tickfont=dict(color="#9ca3c4"))))
+        fig.update_layout(**BASE_LAYOUT, height=500,
             xaxis=dict(**CHART_THEME["xaxis"], tickangle=-45, tickfont=dict(size=10)),
-            yaxis=dict(**CHART_THEME["yaxis"], tickfont=dict(size=10)),
-        )
-        st.plotly_chart(fig_heat, width="stretch")
+            yaxis=dict(**CHART_THEME["yaxis"], tickfont=dict(size=10)))
+        return fig
+
+    has_mom_rolling = "booking_growth_mom_rolling" in heatmap_df.columns
+    has_yoy_rolling = "booking_growth_yoy_rolling" in heatmap_df.columns
+
+    if has_mom_rolling and has_yoy_rolling:
+        ht1, ht2 = st.tabs(["📅 MoM Rolling (3m)", "📆 YoY Rolling (3m)"])
+        with ht1:
+            st.caption("Month-over-month 3m rolling — short-term acceleration")
+            fig_hm = _make_heatmap("booking_growth_mom_rolling")
+            if fig_hm:
+                st.plotly_chart(fig_hm, width="stretch")
+        with ht2:
+            st.caption("Year-over-year 3m rolling — seasonality-adjusted (blank = insufficient prior-year data)")
+            fig_hy = _make_heatmap("booking_growth_yoy_rolling")
+            if fig_hy:
+                st.plotly_chart(fig_hy, width="stretch")
+            else:
+                st.info("YoY rolling data not available — re-run momentum_seasonality.ipynb.")
+    else:
+        fig_hm = _make_heatmap("booking_growth_rolling")
+        if fig_hm:
+            st.plotly_chart(fig_hm, width="stretch")
 
     st.markdown("---")
 

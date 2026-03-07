@@ -17,14 +17,14 @@ def layout(height=300, **kwargs):
     base = dict(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#111827", family="DM Sans"), # Switched to dark text
+        font=dict(color="#e8eaf0", family="DM Sans"), # Switched to dark text
         margin=dict(l=0, r=0, t=30, b=0),
         height=height,
     )
     base.update(kwargs)
     return base
 
-AXIS = dict(gridcolor="#e0e0e0", showline=False, zeroline=False) # Switched to light grid
+AXIS = dict(gridcolor="#2e3350", showline=False, zeroline=False) # Switched to light grid
 
 
 def fmt_thb(val):
@@ -92,15 +92,27 @@ def build_grounded_brief(row: dict, hist: pd.DataFrame, recs: pd.DataFrame) -> s
             score=score_val,
         )
     )
+    mom_gr = pd.to_numeric(row.get("booking_growth_mom_rolling",
+                                     row.get("booking_growth_rolling")), errors="coerce")
+    yoy_gr = pd.to_numeric(row.get("booking_growth_yoy_rolling",
+                                     row.get("booking_growth_yoy")), errors="coerce")
+    signal_used = row.get("growth_signal_used", "–")
+    is_seasonal  = bool(row.get("is_seasonal", False))
     lines.append(
-        "- **Latest performance:** {bk:,} bookings, {rev}, growth {gr}, YoY {yoy}\n- **Recent trend:** {trend}".format(
+        "- **Latest:** {bk:,} bookings, {rev}  |  MoM 3m: {mom}  |  YoY 3m: {yoy}  |  Signal: {sig}\n- **Recent trend:** {trend}".format(
             bk=bookings_val,
             rev=fmt_thb(pd.to_numeric(row.get("monthly_revenue"), errors="coerce")),
-            gr=fmt_pct(pd.to_numeric(row.get("booking_growth_rolling"), errors="coerce")),
-            yoy=fmt_pct(pd.to_numeric(row.get("booking_growth_yoy"), errors="coerce")),
+            mom=fmt_pct(mom_gr),
+            yoy=fmt_pct(yoy_gr),
+            sig=signal_used,
             trend=trend,
         )
     )
+    if is_seasonal:
+        lines.append(
+            "- ⚠️ **Seasonal flag** — strong MoM but YoY below portfolio median. "
+            "Activate at seasonal peak for best ROI."
+        )
 
     lines.append("## Data-Driven Recommended Playbook")
     if recs.empty:
@@ -212,7 +224,7 @@ def render():
 
     st.markdown("## Strategy Engine")
     st.markdown(
-        "<p style='color:#6b7280;margin-top:-0.5rem;'>"
+        "<p style='color:#9ca3c4;margin-top:-0.5rem;'>"
         "Data-first recommendations are ranked by observed campaign outcomes, with fallback from cluster to segment to global evidence."
         "</p>",
         unsafe_allow_html=True,
@@ -223,13 +235,7 @@ def render():
         st.warning("No priority data. Run priority_scoring_seasonality.ipynb first.")
         return
 
-    # Pull from shared restaurant selection (set on Overview page)
-    # "strategy_restaurant" (set via Priority List button) takes precedence
-    preselected = (
-        st.session_state.get("strategy_restaurant")
-        or st.session_state.get("selected_restaurant")
-        or None
-    )
+    preselected = st.session_state.get("strategy_restaurant", None)
     all_names   = priority_df.sort_values("priority_score", ascending=False)["name"].tolist()
     default_idx = all_names.index(preselected) if preselected and preselected in all_names else 0
 
@@ -252,14 +258,14 @@ def render():
 
     with col_info:
             st.markdown(
-                "<div style='background:#ffffff;border:1px solid #e0e0e0;"
+                "<div style='background:#1e2130;border:1px solid #2e3350;"
                 "border-left:4px solid {c};border-radius:8px;padding:1rem 1.4rem;box-shadow:0 1px 2px rgba(0,0,0,0.05);'>"
                 "<div style='display:flex;justify-content:space-between;align-items:center;'>"
                 "<div><div style='font-size:1.3rem;color:#111827;font-weight:700;'>{n}</div>"
-                "<div style='font-size:0.8rem;color:#6b7280;margin-top:4px;'>{tier}</div>"
-                "<div style='font-size:0.75rem;color:#6b7280;margin-top:2px;'>Segment: {seg}</div></div>"
+                "<div style='font-size:0.8rem;color:#9ca3c4;margin-top:4px;'>{tier}</div>"
+                "<div style='font-size:0.75rem;color:#9ca3c4;margin-top:2px;'>Segment: {seg}</div></div>"
                 "<div style='text-align:right;'><div style='font-size:1.8rem;color:#cc0000;font-weight:700;'>{s:.0f}</div>"
-                "<div style='font-size:0.7rem;color:#6b7280;'>SCORE</div></div>"
+                "<div style='font-size:0.7rem;color:#9ca3c4;'>SCORE</div></div>"
                 "</div></div>".format(
                     c=tier_color,
                     n=selected,
@@ -270,51 +276,74 @@ def render():
                 unsafe_allow_html=True
             )
 
+    is_seasonal_flag = bool(row.get("is_seasonal", False))
+    if is_seasonal_flag:
+        st.warning(
+            "🌊 **Seasonal pattern** — strong recent MoM but YoY is below portfolio median. "
+            "Consider timing activation to align with the seasonal peak."
+        )
+
     if len(hist):
-        c1,c2,c3,c4,c5,c6 = st.columns(6)
+        c1,c2,c3,c4,c5,c6,c7 = st.columns(7)
         lat = hist.sort_values("year_month").iloc[-1]
-        c1.metric("Bookings",      "%d" % int(lat.get("monthly_bookings",0)))
-        c2.metric("Revenue",       fmt_thb(lat.get("monthly_revenue")))
-        c3.metric("Rolling Growth",fmt_pct(lat.get("booking_growth_rolling")))
-        c4.metric("YoY Growth",    fmt_pct(lat.get("booking_growth_yoy")))
-        c5.metric("Campaigns",     "%d" % (int(row.get("n_campaigns",0)) if pd.notna(row.get("n_campaigns")) else 0))
-        c6.metric("Reco Signal",   "%d ranked" % len(strategy_recs))
+        c1.metric("Bookings",   "%d" % int(lat.get("monthly_bookings", 0)))
+        c2.metric("Revenue",    fmt_thb(lat.get("monthly_revenue")))
+        c3.metric("MoM Growth", fmt_pct(lat.get("booking_growth_mom_rolling",
+                                                  lat.get("booking_growth_rolling"))))
+        c4.metric("YoY Growth", fmt_pct(lat.get("booking_growth_yoy_rolling",
+                                                  lat.get("booking_growth_yoy"))))
+        c5.metric("Signal",     str(row.get("growth_signal_used","–")))
+        c6.metric("Campaigns",  "%d" % (int(row.get("n_campaigns",0)) if pd.notna(row.get("n_campaigns")) else 0))
+        c7.metric("Strategies", "%d ranked" % len(strategy_recs))
 
     st.markdown("---")
     chart_col, strat_col = st.columns([1.05,0.95])
 
     with chart_col:
-        st.markdown("### Booking Trend")
+        st.markdown("### Booking Trend + Growth Signals")
         if len(hist):
             hs = hist.sort_values("year_month")
             fig = go.Figure()
             fig.add_trace(go.Bar(
                 x=hs["year_month"], y=hs["monthly_bookings"],
-                marker_color=tier_color, marker_opacity=0.7,
+                marker_color=tier_color, marker_opacity=0.7, name="Bookings",
                 hovertemplate="<b>%{x|%b %Y}</b><br>%{y:,} bookings<extra></extra>",
             ))
-            if "booking_growth_yoy" in hs.columns:
+            # MoM rolling on secondary axis
+            mom_col = "booking_growth_mom_rolling" if "booking_growth_mom_rolling" in hs.columns else None
+            if mom_col:
+                fig.add_trace(go.Scatter(
+                    x=hs["year_month"], y=hs[mom_col], mode="lines", name="MoM 3m avg",
+                    line=dict(color="#3b82f6", width=2), yaxis="y2",
+                    hovertemplate="MoM: %{y:.1%}<extra></extra>"))
+            # YoY rolling on secondary axis
+            if "booking_growth_yoy_rolling" in hs.columns:
+                yv = hs[hs["booking_growth_yoy_rolling"].notna()]
+                if len(yv):
+                    fig.add_trace(go.Scatter(
+                        x=yv["year_month"], y=yv["booking_growth_yoy_rolling"],
+                        mode="lines", name="YoY 3m avg",
+                        line=dict(color="#f0a500", width=2, dash="dot"), yaxis="y2",
+                        hovertemplate="YoY: %{y:.1%}<extra></extra>"))
+            elif "booking_growth_yoy" in hs.columns:
                 yv = hs[hs["booking_growth_yoy"].notna()]
                 if len(yv):
                     fig.add_trace(go.Scatter(
                         x=yv["year_month"], y=yv["booking_growth_yoy"],
-                        mode="lines", name="YoY Growth",
-                        line=dict(color="#f0a500", width=2, dash="dot"),
-                        yaxis="y2",
-                        hovertemplate="YoY: %{y:.1%}<extra></extra>",
-                    ))
+                        mode="lines", name="YoY (raw)",
+                        line=dict(color="#f0a500", width=2, dash="dot"), yaxis="y2",
+                        hovertemplate="YoY: %{y:.1%}<extra></extra>"))
             fig.update_layout(
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#111827", family="DM Sans"),
-                margin=dict(l=0, r=0, t=30, b=0),
-                height=260,
-                xaxis=dict(gridcolor="#e0e0e0", showline=False, zeroline=False, tickangle=-30),
-                yaxis=dict(gridcolor="#e0e0e0", showline=False, zeroline=False),
+                paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#e8eaf0", family="DM Sans"),
+                margin=dict(l=0, r=0, t=30, b=0), height=260,
+                xaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False,
+                           tickangle=-30, color="#9ca3c4"),
+                yaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
                 yaxis2=dict(overlaying="y", side="right", showgrid=False,
-                            tickformat=".0%", tickfont=dict(color="#f0a500", size=9)),
-                legend=dict(orientation="h", y=1.02, x=0, font_size=10),
-            )
+                            tickformat=".0%", tickfont=dict(color="#9ca3c4", size=9),
+                            zeroline=True, zerolinecolor="#7c82a0"),
+                legend=dict(orientation="h", y=1.02, x=0, font_size=10, bgcolor="rgba(0,0,0,0)"))
             st.plotly_chart(fig, width="stretch")
 
         st.markdown("### Campaign History")
@@ -330,7 +359,7 @@ def render():
                 ca.markdown("<span style='color:#7c82a0;font-size:0.8rem;'>%s</span>" % k, unsafe_allow_html=True)
                 cb.markdown("<span style='color:#111827;font-size:0.85rem;font-weight:500;'>%s</span>" % v, unsafe_allow_html=True)
         else:
-            st.markdown("<div style='background:#ffffff;border:1px dashed #e0e0e0;border-radius:10px;padding:1.5rem;text-align:center;color:#6b7280;'>No campaign history available for this restaurant.</div>", unsafe_allow_html=True)
+            st.markdown("<div style='background:#1e2130;border:1px dashed #2e3350;border-radius:10px;padding:1.5rem;text-align:center;color:#9ca3c4;'>No campaign history available for this restaurant.</div>", unsafe_allow_html=True)
 
         st.markdown("### Ranked Strategy Evidence")
         st.caption(

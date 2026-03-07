@@ -10,22 +10,18 @@ def layout(height=300, **kwargs):
     base = dict(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#111827", family="DM Sans"), # Switched to dark text
+        font=dict(color="#e8eaf0", family="DM Sans"), # Switched to dark text
         margin=dict(l=0, r=0, t=30, b=0),
         height=height,
     )
     base.update(kwargs)
     return base
 
-AXIS = dict(gridcolor="#e0e0e0", showline=False, zeroline=False) # Switched to light grid
+AXIS = dict(gridcolor="#2e3350", showline=False, zeroline=False) # Switched to light grid
 
 # Priority scoring weights from priority_scoring_seasonality.ipynb
 W_SCORE_GROWTH = 0.60
 W_DELTA_GROWTH = 0.40
-W_GROWTH_FINAL = 0.60
-W_MARKETING_FINAL = 0.40
-W_LIFT = 0.60
-W_ROI = 0.40
 
 def fmt_pct(val):
     if val is None or (isinstance(val, float) and pd.isna(val)): return "-"
@@ -61,29 +57,7 @@ def add_priority_breakdown_cols(df: pd.DataFrame) -> pd.DataFrame:
         out["score_growth_norm"] * W_SCORE_GROWTH +
         out["delta_growth_norm"] * W_DELTA_GROWTH
     )
-
-    lift_series = out["avg_lift_per_day"] if "avg_lift_per_day" in out.columns else pd.Series(0, index=out.index)
-    roi_series = out["avg_roi"] if "avg_roi" in out.columns else pd.Series(0, index=out.index)
-    out["lift_norm"] = min_max_norm(lift_series.fillna(0).clip(lower=0))
-    out["roi_norm"] = min_max_norm(roi_series.fillna(0).clip(lower=0))
-
-    if "pct_yoy_baseline" in out.columns:
-        out["lift_reliability_calc"] = 0.8 + 0.2 * pd.to_numeric(out["pct_yoy_baseline"], errors="coerce").fillna(0)
-    else:
-        out["lift_reliability_calc"] = 1.0
-
-    out["marketing_component"] = (
-        out["lift_norm"] * out["lift_reliability_calc"] * W_LIFT +
-        out["roi_norm"] * W_ROI
-    )
-
-    out["growth_component_norm"] = min_max_norm(out["growth_component"])
-    has_mkt = out["has_marketing"].fillna(False) if "has_marketing" in out.columns else pd.Series(False, index=out.index)
-    out["priority_raw_recomputed"] = np.where(
-        has_mkt,
-        out["growth_component"] * W_GROWTH_FINAL + out["marketing_component"] * W_MARKETING_FINAL,
-        out["growth_component_norm"],
-    )
+    out["priority_raw_recomputed"] = out["growth_component"]
     out["priority_score_recomputed"] = min_max_norm(out["priority_raw_recomputed"]) * 100
     return out
 
@@ -203,12 +177,14 @@ def render():
         st.warning("No priority data. Run priority_scoring_seasonality.ipynb first.")
         return
 
-    k1, k2, k3, k4 = st.columns(4)
+    k1, k2, k3, k4, k5 = st.columns(5)
     k1.metric("In Priority List", str(int(priority_df["is_in_priority_list"].sum())))
     def ct(kw): return sum(kw in str(t).lower() for t in priority_df["priority_tier"])
     k2.metric("Proven",   str(ct("proven")))
     k3.metric("Untapped", str(ct("untapped")))
     k4.metric("Review",   str(ct("review")))
+    seasonal_n = int(priority_df["is_seasonal"].fillna(False).sum()) if "is_seasonal" in priority_df.columns else 0
+    k5.metric("\U0001F30A Seasonal", str(seasonal_n))
     st.markdown("<br>", unsafe_allow_html=True)
     st.caption(
         f"Total restaurants shown: {len(priority_df):,}. "
@@ -219,11 +195,7 @@ def render():
         st.markdown(
             "**Formula (from `priority_scoring_seasonality.ipynb`)**\n\n"
             "- `growth_component = 0.60 * score_growth_norm + 0.40 * delta_growth_norm`\n"
-            "- `marketing_component = 0.60 * lift_norm * lift_reliability + 0.40 * roi_norm`\n"
-            "- If `has_marketing`:\n"
-            "  `priority_raw = 0.60 * growth_component + 0.40 * marketing_component`\n"
-            "- If no marketing history:\n"
-            "  `priority_raw = growth_component_norm`\n"
+            "- `priority_raw = growth_component`\n"
             "- Final score: `priority_score = min_max_norm(priority_raw) * 100`"
         )
 
@@ -231,11 +203,10 @@ def render():
         breakdown_name = st.selectbox("Restaurant breakdown", breakdown_names, key="priority_breakdown_name")
         brow = priority_df[priority_df["name"] == breakdown_name].iloc[0]
 
-        b1, b2, b3, b4 = st.columns(4)
+        b1, b2, b3 = st.columns(3)
         b1.metric("Priority Score", f"{brow.get('priority_score', 0):.2f}")
         b2.metric("Growth Component", f"{brow.get('growth_component', 0):.4f}")
-        b3.metric("Marketing Component", f"{brow.get('marketing_component', 0):.4f}")
-        b4.metric("Has Marketing", "Yes" if bool(brow.get("has_marketing", False)) else "No")
+        b3.metric("Priority Raw", f"{brow.get('priority_raw_recomputed', 0):.4f}")
 
         breakdown_df = pd.DataFrame(
             [
@@ -244,12 +215,6 @@ def render():
                 ("score_growth_norm", brow.get("score_growth_norm", np.nan)),
                 ("delta_growth_norm", brow.get("delta_growth_norm", np.nan)),
                 ("growth_component", brow.get("growth_component", np.nan)),
-                ("avg_lift_per_day", brow.get("avg_lift_per_day", np.nan)),
-                ("avg_roi", brow.get("avg_roi", np.nan)),
-                ("lift_norm", brow.get("lift_norm", np.nan)),
-                ("roi_norm", brow.get("roi_norm", np.nan)),
-                ("lift_reliability", brow.get("lift_reliability", brow.get("lift_reliability_calc", np.nan))),
-                ("marketing_component", brow.get("marketing_component", np.nan)),
                 ("priority_raw_recomputed", brow.get("priority_raw_recomputed", np.nan)),
                 ("priority_score_recomputed", brow.get("priority_score_recomputed", np.nan)),
                 ("priority_score_saved", brow.get("priority_score", np.nan)),
@@ -273,28 +238,58 @@ def render():
         st.plotly_chart(fig_box, width="stretch")
 
     with col2:
-        st.markdown("### Channel Mix")
-        channel_series = priority_df["recommended_channel"].dropna().astype(str).str.strip()
-        channel_series = channel_series[
-            ~channel_series.str.lower().isin(["", "-", "unknown", "n/a", "nan"])
-        ]
-        ch_counts = channel_series.value_counts()
-        cmap = {"FB":"#3b82f6","KOL":"#9b59b6","CRM":"#2ecc71"}
-        if len(ch_counts):
-            fig_ch = go.Figure(go.Bar(
-                x=ch_counts.index, y=ch_counts.values,
-                marker_color=[cmap.get(str(c),"#7c82a0") for c in ch_counts.index],
-                text=ch_counts.values, textposition="outside", textfont=dict(color="#e8eaf0"),
-            ))
-            fig_ch.update_layout(**layout(280, showlegend=False,
-                xaxis=dict(**AXIS, title="Channel"), yaxis=dict(**AXIS, title="Restaurants")))
-            st.plotly_chart(fig_ch, width="stretch")
+        st.markdown("### MoM vs YoY Score - Priority Universe")
+        has_mom_sc = "score_growth_mom" in priority_df.columns
+        has_yoy_sc = "score_growth_yoy" in priority_df.columns
+        if has_mom_sc and has_yoy_sc:
+            pf = priority_df[priority_df["is_in_priority_list"]].copy() if "is_in_priority_list" in priority_df.columns else priority_df.copy()
+            is_seas = pf.get("is_seasonal", pd.Series(False, index=pf.index)).fillna(False)
+            fig_mv = go.Figure()
+            not_seas = pf[~is_seas]
+            if len(not_seas):
+                fig_mv.add_trace(go.Scatter(
+                    x=not_seas["score_growth_mom"], y=not_seas["score_growth_yoy"],
+                    mode="markers", name="Non-seasonal",
+                    marker=dict(color="#2ecc71", size=8, opacity=0.7, line=dict(color="#0f1117", width=1)),
+                    hovertemplate="<b>%{customdata}</b><br>MoM: %{x:.2f} | YoY: %{y:.2f}<extra></extra>",
+                    customdata=not_seas["name"].tolist()))
+            seas_sub = pf[is_seas]
+            if len(seas_sub):
+                fig_mv.add_trace(go.Scatter(
+                    x=seas_sub["score_growth_mom"], y=seas_sub["score_growth_yoy"],
+                    mode="markers", name="\U0001F30A Seasonal",
+                    marker=dict(color="#f0a500", size=10, symbol="diamond", opacity=0.85, line=dict(color="#0f1117", width=1)),
+                    hovertemplate="<b>%{customdata}</b><br>MoM: %{x:.2f} | YoY: %{y:.2f}<extra></extra>",
+                    customdata=seas_sub["name"].tolist()))
+            if "score_growth_mom" in pf.columns and "score_growth_yoy" in pf.columns:
+                fig_mv.add_vline(x=pf["score_growth_mom"].median(), line_dash="dash", line_color="#3b82f6", line_width=1)
+                fig_mv.add_hline(y=pf["score_growth_yoy"].dropna().median(), line_dash="dash", line_color="#f0a500", line_width=1)
+            fig_mv.update_layout(**layout(280, showlegend=True,
+                xaxis=dict(**AXIS, title="MoM Score (0-1)"),
+                yaxis=dict(**AXIS, title="YoY Score (0-1)"),
+                legend=dict(orientation="h", y=1.05, x=0, font_size=10)))
+            st.plotly_chart(fig_mv, width="stretch")
+            st.caption("Top-right = strong on both signals. Bottom-right = strong MoM, weak YoY = \U0001F30A Seasonal. Dashed lines = portfolio medians.")
         else:
-            st.info("No valid channel assignments in the current view.")
+            # Fallback to channel mix if scores not in data
+            channel_series = priority_df["recommended_channel"].dropna().astype(str).str.strip()
+            channel_series = channel_series[~channel_series.str.lower().isin(["", "-", "unknown", "n/a", "nan"])]
+            ch_counts = channel_series.value_counts()
+            cmap = {"FB":"#3b82f6","KOL":"#9b59b6","CRM":"#2ecc71"}
+            if len(ch_counts):
+                fig_ch = go.Figure(go.Bar(
+                    x=ch_counts.index, y=ch_counts.values,
+                    marker_color=[cmap.get(str(c),"#7c82a0") for c in ch_counts.index],
+                    text=ch_counts.values, textposition="outside", textfont=dict(color="#e8eaf0")))
+                fig_ch.update_layout(**layout(280, showlegend=False,
+                    xaxis=dict(**AXIS, title="Channel"), yaxis=dict(**AXIS, title="Restaurants")))
+                st.plotly_chart(fig_ch, width="stretch")
+            else:
+                st.info("Re-run notebooks to see MoM vs YoY score distribution.")
 
     st.markdown("---")
 
-    f1, f2, f3, f4, f5 = st.columns([1, 1, 1, 1, 1.6])
+    f1, f2, f3, f4, f5, f6 = st.columns([1, 1, 1, 1, 1, 1.4])
     with f1:
         t_opts = ["All"] + priority_df["priority_tier"].dropna().unique().tolist()
         t_filt = st.selectbox("Tier", t_opts)
@@ -303,21 +298,23 @@ def render():
         s_opts  = ["All"] + (priority_df["latest_segment"].dropna().unique().tolist() if has_seg else [])
         s_filt  = st.selectbox("Segment", s_opts)
     with f3:
-        channel_opts = priority_df["recommended_channel"].dropna().astype(str).str.strip()
-        channel_opts = channel_opts[
-            ~channel_opts.str.lower().isin(["", "-", "unknown", "n/a", "nan"])
-        ]
-        c_opts = ["All"] + sorted(channel_opts.unique().tolist())
-        c_filt = st.selectbox("Channel", c_opts)
+        sig_filt = st.selectbox("Signal", ["All", "YoY", "MoM"])
     with f4:
-        min_sc = st.slider("Min Score", 0, 100, 0)
+        seas_filt = st.selectbox("Seasonal", ["All", "Seasonal only", "Non-seasonal only"])
     with f5:
+        min_sc = st.slider("Min Score", 0, 100, 0)
+    with f6:
         name_search = st.text_input("Search Restaurant", placeholder="Type restaurant name", key="priority_name_search")
 
     df = priority_df.copy()
     if t_filt != "All": df = df[df["priority_tier"] == t_filt]
     if s_filt != "All" and has_seg: df = df[df["latest_segment"] == s_filt]
-    if c_filt != "All": df = df[df["recommended_channel"] == c_filt]
+    if sig_filt != "All" and "growth_signal_used" in df.columns:
+        df = df[df["growth_signal_used"] == sig_filt]
+    if seas_filt == "Seasonal only" and "is_seasonal" in df.columns:
+        df = df[df["is_seasonal"] == True]
+    if seas_filt == "Non-seasonal only" and "is_seasonal" in df.columns:
+        df = df[df["is_seasonal"] == False]
     if str(name_search).strip():
         df = df[df["name"].str.contains(name_search.strip(), case=False, na=False)]
     df = df[df["priority_score"] >= min_sc].sort_values("priority_score", ascending=False).reset_index(drop=True)
@@ -329,12 +326,20 @@ def render():
 
     top_n = min(25, len(df))
     tc    = df.head(top_n)
+    # Seasonal restaurants get amber bars; others use tier colour
+    _bar_colors = []
+    for _, _row in tc.iterrows():
+        if "is_seasonal" in _row and bool(_row.get("is_seasonal", False)):
+            _bar_colors.append("#f0a500")
+        else:
+            _bar_colors.append(get_tier(_row.get("priority_tier",""))[0])
     fig_rank = go.Figure(go.Bar(
         x=tc["priority_score"], y=tc["name"], orientation="h",
-        marker_color=[get_tier(t)[0] for t in tc["priority_tier"]], marker_opacity=0.85,
+        marker_color=_bar_colors, marker_opacity=0.85,
         text=["%.0f" % s for s in tc["priority_score"]], textposition="inside",
         textfont=dict(color="#fff", size=10),
     ))
+    st.caption("\U0001F7E1 Amber bars = Seasonal flag - strong MoM but weak YoY. Timing-sensitive activation.")
     fig_rank.update_layout(**layout(max(300, top_n*24),
         xaxis=dict(**AXIS, title="Priority Score", range=[0,105]),
         yaxis=dict(**AXIS, autorange="reversed", tickfont=dict(size=10))))
@@ -343,19 +348,6 @@ def render():
 
     st.markdown("---")
     st.markdown("### Full Ranked List")
-
-    # Highlight if the globally selected restaurant appears in this list
-    _sel = st.session_state.get("selected_restaurant")
-    if _sel and _sel in df["name"].values:
-        _sel_score = df[df["name"] == _sel]["priority_score"].iloc[0]
-        _sel_rank  = df[df["name"] == _sel].index[0] + 1
-        st.success(
-            "Currently selected restaurant **%s** appears at rank #%d "
-            "with a priority score of **%.0f / 100**." % (_sel, _sel_rank, _sel_score)
-        )
-    elif _sel:
-        st.warning("Currently selected restaurant **%s** is not in the filtered list." % _sel)
-
 
     for idx, row in df.iterrows():
         rank    = idx + 1
@@ -373,19 +365,19 @@ def render():
         gc      = "#2ecc71" if growth is not None and pd.notna(growth) and growth > 0 else "#e74c3c"
 
         st.markdown(
-                "<div style='background:#ffffff;border:1px solid #e0e0e0;border-left:4px solid {c};border-radius:8px;padding:1.2rem;margin-bottom:1rem;box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>"
+                "<div style='background:#1e2130;border:1px solid #2e3350;border-left:4px solid {c};border-radius:8px;padding:1.2rem;margin-bottom:1rem;box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>"
                 "<div style='display:flex;justify-content:space-between;align-items:flex-start;'>"
-                "<div><span style='font-size:1.2rem;font-weight:700;color:#111827;'>#{r} {n}</span> "
+                "<div><span style='font-size:1.2rem;font-weight:700;color:#e8eaf0;'>#{r} {n}</span> "
                 "<span style='margin-left:8px;font-size:0.75rem;color:{c};border:1px solid {c};padding:2px 8px;border-radius:10px;'>{l}</span> "
                 "<span style='color:#3b82f6;font-size:0.72rem;font-weight:700;padding:2px 8px;"
                 "background:#f3f4f6;border-radius:6px;'>{ch}</span></div>"
                 "<span style='font-size:1.5rem;color:#cc0000;font-weight:700;'>{s:.0f}"
-                "<span style='font-size:0.75rem;color:#6b7280;'>/100</span></span></div>"
-                "<div style='margin-top:0.5rem;font-size:0.79rem;color:#6b7280;display:flex;gap:1.5rem;'>"
-                "<span>Bookings: <b style='color:#111827;'>{b}</b></span>"
+                "<span style='font-size:0.75rem;color:#9ca3c4;'>/100</span></span></div>"
+                "<div style='margin-top:0.5rem;font-size:0.79rem;color:#9ca3c4;display:flex;gap:1.5rem;'>"
+                "<span>Bookings: <b style='color:#e8eaf0;'>{b}</b></span>"
                 "<span>Growth: <b style='color:{gc};'>{g} ({sig})</b></span>"
-                "<span>Campaigns: <b style='color:#111827;'>{nc}</b></span>"
-                "<span>Lift/day: <b style='color:#111827;'>{li}</b></span>"
+                "<span>Campaigns: <b style='color:#e8eaf0;'>{nc}</b></span>"
+                "<span>Lift/day: <b style='color:#e8eaf0;'>{li}</b></span>"
                 "</div></div>".format(
                     c=color, r=rank, n=name, l=label, ch=channel, s=score,
                     b=bookings, g=fmt_pct(growth), sig=signal, gc=gc,
@@ -393,6 +385,23 @@ def render():
                 ),
                 unsafe_allow_html=True
             )
+
+        # MoM / YoY detail row
+        _mom = row.get("booking_growth_mom_rolling")
+        _yoy = row.get("booking_growth_yoy_rolling")
+        if _mom is not None and pd.notna(_mom):
+            _mc1, _mc2 = st.columns(2)
+            _mc1.metric("MoM Growth (3m)", fmt_pct(_mom),
+                        help="Month-over-month 3m rolling average")
+            if _yoy is not None and pd.notna(_yoy):
+                _mc2.metric("YoY Growth (3m)", fmt_pct(_yoy),
+                            help="Year-over-year 3m rolling (>=2 of 3 months valid)")
+            else:
+                _mc2.metric("YoY Growth", "N/A",
+                            help="Insufficient prior-year data or <12 months history")
+        if row.get("is_seasonal", False):
+            st.warning("\U0001F30A **Seasonal pattern** - strong recent MoM but YoY below portfolio median. "
+                       "Activate when timing aligns with seasonal peak for best ROI.")
 
         can_generate = bool(row.get("is_in_priority_list", False))
         if st.button("Generate Strategy for %s" % name, key="strat_%d" % rank, disabled=not can_generate):
@@ -409,3 +418,10 @@ def render():
     if st.session_state.get("_nav_to_strategy"):
         st.session_state["_nav_to_strategy"] = False
         st.info("Go to Strategy Engine in sidebar for: %s" % st.session_state.get("strategy_restaurant",""))
+
+
+
+
+
+
+

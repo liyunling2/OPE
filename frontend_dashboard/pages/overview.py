@@ -23,9 +23,9 @@ from data.loader import (
 CHART_THEME = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(color="#111827", family="DM Sans"),
-    xaxis=dict(gridcolor="#e0e0e0", showline=False, zeroline=False),
-    yaxis=dict(gridcolor="#e0e0e0", showline=False, zeroline=False),
+    font=dict(color="#e8eaf0", family="DM Sans"),
+    xaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
+    yaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
     margin=dict(l=0, r=0, t=30, b=0),
 )
 
@@ -57,40 +57,15 @@ def render():
     bookings_raw_df = load_momentum_raw_bookings()
 
     st.markdown("## Restaurant Explorer")
-    st.markdown("<p style='color:#6b7280; margin-top:-0.5rem;'>Drill into any restaurant's performance, growth trajectory, and momentum segment.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#9ca3c4; margin-top:-0.5rem;'>Drill into any restaurant's performance, growth trajectory, and momentum segment.</p>", unsafe_allow_html=True)
     st.markdown("---")
 
     # ── Filters ───────────────────────────────────────────────────────────────
     col_f1, col_f2, col_f3 = st.columns([2, 1, 1])
 
     all_names = sorted(momentum_df["name"].unique())
-
-    # ── Shared restaurant selection ────────────────────────────────────────────
-    # "selected_restaurant" in session_state is the single source of truth
-    # that all pages read. Changing it here propagates to Momentum, Strategy, etc.
-    DEFAULT_RESTAURANT = "JW Cafe at JW Marriott Hotel Bangkok"
-
-    # Initialise to default on first load if not already set
-    if "selected_restaurant" not in st.session_state:
-        # Try exact match first, then partial, then fall back to index 0
-        if DEFAULT_RESTAURANT in all_names:
-            st.session_state["selected_restaurant"] = DEFAULT_RESTAURANT
-        else:
-            partial = [n for n in all_names if "JW" in n and "Marriott" in n]
-            st.session_state["selected_restaurant"] = partial[0] if partial else all_names[0]
-
-    current = st.session_state["selected_restaurant"]
-    default_idx = all_names.index(current) if current in all_names else 0
-
     with col_f1:
-        selected = st.selectbox(
-            "Select Restaurant",
-            all_names,
-            index=default_idx,
-            key="overview_restaurant_select",
-        )
-        # Write back to shared state so other pages pick it up
-        st.session_state["selected_restaurant"] = selected
+        selected = st.selectbox("Select Restaurant", all_names)
 
     # Segment filter for the summary table at the bottom
     segments_available = sorted(momentum_df["latest_segment"].dropna().unique()) if "latest_segment" in momentum_df.columns else []
@@ -121,10 +96,10 @@ def render():
         cuisine  = latest.get("cuisine", "—")
         st.markdown(f"""
         <div style='margin-bottom: 0.5rem;'>
-            <span style='font-family: "DM Sans", sans-serif; font-size: 1.8rem; font-weight: 700; color: #111827;'>{selected}</span>
+            <span style='font-family: "DM Sans", sans-serif; font-size: 1.8rem; font-weight: 700; color: #e8eaf0;'>{selected}</span>
             &nbsp;&nbsp;{segment_pill(segment)}
         </div>
-        <div style='color: #6b7280; font-size: 0.85rem;'>
+        <div style='color: #9ca3c4; font-size: 0.85rem;'>
             📍 {location} &nbsp;·&nbsp; 🍴 {cuisine}
             &nbsp;·&nbsp; Growth signal: <b style='color:#cc0000;'>{latest.get("growth_signal_used", "—")}</b>
         </div>
@@ -135,9 +110,9 @@ def render():
             tier = p_row.get("priority_tier", "—")
             st.markdown(f"""
             <div style='text-align:right;'>
-                <div style='font-size:0.75rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.08em;'>Priority Score</div>
+                <div style='font-size:0.75rem; color:#9ca3c4; text-transform:uppercase; letter-spacing:0.08em;'>Priority Score</div>
                 <div style='font-family: "DM Sans", sans-serif; font-weight: 700; font-size: 2rem; color: #cc0000;'>{priority_score:.0f}</div>
-                <div style='font-size:0.75rem; color:#6b7280;'>{tier}</div>
+                <div style='font-size:0.75rem; color:#9ca3c4;'>{tier}</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -169,7 +144,7 @@ def render():
     st.markdown("<br>", unsafe_allow_html=True)
 
     # ── Charts ────────────────────────────────────────────────────────────────
-    tab1, tab2, tab3 = st.tabs(["📦 Booking Volume", "💰 Revenue", "📈 Growth Rate"])
+    tab1, tab2, tab3 = st.tabs(["📦 Booking Volume", "💰 Revenue", "📈 MoM vs YoY Growth"])
 
     with tab1:
         fig = go.Figure()
@@ -210,33 +185,89 @@ def render():
         st.plotly_chart(fig2, width="stretch")
 
     with tab3:
-        fig3 = go.Figure()
-        # YoY growth if available
-        if "booking_growth_yoy" in hist.columns:
-            yoy = hist[hist["booking_growth_yoy"].notna()]
-            fig3.add_trace(go.Scatter(
-                x=yoy["year_month"], y=yoy["booking_growth_yoy"],
-                mode="lines+markers",
-                line=dict(color="#f0a500", width=2),
-                name="YoY Growth",
-                hovertemplate="<b>%{x|%b %Y}</b><br>YoY: %{y:.1%}<extra></extra>"
-            ))
-        # rolling growth
-        fig3.add_trace(go.Scatter(
-            x=hist["year_month"], y=hist["booking_growth_rolling"],
-            mode="lines",
-            line=dict(color="#3b82f6", width=2, dash="dot"),
-            name="3m Rolling (blended)",
-            hovertemplate="<b>%{x|%b %Y}</b><br>Rolling: %{y:.1%}<extra></extra>"
-        ))
-        fig3.add_hline(y=0, line_dash="dash", line_color="#7c82a0", line_width=1)
-        fig3.update_layout(
-            **{k: v for k, v in CHART_THEME.items() if k != "yaxis"},
-            height=280,
-            yaxis=dict(**CHART_THEME["yaxis"], tickformat=".0%"),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
+        has_mom = "booking_growth_mom_rolling" in hist.columns
+        has_yoy = (
+            "booking_growth_yoy_rolling" in hist.columns
+            and hist["booking_growth_yoy_rolling"].notna().any()
         )
-        st.plotly_chart(fig3, width="stretch")
+        mom_col = "booking_growth_mom_rolling" if has_mom else "booking_growth_rolling"
+        is_seasonal = bool(latest.get("is_seasonal", False))
+
+        c_mom, c_yoy = st.columns(2)
+
+        # ── MoM panel ────────────────────────────────────────────────────────
+        with c_mom:
+            st.markdown(
+                "<p style='text-align:center;font-size:0.85rem;color:#9ca3c4;margin-bottom:4px;'>"
+                "📅 <b style='color:#3b82f6;'>Month-over-Month</b> — short-term acceleration</p>",
+                unsafe_allow_html=True,
+            )
+            fm = go.Figure()
+            fm.add_trace(go.Scatter(
+                x=hist["year_month"], y=hist[mom_col],
+                mode="lines+markers",
+                line=dict(color="#3b82f6", width=2), marker=dict(size=5),
+                fill="tozeroy", fillcolor="rgba(59,130,246,0.08)", name="MoM 3m avg",
+                hovertemplate="<b>%{x|%b %Y}</b><br>MoM: %{y:.1%}<extra></extra>",
+            ))
+            fm.add_hline(y=0, line_dash="dash", line_color="#7c82a0", line_width=1)
+            fm.update_layout(
+                **{k: v for k, v in CHART_THEME.items() if k != "yaxis"},
+                height=240, showlegend=False,
+                yaxis=dict(**CHART_THEME["yaxis"], tickformat=".0%"),
+            )
+            st.plotly_chart(fm, width="stretch")
+
+        # ── YoY panel ────────────────────────────────────────────────────────
+        with c_yoy:
+            st.markdown(
+                "<p style='text-align:center;font-size:0.85rem;color:#9ca3c4;margin-bottom:4px;'>"
+                "📆 <b style='color:#f0a500;'>Year-over-Year</b> — seasonality-adjusted trend</p>",
+                unsafe_allow_html=True,
+            )
+            fy = go.Figure()
+            if has_yoy:
+                yv = hist[hist["booking_growth_yoy_rolling"].notna()]
+                fy.add_trace(go.Scatter(
+                    x=yv["year_month"], y=yv["booking_growth_yoy_rolling"],
+                    mode="lines+markers",
+                    line=dict(color="#f0a500", width=2), marker=dict(size=5),
+                    fill="tozeroy", fillcolor="rgba(240,165,0,0.08)", name="YoY 3m avg",
+                    hovertemplate="<b>%{x|%b %Y}</b><br>YoY: %{y:.1%}<extra></extra>",
+                ))
+                fy.add_hline(y=0, line_dash="dash", line_color="#7c82a0", line_width=1)
+            else:
+                fy.add_annotation(
+                    text="YoY not available — <12 months of history",
+                    x=0.5, y=0.5, xref="paper", yref="paper",
+                    showarrow=False, font=dict(color="#9ca3c4", size=13),
+                )
+            fy.update_layout(
+                **{k: v for k, v in CHART_THEME.items() if k != "yaxis"},
+                height=240, showlegend=False,
+                yaxis=dict(**CHART_THEME["yaxis"], tickformat=".0%"),
+            )
+            st.plotly_chart(fy, width="stretch")
+
+        # ── Signal callout ────────────────────────────────────────────────────
+        if is_seasonal:
+            st.warning(
+                "🌊 **Seasonal pattern detected** — strong recent MoM but YoY is below portfolio "
+                "median. Growth may reflect a seasonal peak, not sustained momentum. Consider "
+                "timing activation to align with this restaurant's seasonal peak."
+            )
+        elif has_yoy:
+            last_mom = float(hist[mom_col].iloc[-1]) if len(hist) else 0
+            last_yoy = float(hist["booking_growth_yoy_rolling"].dropna().iloc[-1]) if has_yoy else 0
+            if last_mom > 0 and last_yoy > 0:
+                st.success(
+                    "✅ **Both signals positive** — MoM and YoY growth are both positive. "
+                    "Strong candidate for marketing activation."
+                )
+            elif last_yoy < 0:
+                st.info(
+                    "ℹ️ YoY growth is negative despite recent MoM gains — monitor before activating."
+                )
 
     st.markdown("---")
 
@@ -280,8 +311,8 @@ def render():
 
     display_cols = [c for c in [
         "name", "latest_segment", "monthly_bookings", "monthly_revenue",
-        "avg_revenue_per_booking", "avg_guests", "booking_growth_rolling",
-        "growth_signal_used", "priority_score", "recommended_channel"
+        "avg_revenue_per_booking", "avg_guests", "booking_growth_mom_rolling", "booking_growth_yoy_rolling",
+        "growth_signal_used", "is_seasonal", "priority_score", "recommended_channel"
     ] if c in latest_all.columns]
 
     display_df = latest_all[display_cols].copy()
@@ -292,7 +323,7 @@ def render():
     for col in ["monthly_revenue", "avg_revenue_per_booking"]:
         if col in display_df.columns:
             display_df[col] = display_df[col].apply(fmt_thb)
-    for col in ["booking_growth_rolling"]:
+    for col in ["booking_growth_rolling", "booking_growth_mom_rolling", "booking_growth_yoy_rolling"]:
         if col in display_df.columns:
             display_df[col] = display_df[col].apply(lambda x: f"{x:.1%}" if pd.notna(x) else "—")
     if "priority_score" in display_df.columns:

@@ -26,9 +26,9 @@ from data.loader import (
 CHART_THEME = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(color="#111827", family="DM Sans"),
-    xaxis=dict(gridcolor="#e0e0e0", showline=False, zeroline=False),
-    yaxis=dict(gridcolor="#e0e0e0", showline=False, zeroline=False),
+    font=dict(color="#e8eaf0", family="DM Sans"),
+    xaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
+    yaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
     margin=dict(l=0, r=0, t=30, b=0),
 )
 BASE_LAYOUT = {k: v for k, v in CHART_THEME.items() if k not in ("xaxis", "yaxis")}
@@ -206,7 +206,7 @@ def render():
 
     st.markdown("## Clustering Explorer")
     st.markdown(
-        "<p style='color:#6b7280; margin-top:-0.5rem;'>"
+        "<p style='color:#9ca3c4; margin-top:-0.5rem;'>"
         "Explore restaurant clusters, inspect text themes, and benchmark strategy effectiveness by cluster."
         "</p>",
         unsafe_allow_html=True,
