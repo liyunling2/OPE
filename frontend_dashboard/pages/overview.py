@@ -139,7 +139,7 @@ def render():
     m3.metric("Avg Rev / Booking",     fmt_thb(avg_rev),   "")
     m4.metric("Avg Guests / Booking",  f"{guests:.1f}",    "")
     m5.metric("Active Days",           f"{act_days}",      "")
-    m6.metric("Rolling Growth (3m)",   f"{bk_growth:.1%}", "YoY" if latest.get("growth_signal_used") == "YoY" else "MoM")
+    m6.metric("Rolling Growth",   f"{bk_growth:.1%}", "YoY" if latest.get("growth_signal_used") == "YoY" else "MoM")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
