@@ -479,36 +479,36 @@ def load_cluster_assignments() -> pd.DataFrame:
     seg_ref = load_momentum_segments()[["name_norm", "latest_segment"]].drop_duplicates("name_norm")
     momentum_ref = momentum_ref.merge(seg_ref, on="name_norm", how="left")
 
-    if "restaurant_id" in df.columns and "restaurant_id" in momentum_ref.columns and df["restaurant_id"].notna().any():
-        existing_ids = set(pd.to_numeric(df["restaurant_id"], errors="coerce").dropna().astype(int))
-        missing_mask = ~pd.to_numeric(momentum_ref["restaurant_id"], errors="coerce").fillna(-1).astype(int).isin(existing_ids)
-        missing = momentum_ref[missing_mask].copy()
-    else:
-        missing = momentum_ref[~momentum_ref["name_norm"].isin(set(df["name_norm"]))].copy()
+    # if "restaurant_id" in df.columns and "restaurant_id" in momentum_ref.columns and df["restaurant_id"].notna().any():
+    #     existing_ids = set(pd.to_numeric(df["restaurant_id"], errors="coerce").dropna().astype(int))
+    #     missing_mask = ~pd.to_numeric(momentum_ref["restaurant_id"], errors="coerce").fillna(-1).astype(int).isin(existing_ids)
+    #     missing = momentum_ref[missing_mask].copy()
+    # else:
+    #     missing = momentum_ref[~momentum_ref["name_norm"].isin(set(df["name_norm"]))].copy()
 
-    if len(missing):
-        x_series = pd.to_numeric(df.get("x"), errors="coerce")
-        y_series = pd.to_numeric(df.get("y"), errors="coerce")
-        anchor_x = float(x_series.min()) - 1.6 if x_series.notna().any() else -1.6
-        anchor_y = float(y_series.min()) - 1.6 if y_series.notna().any() else -1.6
+    # if len(missing):
+    #     x_series = pd.to_numeric(df.get("x"), errors="coerce")
+    #     y_series = pd.to_numeric(df.get("y"), errors="coerce")
+    #     anchor_x = float(x_series.min()) - 1.6 if x_series.notna().any() else -1.6
+    #     anchor_y = float(y_series.min()) - 1.6 if y_series.notna().any() else -1.6
 
-        n_missing = len(missing)
-        angles = np.linspace(0, 2 * np.pi, n_missing, endpoint=False)
-        radius = np.linspace(0.08, 0.28, n_missing)
+    #     n_missing = len(missing)
+    #     angles = np.linspace(0, 2 * np.pi, n_missing, endpoint=False)
+    #     radius = np.linspace(0.08, 0.28, n_missing)
 
-        missing["cluster_id"] = -1
-        missing["cluster_label"] = "Unclustered - no clustering text"
-        missing["cluster_confidence"] = 0.0
-        missing["x"] = anchor_x + radius * np.cos(angles)
-        missing["y"] = anchor_y + radius * np.sin(angles)
+    #     missing["cluster_id"] = -1
+    #     missing["cluster_label"] = "Unclustered - no clustering text"
+    #     missing["cluster_confidence"] = 0.0
+    #     missing["x"] = anchor_x + radius * np.cos(angles)
+    #     missing["y"] = anchor_y + radius * np.sin(angles)
 
-        if "latest_segment" not in missing.columns:
-            missing["latest_segment"] = np.nan
+    #     if "latest_segment" not in missing.columns:
+    #         missing["latest_segment"] = np.nan
 
-        common_cols = sorted(set(df.columns).union(set(missing.columns)))
-        df = df.reindex(columns=common_cols)
-        missing = missing.reindex(columns=common_cols)
-        df = pd.concat([df, missing], ignore_index=True)
+    #     common_cols = sorted(set(df.columns).union(set(missing.columns)))
+    #     df = df.reindex(columns=common_cols)
+    #     missing = missing.reindex(columns=common_cols)
+    #     df = pd.concat([df, missing], ignore_index=True)
 
     df["cluster_id"] = pd.to_numeric(df["cluster_id"], errors="coerce").fillna(-1).astype(int)
     df["cluster_label"] = df["cluster_label"].fillna(df["cluster_id"].apply(lambda v: f"Cluster {v}"))
