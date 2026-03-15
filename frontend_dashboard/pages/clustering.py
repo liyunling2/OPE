@@ -219,7 +219,7 @@ def render():
 
     assignments = assignments.copy()
     assignments["cluster_id"] = pd.to_numeric(assignments["cluster_id"], errors="coerce").astype(int)
-    assignments["name_norm"] = assignments["name"].apply(_normalize_name)
+    assignments["name"] = assignments["name"].apply(_normalize_name)
 
     all_clusters_option = "All Clusters"
     cluster_rows = assignments[["cluster_id", "cluster_label"]].drop_duplicates().sort_values(["cluster_id", "cluster_label"])
@@ -248,7 +248,7 @@ def render():
     if "cluster_active_restaurant" not in st.session_state:
         st.session_state["cluster_active_restaurant"] = cluster_df.iloc[0]["name"] if len(cluster_df) else assignments.iloc[0]["name"]
 
-    if _normalize_name(st.session_state["cluster_active_restaurant"]) not in set(cluster_df["name_norm"]):
+    if _normalize_name(st.session_state["cluster_active_restaurant"]) not in set(cluster_df["name"]):
         st.session_state["cluster_active_restaurant"] = cluster_df.iloc[0]["name"] if len(cluster_df) else assignments.iloc[0]["name"]
 
     control_a, control_b, control_c = st.columns([1.5, 2.5, 1])
@@ -345,7 +345,7 @@ def render():
             ),
         )
 
-        selected_row = scatter_df[scatter_df["name_norm"] == active_rest_norm]
+        selected_row = scatter_df[scatter_df["name"] == active_rest_norm]
         if len(selected_row):
             fig.add_trace(
                 go.Scatter(
@@ -355,7 +355,7 @@ def render():
                     text=["Selected"],
                     textposition="top center",
                     name="Selected Restaurant",
-                    marker=dict(size=20, color="#cc0000", symbol="diamond-open", line=dict(width=2, color="#cc0000")),
+                    marker=dict(size=30, color="#cc0000", symbol="diamond", line=dict(width=2, color="#cc0000")),
                     customdata=np.stack(
                         [
                             selected_row["name"].to_numpy(),
@@ -454,7 +454,7 @@ def render():
     active_rest_norm = _normalize_name(active_restaurant)
 
     selected_cluster_df = _filter_by_selected_cluster(assignments).copy()
-    selected_restaurant_row = assignments[assignments["name_norm"] == active_rest_norm].head(1)
+    selected_restaurant_row = assignments[assignments["name"] == active_rest_norm].head(1)
 
     section_a, section_b = st.columns(2)
 
@@ -477,7 +477,7 @@ def render():
                 cluster_text = text_corpus[text_corpus["cluster_id"] == active_cluster]["clean_text"]
             cluster_keywords = _terms_from_texts(cluster_text, top_n=40)
 
-        rest_text_df = text_corpus[text_corpus["name_norm"] == active_rest_norm]
+        rest_text_df = text_corpus[text_corpus["name"] == active_rest_norm]
         restaurant_terms = _terms_from_texts(rest_text_df["clean_text"], top_n=30)
         highlight_terms = set(restaurant_terms["keyword"].tolist())
 
@@ -503,7 +503,7 @@ def render():
 
     st.markdown("### Raw Text Records")
     search_text = st.text_input("Filter selected restaurant text", value="", key="cluster_text_filter")
-    rest_text_df = text_corpus[text_corpus["name_norm"] == active_rest_norm].copy()
+    rest_text_df = text_corpus[text_corpus["name"] == active_rest_norm].copy()
 
     if search_text.strip():
         mask = rest_text_df["raw_text"].fillna("").str.contains(search_text.strip(), case=False, regex=False)
