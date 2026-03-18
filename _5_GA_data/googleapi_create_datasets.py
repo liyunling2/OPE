@@ -143,7 +143,7 @@ def createDatasets():
         client = BetaAnalyticsDataClient.from_service_account_info(key_dict)
         print("=" * 40)
 
-        # session source 
+        # # session source 
         run_dataset(
             client,
             "session_source",
@@ -182,6 +182,7 @@ def createDatasets():
             client,
             "campaign_impact",
             dimensions=[
+                "yearMonth",
                 "itemId",
                 "itemName",
             ],
@@ -193,6 +194,21 @@ def createDatasets():
             ],
             filename="campaign_impact",
         )
+
+        ### test
+        # run_dataset(
+        #     client,
+        #     "campaign_rest",
+        #     dimensions=[
+        #         "itemId",
+        #         "itemName",
+        #         "campaignId",
+        #         "campaignName",
+        #     ],
+        #     metrics=[
+        #     ],
+        #     filename="campaign_rest",
+        # )
 
 
     # time series
