@@ -13,15 +13,19 @@ session_source = pd.read_parquet(BASE_PATH + "session_source.parquet")
 SCHEMA = {
     'session_source': {
         'datetime': ['yearMonth'],
-        'category': ['sessionSource'],
+        'category': [
+            'sessionDefaultChannelGroup',  
+            'sessionSource',               
+        ],
         'float': [
             'sessions',
-            'sessionKeyEventRate:add_to_cart',
-            'sessionKeyEventRate:add_to_wishlist',
-            'sessionKeyEventRate:begin_checkout',
-            'sessionKeyEventRate:booking',
-            'sessionKeyEventRate:ecommerce_purchase',
-            'sessionKeyEventRate:in_app_purchase',
+            'engagedSessions',
+            'bounceRate',
+            'keyEvents:booking',
+            'keyEvents:begin_checkout',
+            'keyEvents:ecommerce_purchase',
+            'purchaseRevenue',
+            'transactions',
         ],
     },
     'campaigns_outreach': {
@@ -70,7 +74,7 @@ SCHEMA = {
 # for each col to row, drop ay values that match
 FILTER_RULES = {
     'session_source': [
-        ('sessionSource', ['(data not available)']),
+        ('sessionSource', ['(data not available)','(not set)','(other)']),
     ],
     'campaigns_outreach': [
         ('campaignId',   ['(not set)']),

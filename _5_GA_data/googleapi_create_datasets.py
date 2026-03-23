@@ -108,7 +108,7 @@ def run_dataset(client, dataset_name, dimensions, metrics, filename):
             offset += page_size
 
         df = pd.DataFrame(all_rows)
-        output_path = f"./data/marketing/googleAPI/{filename}.parquet"
+        output_path = f"../data/marketing/googleAPI/{filename}.parquet"
         df.to_parquet(output_path, index=False, engine="pyarrow")
         
         # output_path = f"./data/marketing/googleAPI/{filename}.csv"
@@ -150,15 +150,19 @@ def createDatasets():
             dimensions=[
                 "yearMonth",
                 "sessionSource",
+                "sessionDefaultChannelGroup"
             ],
             metrics=[
                 "sessions",
-                "sessionKeyEventRate:add_to_cart",
-                "sessionKeyEventRate:add_to_wishlist",
-                "sessionKeyEventRate:begin_checkout",
-                "sessionKeyEventRate:booking",
-                "sessionKeyEventRate:ecommerce_purchase",
-                "sessionKeyEventRate:in_app_purchase",
+                # QUALITY — what happened in those sessions
+                'engagedSessions',      
+                'bounceRate',           
+                # OUTCOMES — what those sessions resulted in 
+                'keyEvents:booking',          
+                'keyEvents:begin_checkout',   
+                'keyEvents:ecommerce_purchase',
+                'purchaseRevenue',            
+                'transactions'
             ],
             filename="session_source",
         )
@@ -195,7 +199,7 @@ def createDatasets():
             filename="campaign_impact",
         )
 
-        ### test
+        ### not allowed
         # run_dataset(
         #     client,
         #     "campaign_rest",
