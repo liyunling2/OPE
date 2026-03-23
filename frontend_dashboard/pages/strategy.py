@@ -101,7 +101,7 @@ def build_grounded_brief(row: dict, hist: pd.DataFrame, recs: pd.DataFrame) -> s
     lines.append(
         "- **Latest:** {bk:,} bookings, {rev}  |  MoM 3m: {mom}  |  YoY 3m: {yoy}  |  Signal: {sig}\n- **Recent trend:** {trend}".format(
             bk=bookings_val,
-            rev=fmt_thb(pd.to_numeric(row.get("monthly_revenue"), errors="coerce")),
+            rev=fmt_thb(pd.to_numeric(row.get("monthly_gmv"), errors="coerce")),
             mom=fmt_pct(mom_gr),
             yoy=fmt_pct(yoy_gr),
             sig=signal_used,
@@ -287,7 +287,7 @@ def render():
         c1,c2,c3,c4,c5,c6,c7 = st.columns(7)
         lat = hist.sort_values("year_month").iloc[-1]
         c1.metric("Bookings",   "%d" % int(lat.get("monthly_bookings", 0)))
-        c2.metric("Revenue",    fmt_thb(lat.get("monthly_revenue")))
+        c2.metric("Revenue",    fmt_thb(lat.get("monthly_gmv")))
         c3.metric("MoM Growth", fmt_pct(lat.get("booking_growth_mom_rolling",
                                                   lat.get("booking_growth_rolling"))))
         c4.metric("YoY Growth", fmt_pct(lat.get("booking_growth_yoy_rolling",

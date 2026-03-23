@@ -75,7 +75,7 @@ def render():
             ["All"] + (list(SEGMENT_COLORS.keys()) if not segments_available else segments_available)
         )
     with col_f3:
-        sort_by = st.selectbox("Sort table by", ["monthly_bookings", "monthly_revenue", "score_growth", "score_perf"])
+        sort_by = st.selectbox("Sort table by", ["monthly_bookings", "monthly_gmv", "score_growth", "score_perf"])
 
     st.markdown("---")
 
@@ -121,8 +121,8 @@ def render():
     # ── KPI metrics ───────────────────────────────────────────────────────────
     m1, m2, m3, m4, m5, m6 = st.columns(6)
     bk     = int(latest.get("monthly_bookings", 0))
-    rev    = latest.get("monthly_revenue", 0)
-    avg_rev = latest.get("avg_revenue_per_booking", 0)
+    rev    = latest.get("monthly_gmv", 0)
+    avg_rev = latest.get("avg_gmv_per_booking", 0)
     guests  = latest.get("avg_guests", 0)
     act_days = int(latest.get("active_days", 0))
     bk_growth = latest.get("booking_growth_rolling", 0)
@@ -174,7 +174,7 @@ def render():
     with tab2:
         fig2 = go.Figure()
         fig2.add_trace(go.Scatter(
-            x=hist["year_month"], y=hist["monthly_revenue"],
+            x=hist["year_month"], y=hist["monthly_gmv"],
             fill="tozeroy",
             line=dict(color="#2ecc71", width=2),
             fillcolor="rgba(46,204,113,0.12)",
@@ -310,8 +310,8 @@ def render():
         latest_all["latest_segment"] = latest_all["latest_segment"].fillna("Unknown")
 
     display_cols = [c for c in [
-        "name", "latest_segment", "monthly_bookings", "monthly_revenue",
-        "avg_revenue_per_booking", "avg_guests", "booking_growth_mom_rolling", "booking_growth_yoy_rolling",
+        "name", "latest_segment", "monthly_bookings", "monthly_gmv",
+        "avg_gmv_per_booking", "avg_guests", "booking_growth_mom_rolling", "booking_growth_yoy_rolling",
         "growth_signal_used", "is_seasonal", "priority_score", "recommended_channel"
     ] if c in latest_all.columns]
 
@@ -320,7 +320,7 @@ def render():
         display_df = display_df.sort_values(sort_by, ascending=False)
 
     # Format
-    for col in ["monthly_revenue", "avg_revenue_per_booking"]:
+    for col in ["monthly_gmv", "avg_gmv_per_booking"]:
         if col in display_df.columns:
             display_df[col] = display_df[col].apply(fmt_thb)
     for col in ["booking_growth_rolling", "booking_growth_mom_rolling", "booking_growth_yoy_rolling"]:

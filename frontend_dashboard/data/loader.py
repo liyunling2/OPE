@@ -22,8 +22,8 @@ MOMENTUM_PATH = BASE_DIR / "_2_feature_engineering+momentum" / "start" / "restau
 MOMENTUM_LABELS_PATH = BASE_DIR / "_2_feature_engineering+momentum" / "start" / "priority_latest_momentum_labels.parquet"
 MARKETING_PATH = BASE_DIR / "_3_marketing" / "activity_performance_with_roi.csv"
 PRIORITY_PATH = BASE_DIR / "_4_final_outputs" / "priority_list.csv"
-MOMENTUM_VALID_BOOKINGS_PATH = BASE_DIR / "_2_feature_engineering+momentum" / "start" / "valid_bookings.parquet"
-MOMENTUM_VALID_BOOKINGS_ENRICHED_PATH = BASE_DIR / "_2_feature_engineering+momentum" / "start" / "valid_bookings_with_currency_and_google_restaurants_without_duplicates.parquet"
+MOMENTUM_VALID_BOOKINGS_PATH = BASE_DIR / "_2_feature_engineering+momentum" / "start" / "bookings_cleaned.parquet"
+MOMENTUM_VALID_BOOKINGS_ENRICHED_PATH = BASE_DIR / "_2_feature_engineering+momentum" / "start" / "bookings_cleaned.parquet"
 MOMENTUM_EXPORT_DIR = Path(__file__).resolve().parent / "momentum"
 MOMENTUM_BOOKINGS_EXPORT_PATH = MOMENTUM_EXPORT_DIR / "restaurant_bookings_history.parquet"
 

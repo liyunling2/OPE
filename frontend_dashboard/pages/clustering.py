@@ -311,7 +311,7 @@ def render():
     metric_a, metric_b, metric_c, metric_d = st.columns(4)
     metric_a.metric("Restaurants in Scope", f"{len(cluster_df):,}")
     metric_b.metric("Total Scope Bookings", f"{cluster_df['monthly_bookings'].fillna(0).sum():,.0f}")
-    metric_c.metric("Avg Scope Revenue", _fmt_thb(cluster_df["monthly_revenue"].mean()))
+    metric_c.metric("Avg Scope Revenue", _fmt_thb(cluster_df["monthly_gmv"].mean()))
     metric_d.metric("Known Momentum Segment", f"{cluster_df['latest_segment'].notna().sum():,}")
 
     st.markdown("<br>", unsafe_allow_html=True)

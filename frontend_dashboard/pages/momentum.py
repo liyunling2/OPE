@@ -103,7 +103,7 @@ def render():
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Total Active Restaurants", f"{latest_all['name'].nunique():,}")
     k2.metric("Total Monthly Bookings", f"{latest_all['monthly_bookings'].sum():,.0f}")
-    k3.metric("Total Monthly Revenue", f"THB {latest_all['monthly_revenue'].sum()/1e6:.1f}M")
+    k3.metric("Total Monthly Revenue", f"THB {latest_all['monthly_gmv'].sum()/1e6:.1f}M")
 
     if has_segments:
         rising = (latest_all[seg_col] == "Rising Stars").sum()
@@ -407,7 +407,7 @@ def render():
         "momentum_segment",
         "location",
         "monthly_bookings",
-        "monthly_revenue",
+        "monthly_gmv",
         "booking_growth_rolling",
         "score_perf",
         "score_growth",
@@ -419,8 +419,8 @@ def render():
         full_display["booking_growth_rolling"] = full_display["booking_growth_rolling"].apply(
             lambda x: f"{x:.1%}" if pd.notna(x) else "-"
         )
-    if "monthly_revenue" in full_display.columns:
-        full_display["monthly_revenue"] = full_display["monthly_revenue"].apply(
+    if "monthly_gmv" in full_display.columns:
+        full_display["monthly_gmv"] = full_display["monthly_gmv"].apply(
             lambda x: f"THB {x:,.0f}" if pd.notna(x) else "-"
         )
     full_display = full_display.rename(
@@ -430,7 +430,7 @@ def render():
             "momentum_segment": "Momentum Segment",
             "location": "Location",
             "monthly_bookings": "Monthly Bookings",
-            "monthly_revenue": "Monthly Revenue",
+            "monthly_gmv": "Monthly Revenue",
             "booking_growth_rolling": "Growth (3m)",
             "score_perf": "Performance Score",
             "score_growth": "Growth Score",
