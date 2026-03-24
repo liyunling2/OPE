@@ -17,20 +17,20 @@ def layout(height=300, **kwargs):
     base = dict(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#e8eaf0", family="DM Sans"), # Switched to dark text
+        font=dict(color="#e8eaf0", family="DM Sans"),
         margin=dict(l=0, r=0, t=30, b=0),
         height=height,
     )
     base.update(kwargs)
     return base
 
-AXIS = dict(gridcolor="#2e3350", showline=False, zeroline=False) # Switched to light grid
+AXIS = dict(gridcolor="#2e3350", showline=False, zeroline=False)
 
 
 def fmt_thb(val):
     if pd.isna(val): return "-"
-    if val >= 1_000_000: return "%.1fM THB" % (val/1_000_000)
-    if val >= 1_000:     return "%.0fK THB" % (val/1_000)
+    if val >= 1_000_000: return "%.1fM THB" % (val / 1_000_000)
+    if val >= 1_000:     return "%.0fK THB" % (val / 1_000)
     return "%.0f THB" % val
 
 def fmt_pct(val):
@@ -43,6 +43,22 @@ def get_tier_color(tier):
     if "untapped" in t: return "#e67e22"
     if "review"   in t: return "#f1c40f"
     return "#7c82a0"
+
+
+def clean_tier_label(tier: str) -> str:
+    """Strip emoji characters and mojibake prefixes from tier label strings.
+    priority_list.csv may contain emoji-prefixed tiers (e.g. '🔴 Activate...')
+    which render as mojibake (ðŸ"´) when the CSV is written/read with mismatched
+    encoding on Windows. We strip everything up to and including the first
+    space-preceded word boundary so only the readable text remains.
+    """
+    import re
+    s = str(tier).strip()
+    # Remove any leading non-ASCII characters and surrounding whitespace
+    s = re.sub(r'^[^\x00-\x7F\s]+\s*', '', s)
+    # Also catch common mojibake prefixes like ðŸ"´, ðŸŸ , ðŸŸ¡
+    s = re.sub(r'^[Ã°Å¸â€œÂ´\s\x80-\xff]+\s*', '', s)
+    return s.strip()
 
 def _playbook_actions(strategy_name: str) -> str:
     text = str(strategy_name).lower()
@@ -96,8 +112,8 @@ def build_grounded_brief(row: dict, hist: pd.DataFrame, recs: pd.DataFrame) -> s
                                      row.get("booking_growth_rolling")), errors="coerce")
     yoy_gr = pd.to_numeric(row.get("booking_growth_yoy_rolling",
                                      row.get("booking_growth_yoy")), errors="coerce")
-    signal_used = row.get("growth_signal_used", "–")
-    is_seasonal  = bool(row.get("is_seasonal", False))
+    signal_used = row.get("growth_signal_used", "-")
+    is_seasonal = bool(row.get("is_seasonal", False))
     lines.append(
         "- **Latest:** {bk:,} bookings, {rev}  |  MoM 3m: {mom}  |  YoY 3m: {yoy}  |  Signal: {sig}\n- **Recent trend:** {trend}".format(
             bk=bookings_val,
@@ -110,7 +126,7 @@ def build_grounded_brief(row: dict, hist: pd.DataFrame, recs: pd.DataFrame) -> s
     )
     if is_seasonal:
         lines.append(
-            "- ⚠️ **Seasonal flag** — strong MoM but YoY below portfolio median. "
+            "- **Seasonal flag** — strong MoM but YoY below portfolio median. "
             "Activate at seasonal peak for best ROI."
         )
 
@@ -218,6 +234,7 @@ def call_claude(prompt: str) -> str:
     data = r.json()
     return "".join(block.get("text", "") for block in data.get("content", []) if isinstance(block, dict))
 
+
 def render():
     priority_df = load_priority()
     momentum_df = load_momentum()
@@ -225,7 +242,8 @@ def render():
     st.markdown("## Strategy Engine")
     st.markdown(
         "<p style='color:#9ca3c4;margin-top:-0.5rem;'>"
-        "Data-first recommendations are ranked by observed campaign outcomes, with fallback from cluster to segment to global evidence."
+        "Data-first recommendations are ranked by observed campaign outcomes, "
+        "with fallback from cluster to segment to global evidence."
         "</p>",
         unsafe_allow_html=True,
     )
@@ -241,50 +259,60 @@ def render():
 
     col_sel, col_cfg, col_info = st.columns([2, 1.2, 2.8])
     with col_sel:
-        selected = st.selectbox("Restaurant", all_names, index=default_idx,
-                                format_func=lambda n: "#%d  %s" % (all_names.index(n)+1, n))
+        selected = st.selectbox(
+            "Restaurant", all_names, index=default_idx,
+            format_func=lambda n: "#%d  %s" % (all_names.index(n) + 1, n),
+        )
         st.session_state["strategy_restaurant"] = selected
 
     with col_cfg:
         min_sample_size = st.number_input("Min sample", min_value=1, max_value=20, value=3, step=1)
         top_n = st.slider("Top strategies", min_value=1, max_value=6, value=3, step=1)
 
-    row  = get_restaurant_priority_row(priority_df, selected)
-    hist = get_restaurant_history(momentum_df, selected)
-    strategy_recs = recommend_strategies_for_restaurant(selected, top_n=int(top_n), min_sample_size=int(min_sample_size))
+    row           = get_restaurant_priority_row(priority_df, selected)
+    hist          = get_restaurant_history(momentum_df, selected)
+    strategy_recs = recommend_strategies_for_restaurant(
+        selected, top_n=int(top_n), min_sample_size=int(min_sample_size)
+    )
 
-    tier_color = get_tier_color(row.get("priority_tier","-"))
+    tier_color = get_tier_color(row.get("priority_tier", "-"))
     score      = row.get("priority_score", 0)
 
     with col_info:
-            st.markdown(
-                "<div style='background:#1e2130;border:1px solid #2e3350;"
-                "border-left:4px solid {c};border-radius:8px;padding:1rem 1.4rem;box-shadow:0 1px 2px rgba(0,0,0,0.05);'>"
-                "<div style='display:flex;justify-content:space-between;align-items:center;'>"
-                "<div><div style='font-size:1.3rem;color:#111827;font-weight:700;'>{n}</div>"
-                "<div style='font-size:0.8rem;color:#9ca3c4;margin-top:4px;'>{tier}</div>"
-                "<div style='font-size:0.75rem;color:#9ca3c4;margin-top:2px;'>Segment: {seg}</div></div>"
-                "<div style='text-align:right;'><div style='font-size:1.8rem;color:#cc0000;font-weight:700;'>{s:.0f}</div>"
-                "<div style='font-size:0.7rem;color:#9ca3c4;'>SCORE</div></div>"
-                "</div></div>".format(
-                    c=tier_color,
-                    n=selected,
-                    tier=row.get("priority_tier","-"),
-                    seg=row.get("latest_segment", "Unknown"),
-                    s=score
-                ),
-                unsafe_allow_html=True
-            )
+        st.markdown(
+            "<div style='background:#1e2130;border:1px solid #2e3350;"
+            "border-left:4px solid {c};border-radius:8px;padding:1rem 1.4rem;"
+            "box-shadow:0 1px 2px rgba(0,0,0,0.05);'>"
+            "<div style='display:flex;justify-content:space-between;align-items:center;'>"
+            "<div>"
+            "<div style='font-size:1.3rem;color:#e8eaf0;font-weight:700;'>{n}</div>"
+            "<div style='font-size:0.8rem;color:#9ca3c4;margin-top:4px;'>{tier}</div>"
+            "<div style='font-size:0.75rem;color:#9ca3c4;margin-top:2px;'>Segment: {seg}</div>"
+            "</div>"
+            "<div style='text-align:right;'>"
+            "<div style='font-size:1.8rem;color:#cc0000;font-weight:700;'>{s:.0f}</div>"
+            "<div style='font-size:0.7rem;color:#9ca3c4;'>SCORE</div>"
+            "</div>"
+            "</div></div>".format(
+                c=tier_color,
+                n=selected,
+                tier=clean_tier_label(row.get("priority_tier", "-")),
+                seg=row.get("latest_segment", "Unknown"),
+                s=score,
+            ),
+            unsafe_allow_html=True,
+        )
 
+    # ── Seasonal warning — plain st.warning, no HTML, no emoji escape issues ──
     is_seasonal_flag = bool(row.get("is_seasonal", False))
     if is_seasonal_flag:
         st.warning(
-            "🌊 **Seasonal pattern** — strong recent MoM but YoY is below portfolio median. "
+            "Seasonal pattern detected — strong recent MoM but YoY is below portfolio median. "
             "Consider timing activation to align with the seasonal peak."
         )
 
     if len(hist):
-        c1,c2,c3,c4,c5,c6,c7 = st.columns(7)
+        c1, c2, c3, c4, c5, c6, c7 = st.columns(7)
         lat = hist.sort_values("year_month").iloc[-1]
         c1.metric("Bookings",   "%d" % int(lat.get("monthly_bookings", 0)))
         c2.metric("Revenue",    fmt_thb(lat.get("monthly_gmv")))
@@ -292,12 +320,12 @@ def render():
                                                   lat.get("booking_growth_rolling"))))
         c4.metric("YoY Growth", fmt_pct(lat.get("booking_growth_yoy_rolling",
                                                   lat.get("booking_growth_yoy"))))
-        c5.metric("Signal",     str(row.get("growth_signal_used","–")))
-        c6.metric("Campaigns",  "%d" % (int(row.get("n_campaigns",0)) if pd.notna(row.get("n_campaigns")) else 0))
+        c5.metric("Signal",     str(row.get("growth_signal_used", "-")))
+        c6.metric("Campaigns",  "%d" % (int(row.get("n_campaigns", 0)) if pd.notna(row.get("n_campaigns")) else 0))
         c7.metric("Strategies", "%d ranked" % len(strategy_recs))
 
     st.markdown("---")
-    chart_col, strat_col = st.columns([1.05,0.95])
+    chart_col, strat_col = st.columns([1.05, 0.95])
 
     with chart_col:
         st.markdown("### Booking Trend + Growth Signals")
@@ -309,14 +337,13 @@ def render():
                 marker_color=tier_color, marker_opacity=0.7, name="Bookings",
                 hovertemplate="<b>%{x|%b %Y}</b><br>%{y:,} bookings<extra></extra>",
             ))
-            # MoM rolling on secondary axis
             mom_col = "booking_growth_mom_rolling" if "booking_growth_mom_rolling" in hs.columns else None
             if mom_col:
                 fig.add_trace(go.Scatter(
                     x=hs["year_month"], y=hs[mom_col], mode="lines", name="MoM 3m avg",
                     line=dict(color="#3b82f6", width=2), yaxis="y2",
-                    hovertemplate="MoM: %{y:.1%}<extra></extra>"))
-            # YoY rolling on secondary axis
+                    hovertemplate="MoM: %{y:.1%}<extra></extra>",
+                ))
             if "booking_growth_yoy_rolling" in hs.columns:
                 yv = hs[hs["booking_growth_yoy_rolling"].notna()]
                 if len(yv):
@@ -324,7 +351,8 @@ def render():
                         x=yv["year_month"], y=yv["booking_growth_yoy_rolling"],
                         mode="lines", name="YoY 3m avg",
                         line=dict(color="#f0a500", width=2, dash="dot"), yaxis="y2",
-                        hovertemplate="YoY: %{y:.1%}<extra></extra>"))
+                        hovertemplate="YoY: %{y:.1%}<extra></extra>",
+                    ))
             elif "booking_growth_yoy" in hs.columns:
                 yv = hs[hs["booking_growth_yoy"].notna()]
                 if len(yv):
@@ -332,7 +360,8 @@ def render():
                         x=yv["year_month"], y=yv["booking_growth_yoy"],
                         mode="lines", name="YoY (raw)",
                         line=dict(color="#f0a500", width=2, dash="dot"), yaxis="y2",
-                        hovertemplate="YoY: %{y:.1%}<extra></extra>"))
+                        hovertemplate="YoY: %{y:.1%}<extra></extra>",
+                    ))
             fig.update_layout(
                 paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                 font=dict(color="#e8eaf0", family="DM Sans"),
@@ -340,26 +369,44 @@ def render():
                 xaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False,
                            tickangle=-30, color="#9ca3c4"),
                 yaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
-                yaxis2=dict(overlaying="y", side="right", showgrid=False,
-                            tickformat=".0%", tickfont=dict(color="#9ca3c4", size=9),
-                            zeroline=True, zerolinecolor="#7c82a0"),
-                legend=dict(orientation="h", y=1.02, x=0, font_size=10, bgcolor="rgba(0,0,0,0)"))
+                yaxis2=dict(
+                    overlaying="y", side="right", showgrid=False,
+                    tickformat=".0%", tickfont=dict(color="#9ca3c4", size=9),
+                    zeroline=True, zerolinecolor="#7c82a0",
+                ),
+                legend=dict(orientation="h", y=1.02, x=0, font_size=10, bgcolor="rgba(0,0,0,0)"),
+            )
             st.plotly_chart(fig, width="stretch")
 
         st.markdown("### Campaign History")
         if row.get("has_marketing"):
             for k, v in [
-                ("Channels Used",      row.get("channels_used","-")),
-                ("Best Channel",       row.get("best_channel","-")),
+                ("Channels Used",      row.get("channels_used", "-")),
+                ("Best Channel",       row.get("best_channel", "-")),
                 ("Avg Lift / Day",     "%.2f bookings" % row["avg_lift_per_day"] if pd.notna(row.get("avg_lift_per_day")) else "-"),
                 ("Avg ROI",            fmt_pct(row.get("avg_roi"))),
-                ("Positive Campaigns", "%d / %s" % (int(row.get("n_positive_lift",0)), str(int(row.get("n_campaigns",0))) if pd.notna(row.get("n_campaigns")) else "?")),
+                ("Positive Campaigns", "%d / %s" % (
+                    int(row.get("n_positive_lift", 0)),
+                    str(int(row.get("n_campaigns", 0))) if pd.notna(row.get("n_campaigns")) else "?",
+                )),
             ]:
-                ca, cb = st.columns([2,3])
-                ca.markdown("<span style='color:#7c82a0;font-size:0.8rem;'>%s</span>" % k, unsafe_allow_html=True)
-                cb.markdown("<span style='color:#111827;font-size:0.85rem;font-weight:500;'>%s</span>" % v, unsafe_allow_html=True)
+                ca, cb = st.columns([2, 3])
+                ca.markdown(
+                    "<span style='color:#7c82a0;font-size:0.8rem;'>%s</span>" % k,
+                    unsafe_allow_html=True,
+                )
+                cb.markdown(
+                    "<span style='color:#e8eaf0;font-size:0.85rem;font-weight:500;'>%s</span>" % v,
+                    unsafe_allow_html=True,
+                )
         else:
-            st.markdown("<div style='background:#1e2130;border:1px dashed #2e3350;border-radius:10px;padding:1.5rem;text-align:center;color:#9ca3c4;'>No campaign history available for this restaurant.</div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div style='background:#1e2130;border:1px dashed #2e3350;border-radius:10px;"
+                "padding:1.5rem;text-align:center;color:#9ca3c4;'>"
+                "No campaign history available for this restaurant."
+                "</div>",
+                unsafe_allow_html=True,
+            )
 
         st.markdown("### Ranked Strategy Evidence")
         st.caption(
@@ -367,7 +414,7 @@ def render():
             "If revenue uplift % is missing, normalized incremental revenue is used."
         )
         if len(strategy_recs):
-            recs = strategy_recs[[
+            recs_display = strategy_recs[[
                 "strategy_name",
                 "recommendation_scope",
                 "recommendation_reason",
@@ -381,34 +428,25 @@ def render():
                 "context_adjusted_score",
                 "data_quality_note",
             ]].copy()
-            recs.columns = [
-                "Strategy",
-                "Scope",
-                "Rationale",
-                "Activities",
-                "Restaurants",
-                "Confidence Level",
-                "Revenue Uplift",
-                "Bookings Uplift",
-                "Avg ROI",
-                "Base Score",
-                "Final Score",
-                "Data Quality",
+            recs_display.columns = [
+                "Strategy", "Scope", "Rationale", "Activities", "Restaurants",
+                "Confidence Level", "Revenue Uplift", "Bookings Uplift",
+                "Avg ROI", "Base Score", "Final Score", "Data Quality",
             ]
-            recs["Revenue Uplift"] = recs["Revenue Uplift"].apply(fmt_pct)
-            recs["Bookings Uplift"] = recs["Bookings Uplift"].apply(fmt_pct)
-            recs["Avg ROI"] = recs["Avg ROI"].apply(lambda v: "-" if pd.isna(v) else "%.2f" % v)
-            recs["Scope"] = recs["Scope"].str.title()
-            recs["Base Score"] = pd.to_numeric(recs["Base Score"], errors="coerce").round(2)
-            recs["Final Score"] = pd.to_numeric(recs["Final Score"], errors="coerce").round(2)
-            st.dataframe(recs, width="stretch", hide_index=True, height=260)
+            recs_display["Revenue Uplift"]  = recs_display["Revenue Uplift"].apply(fmt_pct)
+            recs_display["Bookings Uplift"] = recs_display["Bookings Uplift"].apply(fmt_pct)
+            recs_display["Avg ROI"]         = recs_display["Avg ROI"].apply(lambda v: "-" if pd.isna(v) else "%.2f" % v)
+            recs_display["Scope"]           = recs_display["Scope"].str.title()
+            recs_display["Base Score"]      = pd.to_numeric(recs_display["Base Score"], errors="coerce").round(2)
+            recs_display["Final Score"]     = pd.to_numeric(recs_display["Final Score"], errors="coerce").round(2)
+            st.dataframe(recs_display, width="stretch", hide_index=True, height=260)
         else:
             st.info("No strategy recommendations available for this restaurant yet.")
 
     with strat_col:
         st.markdown("### Grounded Strategy Brief")
-        grounded_key = "grounded_strategy_%s" % selected
-        ai_key = "ai_strategy_%s" % selected
+        grounded_key  = "grounded_strategy_%s" % selected
+        ai_key        = "ai_strategy_%s" % selected
         grounded_brief = build_grounded_brief(row, hist, strategy_recs)
         st.session_state[grounded_key] = grounded_brief
 
@@ -416,7 +454,7 @@ def render():
         st.download_button(
             label="Download Grounded Brief",
             data="MARKETING STRATEGY\n%s\n\n%s" % (selected, st.session_state[grounded_key]),
-            file_name="grounded_strategy_%s.txt" % selected.replace(" ","_"),
+            file_name="grounded_strategy_%s.txt" % selected.replace(" ", "_"),
             mime="text/plain",
             width="stretch",
         )
@@ -424,7 +462,7 @@ def render():
         st.markdown("---")
         st.markdown("### Optional AI Narrative")
         st.caption("Uses `ANTHROPIC_API_KEY` if configured. Deterministic brief above is the source of truth.")
-        a_col, b_col = st.columns([2,1])
+        a_col, b_col = st.columns([2, 1])
         with a_col:
             generate_ai = st.button("Generate AI Narrative", key="gen_ai_%s" % selected, width="stretch")
         with b_col:
@@ -445,7 +483,7 @@ def render():
             st.download_button(
                 label="Download AI Narrative",
                 data="AI STRATEGY NARRATIVE\n%s\n\n%s" % (selected, st.session_state[ai_key]),
-                file_name="ai_strategy_%s.txt" % selected.replace(" ","_"),
+                file_name="ai_strategy_%s.txt" % selected.replace(" ", "_"),
                 mime="text/plain",
                 width="stretch",
             )
