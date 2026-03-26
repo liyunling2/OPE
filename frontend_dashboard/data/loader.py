@@ -29,8 +29,6 @@ MOMENTUM_BOOKINGS_EXPORT_PATH = Path(__file__).resolve().parent / "momentum" / "
 
 CLUSTERING_DIR = BASE_DIR / "clustering"
 CLUSTER_RESULTS_PATH = CLUSTERING_DIR / "clustering_results.csv"
-VIZ_DF_PATH = CLUSTERING_DIR / "viz_df.csv"
-THEME_DETAILS_PATH = CLUSTERING_DIR / "restaurant_theme_details.csv"
 REVIEWS_PATH = CLUSTERING_DIR / "reviews.csv"
 
 SEGMENT_COLORS = {
@@ -605,9 +603,6 @@ def load_cluster_assignments() -> pd.DataFrame:
     if CLUSTER_RESULTS_PATH.exists():
         df = pd.read_csv(CLUSTER_RESULTS_PATH)
 
-    if df.empty and VIZ_DF_PATH.exists():
-        df = pd.read_csv(VIZ_DF_PATH)
-
     if df.empty:
         return pd.DataFrame(
             columns=[
@@ -834,11 +829,6 @@ def load_cluster_keywords() -> pd.DataFrame:
                 rows.append({"cluster_id": int(cluster_id), "keyword": token, "weight": float(weight), "rank": rank})
         if rows:
             return pd.DataFrame(rows)
-
-    if THEME_DETAILS_PATH.exists():
-        theme_df = pd.read_csv(THEME_DETAILS_PATH).rename(columns={"cluster": "cluster_id", "theme": "keyword", "percentage": "weight"})
-        theme_df["rank"] = theme_df.groupby("cluster_id").cumcount() + 1
-        return theme_df[[c for c in ["cluster_id", "keyword", "weight", "rank"] if c in theme_df.columns]]
 
     return pd.DataFrame(columns=["cluster_id", "keyword", "weight", "rank"])
 
