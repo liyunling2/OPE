@@ -10,16 +10,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from data.loader import load_momentum, load_priority
-
-CHART_THEME = dict(
-    paper_bgcolor="rgba(0,0,0,0)",
-    plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(color="#e8eaf0", family="DM Sans"),
-    xaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
-    yaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
-    margin=dict(l=0, r=0, t=30, b=0),
-)
-BASE_LAYOUT = {k: v for k, v in CHART_THEME.items() if k not in ("xaxis", "yaxis")}
+from theme import BASE_LAYOUT, CHART_THEME, GRID_COLOR, MUTED_TEXT, SOFT_DIVIDER, TEXT_COLOR
 
 SEG_COLOR_LIST = {
     "Rising Stars": "#2ecc71",
@@ -96,7 +87,7 @@ def render():
 
     st.markdown("## Momentum Dashboard")
     st.markdown(
-        "<p style='color:#9ca3c4; margin-top:-0.5rem;'>"
+        f"<p style='color:{MUTED_TEXT}; margin-top:-0.5rem;'>"
         "Segment distribution, growth trajectories, and seasonality-adjusted momentum signals."
         "</p>",
         unsafe_allow_html=True,
@@ -191,7 +182,7 @@ def render():
         if has_segments:
             seg_counts = latest_all[seg_col].value_counts().reset_index()
             seg_counts.columns = ["segment", "count"]
-            colors = [SEG_COLOR_LIST.get(s, "#7c82a0") for s in seg_counts["segment"]]
+            colors = [SEG_COLOR_LIST.get(s, MUTED_TEXT) for s in seg_counts["segment"]]
             pull_vals = [
                 0.1 if selected_segment is not None and seg == selected_segment else 0
                 for seg in seg_counts["segment"]
@@ -225,7 +216,7 @@ def render():
                         y=0.5,
                         font_size=14,
                         showarrow=False,
-                        font_color="#e8eaf0",
+                        font_color=TEXT_COLOR,
                     )
                 ],
             )
@@ -297,8 +288,8 @@ def render():
 
         p75_perf = scatter_df["score_perf"].quantile(0.75)
         p75_growth = scatter_df["score_growth"].quantile(0.75)
-        fig_scatter.add_vline(x=p75_perf, line_dash="dash", line_color="#2e3350", line_width=1)
-        fig_scatter.add_hline(y=p75_growth, line_dash="dash", line_color="#2e3350", line_width=1)
+        fig_scatter.add_vline(x=p75_perf, line_dash="dash", line_color=GRID_COLOR, line_width=1)
+        fig_scatter.add_hline(y=p75_growth, line_dash="dash", line_color=GRID_COLOR, line_width=1)
 
         fig_scatter.update_layout(
             **BASE_LAYOUT,
@@ -425,7 +416,7 @@ def render():
                         y=path_df["score_growth"],
                         mode="lines+markers",
                         name=selected_restaurant,
-                        line=dict(color="#9ca3c4", width=2),
+                        line=dict(color="#94a3b8", width=2),
                         marker=dict(
                             size=9,
                             color=list(range(len(path_df))),
@@ -453,13 +444,13 @@ def render():
                 fig_path.add_vline(
                     x=latest_all["score_perf"].quantile(0.75),
                     line_dash="dash",
-                    line_color="#2e3350",
+                    line_color=GRID_COLOR,
                     line_width=1,
                 )
                 fig_path.add_hline(
                     y=latest_all["score_growth"].quantile(0.75),
                     line_dash="dash",
-                    line_color="#2e3350",
+                    line_color=GRID_COLOR,
                     line_width=1,
                 )
                 fig_path.update_layout(
@@ -671,7 +662,7 @@ def render():
                     hovertemplate="<b>%{x|%b %Y}</b><br>Growth score: %{y:.2f}<extra></extra>",
                 )
             )
-            fig_driver.add_hline(y=0, line_dash="dash", line_color="#7c82a0", line_width=1)
+            fig_driver.add_hline(y=0, line_dash="dash", line_color=SOFT_DIVIDER, line_width=1)
             fig_driver.update_layout(
                 **BASE_LAYOUT,
                 height=320,
@@ -707,7 +698,7 @@ def render():
                 x=sig_counts.index, y=sig_counts.values,
                 marker_color=["#f0a500" if x == "YoY" else "#3b82f6" for x in sig_counts.index],
                 text=sig_counts.values, textposition="outside",
-                textfont=dict(color="#e8eaf0"),
+                textfont=dict(color=TEXT_COLOR),
                 hovertemplate="%{x}: %{y} restaurants<extra></extra>",
             ))
             fig_sig.update_layout(**BASE_LAYOUT, height=240, showlegend=False,
@@ -749,7 +740,7 @@ def render():
                 fig_stab = go.Figure(go.Bar(
                     x=[f"{v}m" for v in stab.index], y=stab.values,
                     marker_color=bar_colors, text=stab.values, textposition="outside",
-                    textfont=dict(color="#e8eaf0"),
+                    textfont=dict(color=TEXT_COLOR),
                     hovertemplate="Positive MoM growth %{x}: %{y} restaurants<extra></extra>"))
                 fig_stab.update_layout(**BASE_LAYOUT, height=240, showlegend=False,
                     xaxis=dict(**CHART_THEME["xaxis"], title="Positive-growth months"),
@@ -786,8 +777,8 @@ def render():
             text=[[f"{v:.0%}" if pd.notna(v) else "–" for v in row] for row in pv.values],
             texttemplate="%{text}", textfont=dict(size=9),
             hovertemplate="<b>%{y}</b><br>%{x}: %{z:.1%}<extra></extra>",
-            colorbar=dict(title=dict(text="Growth", font=dict(color="#9ca3c4")),
-                          tickformat=".0%", tickfont=dict(color="#9ca3c4"))))
+            colorbar=dict(title=dict(text="Growth", font=dict(color=MUTED_TEXT)),
+                          tickformat=".0%", tickfont=dict(color=MUTED_TEXT))))
         fig.update_layout(**BASE_LAYOUT, height=500,
             xaxis=dict(**CHART_THEME["xaxis"], tickangle=-45, tickfont=dict(size=10)),
             yaxis=dict(**CHART_THEME["yaxis"], tickfont=dict(size=10)))

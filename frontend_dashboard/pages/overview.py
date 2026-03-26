@@ -18,15 +18,7 @@ from data.loader import (
     get_restaurant_booking_history,
     SEGMENT_COLORS,
 )
-
-CHART_THEME = dict(
-    paper_bgcolor="rgba(0,0,0,0)",
-    plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(color="#e8eaf0", family="DM Sans"),
-    xaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
-    yaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
-    margin=dict(l=0, r=0, t=30, b=0),
-)
+from theme import CHART_THEME, MUTED_TEXT, SOFT_DIVIDER
 
 
 def fmt_thb(val):
@@ -57,14 +49,22 @@ def has_display_values(series: pd.Series) -> bool:
 
 
 def segment_pill(segment: str) -> str:
-    color_map = {
-        "Rising Stars"           : "green",
-        "Emerging Opportunities" : "blue",
-        "Established Players"    : "purple",
-        "Needs Attention"        : "red",
+    pill_map = {
+        "Rising Stars": ("rgba(34, 197, 94, 0.18)", "#dcfce7", "rgba(134, 239, 172, 0.28)"),
+        "Emerging Opportunities": ("rgba(59, 130, 246, 0.18)", "#dbeafe", "rgba(147, 197, 253, 0.28)"),
+        "Established Players": ("rgba(168, 85, 247, 0.18)", "#f3e8ff", "rgba(216, 180, 254, 0.28)"),
+        "Needs Attention": ("rgba(239, 68, 68, 0.18)", "#fee2e2", "rgba(252, 165, 165, 0.28)"),
     }
-    c = color_map.get(segment, "yellow")
-    return f'<span class="pill pill-{c}">{segment}</span>'
+    bg, text, border = pill_map.get(
+        segment,
+        ("rgba(245, 158, 11, 0.18)", "#fef3c7", "rgba(253, 230, 138, 0.28)"),
+    )
+    return (
+        "<span style='display:inline-flex; align-items:center; padding:0.3rem 0.72rem; "
+        f"border-radius:999px; background:{bg}; border:1px solid {border}; color:{text}; "
+        "font-size:0.78rem; font-weight:700; line-height:1; white-space:nowrap;'>"
+        f"{segment}</span>"
+    )
 
 
 def render():
@@ -73,7 +73,10 @@ def render():
     bookings_raw_df = load_momentum_raw_bookings()
 
     st.markdown("## Restaurant Explorer")
-    st.markdown("<p style='color:#9ca3c4; margin-top:-0.5rem;'>Drill into any restaurant's performance, growth trajectory, and momentum segment.</p>", unsafe_allow_html=True)
+    st.markdown(
+        f"<p style='color:{MUTED_TEXT}; margin-top:-0.5rem;'>Drill into any restaurant's performance, growth trajectory, and momentum segment.</p>",
+        unsafe_allow_html=True,
+    )
     st.markdown("---")
 
     # ── Filters ───────────────────────────────────────────────────────────────
@@ -109,16 +112,19 @@ def render():
 
     # Header row
     hc1, hc2 = st.columns([3, 1])
+    hero_title_color = "#f8fafc"
+    hero_meta_color = "#cbd5e1"
+    hero_subtle_color = "#94a3b8"
     with hc1:
         segment = p_row.get("latest_segment", latest.get("latest_segment", "—"))
         location = latest.get("location", "Bangkok")
         cuisine  = latest.get("cuisine", "—")
         st.markdown(f"""
-        <div style='margin-bottom: 0.5rem;'>
-            <span style='font-family: "DM Sans", sans-serif; font-size: 1.8rem; font-weight: 700; color: #e8eaf0;'>{selected}</span>
-            &nbsp;&nbsp;{segment_pill(segment)}
+        <div style='margin-bottom: 0.5rem; display:flex; align-items:center; gap:0.7rem; flex-wrap:wrap;'>
+            <span style='font-family: "DM Sans", sans-serif; font-size: 1.8rem; font-weight: 700; color: {hero_title_color};'>{selected}</span>
+            {segment_pill(segment)}
         </div>
-        <div style='color: #9ca3c4; font-size: 0.85rem;'>
+        <div style='color: {hero_meta_color}; font-size: 0.85rem;'>
             📍 {location} &nbsp;·&nbsp; 🍴 {cuisine}
             &nbsp;·&nbsp; Growth signal: <b style='color:#cc0000;'>{latest.get("growth_signal_used", "—")}</b>
         </div>
@@ -130,10 +136,10 @@ def render():
             reason = p_row.get("priority_reason", "—")
             st.markdown(f"""
             <div style='text-align:right;'>
-                <div style='font-size:0.75rem; color:#9ca3c4; text-transform:uppercase; letter-spacing:0.08em;'>Priority Score</div>
+                <div style='font-size:0.75rem; color:{hero_subtle_color}; text-transform:uppercase; letter-spacing:0.08em;'>Priority Score</div>
                 <div style='font-family: "DM Sans", sans-serif; font-weight: 700; font-size: 2rem; color: #cc0000;'>{priority_score:.0f}</div>
-                <div style='font-size:0.75rem; color:#9ca3c4;'>{tier}</div>
-                <div style='font-size:0.75rem; color:#9ca3c4; margin-top:0.2rem;'>{reason}</div>
+                <div style='font-size:0.75rem; color:{hero_meta_color};'>{tier}</div>
+                <div style='font-size:0.75rem; color:{hero_subtle_color}; margin-top:0.2rem;'>{reason}</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -224,7 +230,7 @@ def render():
         # ── MoM panel ────────────────────────────────────────────────────────
         with c_mom:
             st.markdown(
-                "<p style='text-align:center;font-size:0.85rem;color:#9ca3c4;margin-bottom:4px;'>"
+                f"<p style='text-align:center;font-size:0.85rem;color:{MUTED_TEXT};margin-bottom:4px;'>"
                 "📅 <b style='color:#3b82f6;'>Month-over-Month</b> — short-term acceleration</p>",
                 unsafe_allow_html=True,
             )
@@ -236,7 +242,7 @@ def render():
                 fill="tozeroy", fillcolor="rgba(59,130,246,0.08)", name="MoM 3m avg",
                 hovertemplate="<b>%{x|%b %Y}</b><br>MoM: %{y:.1%}<extra></extra>",
             ))
-            fm.add_hline(y=0, line_dash="dash", line_color="#7c82a0", line_width=1)
+            fm.add_hline(y=0, line_dash="dash", line_color=SOFT_DIVIDER, line_width=1)
             fm.update_layout(
                 **{k: v for k, v in CHART_THEME.items() if k != "yaxis"},
                 height=240, showlegend=False,
@@ -247,7 +253,7 @@ def render():
         # ── YoY panel ────────────────────────────────────────────────────────
         with c_yoy:
             st.markdown(
-                "<p style='text-align:center;font-size:0.85rem;color:#9ca3c4;margin-bottom:4px;'>"
+                f"<p style='text-align:center;font-size:0.85rem;color:{MUTED_TEXT};margin-bottom:4px;'>"
                 "📆 <b style='color:#f0a500;'>Year-over-Year</b> — seasonality-adjusted trend</p>",
                 unsafe_allow_html=True,
             )
@@ -261,12 +267,12 @@ def render():
                     fill="tozeroy", fillcolor="rgba(240,165,0,0.08)", name="YoY 3m avg",
                     hovertemplate="<b>%{x|%b %Y}</b><br>YoY: %{y:.1%}<extra></extra>",
                 ))
-                fy.add_hline(y=0, line_dash="dash", line_color="#7c82a0", line_width=1)
+                fy.add_hline(y=0, line_dash="dash", line_color=SOFT_DIVIDER, line_width=1)
             else:
                 fy.add_annotation(
                     text="YoY not available — <12 months of history",
                     x=0.5, y=0.5, xref="paper", yref="paper",
-                    showarrow=False, font=dict(color="#9ca3c4", size=13),
+                    showarrow=False, font=dict(color=MUTED_TEXT, size=13),
                 )
             fy.update_layout(
                 **{k: v for k, v in CHART_THEME.items() if k != "yaxis"},

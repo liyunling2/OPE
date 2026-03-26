@@ -11,20 +11,19 @@ from data.loader import (
     get_restaurant_priority_row,
     recommend_strategies_for_restaurant,
 )
+from theme import AXIS, BORDER_COLOR, MUTED_TEXT, SURFACE_COLOR, TEXT_COLOR
 
 
 def layout(height=300, **kwargs):
     base = dict(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#e8eaf0", family="DM Sans"),
+        font=dict(color=TEXT_COLOR, family="DM Sans"),
         margin=dict(l=0, r=0, t=30, b=0),
         height=height,
     )
     base.update(kwargs)
     return base
-
-AXIS = dict(gridcolor="#2e3350", showline=False, zeroline=False)
 
 
 def fmt_thb(val):
@@ -54,7 +53,7 @@ def get_tier_color(tier):
     if "proven"   in t: return "#e74c3c"
     if "untapped" in t: return "#e67e22"
     if "review"   in t: return "#f1c40f"
-    return "#7c82a0"
+    return MUTED_TEXT
 
 
 def clean_tier_label(tier: str) -> str:
@@ -656,7 +655,7 @@ def render():
 
     st.markdown("## Strategy Engine")
     st.markdown(
-        "<p style='color:#9ca3c4;margin-top:-0.5rem;'>"
+        f"<p style='color:{MUTED_TEXT};margin-top:-0.5rem;'>"
         "Historical lift evidence is overlaid with restaurant-level GA diagnostics, "
         "using GMV / GA view as the main efficiency guardrail."
         "</p>",
@@ -697,19 +696,19 @@ def render():
 
     with col_info:
         st.markdown(
-            "<div style='background:#1e2130;border:1px solid #2e3350;"
+            "<div style='background:{surface};border:1px solid {border};"
             "border-left:4px solid {c};border-radius:8px;padding:1rem 1.4rem;"
             "box-shadow:0 1px 2px rgba(0,0,0,0.05);'>"
             "<div style='display:flex;justify-content:space-between;align-items:center;'>"
             "<div>"
-            "<div style='font-size:1.3rem;color:#e8eaf0;font-weight:700;'>{n}</div>"
-            "<div style='font-size:0.8rem;color:#9ca3c4;margin-top:4px;'>{tier}</div>"
-            "<div style='font-size:0.75rem;color:#9ca3c4;margin-top:2px;'>Segment: {seg}</div>"
-            "<div style='font-size:0.75rem;color:#9ca3c4;margin-top:4px;'>GA focus: {ga_focus}</div>"
+            "<div style='font-size:1.3rem;color:{text};font-weight:700;'>{n}</div>"
+            "<div style='font-size:0.8rem;color:{muted};margin-top:4px;'>{tier}</div>"
+            "<div style='font-size:0.75rem;color:{muted};margin-top:2px;'>Segment: {seg}</div>"
+            "<div style='font-size:0.75rem;color:{muted};margin-top:4px;'>GA focus: {ga_focus}</div>"
             "</div>"
             "<div style='text-align:right;'>"
             "<div style='font-size:1.8rem;color:#cc0000;font-weight:700;'>{s:.0f}</div>"
-            "<div style='font-size:0.7rem;color:#9ca3c4;'>SCORE</div>"
+            "<div style='font-size:0.7rem;color:{muted};'>SCORE</div>"
             "</div>"
             "</div></div>".format(
                 c=tier_color,
@@ -718,6 +717,10 @@ def render():
                 seg=row.get("latest_segment", "Unknown"),
                 ga_focus=ga_context.get("primary_signal_short", "No GA diagnostic"),
                 s=score,
+                surface=SURFACE_COLOR,
+                border=BORDER_COLOR,
+                text=TEXT_COLOR,
+                muted=MUTED_TEXT,
             ),
             unsafe_allow_html=True,
         )
@@ -772,13 +775,13 @@ def render():
                 ))
             fig.update_layout(
                 paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#e8eaf0", family="DM Sans"),
+                font=dict(color=TEXT_COLOR, family="DM Sans"),
                 margin=dict(l=0, r=0, t=30, b=0), height=280,
-                xaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, tickangle=-30, color="#9ca3c4"),
-                yaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4", title="Bookings"),
+                xaxis=dict(**AXIS, tickangle=-30),
+                yaxis=dict(**AXIS, title="Bookings"),
                 yaxis2=dict(
                     overlaying="y", side="right", showgrid=False, color="#2ecc71", title="GMV / GA View",
-                    tickfont=dict(color="#9ca3c4", size=9),
+                    tickfont=dict(color=MUTED_TEXT, size=9),
                 ),
                 legend=dict(orientation="h", y=1.02, x=0, font_size=10, bgcolor="rgba(0,0,0,0)"),
             )
@@ -809,11 +812,11 @@ def render():
             fig_ga.update_layout(
                 **layout(
                     280,
-                    xaxis=dict(**AXIS, tickangle=-30, color="#9ca3c4"),
-                    yaxis=dict(**AXIS, title="GA item views", color="#9ca3c4"),
+                    xaxis=dict(**AXIS, tickangle=-30),
+                    yaxis=dict(**AXIS, title="GA item views"),
                     yaxis2=dict(
                         overlaying="y", side="right", showgrid=False, tickformat=".0%",
-                        color="#9ca3c4", title="Funnel rate",
+                        color=MUTED_TEXT, title="Funnel rate",
                     ),
                     legend=dict(orientation="h", y=1.02, x=0, font_size=10, bgcolor="rgba(0,0,0,0)"),
                 )
@@ -833,8 +836,8 @@ def render():
         ]
         for label, value in readout_rows:
             ca, cb = st.columns([2, 3])
-            ca.markdown("<span style='color:#7c82a0;font-size:0.8rem;'>%s</span>" % label, unsafe_allow_html=True)
-            cb.markdown("<span style='color:#e8eaf0;font-size:0.85rem;font-weight:500;'>%s</span>" % value, unsafe_allow_html=True)
+            ca.markdown("<span style='color:%s;font-size:0.8rem;'>%s</span>" % (MUTED_TEXT, label), unsafe_allow_html=True)
+            cb.markdown("<span style='color:%s;font-size:0.85rem;font-weight:500;'>%s</span>" % (TEXT_COLOR, value), unsafe_allow_html=True)
 
         st.markdown("### Ranked Strategy Evidence")
         st.caption(

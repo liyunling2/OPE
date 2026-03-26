@@ -4,20 +4,19 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 from data.loader import load_priority, load_momentum, load_momentum_segments, score_priority_with_ga
+from theme import AXIS, BORDER_COLOR, MUTED_TEXT, SURFACE_COLOR, TEXT_COLOR
 
 
 def layout(height=300, **kwargs):
     base = dict(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#e8eaf0", family="DM Sans"), # Switched to dark text
+        font=dict(color=TEXT_COLOR, family="DM Sans"),
         margin=dict(l=0, r=0, t=30, b=0),
         height=height,
     )
     base.update(kwargs)
     return base
-
-AXIS = dict(gridcolor="#2e3350", showline=False, zeroline=False) # Switched to light grid
 
 BOOL_TRUE_VALUES = {"true", "1", "yes", "y", "t"}
 BOOL_FALSE_VALUES = {"false", "0", "no", "n", "f", ""}
@@ -35,7 +34,7 @@ def get_tier(tier):
     if "proven"   in t: return "#e74c3c", "Proven"
     if "untapped" in t: return "#e67e22", "Untapped"
     if "review"   in t: return "#f1c40f", "Review"
-    return "#7c82a0", str(tier)
+    return MUTED_TEXT, str(tier)
 
 
 def coerce_bool_series(df: pd.DataFrame, column: str, default: bool = False) -> pd.Series:
@@ -186,7 +185,10 @@ def render():
     base_priority_df = load_priority()
     priority_df = score_priority_with_ga(build_priority_universe(base_priority_df))
     st.markdown("## Priority List")
-    st.markdown("<p style='color:#7c82a0;margin-top:-0.5rem;'>Stable-growth restaurants ranked by composite priority score.</p>", unsafe_allow_html=True)
+    st.markdown(
+        f"<p style='color:{MUTED_TEXT};margin-top:-0.5rem;'>Stable-growth restaurants ranked by composite priority score.</p>",
+        unsafe_allow_html=True,
+    )
     st.markdown("---")
 
     if len(priority_df) == 0:
@@ -311,8 +313,8 @@ def render():
             if len(ch_counts):
                 fig_ch = go.Figure(go.Bar(
                     x=ch_counts.index, y=ch_counts.values,
-                    marker_color=[cmap.get(str(c),"#7c82a0") for c in ch_counts.index],
-                    text=ch_counts.values, textposition="outside", textfont=dict(color="#e8eaf0")))
+                    marker_color=[cmap.get(str(c), MUTED_TEXT) for c in ch_counts.index],
+                    text=ch_counts.values, textposition="outside", textfont=dict(color=TEXT_COLOR)))
                 fig_ch.update_layout(**layout(280, showlegend=False,
                     xaxis=dict(**AXIS, title="Channel"), yaxis=dict(**AXIS, title="Restaurants")))
                 st.plotly_chart(fig_ch, width="stretch")
@@ -399,27 +401,31 @@ def render():
         priority_reason = row.get("priority_reason", "-")
 
         st.markdown(
-                "<div style='background:#1e2130;border:1px solid #2e3350;border-left:4px solid {c};border-radius:8px;padding:1.2rem;margin-bottom:1rem;box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>"
+                "<div style='background:{surface};border:1px solid {border};border-left:4px solid {c};border-radius:8px;padding:1.2rem;margin-bottom:1rem;box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>"
                 "<div style='display:flex;justify-content:space-between;align-items:flex-start;'>"
-                "<div><span style='font-size:1.2rem;font-weight:700;color:#e8eaf0;'>#{r} {n}</span> "
+                "<div><span style='font-size:1.2rem;font-weight:700;color:{text};'>#{r} {n}</span> "
                 "<span style='margin-left:8px;font-size:0.75rem;color:{c};border:1px solid {c};padding:2px 8px;border-radius:10px;'>{l}</span> "
                 "<span style='color:#3b82f6;font-size:0.72rem;font-weight:700;padding:2px 8px;"
                 "background:#f3f4f6;border-radius:6px;'>{ch}</span></div>"
                 "<span style='font-size:1.5rem;color:#cc0000;font-weight:700;'>{s:.0f}"
-                "<span style='font-size:0.75rem;color:#9ca3c4;'>/100</span></span></div>"
-                "<div style='margin-top:0.5rem;font-size:0.79rem;color:#9ca3c4;display:flex;gap:1.5rem;'>"
-                "<span>Bookings: <b style='color:#e8eaf0;'>{b}</b></span>"
+                "<span style='font-size:0.75rem;color:{muted};'>/100</span></span></div>"
+                "<div style='margin-top:0.5rem;font-size:0.79rem;color:{muted};display:flex;gap:1.5rem;'>"
+                "<span>Bookings: <b style='color:{text};'>{b}</b></span>"
                 "<span>Growth: <b style='color:{gc};'>{g} ({sig})</b></span>"
-                "<span>GMV / GA View: <b style='color:#e8eaf0;'>{ggv}</b></span>"
-                "<span>Campaigns: <b style='color:#e8eaf0;'>{nc}</b></span>"
-                "<span>Lift/day: <b style='color:#e8eaf0;'>{li}</b></span>"
-                "<span>Reason: <b style='color:#e8eaf0;'>{reason}</b></span>"
+                "<span>GMV / GA View: <b style='color:{text};'>{ggv}</b></span>"
+                "<span>Campaigns: <b style='color:{text};'>{nc}</b></span>"
+                "<span>Lift/day: <b style='color:{text};'>{li}</b></span>"
+                "<span>Reason: <b style='color:{text};'>{reason}</b></span>"
                 "</div></div>".format(
                     c=color, r=rank, n=name, l=label, ch=channel, s=score,
                     b=bookings, g=fmt_pct(growth), sig=signal, gc=gc,
                     ggv=fmt_thb(gmv_per_ga_view),
                     nc=n_camp, li=("%.2f" % lift if lift is not None and pd.notna(lift) else "-"),
                     reason=priority_reason,
+                    surface=SURFACE_COLOR,
+                    border=BORDER_COLOR,
+                    text=TEXT_COLOR,
+                    muted=MUTED_TEXT,
                 ),
                 unsafe_allow_html=True
             )

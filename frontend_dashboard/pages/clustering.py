@@ -27,16 +27,7 @@ from data.loader import (
     load_cluster_strategy_rankings,
     load_cluster_text_corpus,
 )
-
-CHART_THEME = dict(
-    paper_bgcolor="rgba(0,0,0,0)",
-    plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(color="#e8eaf0", family="DM Sans"),
-    xaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
-    yaxis=dict(gridcolor="#2e3350", showline=False, zeroline=False, color="#9ca3c4"),
-    margin=dict(l=0, r=0, t=30, b=0),
-)
-BASE_LAYOUT = {k: v for k, v in CHART_THEME.items() if k not in ("xaxis", "yaxis")}
+from theme import BASE_LAYOUT, CHART_THEME, MUTED_TEXT
 
 
 def _normalize_name(value: str) -> str:
@@ -482,7 +473,7 @@ def render():
 
     st.markdown("## Clustering Explorer")
     st.markdown(
-        "<p style='color:#9ca3c4; margin-top:-0.5rem;'>"
+        f"<p style='color:{MUTED_TEXT}; margin-top:-0.5rem;'>"
         "Explore restaurant clusters, inspect text themes, and benchmark strategy effectiveness by cluster."
         "</p>",
         unsafe_allow_html=True,
