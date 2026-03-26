@@ -42,6 +42,7 @@ MOMENTUM_LABELS_PATH = MOMENTUM_OUTPUT_DIR / "priority_latest_momentum_labels.pa
 MARKETING_PATH = MARKETING_OUTPUT_DIR / "activity_performance_with_roi.csv"
 PRIORITY_PATH = PRIORITY_OUTPUT_DIR / "priority_list.csv"
 GA_OUTREACH_PATH = BASE_DIR / "data" / "marketing" / "googleAPI" / "campaigns_outreach.parquet"
+GA_GMV_VIEW_PATH = GA_OUTPUT_DIR / "gmv" / "gmv_view.parquet"
 MOMENTUM_VALID_BOOKINGS_PATH = MOMENTUM_OUTPUT_DIR / "bookings_cleaned.parquet"
 MOMENTUM_BOOKINGS_EXPORT_PATH = Path(__file__).resolve().parent / "momentum" / "restaurant_bookings_history.parquet"
 
@@ -405,6 +406,157 @@ def load_ga_restaurant_monthly() -> pd.DataFrame:
     if "ga_items_viewed" in ga_df.columns:
         ga_df = ga_df[ga_df["ga_items_viewed"].fillna(0) > 0]
     return ga_df.reset_index(drop=True)
+
+
+@st.cache_data(ttl=300)
+def load_raw_gmv_view_monthly() -> pd.DataFrame:
+    if not GA_GMV_VIEW_PATH.exists():
+        return pd.DataFrame(
+            columns=[
+                "restaurant_id",
+                "name",
+                "name_norm",
+                "year_month",
+                "monthly_gmv",
+                "monthly_bookings",
+                "ga_items_viewed",
+                "ga_items_added_to_cart",
+                "ga_items_purchased",
+                "ga_item_revenue",
+                "gmv_per_ga_view",
+                "bookings_per_ga_view",
+                "ga_add_to_cart_rate",
+                "ga_view_to_purchase_rate",
+                "ga_purchase_to_cart_rate",
+                "ga_revenue_per_view",
+            ]
+        )
+
+    out = pd.read_parquet(GA_GMV_VIEW_PATH).copy()
+    rename_map = {
+        "gmv_per_view": "gmv_per_ga_view",
+        "bookings_per_view": "bookings_per_ga_view",
+        "view_to_purchase_rate": "ga_view_to_purchase_rate",
+        "purchase_to_cart_rate": "ga_purchase_to_cart_rate",
+        "revenue_per_view": "ga_revenue_per_view",
+    }
+    applicable = {
+        old: new
+        for old, new in rename_map.items()
+        if old in out.columns and new not in out.columns
+    }
+    if applicable:
+        out = out.rename(columns=applicable)
+
+    if "year_month" in out.columns:
+        out["year_month"] = pd.to_datetime(out["year_month"], errors="coerce")
+    if "restaurant_id" in out.columns:
+        out["restaurant_id"] = pd.to_numeric(out["restaurant_id"], errors="coerce").astype("Int64")
+    if "name" in out.columns and "name_norm" not in out.columns:
+        out["name_norm"] = _normalize_name(out["name"])
+
+    numeric_cols = [
+        c
+        for c in [
+            "monthly_gmv",
+            "monthly_bookings",
+            "ga_items_viewed",
+            "ga_items_added_to_cart",
+            "ga_items_purchased",
+            "ga_item_revenue",
+            "gmv_per_ga_view",
+            "bookings_per_ga_view",
+            "ga_add_to_cart_rate",
+            "ga_view_to_purchase_rate",
+            "ga_purchase_to_cart_rate",
+            "ga_revenue_per_view",
+        ]
+        if c in out.columns
+    ]
+    for col in numeric_cols:
+        out[col] = pd.to_numeric(out[col], errors="coerce")
+
+    keep_cols = [
+        c
+        for c in [
+            "restaurant_id",
+            "name",
+            "name_norm",
+            "year_month",
+            "monthly_gmv",
+            "monthly_bookings",
+            "ga_items_viewed",
+            "ga_items_added_to_cart",
+            "ga_items_purchased",
+            "ga_item_revenue",
+            "gmv_per_ga_view",
+            "bookings_per_ga_view",
+            "ga_add_to_cart_rate",
+            "ga_view_to_purchase_rate",
+            "ga_purchase_to_cart_rate",
+            "ga_revenue_per_view",
+        ]
+        if c in out.columns
+    ]
+    out = out[keep_cols].copy()
+
+    if "ga_items_viewed" in out.columns:
+        out = out[out["ga_items_viewed"].fillna(0) > 0]
+
+    return out.sort_values(["name", "year_month"]).reset_index(drop=True)
+
+
+@st.cache_data(ttl=300)
+def load_ga_campaign_outreach_raw() -> pd.DataFrame:
+    empty_cols = [
+        "year_month",
+        "campaign_id",
+        "campaign_name",
+        "googleAdsCampaignType",
+        "sessions",
+    ]
+    if not GA_OUTREACH_PATH.exists():
+        return pd.DataFrame(columns=empty_cols)
+
+    outreach_df = pd.read_parquet(GA_OUTREACH_PATH)
+    if outreach_df.empty:
+        return pd.DataFrame(columns=empty_cols)
+
+    out = outreach_df.copy()
+    out = out[
+        out["campaignId"].notna()
+        & out["campaignId"].astype(str).ne("(not set)")
+    ]
+    out["googleAdsCampaignType"] = out["googleAdsCampaignType"].fillna("Unknown").astype(str).str.strip()
+    out = out[
+        out["googleAdsCampaignType"].ne("")
+        & out["googleAdsCampaignType"].ne("(not set)")
+    ]
+    out["campaignName"] = out["campaignName"].fillna("Unknown Campaign").astype(str).str.strip()
+    out["year_month"] = pd.to_datetime(out["yearMonth"].astype(str), format="%Y%m", errors="coerce")
+    out["sessions"] = pd.to_numeric(
+        out["sessions"].astype(str).str.replace(r"[^0-9.\-]", "", regex=True),
+        errors="coerce",
+    )
+    out = out.dropna(subset=["year_month", "sessions"])
+    if out.empty:
+        return pd.DataFrame(columns=empty_cols)
+
+    return (
+        out.groupby(
+            ["year_month", "campaignId", "campaignName", "googleAdsCampaignType"],
+            as_index=False,
+        )["sessions"]
+        .sum()
+        .rename(
+            columns={
+                "campaignId": "campaign_id",
+                "campaignName": "campaign_name",
+            }
+        )
+        .sort_values(["year_month", "sessions"], ascending=[False, False])
+        .reset_index(drop=True)
+    )
 
 
 def _merge_latest_ga_metrics(df: pd.DataFrame) -> pd.DataFrame:

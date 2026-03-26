@@ -29,6 +29,67 @@ SEG_COLOR_LIST = {
 }
 
 
+def fmt_thb_short(val):
+    if val is None or pd.isna(val):
+        return "-"
+    if abs(val) >= 1_000_000:
+        return f"THB {val/1_000_000:.1f}M"
+    if abs(val) >= 1_000:
+        return f"THB {val/1_000:.0f}K"
+    return f"THB {val:.0f}"
+
+
+def fmt_pct(val):
+    if val is None or pd.isna(val):
+        return "-"
+    return f"{val:.1%}"
+
+
+def fmt_score_delta(current, previous):
+    if previous is None or pd.isna(previous) or current is None or pd.isna(current):
+        return None
+    return f"{current - previous:+.2f}"
+
+
+def fmt_level_delta(current, previous, currency: bool = False):
+    if previous is None or pd.isna(previous) or current is None or pd.isna(current):
+        return None
+    delta = current - previous
+    if currency:
+        sign = "+" if delta >= 0 else "-"
+        return f"{sign}{fmt_thb_short(abs(delta))} vs prev"
+    return f"{delta:+,.0f} vs prev"
+
+
+def numeric_series(df: pd.DataFrame, col: str) -> pd.Series:
+    if col not in df.columns:
+        return pd.Series(index=df.index, dtype="float64")
+    return pd.to_numeric(df[col], errors="coerce")
+
+
+def score_percentile(series: pd.Series, value) -> float:
+    values = pd.to_numeric(series, errors="coerce").dropna()
+    current = pd.to_numeric(pd.Series([value]), errors="coerce").iloc[0]
+    if pd.isna(current) or values.empty:
+        return float("nan")
+    return float((values <= current).mean())
+
+
+def resolve_growth_signal_columns(hist: pd.DataFrame, signal_used: str) -> tuple[str | None, str | None, str]:
+    has_yoy = (
+        "booking_growth_yoy_rolling" in hist.columns
+        and numeric_series(hist, "booking_growth_yoy_rolling").notna().any()
+    )
+    if str(signal_used).strip().upper() == "YOY" and has_yoy:
+        revenue_col = "gmv_growth_yoy_rolling" if "gmv_growth_yoy_rolling" in hist.columns else "gmv_growth_rolling"
+        return "booking_growth_yoy_rolling", revenue_col, "YoY"
+
+    booking_col = "booking_growth_mom_rolling" if "booking_growth_mom_rolling" in hist.columns else "booking_growth_rolling"
+    revenue_col = "gmv_growth_mom_rolling" if "gmv_growth_mom_rolling" in hist.columns else "gmv_growth_rolling"
+    label = "MoM" if booking_col == "booking_growth_mom_rolling" else "Rolling"
+    return booking_col if booking_col in hist.columns else None, revenue_col if revenue_col in hist.columns else None, label
+
+
 def render():
     momentum_df = load_momentum()
     priority_df = load_priority()
@@ -98,6 +159,11 @@ def render():
         selected_row.iloc[0].get(seg_col)
         if has_segments and not selected_row.empty
         else None
+    )
+    selected_history = (
+        momentum_df[momentum_df["name"] == selected_restaurant].sort_values("year_month").copy()
+        if selected_restaurant != "None"
+        else pd.DataFrame()
     )
 
     k1, k2, k3, k4 = st.columns(4)
@@ -253,6 +319,381 @@ def render():
                 else f"Strategic matrix position: Perf {'-' if pd.isna(perf_val) else f'{perf_val:.2f}'} / "
                      f"Growth {'-' if pd.isna(growth_val) else f'{growth_val:.2f}'}"
             )
+
+    if not selected_history.empty:
+        st.markdown("### Highlighted Restaurant Trajectory")
+        selected_history = selected_history.copy()
+        selected_history["month_label"] = selected_history["year_month"].dt.strftime("%b %Y")
+        latest_point = selected_history.iloc[-1]
+        previous_point = selected_history.iloc[-2] if len(selected_history) > 1 else None
+
+        latest_perf = pd.to_numeric(pd.Series([latest_point.get("score_perf")]), errors="coerce").iloc[0]
+        latest_growth = pd.to_numeric(pd.Series([latest_point.get("score_growth")]), errors="coerce").iloc[0]
+        latest_bookings = pd.to_numeric(pd.Series([latest_point.get("monthly_bookings")]), errors="coerce").iloc[0]
+        latest_gmv = pd.to_numeric(pd.Series([latest_point.get("monthly_gmv")]), errors="coerce").iloc[0]
+        latest_growth_rate = pd.to_numeric(
+            pd.Series(
+                [
+                    latest_point.get(
+                        "booking_growth_rolling",
+                        latest_point.get("booking_growth_mom_rolling"),
+                    )
+                ]
+            ),
+            errors="coerce",
+        ).iloc[0]
+
+        prev_perf = previous_point.get("score_perf") if previous_point is not None else None
+        prev_growth = previous_point.get("score_growth") if previous_point is not None else None
+        prev_bookings = previous_point.get("monthly_bookings") if previous_point is not None else None
+        prev_gmv = previous_point.get("monthly_gmv") if previous_point is not None else None
+
+        snap_a, snap_b, snap_c, snap_d, snap_e = st.columns(5)
+        snap_a.metric("Performance Score", "-" if pd.isna(latest_perf) else f"{latest_perf:.2f}", delta=fmt_score_delta(latest_perf, prev_perf))
+        snap_b.metric("Growth Score", "-" if pd.isna(latest_growth) else f"{latest_growth:.2f}", delta=fmt_score_delta(latest_growth, prev_growth))
+        snap_c.metric("Latest Bookings", "-" if pd.isna(latest_bookings) else f"{latest_bookings:,.0f}", delta=fmt_level_delta(latest_bookings, prev_bookings))
+        snap_d.metric("Latest Revenue", fmt_thb_short(latest_gmv), delta=fmt_level_delta(latest_gmv, prev_gmv, currency=True))
+        snap_e.metric(
+            "Latest Growth Signal",
+            str(latest_point.get("growth_signal_used", "-")),
+            delta=fmt_pct(latest_growth_rate) if pd.notna(latest_growth_rate) else None,
+        )
+
+        trend_col, path_col = st.columns(2)
+
+        with trend_col:
+            st.markdown("#### Score Trend")
+            fig_scores = go.Figure()
+            if "score_perf" in selected_history.columns:
+                fig_scores.add_trace(
+                    go.Scatter(
+                        x=selected_history["year_month"],
+                        y=pd.to_numeric(selected_history["score_perf"], errors="coerce"),
+                        mode="lines+markers",
+                        name="Performance Score",
+                        line=dict(color="#3b82f6", width=3),
+                        marker=dict(size=7),
+                        hovertemplate="<b>%{x|%b %Y}</b><br>Performance: %{y:.2f}<extra></extra>",
+                    )
+                )
+            if "score_growth" in selected_history.columns:
+                fig_scores.add_trace(
+                    go.Scatter(
+                        x=selected_history["year_month"],
+                        y=pd.to_numeric(selected_history["score_growth"], errors="coerce"),
+                        mode="lines+markers",
+                        name="Growth Score",
+                        line=dict(color="#2ecc71", width=3),
+                        marker=dict(size=7),
+                        hovertemplate="<b>%{x|%b %Y}</b><br>Growth: %{y:.2f}<extra></extra>",
+                    )
+                )
+            fig_scores.update_layout(
+                **BASE_LAYOUT,
+                height=280,
+                xaxis=dict(**CHART_THEME["xaxis"], title="Month", tickangle=-30),
+                yaxis=dict(**CHART_THEME["yaxis"], title="Score (0-1)"),
+                legend=dict(orientation="h", y=1.02, x=0, font_size=10),
+            )
+            st.plotly_chart(fig_scores, width="stretch")
+
+        with path_col:
+            st.markdown("#### Matrix Path Over Time")
+            path_df = selected_history.dropna(subset=["score_perf", "score_growth"]).copy()
+            if len(path_df):
+                hover_text = []
+                for _, row in path_df.iterrows():
+                    hover_text.append(
+                        "<b>{month}</b><br>Perf: {perf:.2f}<br>Growth: {growth:.2f}<br>"
+                        "Bookings: {bookings}<br>Revenue: {revenue}<br>Rolling growth: {roll}<br>Signal: {signal}".format(
+                            month=row["month_label"],
+                            perf=float(row["score_perf"]),
+                            growth=float(row["score_growth"]),
+                            bookings="-"
+                            if pd.isna(pd.to_numeric(row.get("monthly_bookings"), errors="coerce"))
+                            else f"{float(row.get('monthly_bookings')):,.0f}",
+                            revenue=fmt_thb_short(pd.to_numeric(row.get("monthly_gmv"), errors="coerce")),
+                            roll=fmt_pct(pd.to_numeric(row.get("booking_growth_rolling"), errors="coerce")),
+                            signal=row.get("growth_signal_used", "-"),
+                        )
+                    )
+
+                fig_path = go.Figure()
+                fig_path.add_trace(
+                    go.Scatter(
+                        x=path_df["score_perf"],
+                        y=path_df["score_growth"],
+                        mode="lines+markers",
+                        name=selected_restaurant,
+                        line=dict(color="#9ca3c4", width=2),
+                        marker=dict(
+                            size=9,
+                            color=list(range(len(path_df))),
+                            colorscale="Blues",
+                            line=dict(color="#0f1117", width=1.5),
+                            showscale=False,
+                        ),
+                        hovertext=hover_text,
+                        hovertemplate="%{hovertext}<extra></extra>",
+                    )
+                )
+                fig_path.add_trace(
+                    go.Scatter(
+                        x=[path_df["score_perf"].iloc[-1]],
+                        y=[path_df["score_growth"].iloc[-1]],
+                        mode="markers+text",
+                        name="Latest",
+                        marker=dict(color="#cc0000", size=16, symbol="diamond", line=dict(color="#111827", width=2)),
+                        text=["Latest"],
+                        textposition="top center",
+                        hovertemplate="%{text}<extra></extra>",
+                        showlegend=True,
+                    )
+                )
+                fig_path.add_vline(
+                    x=latest_all["score_perf"].quantile(0.75),
+                    line_dash="dash",
+                    line_color="#2e3350",
+                    line_width=1,
+                )
+                fig_path.add_hline(
+                    y=latest_all["score_growth"].quantile(0.75),
+                    line_dash="dash",
+                    line_color="#2e3350",
+                    line_width=1,
+                )
+                fig_path.update_layout(
+                    **BASE_LAYOUT,
+                    height=280,
+                    xaxis=dict(**CHART_THEME["xaxis"], title="Performance Score"),
+                    yaxis=dict(**CHART_THEME["yaxis"], title="Growth Score"),
+                    legend=dict(orientation="h", y=1.02, x=0, font_size=10),
+                )
+                st.plotly_chart(fig_path, width="stretch")
+                st.caption(
+                    "The line shows how the restaurant moved through the strategic matrix month by month. "
+                    "Hover each point to see bookings, revenue, rolling growth, and the signal used."
+                )
+            else:
+                st.info("Not enough scored history is available to chart the matrix path.")
+
+        st.markdown("#### Why The Growth Score Is High")
+        levels_df = selected_history.copy()
+        levels_df["bookings_value"] = numeric_series(levels_df, "monthly_bookings")
+        levels_df["revenue_value"] = numeric_series(levels_df, "monthly_gmv")
+        levels_df["bookings_mom_change"] = levels_df["bookings_value"].diff()
+        levels_df["revenue_mom_change"] = levels_df["revenue_value"].diff()
+        levels_df["bookings_3m_avg"] = levels_df["bookings_value"].rolling(3, min_periods=1).mean()
+        levels_df["revenue_3m_avg"] = levels_df["revenue_value"].rolling(3, min_periods=1).mean()
+
+        booking_signal_col, revenue_signal_col, signal_label = resolve_growth_signal_columns(
+            levels_df,
+            latest_point.get("growth_signal_used", "-"),
+        )
+        levels_df["booking_signal_growth"] = (
+            numeric_series(levels_df, booking_signal_col)
+            if booking_signal_col
+            else pd.Series(index=levels_df.index, dtype="float64")
+        )
+        levels_df["revenue_signal_growth"] = (
+            numeric_series(levels_df, revenue_signal_col)
+            if revenue_signal_col
+            else pd.Series(index=levels_df.index, dtype="float64")
+        )
+        levels_df["mom_growth_composite"] = (
+            numeric_series(levels_df, "booking_growth_mom_rolling")
+            + numeric_series(levels_df, "gmv_growth_mom_rolling")
+        ) / 2
+        levels_df["yoy_growth_composite"] = (
+            numeric_series(levels_df, "booking_growth_yoy_rolling")
+            + numeric_series(levels_df, "gmv_growth_yoy_rolling")
+        ) / 2
+        levels_df["growth_input_blended"] = numeric_series(levels_df, "growth_rate_blended")
+        if levels_df["growth_input_blended"].isna().all():
+            levels_df["growth_input_blended"] = levels_df["mom_growth_composite"]
+            yoy_mask = levels_df["yoy_growth_composite"].notna()
+            levels_df.loc[yoy_mask, "growth_input_blended"] = (
+                levels_df.loc[yoy_mask, "yoy_growth_composite"] * 0.70
+                + levels_df.loc[yoy_mask, "mom_growth_composite"] * 0.30
+            )
+
+        latest_booking_signal = levels_df["booking_signal_growth"].iloc[-1] if len(levels_df) else None
+        latest_revenue_signal = levels_df["revenue_signal_growth"].iloc[-1] if len(levels_df) else None
+        latest_blended_growth = levels_df["growth_input_blended"].iloc[-1] if len(levels_df) else None
+        growth_pctile = score_percentile(latest_all["score_growth"], latest_growth)
+        growth_rank_label = f"P{int(round(growth_pctile * 100))}" if pd.notna(growth_pctile) else None
+        blend_rule = (
+            "70% YoY + 30% MoM blend"
+            if signal_label == "YoY" and pd.notna(levels_df["yoy_growth_composite"].iloc[-1])
+            else "100% MoM composite"
+        )
+
+        explainer_bits = [
+            "`score_growth` is a relative 0-1 score, not a literal growth percentage.",
+        ]
+        if pd.notna(latest_growth) and growth_rank_label:
+            explainer_bits.append(
+                f"This restaurant's latest growth score is {latest_growth:.2f}, around {growth_rank_label} within the portfolio."
+            )
+        if pd.notna(latest_booking_signal) or pd.notna(latest_revenue_signal):
+            explainer_bits.append(
+                f"The latest {signal_label} rolling inputs are bookings {fmt_pct(latest_booking_signal)} and revenue {fmt_pct(latest_revenue_signal)}."
+            )
+        if pd.notna(latest_blended_growth):
+            explainer_bits.append(
+                f"Those inputs feed a raw blended growth rate of {fmt_pct(latest_blended_growth)} before normalization ({blend_rule})."
+            )
+        st.caption(" ".join(explainer_bits))
+
+        level_col, driver_col = st.columns(2)
+
+        with level_col:
+            st.markdown("##### Raw Levels + 3M Trend")
+            booking_custom = levels_df[["bookings_3m_avg", "bookings_mom_change"]].to_numpy()
+            revenue_custom = levels_df[["revenue_3m_avg", "revenue_mom_change"]].to_numpy()
+
+            fig_levels = go.Figure()
+            fig_levels.add_trace(
+                go.Bar(
+                    x=levels_df["year_month"],
+                    y=levels_df["bookings_value"],
+                    name="Monthly Bookings",
+                    marker_color="#3b82f6",
+                    marker_opacity=0.70,
+                    customdata=booking_custom,
+                    hovertemplate=(
+                        "<b>%{x|%b %Y}</b><br>"
+                        "Bookings: %{y:,.0f}<br>"
+                        "3m avg: %{customdata[0]:,.1f}<br>"
+                        "MoM change: %{customdata[1]:+,.0f}<extra></extra>"
+                    ),
+                )
+            )
+            fig_levels.add_trace(
+                go.Scatter(
+                    x=levels_df["year_month"],
+                    y=levels_df["bookings_3m_avg"],
+                    mode="lines",
+                    name="Bookings 3m Avg",
+                    line=dict(color="#93c5fd", width=2, dash="dash"),
+                    hovertemplate="<b>%{x|%b %Y}</b><br>Bookings 3m avg: %{y:,.1f}<extra></extra>",
+                )
+            )
+            fig_levels.add_trace(
+                go.Scatter(
+                    x=levels_df["year_month"],
+                    y=levels_df["revenue_value"],
+                    mode="lines+markers",
+                    name="Monthly Revenue",
+                    line=dict(color="#f0a500", width=3),
+                    marker=dict(size=7),
+                    yaxis="y2",
+                    customdata=revenue_custom,
+                    hovertemplate=(
+                        "<b>%{x|%b %Y}</b><br>"
+                        "Revenue: THB %{y:,.0f}<br>"
+                        "3m avg: THB %{customdata[0]:,.0f}<br>"
+                        "MoM change: THB %{customdata[1]:+,.0f}<extra></extra>"
+                    ),
+                )
+            )
+            fig_levels.add_trace(
+                go.Scatter(
+                    x=levels_df["year_month"],
+                    y=levels_df["revenue_3m_avg"],
+                    mode="lines",
+                    name="Revenue 3m Avg",
+                    line=dict(color="#f7d488", width=2, dash="dash"),
+                    yaxis="y2",
+                    hovertemplate="<b>%{x|%b %Y}</b><br>Revenue 3m avg: THB %{y:,.0f}<extra></extra>",
+                )
+            )
+            fig_levels.update_layout(
+                **BASE_LAYOUT,
+                height=320,
+                xaxis=dict(**CHART_THEME["xaxis"], title="Month", tickangle=-30),
+                yaxis=dict(**CHART_THEME["yaxis"], title="Bookings"),
+                yaxis2=dict(
+                    overlaying="y",
+                    side="right",
+                    showgrid=False,
+                    title="Revenue (THB)",
+                    color="#f0a500",
+                ),
+                legend=dict(orientation="h", y=1.02, x=0, font_size=10),
+            )
+            st.plotly_chart(fig_levels, width="stretch")
+
+        with driver_col:
+            st.markdown(f"##### Growth Signal Behind Score ({signal_label})")
+            fig_driver = go.Figure()
+            fig_driver.add_trace(
+                go.Scatter(
+                    x=levels_df["year_month"],
+                    y=levels_df["booking_signal_growth"],
+                    mode="lines+markers",
+                    name=f"Bookings {signal_label} Growth",
+                    line=dict(color="#3b82f6", width=2.5),
+                    marker=dict(size=6),
+                    hovertemplate="<b>%{x|%b %Y}</b><br>Bookings growth: %{y:.1%}<extra></extra>",
+                )
+            )
+            fig_driver.add_trace(
+                go.Scatter(
+                    x=levels_df["year_month"],
+                    y=levels_df["revenue_signal_growth"],
+                    mode="lines+markers",
+                    name=f"Revenue {signal_label} Growth",
+                    line=dict(color="#f0a500", width=2.5),
+                    marker=dict(size=6),
+                    hovertemplate="<b>%{x|%b %Y}</b><br>Revenue growth: %{y:.1%}<extra></extra>",
+                )
+            )
+            fig_driver.add_trace(
+                go.Scatter(
+                    x=levels_df["year_month"],
+                    y=levels_df["growth_input_blended"],
+                    mode="lines",
+                    name="Blended Growth Input",
+                    line=dict(color="#e5e7eb", width=2, dash="dash"),
+                    hovertemplate="<b>%{x|%b %Y}</b><br>Blended growth input: %{y:.1%}<extra></extra>",
+                )
+            )
+            fig_driver.add_trace(
+                go.Scatter(
+                    x=levels_df["year_month"],
+                    y=numeric_series(levels_df, "score_growth"),
+                    mode="lines+markers",
+                    name="Growth Score",
+                    line=dict(color="#2ecc71", width=3),
+                    marker=dict(size=7),
+                    yaxis="y2",
+                    hovertemplate="<b>%{x|%b %Y}</b><br>Growth score: %{y:.2f}<extra></extra>",
+                )
+            )
+            fig_driver.add_hline(y=0, line_dash="dash", line_color="#7c82a0", line_width=1)
+            fig_driver.update_layout(
+                **BASE_LAYOUT,
+                height=320,
+                xaxis=dict(**CHART_THEME["xaxis"], title="Month", tickangle=-30),
+                yaxis=dict(**CHART_THEME["yaxis"], title=f"{signal_label} Growth", tickformat=".0%"),
+                yaxis2=dict(
+                    overlaying="y",
+                    side="right",
+                    showgrid=False,
+                    title="Growth Score (0-1)",
+                    color="#2ecc71",
+                    range=[0, 1],
+                ),
+                legend=dict(orientation="h", y=1.02, x=0, font_size=10),
+            )
+            st.plotly_chart(fig_driver, width="stretch")
+
+        st.caption(
+            "Left: raw bookings and revenue levels, with 3-month smoothing to show whether the lift is sustained. "
+            "Right: the actual rolling growth inputs behind `score_growth`. "
+            "When YoY is available the score uses a 50/50 bookings-revenue composite and blends 70% YoY with 30% MoM before normalizing to a 0-1 score."
+        )
 
     st.markdown("---")
 
