@@ -19,6 +19,7 @@ from data.loader import (
     load_cluster_assignments,
     load_cluster_ga_campaign_effectiveness,
     load_cluster_keywords,
+    load_ga_restaurant_monthly,
     load_cluster_strategy_outcomes,
     load_cluster_strategy_rankings,
     load_cluster_text_corpus,
@@ -202,6 +203,7 @@ def _build_word_cloud_figure(
 def render():
     assignments = load_cluster_assignments()
     ga_effectiveness_df = load_cluster_ga_campaign_effectiveness()
+    ga_restaurant_monthly = load_ga_restaurant_monthly()
     text_corpus = load_cluster_text_corpus()
     keyword_df = load_cluster_keywords()
     outcomes_df = load_cluster_strategy_outcomes()
@@ -472,6 +474,7 @@ def render():
     selected_restaurant_row = assignments[assignments["name_norm"] == active_rest_norm].head(1)
 
     st.markdown(f"### Selected Restaurant Snapshot: {active_restaurant}")
+    restaurant_ga_df = ga_restaurant_monthly.iloc[0:0].copy()
     if selected_restaurant_row.empty:
         st.info("No restaurant-level cluster snapshot found.")
     else:
@@ -481,6 +484,70 @@ def render():
         snap_b.metric("GMV / GA View", _fmt_thb(selected_rest.get("gmv_per_ga_view")))
         snap_c.metric("GA Add to Cart", _fmt_pct(selected_rest.get("ga_add_to_cart_rate")))
         snap_d.metric("GA View to Purchase", _fmt_pct(selected_rest.get("ga_view_to_purchase_rate")))
+
+        selected_rest_id = pd.to_numeric(pd.Series([selected_rest.get("restaurant_id")]), errors="coerce").iloc[0]
+        if pd.notna(selected_rest_id) and "restaurant_id" in ga_restaurant_monthly.columns:
+            restaurant_ga_df = ga_restaurant_monthly[
+                pd.to_numeric(ga_restaurant_monthly["restaurant_id"], errors="coerce") == selected_rest_id
+            ].copy()
+        elif "name_norm" in ga_restaurant_monthly.columns:
+            restaurant_ga_df = ga_restaurant_monthly[
+                ga_restaurant_monthly["name_norm"] == active_rest_norm
+            ].copy()
+
+    st.markdown("### Raw GA Records")
+    if restaurant_ga_df.empty:
+        st.info("No month-level GA rows found for the selected restaurant.")
+    else:
+        restaurant_ga_df = restaurant_ga_df.sort_values("year_month", ascending=False).copy()
+        ga_display_cols = [
+            c
+            for c in [
+                "year_month",
+                "monthly_gmv",
+                "monthly_bookings",
+                "ga_items_viewed",
+                "ga_items_added_to_cart",
+                "ga_items_purchased",
+                "ga_item_revenue",
+                "gmv_per_ga_view",
+                "bookings_per_ga_view",
+                "ga_add_to_cart_rate",
+                "ga_view_to_purchase_rate",
+                "ga_purchase_to_cart_rate",
+            ]
+            if c in restaurant_ga_df.columns
+        ]
+        ga_display = restaurant_ga_df[ga_display_cols].copy().rename(
+            columns={
+                "year_month": "Year Month",
+                "monthly_gmv": "Monthly GMV",
+                "monthly_bookings": "Monthly Bookings",
+                "ga_items_viewed": "Items Viewed",
+                "ga_items_added_to_cart": "Items Added to Cart",
+                "ga_items_purchased": "Items Purchased",
+                "ga_item_revenue": "GA Item Revenue",
+                "gmv_per_ga_view": "GMV / GA View",
+                "bookings_per_ga_view": "Bookings / GA View",
+                "ga_add_to_cart_rate": "Add to Cart Rate",
+                "ga_view_to_purchase_rate": "View to Purchase Rate",
+                "ga_purchase_to_cart_rate": "Purchase to Cart Rate",
+            }
+        )
+        if "Year Month" in ga_display.columns:
+            ga_display["Year Month"] = pd.to_datetime(ga_display["Year Month"], errors="coerce").dt.strftime("%Y-%m")
+        for col in ["Monthly GMV", "GA Item Revenue", "GMV / GA View"]:
+            if col in ga_display.columns:
+                ga_display[col] = ga_display[col].apply(_fmt_thb)
+        if "Bookings / GA View" in ga_display.columns:
+            ga_display["Bookings / GA View"] = pd.to_numeric(ga_display["Bookings / GA View"], errors="coerce").round(3)
+        for col in ["Monthly Bookings", "Items Viewed", "Items Added to Cart", "Items Purchased"]:
+            if col in ga_display.columns:
+                ga_display[col] = pd.to_numeric(ga_display[col], errors="coerce").round(0)
+        for col in ["Add to Cart Rate", "View to Purchase Rate", "Purchase to Cart Rate"]:
+            if col in ga_display.columns:
+                ga_display[col] = ga_display[col].apply(_fmt_pct)
+        st.dataframe(ga_display, hide_index=True, width="stretch", height=240)
 
     section_a, section_b = st.columns(2)
 
@@ -727,7 +794,7 @@ def render():
         )
 
     st.markdown(f"### Strategy Activity Detail ({scope_label})")
-    if active_cluster == all_clusters_option:
+    if active_cluster == all_clusters_option or "cluster_id" not in outcomes_df.columns:
         cluster_outcomes = outcomes_df.copy()
     else:
         cluster_outcomes = outcomes_df[outcomes_df["cluster_id"] == active_cluster].copy()
