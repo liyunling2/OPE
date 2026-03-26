@@ -550,8 +550,19 @@ def load_momentum_raw_bookings() -> pd.DataFrame:
         "id": "booking_id",
         "name": "restaurant_name",
         "adult": "adults",
+        "child": "kids",
+        "party_size": "total_guests",
+        "revenue": "revenue_thb",
     }
     bookings_df = bookings_df.rename(columns=rename_map)
+
+    if "channel_name" in bookings_df.columns:
+        channel_labels = bookings_df["channel_name"].astype("string").str.strip()
+        if "channel" in bookings_df.columns:
+            raw_channel = bookings_df["channel"].astype("string").str.strip()
+            bookings_df["channel"] = channel_labels.where(channel_labels.notna() & channel_labels.ne(""), raw_channel)
+        else:
+            bookings_df["channel"] = channel_labels
 
     if "restaurant_id" in bookings_df.columns:
         bookings_df["restaurant_id"] = pd.to_numeric(bookings_df["restaurant_id"], errors="coerce").astype("Int64")
@@ -568,20 +579,20 @@ def load_momentum_raw_bookings() -> pd.DataFrame:
     if "restaurant_name" not in bookings_df.columns:
         bookings_df["restaurant_name"] = "Unknown"
 
-    if "adults" not in bookings_df.columns:
-        bookings_df["adults"] = 0
-    if "kids" not in bookings_df.columns:
-        bookings_df["kids"] = 0
+    has_adults = "adults" in bookings_df.columns
+    has_kids = "kids" in bookings_df.columns
 
-    bookings_df["adults"] = pd.to_numeric(bookings_df["adults"], errors="coerce").fillna(0).astype(int)
-    bookings_df["kids"] = pd.to_numeric(bookings_df["kids"], errors="coerce").fillna(0).astype(int)
+    if has_adults:
+        bookings_df["adults"] = pd.to_numeric(bookings_df["adults"], errors="coerce").astype("Int64")
+    if has_kids:
+        bookings_df["kids"] = pd.to_numeric(bookings_df["kids"], errors="coerce").astype("Int64")
 
-    if "total_guests" not in bookings_df.columns:
-        bookings_df["total_guests"] = bookings_df["adults"] + bookings_df["kids"]
-    else:
-        bookings_df["total_guests"] = pd.to_numeric(bookings_df["total_guests"], errors="coerce").fillna(
-            bookings_df["adults"] + bookings_df["kids"]
-        )
+    if "total_guests" in bookings_df.columns:
+        bookings_df["total_guests"] = pd.to_numeric(bookings_df["total_guests"], errors="coerce").astype("Int64")
+    elif has_adults or has_kids:
+        adult_vals = pd.to_numeric(bookings_df["adults"], errors="coerce") if has_adults else 0
+        kid_vals = pd.to_numeric(bookings_df["kids"], errors="coerce") if has_kids else 0
+        bookings_df["total_guests"] = (adult_vals.fillna(0) + kid_vals.fillna(0)).astype("Int64")
 
     for dt_col in ["booking_date", "created_at"]:
         if dt_col in bookings_df.columns:
@@ -598,6 +609,10 @@ def load_momentum_raw_bookings() -> pd.DataFrame:
         bookings_df["revenue_dollars"] = pd.to_numeric(bookings_df["revenue_dollars"], errors="coerce")
     else:
         bookings_df["revenue_dollars"] = pd.NA
+
+    if "refund" not in bookings_df.columns and "refund_guarantee_status" in bookings_df.columns:
+        refund_status = bookings_df["refund_guarantee_status"].astype("string").str.strip()
+        bookings_df["refund"] = refund_status.where(refund_status.notna() & refund_status.ne("pending"), pd.NA)
 
     for bool_col in ["arrived", "no_show", "refund", "adjusted"]:
         if bool_col not in bookings_df.columns:
@@ -870,6 +885,156 @@ def _tokenize_text(text: str) -> list[str]:
     return [t for t in tokens if t not in stopwords]
 
 
+def _is_nonempty_text(value) -> bool:
+    if value is None:
+        return False
+    try:
+        if pd.isna(value):
+            return False
+    except TypeError:
+        pass
+    text = str(value).strip()
+    return text != "" and text.lower() not in {"nan", "none", "null"}
+
+
+def _normalize_text_snippet(text: str) -> str:
+    return re.sub(r"\s+", " ", str(text)).strip(" -\n\t")
+
+
+def _chunk_sentences(sentences: list[str], target_chars: int = 320, max_chars: int = 480) -> list[str]:
+    chunks: list[str] = []
+    current: list[str] = []
+    current_len = 0
+
+    for sentence in sentences:
+        clean_sentence = _normalize_text_snippet(sentence)
+        if not clean_sentence:
+            continue
+        proposed_len = current_len + len(clean_sentence) + (1 if current else 0)
+        if current and proposed_len > target_chars:
+            chunk = " ".join(current).strip()
+            if chunk:
+                chunks.append(chunk)
+            current = [clean_sentence]
+            current_len = len(clean_sentence)
+        else:
+            current.append(clean_sentence)
+            current_len = proposed_len
+
+        if current_len >= max_chars:
+            chunk = " ".join(current).strip()
+            if chunk:
+                chunks.append(chunk)
+            current = []
+            current_len = 0
+
+    if current:
+        chunk = " ".join(current).strip()
+        if chunk:
+            chunks.append(chunk)
+
+    return chunks
+
+
+def _split_text_blob(text: str, target_chars: int = 320, max_chars: int = 480) -> list[str]:
+    if not _is_nonempty_text(text):
+        return []
+
+    raw = str(text).replace("\r\n", "\n").replace("\r", "\n")
+    raw = re.sub(r"[ \t]+", " ", raw)
+    raw = re.sub(r"\n{3,}", "\n\n", raw).strip()
+
+    primary_parts = [
+        _normalize_text_snippet(part)
+        for part in re.split(
+            r"\n{2,}|(?<=[.!?])\s{2,}(?=[A-Z0-9'\"(])|\s+-\s*(?=[A-Z0-9'\"(])",
+            raw,
+        )
+        if _normalize_text_snippet(part)
+    ]
+
+    if len(primary_parts) <= 1:
+        sentence_parts = [
+            _normalize_text_snippet(part)
+            for part in re.split(r"(?<=[.!?])\s+(?=[A-Z0-9'\"(])", raw)
+            if _normalize_text_snippet(part)
+        ]
+        primary_parts = _chunk_sentences(sentence_parts, target_chars=target_chars, max_chars=max_chars)
+
+    chunks: list[str] = []
+    for part in primary_parts:
+        if len(part) <= max_chars:
+            chunks.append(part)
+            continue
+
+        sentence_parts = [
+            _normalize_text_snippet(sentence)
+            for sentence in re.split(r"(?<=[.!?])\s+(?=[A-Z0-9'\"(])", part)
+            if _normalize_text_snippet(sentence)
+        ]
+        if sentence_parts:
+            chunks.extend(_chunk_sentences(sentence_parts, target_chars=target_chars, max_chars=max_chars))
+        else:
+            for start in range(0, len(part), max_chars):
+                chunks.append(part[start : start + max_chars].strip())
+
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for chunk in chunks:
+        normalized_chunk = _normalize_text_snippet(chunk)
+        if not normalized_chunk or normalized_chunk in seen:
+            continue
+        seen.add(normalized_chunk)
+        deduped.append(normalized_chunk)
+    return deduped
+
+
+def _expand_cluster_text_corpus(text_df: pd.DataFrame) -> pd.DataFrame:
+    if text_df.empty:
+        return pd.DataFrame(
+            columns=["name", "name_norm", "text_id", "text_source", "raw_text", "clean_text", "cluster_id", "year_month"]
+        )
+
+    source_columns = [
+        ("review_text", "Review"),
+        ("google_text", "Google"),
+        ("kol_text", "KOL"),
+    ]
+    records: list[dict] = []
+    next_text_id = 1
+
+    for row in text_df.to_dict(orient="records"):
+        row_sources = [
+            (source_label, row.get(source_col))
+            for source_col, source_label in source_columns
+            if source_col in text_df.columns and _is_nonempty_text(row.get(source_col))
+        ]
+        if not row_sources and _is_nonempty_text(row.get("raw_text")):
+            row_sources = [("Combined", row.get("raw_text"))]
+
+        for source_label, source_text in row_sources:
+            for snippet in _split_text_blob(source_text):
+                records.append(
+                    {
+                        "name": row.get("name"),
+                        "name_norm": row.get("name_norm"),
+                        "text_id": next_text_id,
+                        "text_source": source_label,
+                        "raw_text": snippet,
+                        "clean_text": snippet.lower(),
+                        "cluster_id": row.get("cluster_id"),
+                        "year_month": row.get("year_month"),
+                    }
+                )
+                next_text_id += 1
+
+    if not records:
+        return pd.DataFrame(
+            columns=["name", "name_norm", "text_id", "text_source", "raw_text", "clean_text", "cluster_id", "year_month"]
+        )
+    return pd.DataFrame(records)
+
+
 @st.cache_data(ttl=300)
 def load_cluster_text_corpus() -> pd.DataFrame:
     text_df = pd.DataFrame()
@@ -908,8 +1073,9 @@ def load_cluster_text_corpus() -> pd.DataFrame:
 
     assignments = load_cluster_assignments()[["name_norm", "cluster_id"]].drop_duplicates("name_norm")
     text_df = text_df.drop(columns=["cluster_id"], errors="ignore").merge(assignments, on="name_norm", how="left")
+    text_df = _expand_cluster_text_corpus(text_df)
 
-    keep_cols = ["name", "name_norm", "text_id", "raw_text", "clean_text", "cluster_id", "year_month"]
+    keep_cols = ["name", "name_norm", "text_id", "text_source", "raw_text", "clean_text", "cluster_id", "year_month"]
     return text_df[keep_cols]
 
 

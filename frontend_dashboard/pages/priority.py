@@ -19,6 +19,9 @@ def layout(height=300, **kwargs):
 
 AXIS = dict(gridcolor="#2e3350", showline=False, zeroline=False) # Switched to light grid
 
+BOOL_TRUE_VALUES = {"true", "1", "yes", "y", "t"}
+BOOL_FALSE_VALUES = {"false", "0", "no", "n", "f", ""}
+
 def fmt_pct(val):
     if val is None or (isinstance(val, float) and pd.isna(val)): return "-"
     return "%.1f%%" % (val * 100)
@@ -33,6 +36,25 @@ def get_tier(tier):
     if "untapped" in t: return "#e67e22", "Untapped"
     if "review"   in t: return "#f1c40f", "Review"
     return "#7c82a0", str(tier)
+
+
+def coerce_bool_series(df: pd.DataFrame, column: str, default: bool = False) -> pd.Series:
+    if column not in df.columns:
+        return pd.Series(default, index=df.index, dtype=bool)
+
+    series = df[column]
+    if pd.api.types.is_bool_dtype(series):
+        return series.astype("boolean").fillna(default).astype(bool)
+
+    if pd.api.types.is_numeric_dtype(series):
+        return pd.to_numeric(series, errors="coerce").fillna(float(default)).astype(bool)
+
+    normalized = series.astype("string").str.strip().str.lower()
+    mapped = normalized.map(
+        {value: True for value in BOOL_TRUE_VALUES}
+        | {value: False for value in BOOL_FALSE_VALUES}
+    )
+    return mapped.astype("boolean").fillna(default).astype(bool)
 
 
 def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
@@ -176,6 +198,7 @@ def render():
         if "gmv_per_ga_view" in priority_df.columns
         else pd.Series(dtype="float64")
     )
+    is_seasonal_series = coerce_bool_series(priority_df, "is_seasonal", default=False)
 
     k1, k2, k3, k4, k5, k6 = st.columns(6)
     k1.metric("In Priority List", str(int(priority_df["is_in_priority_list"].sum())))
@@ -183,7 +206,7 @@ def render():
     k2.metric("Proven",   str(ct("proven")))
     k3.metric("Untapped", str(ct("untapped")))
     k4.metric("Review",   str(ct("review")))
-    seasonal_n = int(priority_df["is_seasonal"].fillna(False).sum()) if "is_seasonal" in priority_df.columns else 0
+    seasonal_n = int(is_seasonal_series.sum())
     k5.metric("\U0001F30A Seasonal", str(seasonal_n))
     k6.metric("Avg GMV / GA View", fmt_thb(ga_gmv_series.dropna().mean()))
     st.markdown("<br>", unsafe_allow_html=True)
@@ -252,7 +275,7 @@ def render():
         has_yoy_sc = "score_growth_yoy" in priority_df.columns
         if has_mom_sc and has_yoy_sc:
             pf = priority_df[priority_df["is_in_priority_list"]].copy() if "is_in_priority_list" in priority_df.columns else priority_df.copy()
-            is_seas = pf.get("is_seasonal", pd.Series(False, index=pf.index)).fillna(False)
+            is_seas = coerce_bool_series(pf, "is_seasonal", default=False)
             fig_mv = go.Figure()
             not_seas = pf[~is_seas]
             if len(not_seas):

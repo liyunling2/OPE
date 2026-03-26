@@ -6,6 +6,7 @@ Cluster exploration dashboard with cross-highlighting and strategy effectiveness
 
 from __future__ import annotations
 
+import html
 import re
 
 import numpy as np
@@ -50,6 +51,15 @@ def _fmt_thb(value: float | int | None) -> str:
     if value is None or (isinstance(value, float) and pd.isna(value)):
         return "-"
     return f"THB {value:,.0f}"
+
+
+def _fmt_year_month(value) -> str:
+    if value is None or pd.isna(value):
+        return "Unknown month"
+    parsed = pd.to_datetime(value, errors="coerce")
+    if pd.isna(parsed):
+        return str(value)
+    return parsed.strftime("%Y-%m")
 
 
 def _extract_selected_point(state) -> tuple[str | None, int | None]:
@@ -198,6 +208,97 @@ def _build_word_cloud_figure(
         showlegend=False,
     )
     return fig
+
+
+def _highlight_text(value: str, query: str) -> str:
+    escaped = html.escape(str(value))
+    if not query.strip():
+        return escaped.replace("\n", "<br>")
+
+    pattern = re.compile(re.escape(query.strip()), flags=re.IGNORECASE)
+    parts: list[str] = []
+    last_end = 0
+    for match in pattern.finditer(str(value)):
+        parts.append(html.escape(str(value)[last_end:match.start()]))
+        parts.append(
+            "<mark style='background:#fbbf24; color:#111827; padding:0 0.2rem; border-radius:0.2rem;'>"
+            f"{html.escape(match.group(0))}"
+            "</mark>"
+        )
+        last_end = match.end()
+    parts.append(html.escape(str(value)[last_end:]))
+    return "".join(parts).replace("\n", "<br>")
+
+
+def _render_raw_text_records(text_df: pd.DataFrame, search_text: str, max_rows: int) -> None:
+    if text_df.empty:
+        st.info("No raw text rows for this restaurant with the current filter.")
+        return
+
+    display_df = text_df.copy()
+    display_df["_sort_month"] = pd.to_datetime(display_df.get("year_month"), errors="coerce")
+    sort_cols = [c for c in ["_sort_month", "text_id"] if c in display_df.columns]
+    if sort_cols:
+        ascending = [False] * len(sort_cols)
+        display_df = display_df.sort_values(sort_cols, ascending=ascending)
+    display_df = display_df.head(int(max_rows))
+
+    for _, row in display_df.iterrows():
+        text_id = row.get("text_id", "-")
+        year_month = _fmt_year_month(row.get("year_month"))
+        text_source = str(row.get("text_source", "Review")).strip() or "Review"
+        raw_text = row.get("raw_text", "")
+        if pd.isna(raw_text) or str(raw_text).strip() == "":
+            raw_text = "(empty text)"
+        source_bg = {
+            "Review": "#172554",
+            "Google": "#14532d",
+            "KOL": "#7c2d12",
+            "Combined": "#3f3f46",
+        }.get(text_source, "#334155")
+        card_html = f"""
+        <div style="
+            background: linear-gradient(180deg, #161b26 0%, #10151f 100%);
+            border: 1px solid #2a3344;
+            border-radius: 14px;
+            padding: 1rem 1.1rem;
+            margin-bottom: 0.85rem;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+        ">
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                gap:1rem;
+                margin-bottom:0.75rem;
+                flex-wrap:wrap;
+                align-items:center;
+            ">
+                <div style="display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap;">
+                    <div style="font-size:0.85rem; font-weight:700; color:#f9fafb;">Text ID {html.escape(str(text_id))}</div>
+                    <span style="
+                        display:inline-flex;
+                        align-items:center;
+                        padding:0.18rem 0.55rem;
+                        border-radius:999px;
+                        background:{source_bg};
+                        color:#e5e7eb;
+                        font-size:0.72rem;
+                        font-weight:700;
+                        letter-spacing:0.03em;
+                    ">{html.escape(text_source)}</span>
+                </div>
+                <div style="font-size:0.8rem; color:#cbd5e1;">{html.escape(year_month)}</div>
+            </div>
+            <div style="
+                color:#e5e7eb;
+                font-size:0.98rem;
+                line-height:1.7;
+                white-space:normal;
+                word-break:break-word;
+            ">{_highlight_text(str(raw_text), search_text)}</div>
+        </div>
+        """
+        st.markdown(card_html, unsafe_allow_html=True)
 
 
 def render():
@@ -595,20 +696,38 @@ def render():
             st.plotly_chart(fig_rest_wc, width="stretch")
 
     st.markdown("### Raw Text Records")
-    search_text = st.text_input("Filter selected restaurant text", value="", key="cluster_text_filter")
     rest_text_df = text_corpus[text_corpus["name_norm"] == active_rest_norm].copy()
+    source_options = ["All Sources"]
+    if "text_source" in rest_text_df.columns:
+        source_values = sorted(rest_text_df["text_source"].dropna().astype(str).unique().tolist())
+        source_options.extend(source_values)
+
+    text_control_a, text_control_b, text_control_c = st.columns([3.4, 1.4, 1.0])
+    with text_control_a:
+        search_text = st.text_input("Filter selected restaurant text", value="", key="cluster_text_filter")
+    with text_control_b:
+        source_choice = st.selectbox("Source", options=source_options, index=0, key="cluster_text_source_filter")
+    with text_control_c:
+        text_limit = st.selectbox(
+            "Rows to show",
+            options=[5, 10, 15, 20, 30],
+            index=2,
+            key="cluster_text_limit",
+        )
 
     if search_text.strip():
         mask = rest_text_df["raw_text"].fillna("").str.contains(search_text.strip(), case=False, regex=False)
         rest_text_df = rest_text_df[mask]
+    if source_choice != "All Sources" and "text_source" in rest_text_df.columns:
+        rest_text_df = rest_text_df[rest_text_df["text_source"] == source_choice].copy()
 
     if rest_text_df.empty:
         st.info("No raw text rows for this restaurant with the current filter.")
     else:
-        raw_display = rest_text_df[[c for c in ["text_id", "year_month", "raw_text"] if c in rest_text_df.columns]].rename(
-            columns={"text_id": "Text ID", "year_month": "Year Month", "raw_text": "Raw Text"}
+        st.caption(
+            f"Showing {min(len(rest_text_df), int(text_limit))} of {len(rest_text_df)} matched text records for {active_restaurant}."
         )
-        st.dataframe(raw_display, hide_index=True, width="stretch", height=240)
+        _render_raw_text_records(rest_text_df, search_text=search_text, max_rows=int(text_limit))
 
     st.markdown("---")
 

@@ -45,6 +45,17 @@ def fmt_pct(val):
     return f"{val:.1%}"
 
 
+def has_display_values(series: pd.Series) -> bool:
+    if series is None or len(series) == 0:
+        return False
+    if pd.api.types.is_numeric_dtype(series) or pd.api.types.is_bool_dtype(series) or pd.api.types.is_datetime64_any_dtype(series):
+        return series.notna().any()
+
+    text = series.astype("string").str.strip()
+    valid = text.notna() & ~text.isin(["", "-", "nan", "None", "<NA>"])
+    return bool(valid.any())
+
+
 def segment_pill(segment: str) -> str:
     color_map = {
         "Rising Stars"           : "green",
@@ -402,29 +413,29 @@ def render():
             raw_display["revenue_dollars"] = pd.to_numeric(raw_display["revenue_dollars"], errors="coerce").apply(
                 lambda x: f"${x:,.2f}" if pd.notna(x) else "-"
             )
+        for bool_col in ["arrived", "no_show", "adjusted"]:
+            if bool_col in raw_display.columns:
+                raw_display[bool_col] = raw_display[bool_col].map({True: "Yes", False: "No"})
 
-        display_cols = [
-            c
-            for c in [
-                "booking_id",
-                "booking_date",
-                "created_at",
-                "start_time",
-                "end_time",
-                "channel",
-                "medium",
-                "adults",
-                "kids",
-                "total_guests",
-                "revenue_thb",
-                "revenue_dollars",
-                "arrived",
-                "no_show",
-                "refund",
-                "adjusted",
-            ]
-            if c in raw_display.columns
+        candidate_cols = [
+            "booking_id",
+            "booking_date",
+            "created_at",
+            "start_time",
+            "end_time",
+            "channel",
+            "medium",
+            "adults",
+            "kids",
+            "total_guests",
+            "revenue_thb",
+            "revenue_dollars",
+            "arrived",
+            "no_show",
+            "refund",
+            "adjusted",
         ]
+        display_cols = [c for c in candidate_cols if c in raw_display.columns and has_display_values(raw_display[c])]
         raw_display = raw_display[display_cols].rename(
             columns={
                 "booking_id": "Booking ID",
