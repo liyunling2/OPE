@@ -174,7 +174,8 @@ def createDatasets():
             dimensions=[
                 "yearMonth",
                 "campaignId",
-                "campaignName"
+                "campaignName",
+                "googleAdsCampaignType"
             ],
             metrics=[
                 "sessions"

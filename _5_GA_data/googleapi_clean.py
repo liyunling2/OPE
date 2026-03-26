@@ -31,7 +31,7 @@ SCHEMA = {
     'campaigns_outreach': {
         'datetime': ['yearMonth'],
         'string':   ['campaignId'],
-        'category': ['campaignName'],
+        'category': ['campaignName','googleAdsCampaignType'],
         'float':    ['sessions'],
     },
     'campaign_impact': {
@@ -79,6 +79,7 @@ FILTER_RULES = {
     'campaigns_outreach': [
         ('campaignId',   ['(not set)']),
         ('campaignName', ['(not set)']),
+        ('googleAdsCampaignType', ['(not set)']),
     ],
     'campaign_impact': [
         ('itemId',   ['(not set)']),
