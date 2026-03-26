@@ -7,7 +7,6 @@ Shows restaurant details, current performance metrics, and booking trends.
 
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
 import streamlit as st
 
 from data.loader import (
@@ -38,6 +37,12 @@ def fmt_thb(val):
     if val >= 1_000:
         return f"฿{val/1_000:.0f}K"
     return f"฿{val:.0f}"
+
+
+def fmt_pct(val):
+    if pd.isna(val):
+        return "-"
+    return f"{val:.1%}"
 
 
 def segment_pill(segment: str) -> str:
@@ -75,7 +80,10 @@ def render():
             ["All"] + (list(SEGMENT_COLORS.keys()) if not segments_available else segments_available)
         )
     with col_f3:
-        sort_by = st.selectbox("Sort table by", ["monthly_bookings", "monthly_gmv", "score_growth", "score_perf"])
+        sort_by = st.selectbox(
+            "Sort table by",
+            ["monthly_bookings", "monthly_gmv", "gmv_per_ga_view", "score_growth", "score_perf"],
+        )
 
     st.markdown("---")
 
@@ -106,26 +114,31 @@ def render():
         """, unsafe_allow_html=True)
     with hc2:
         priority_score = p_row.get("priority_score", None)
-        if priority_score is not None:
+        if priority_score is not None and pd.notna(priority_score):
             tier = p_row.get("priority_tier", "—")
+            reason = p_row.get("priority_reason", "—")
             st.markdown(f"""
             <div style='text-align:right;'>
                 <div style='font-size:0.75rem; color:#9ca3c4; text-transform:uppercase; letter-spacing:0.08em;'>Priority Score</div>
                 <div style='font-family: "DM Sans", sans-serif; font-weight: 700; font-size: 2rem; color: #cc0000;'>{priority_score:.0f}</div>
                 <div style='font-size:0.75rem; color:#9ca3c4;'>{tier}</div>
+                <div style='font-size:0.75rem; color:#9ca3c4; margin-top:0.2rem;'>{reason}</div>
             </div>
             """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
     # ── KPI metrics ───────────────────────────────────────────────────────────
-    m1, m2, m3, m4, m5, m6 = st.columns(6)
+    m1, m2, m3, m4 = st.columns(4)
+    m5, m6, m7, m8 = st.columns(4)
     bk     = int(latest.get("monthly_bookings", 0))
     rev    = latest.get("monthly_gmv", 0)
     avg_rev = latest.get("avg_gmv_per_booking", 0)
     guests  = latest.get("avg_guests", 0)
-    act_days = int(latest.get("active_days", 0))
     bk_growth = latest.get("booking_growth_rolling", 0)
+    gmv_per_ga_view = latest.get("gmv_per_ga_view", pd.NA)
+    ga_add_to_cart_rate = latest.get("ga_add_to_cart_rate", pd.NA)
+    ga_view_to_purchase_rate = latest.get("ga_view_to_purchase_rate", pd.NA)
 
     # compute MoM delta for bookings
     if len(hist) >= 2:
@@ -136,10 +149,12 @@ def render():
 
     m1.metric("Monthly Bookings",      f"{bk:,}",         f"{bk_delta:+,} vs prev month")
     m2.metric("Monthly Revenue",       fmt_thb(rev),       "")
-    m3.metric("Avg Rev / Booking",     fmt_thb(avg_rev),   "")
-    m4.metric("Avg Guests / Booking",  f"{guests:.1f}",    "")
-    m5.metric("Active Days",           f"{act_days}",      "")
-    m6.metric("Rolling Growth",   f"{bk_growth:.1%}", "YoY" if latest.get("growth_signal_used") == "YoY" else "MoM")
+    m3.metric("GMV / GA View",         fmt_thb(gmv_per_ga_view), "")
+    m4.metric("GA Add to Cart",        fmt_pct(ga_add_to_cart_rate), "")
+    m5.metric("Avg Rev / Booking",     fmt_thb(avg_rev),   "")
+    m6.metric("Avg Guests / Booking",  f"{guests:.1f}",    "")
+    m7.metric("GA View to Purchase",   fmt_pct(ga_view_to_purchase_rate), "")
+    m8.metric("Rolling Growth",        fmt_pct(bk_growth), "YoY" if latest.get("growth_signal_used") == "YoY" else "MoM")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -311,8 +326,9 @@ def render():
 
     display_cols = [c for c in [
         "name", "latest_segment", "monthly_bookings", "monthly_gmv",
+        "gmv_per_ga_view", "ga_add_to_cart_rate", "ga_view_to_purchase_rate",
         "avg_gmv_per_booking", "avg_guests", "booking_growth_mom_rolling", "booking_growth_yoy_rolling",
-        "growth_signal_used", "is_seasonal", "priority_score", "recommended_channel"
+        "growth_signal_used", "is_seasonal", "priority_score", "priority_reason", "recommended_channel"
     ] if c in latest_all.columns]
 
     display_df = latest_all[display_cols].copy()
@@ -320,9 +336,12 @@ def render():
         display_df = display_df.sort_values(sort_by, ascending=False)
 
     # Format
-    for col in ["monthly_gmv", "avg_gmv_per_booking"]:
+    for col in ["monthly_gmv", "gmv_per_ga_view", "avg_gmv_per_booking"]:
         if col in display_df.columns:
             display_df[col] = display_df[col].apply(fmt_thb)
+    for col in ["ga_add_to_cart_rate", "ga_view_to_purchase_rate"]:
+        if col in display_df.columns:
+            display_df[col] = display_df[col].apply(fmt_pct)
     for col in ["booking_growth_rolling", "booking_growth_mom_rolling", "booking_growth_yoy_rolling"]:
         if col in display_df.columns:
             display_df[col] = display_df[col].apply(lambda x: f"{x:.1%}" if pd.notna(x) else "—")

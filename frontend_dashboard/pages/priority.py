@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-from data.loader import load_priority, load_momentum, load_momentum_segments
+from data.loader import load_priority, load_momentum, load_momentum_segments, score_priority_with_ga
 
 
 def layout(height=300, **kwargs):
@@ -19,13 +19,13 @@ def layout(height=300, **kwargs):
 
 AXIS = dict(gridcolor="#2e3350", showline=False, zeroline=False) # Switched to light grid
 
-# Priority scoring weights from priority_scoring_seasonality.ipynb
-W_SCORE_GROWTH = 0.60
-W_DELTA_GROWTH = 0.40
-
 def fmt_pct(val):
     if val is None or (isinstance(val, float) and pd.isna(val)): return "-"
     return "%.1f%%" % (val * 100)
+
+def fmt_thb(val):
+    if val is None or pd.isna(val): return "-"
+    return f"THB {val:,.2f}" if abs(val) < 1000 else f"THB {val:,.0f}"
 
 def get_tier(tier):
     t = str(tier).lower()
@@ -33,33 +33,6 @@ def get_tier(tier):
     if "untapped" in t: return "#e67e22", "Untapped"
     if "review"   in t: return "#f1c40f", "Review"
     return "#7c82a0", str(tier)
-
-
-def min_max_norm(s: pd.Series) -> pd.Series:
-    s = pd.to_numeric(s, errors="coerce").fillna(0)
-    rng = s.max() - s.min()
-    if pd.isna(rng) or rng == 0:
-        return pd.Series(0.5, index=s.index)
-    return (s - s.min()) / rng
-
-
-def add_priority_breakdown_cols(df: pd.DataFrame) -> pd.DataFrame:
-    out = df.copy()
-
-    growth_series = out["score_growth"] if "score_growth" in out.columns else pd.Series(0, index=out.index)
-    out["score_growth_norm"] = min_max_norm(growth_series.fillna(0))
-    if "delta_growth_book" in out.columns:
-        out["delta_growth_norm"] = min_max_norm(out["delta_growth_book"])
-    else:
-        out["delta_growth_norm"] = 0.0
-
-    out["growth_component"] = (
-        out["score_growth_norm"] * W_SCORE_GROWTH +
-        out["delta_growth_norm"] * W_DELTA_GROWTH
-    )
-    out["priority_raw_recomputed"] = out["growth_component"]
-    out["priority_score_recomputed"] = min_max_norm(out["priority_raw_recomputed"]) * 100
-    return out
 
 
 def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
@@ -100,14 +73,25 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
             "monthly_bookings",
             "monthly_gmv",
             "booking_growth_rolling",
+            "booking_growth_mom_rolling",
+            "booking_growth_yoy_rolling",
             "gmv_growth_rolling",
             "booking_growth_yoy",
             "gmv_growth_yoy",
             "growth_signal_used",
             "delta_growth_book",
             "delta_growth_rev",
+            "gmv_per_ga_view",
+            "bookings_per_ga_view",
+            "ga_add_to_cart_rate",
+            "ga_view_to_purchase_rate",
+            "ga_purchase_to_cart_rate",
+            "ga_revenue_per_view",
+            "ga_items_viewed",
+            "has_ga_data",
             "months_of_history",
             "has_full_year",
+            "is_seasonal",
         ]
         if c in latest.columns
     ]
@@ -126,13 +110,24 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
         "monthly_bookings",
         "monthly_gmv",
         "booking_growth_rolling",
+        "booking_growth_mom_rolling",
+        "booking_growth_yoy_rolling",
         "gmv_growth_rolling",
         "booking_growth_yoy",
         "gmv_growth_yoy",
         "growth_signal_used",
         "delta_growth_book",
         "delta_growth_rev",
+        "gmv_per_ga_view",
+        "bookings_per_ga_view",
+        "ga_add_to_cart_rate",
+        "ga_view_to_purchase_rate",
+        "ga_purchase_to_cart_rate",
+        "ga_revenue_per_view",
+        "ga_items_viewed",
+        "has_ga_data",
         "has_full_year",
+        "is_seasonal",
     ]
     for col in coalesce_cols:
         bcol = f"{col}_base"
@@ -153,7 +148,7 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
         combined["recommended_channel"].notna(),
         pd.NA,
     )
-    combined["priority_score"] = pd.to_numeric(combined.get("priority_score"), errors="coerce").fillna(0.0)
+    combined["priority_score"] = pd.to_numeric(combined.get("priority_score"), errors="coerce")
     if "has_marketing" in combined.columns:
         combined["has_marketing"] = np.where(
             combined["has_marketing"].isna(),
@@ -167,8 +162,7 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
 
 def render():
     base_priority_df = load_priority()
-    priority_df = build_priority_universe(base_priority_df)
-    priority_df = add_priority_breakdown_cols(priority_df)
+    priority_df = score_priority_with_ga(build_priority_universe(base_priority_df))
     st.markdown("## Priority List")
     st.markdown("<p style='color:#7c82a0;margin-top:-0.5rem;'>Stable-growth restaurants ranked by composite priority score.</p>", unsafe_allow_html=True)
     st.markdown("---")
@@ -177,7 +171,13 @@ def render():
         st.warning("No priority data. Run priority_scoring_seasonality.ipynb first.")
         return
 
-    k1, k2, k3, k4, k5 = st.columns(5)
+    ga_gmv_series = (
+        pd.to_numeric(priority_df["gmv_per_ga_view"], errors="coerce")
+        if "gmv_per_ga_view" in priority_df.columns
+        else pd.Series(dtype="float64")
+    )
+
+    k1, k2, k3, k4, k5, k6 = st.columns(6)
     k1.metric("In Priority List", str(int(priority_df["is_in_priority_list"].sum())))
     def ct(kw): return sum(kw in str(t).lower() for t in priority_df["priority_tier"])
     k2.metric("Proven",   str(ct("proven")))
@@ -185,6 +185,7 @@ def render():
     k4.metric("Review",   str(ct("review")))
     seasonal_n = int(priority_df["is_seasonal"].fillna(False).sum()) if "is_seasonal" in priority_df.columns else 0
     k5.metric("\U0001F30A Seasonal", str(seasonal_n))
+    k6.metric("Avg GMV / GA View", fmt_thb(ga_gmv_series.dropna().mean()))
     st.markdown("<br>", unsafe_allow_html=True)
     st.caption(
         f"Total restaurants shown: {len(priority_df):,}. "
@@ -193,9 +194,10 @@ def render():
 
     with st.expander("How Priority Score Is Calculated", expanded=False):
         st.markdown(
-            "**Formula (from `priority_scoring_seasonality.ipynb`)**\n\n"
+            "**Formula (GA-adjusted priority model)**\n\n"
             "- `growth_component = 0.60 * score_growth_norm + 0.40 * delta_growth_norm`\n"
-            "- `priority_raw = growth_component`\n"
+            "- `ga_component = gmv_per_ga_view_norm`\n"
+            "- `priority_raw = 0.75 * growth_component + 0.25 * ga_component`\n"
             "- Final score: `priority_score = min_max_norm(priority_raw) * 100`"
         )
 
@@ -203,10 +205,12 @@ def render():
         breakdown_name = st.selectbox("Restaurant breakdown", breakdown_names, key="priority_breakdown_name")
         brow = priority_df[priority_df["name"] == breakdown_name].iloc[0]
 
-        b1, b2, b3 = st.columns(3)
+        b1, b2, b3, b4 = st.columns(4)
         b1.metric("Priority Score", f"{brow.get('priority_score', 0):.2f}")
         b2.metric("Growth Component", f"{brow.get('growth_component', 0):.4f}")
-        b3.metric("Priority Raw", f"{brow.get('priority_raw_recomputed', 0):.4f}")
+        b3.metric("GA Component", f"{brow.get('ga_component', 0):.4f}")
+        b4.metric("GMV / GA View", fmt_thb(brow.get("gmv_per_ga_view")))
+        st.caption(f"Priority reason: {brow.get('priority_reason', '-')}")
 
         breakdown_df = pd.DataFrame(
             [
@@ -215,9 +219,14 @@ def render():
                 ("score_growth_norm", brow.get("score_growth_norm", np.nan)),
                 ("delta_growth_norm", brow.get("delta_growth_norm", np.nan)),
                 ("growth_component", brow.get("growth_component", np.nan)),
+                ("gmv_per_ga_view", brow.get("gmv_per_ga_view", np.nan)),
+                ("gmv_per_ga_view_norm", brow.get("gmv_per_ga_view_norm", np.nan)),
+                ("ga_add_to_cart_rate", brow.get("ga_add_to_cart_rate", np.nan)),
+                ("ga_view_to_purchase_rate", brow.get("ga_view_to_purchase_rate", np.nan)),
+                ("ga_component", brow.get("ga_component", np.nan)),
                 ("priority_raw_recomputed", brow.get("priority_raw_recomputed", np.nan)),
                 ("priority_score_recomputed", brow.get("priority_score_recomputed", np.nan)),
-                ("priority_score_saved", brow.get("priority_score", np.nan)),
+                ("priority_score_saved", brow.get("priority_score_saved", np.nan)),
             ],
             columns=["Figure Used In Calculation", "Value"],
         )
@@ -363,6 +372,8 @@ def render():
         lift    = row.get("avg_lift_per_day", None)
         signal  = row.get("growth_signal_used", "-")
         gc      = "#2ecc71" if growth is not None and pd.notna(growth) and growth > 0 else "#e74c3c"
+        gmv_per_ga_view = row.get("gmv_per_ga_view", None)
+        priority_reason = row.get("priority_reason", "-")
 
         st.markdown(
                 "<div style='background:#1e2130;border:1px solid #2e3350;border-left:4px solid {c};border-radius:8px;padding:1.2rem;margin-bottom:1rem;box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>"
@@ -376,12 +387,16 @@ def render():
                 "<div style='margin-top:0.5rem;font-size:0.79rem;color:#9ca3c4;display:flex;gap:1.5rem;'>"
                 "<span>Bookings: <b style='color:#e8eaf0;'>{b}</b></span>"
                 "<span>Growth: <b style='color:{gc};'>{g} ({sig})</b></span>"
+                "<span>GMV / GA View: <b style='color:#e8eaf0;'>{ggv}</b></span>"
                 "<span>Campaigns: <b style='color:#e8eaf0;'>{nc}</b></span>"
                 "<span>Lift/day: <b style='color:#e8eaf0;'>{li}</b></span>"
+                "<span>Reason: <b style='color:#e8eaf0;'>{reason}</b></span>"
                 "</div></div>".format(
                     c=color, r=rank, n=name, l=label, ch=channel, s=score,
                     b=bookings, g=fmt_pct(growth), sig=signal, gc=gc,
-                    nc=n_camp, li=("%.2f" % lift if lift is not None and pd.notna(lift) else "-")
+                    ggv=fmt_thb(gmv_per_ga_view),
+                    nc=n_camp, li=("%.2f" % lift if lift is not None and pd.notna(lift) else "-"),
+                    reason=priority_reason,
                 ),
                 unsafe_allow_html=True
             )

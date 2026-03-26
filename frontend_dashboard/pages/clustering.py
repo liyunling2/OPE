@@ -17,6 +17,7 @@ import streamlit as st
 from data.loader import (
     get_cluster_strategy_recommendations,
     load_cluster_assignments,
+    load_cluster_ga_campaign_effectiveness,
     load_cluster_keywords,
     load_cluster_strategy_outcomes,
     load_cluster_strategy_rankings,
@@ -200,6 +201,7 @@ def _build_word_cloud_figure(
 
 def render():
     assignments = load_cluster_assignments()
+    ga_effectiveness_df = load_cluster_ga_campaign_effectiveness()
     text_corpus = load_cluster_text_corpus()
     keyword_df = load_cluster_keywords()
     outcomes_df = load_cluster_strategy_outcomes()
@@ -219,7 +221,8 @@ def render():
 
     assignments = assignments.copy()
     assignments["cluster_id"] = pd.to_numeric(assignments["cluster_id"], errors="coerce").astype(int)
-    assignments["name"] = assignments["name"].apply(_normalize_name)
+    if "name_norm" not in assignments.columns:
+        assignments["name_norm"] = assignments["name"].apply(_normalize_name)
 
     all_clusters_option = "All Clusters"
     cluster_rows = assignments[["cluster_id", "cluster_label"]].drop_duplicates().sort_values(["cluster_id", "cluster_label"])
@@ -248,7 +251,7 @@ def render():
     if "cluster_active_restaurant" not in st.session_state:
         st.session_state["cluster_active_restaurant"] = cluster_df.iloc[0]["name"] if len(cluster_df) else assignments.iloc[0]["name"]
 
-    if _normalize_name(st.session_state["cluster_active_restaurant"]) not in set(cluster_df["name"]):
+    if _normalize_name(st.session_state["cluster_active_restaurant"]) not in set(cluster_df["name_norm"]):
         st.session_state["cluster_active_restaurant"] = cluster_df.iloc[0]["name"] if len(cluster_df) else assignments.iloc[0]["name"]
 
     control_a, control_b, control_c = st.columns([1.5, 2.5, 1])
@@ -307,12 +310,24 @@ def render():
     active_restaurant = st.session_state["cluster_active_restaurant"]
     active_rest_norm = _normalize_name(active_restaurant)
     scope_label = all_clusters_option if active_cluster == all_clusters_option else f"Cluster {active_cluster}"
+    scope_gmv_per_ga_view = (
+        pd.to_numeric(cluster_df["gmv_per_ga_view"], errors="coerce").mean()
+        if "gmv_per_ga_view" in cluster_df.columns
+        else np.nan
+    )
+    scope_ga_add_to_cart = (
+        pd.to_numeric(cluster_df["ga_add_to_cart_rate"], errors="coerce").mean()
+        if "ga_add_to_cart_rate" in cluster_df.columns
+        else np.nan
+    )
 
-    metric_a, metric_b, metric_c, metric_d = st.columns(4)
+    metric_a, metric_b, metric_c, metric_d, metric_e, metric_f = st.columns(6)
     metric_a.metric("Restaurants in Scope", f"{len(cluster_df):,}")
     metric_b.metric("Total Scope Bookings", f"{cluster_df['monthly_bookings'].fillna(0).sum():,.0f}")
     metric_c.metric("Avg Scope Revenue", _fmt_thb(cluster_df["monthly_gmv"].mean()))
-    metric_d.metric("Known Momentum Segment", f"{cluster_df['latest_segment'].notna().sum():,}")
+    metric_d.metric("Scope GMV / GA View", _fmt_thb(scope_gmv_per_ga_view))
+    metric_e.metric("Scope GA Add to Cart", _fmt_pct(scope_ga_add_to_cart))
+    metric_f.metric("Known Momentum Segment", f"{cluster_df['latest_segment'].notna().sum():,}")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -345,7 +360,7 @@ def render():
             ),
         )
 
-        selected_row = scatter_df[scatter_df["name"] == active_rest_norm]
+        selected_row = scatter_df[scatter_df["name_norm"] == active_rest_norm]
         if len(selected_row):
             fig.add_trace(
                 go.Scatter(
@@ -409,7 +424,7 @@ def render():
             ["latest_segment", "name"], ascending=[True, True]
         )
         active_rest_norm = _normalize_name(st.session_state["cluster_active_restaurant"])
-        cluster_df["active"] = np.where(cluster_df["name"].apply(_normalize_name) == active_rest_norm, "Selected", "")
+        cluster_df["active"] = np.where(cluster_df["name_norm"] == active_rest_norm, "Selected", "")
 
         display_cols = [
             "active",
@@ -454,7 +469,18 @@ def render():
     active_rest_norm = _normalize_name(active_restaurant)
 
     selected_cluster_df = _filter_by_selected_cluster(assignments).copy()
-    selected_restaurant_row = assignments[assignments["name"] == active_rest_norm].head(1)
+    selected_restaurant_row = assignments[assignments["name_norm"] == active_rest_norm].head(1)
+
+    st.markdown(f"### Selected Restaurant Snapshot: {active_restaurant}")
+    if selected_restaurant_row.empty:
+        st.info("No restaurant-level cluster snapshot found.")
+    else:
+        selected_rest = selected_restaurant_row.iloc[0]
+        snap_a, snap_b, snap_c, snap_d = st.columns(4)
+        snap_a.metric("Cluster", str(selected_rest.get("cluster_label", "-")))
+        snap_b.metric("GMV / GA View", _fmt_thb(selected_rest.get("gmv_per_ga_view")))
+        snap_c.metric("GA Add to Cart", _fmt_pct(selected_rest.get("ga_add_to_cart_rate")))
+        snap_d.metric("GA View to Purchase", _fmt_pct(selected_rest.get("ga_view_to_purchase_rate")))
 
     section_a, section_b = st.columns(2)
 
@@ -477,7 +503,7 @@ def render():
                 cluster_text = text_corpus[text_corpus["cluster_id"] == active_cluster]["clean_text"]
             cluster_keywords = _terms_from_texts(cluster_text, top_n=40)
 
-        rest_text_df = text_corpus[text_corpus["name"] == active_rest_norm]
+        rest_text_df = text_corpus[text_corpus["name_norm"] == active_rest_norm]
         restaurant_terms = _terms_from_texts(rest_text_df["clean_text"], top_n=30)
         highlight_terms = set(restaurant_terms["keyword"].tolist())
 
@@ -503,7 +529,7 @@ def render():
 
     st.markdown("### Raw Text Records")
     search_text = st.text_input("Filter selected restaurant text", value="", key="cluster_text_filter")
-    rest_text_df = text_corpus[text_corpus["name"] == active_rest_norm].copy()
+    rest_text_df = text_corpus[text_corpus["name_norm"] == active_rest_norm].copy()
 
     if search_text.strip():
         mask = rest_text_df["raw_text"].fillna("").str.contains(search_text.strip(), case=False, regex=False)
@@ -620,6 +646,85 @@ def render():
             rank_display["Rank Score"] = pd.to_numeric(rank_display["Rank Score"], errors="coerce").round(2)
 
             st.dataframe(rank_display.sort_values(["Eligible", "Rank Score"], ascending=[False, False]), hide_index=True, width="stretch", height=280)
+
+    st.markdown("---")
+    st.markdown(f"### GA Campaign Effectiveness ({scope_label})")
+    if active_cluster == all_clusters_option:
+        scope_ga = ga_effectiveness_df.copy()
+    else:
+        scope_ga = ga_effectiveness_df[ga_effectiveness_df["cluster_id"] == int(active_cluster)].copy()
+
+    if scope_ga.empty:
+        st.info("No GA campaign effectiveness data available for this scope.")
+    else:
+        st.caption(
+            "Campaign effectiveness is inferred from month-level overlap between cluster GMV per GA view "
+            "and the platform Google Ads campaign mix. Use it as directional evidence, not restaurant-level attribution."
+        )
+
+        top_ga = scope_ga.sort_values("ga_effectiveness_score", ascending=False).head(3)
+        ga_cols = st.columns(min(3, len(top_ga)))
+        for idx, (_, rec) in enumerate(top_ga.iterrows()):
+            with ga_cols[idx]:
+                st.metric(
+                    f"#{idx + 1} {rec['googleAdsCampaignType']}",
+                    _fmt_thb(rec.get("session_weighted_gmv_per_ga_view")),
+                    f"ATC {_fmt_pct(rec.get('session_weighted_add_to_cart_rate'))}",
+                )
+
+        ga_display_cols = [
+            c
+            for c in [
+                "cluster_label",
+                "googleAdsCampaignType",
+                "active_months",
+                "total_sessions",
+                "active_campaigns",
+                "session_weighted_gmv_per_ga_view",
+                "session_weighted_add_to_cart_rate",
+                "session_weighted_view_to_purchase_rate",
+                "sessions_to_gmv_correlation",
+                "ga_effectiveness_score",
+            ]
+            if c in scope_ga.columns
+        ]
+        ga_display = scope_ga[ga_display_cols].copy().rename(
+            columns={
+                "cluster_label": "Cluster",
+                "googleAdsCampaignType": "GA Campaign Type",
+                "active_months": "Active Months",
+                "total_sessions": "Sessions",
+                "active_campaigns": "Campaign Months",
+                "session_weighted_gmv_per_ga_view": "GMV / GA View",
+                "session_weighted_add_to_cart_rate": "Add to Cart Rate",
+                "session_weighted_view_to_purchase_rate": "View to Purchase Rate",
+                "sessions_to_gmv_correlation": "Sessions to GMV Corr",
+                "ga_effectiveness_score": "GA Effectiveness Score",
+            }
+        )
+        if active_cluster != all_clusters_option and "Cluster" in ga_display.columns:
+            ga_display = ga_display.drop(columns=["Cluster"])
+
+        if "Sessions" in ga_display.columns:
+            ga_display["Sessions"] = pd.to_numeric(ga_display["Sessions"], errors="coerce").round(0)
+        if "Campaign Months" in ga_display.columns:
+            ga_display["Campaign Months"] = pd.to_numeric(ga_display["Campaign Months"], errors="coerce").round(0)
+        if "GMV / GA View" in ga_display.columns:
+            ga_display["GMV / GA View"] = ga_display["GMV / GA View"].apply(_fmt_thb)
+        for col in ["Add to Cart Rate", "View to Purchase Rate"]:
+            if col in ga_display.columns:
+                ga_display[col] = ga_display[col].apply(_fmt_pct)
+        if "Sessions to GMV Corr" in ga_display.columns:
+            ga_display["Sessions to GMV Corr"] = pd.to_numeric(ga_display["Sessions to GMV Corr"], errors="coerce").round(2)
+        if "GA Effectiveness Score" in ga_display.columns:
+            ga_display["GA Effectiveness Score"] = pd.to_numeric(ga_display["GA Effectiveness Score"], errors="coerce").round(2)
+
+        st.dataframe(
+            ga_display.sort_values("GA Effectiveness Score", ascending=False),
+            hide_index=True,
+            width="stretch",
+            height=280,
+        )
 
     st.markdown(f"### Strategy Activity Detail ({scope_label})")
     if active_cluster == all_clusters_option:

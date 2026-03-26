@@ -19,33 +19,19 @@ import streamlit as st
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 MOMENTUM_PATH = BASE_DIR / "_2_feature_engineering+momentum" / "start" / "restaurants_agg_performance.parquet"
+MOMENTUM_GA_PATH = BASE_DIR / "_5_GA_data" / "combined_restaurant_ga.parquet"
 MOMENTUM_LABELS_PATH = BASE_DIR / "_2_feature_engineering+momentum" / "start" / "priority_latest_momentum_labels.parquet"
 MARKETING_PATH = BASE_DIR / "_3_marketing" / "activity_performance_with_roi.csv"
 PRIORITY_PATH = BASE_DIR / "_4_final_outputs" / "priority_list.csv"
+GA_OUTREACH_PATH = BASE_DIR / "data" / "marketing" / "googleAPI" / "campaigns_outreach.parquet"
 MOMENTUM_VALID_BOOKINGS_PATH = BASE_DIR / "_2_feature_engineering+momentum" / "start" / "bookings_cleaned.parquet"
-MOMENTUM_VALID_BOOKINGS_ENRICHED_PATH = BASE_DIR / "_2_feature_engineering+momentum" / "start" / "bookings_cleaned.parquet"
-MOMENTUM_EXPORT_DIR = Path(__file__).resolve().parent / "momentum"
-MOMENTUM_BOOKINGS_EXPORT_PATH = MOMENTUM_EXPORT_DIR / "restaurant_bookings_history.parquet"
+MOMENTUM_BOOKINGS_EXPORT_PATH = Path(__file__).resolve().parent / "momentum" / "restaurant_bookings_history.parquet"
 
 CLUSTERING_DIR = BASE_DIR / "clustering"
-CLUSTER_EXPORT_DIR = Path(__file__).resolve().parent / "clustering"
-
-CLUSTER_ASSIGN_EXPORT_PATH = CLUSTER_EXPORT_DIR / "restaurant_cluster_assignments.parquet"
-CLUSTER_KEYWORDS_EXPORT_PATH = CLUSTER_EXPORT_DIR / "cluster_keywords.parquet"
-CLUSTER_TEXT_EXPORT_PATH = CLUSTER_EXPORT_DIR / "restaurant_text_corpus.parquet"
-CLUSTER_STRATEGY_EXPORT_PATH = CLUSTER_EXPORT_DIR / "cluster_strategy_outcomes.parquet"
-
 CLUSTER_RESULTS_PATH = CLUSTERING_DIR / "clustering_results.csv"
 VIZ_DF_PATH = CLUSTERING_DIR / "viz_df.csv"
-MULTI_THEME_PATH = CLUSTERING_DIR / "restaurants_with_multi_themes.csv"
 THEME_DETAILS_PATH = CLUSTERING_DIR / "restaurant_theme_details.csv"
 REVIEWS_PATH = CLUSTERING_DIR / "reviews.csv"
-
-TIER_COLORS = {
-    "Activate - proven marketing response": "#e74c3c",
-    "Activate - untapped, no prior spend": "#e67e22",
-    "Activate - review channel strategy": "#f1c40f",
-}
 
 SEGMENT_COLORS = {
     "Rising Stars": "#2ecc71",
@@ -53,6 +39,9 @@ SEGMENT_COLORS = {
     "Established Players": "#9b59b6",
     "Needs Attention": "#e74c3c",
 }
+
+PRIORITY_GROWTH_WEIGHT = 0.75
+PRIORITY_GA_WEIGHT = 0.25
 
 
 def _normalize_name(series: pd.Series) -> pd.Series:
@@ -70,6 +59,95 @@ def _read_table(path: Path) -> pd.DataFrame:
     if path.suffix.lower() == ".parquet":
         return pd.read_parquet(path)
     return pd.read_csv(path)
+
+
+def _normalize_metric_columns(df: pd.DataFrame) -> pd.DataFrame:
+    rename_map = {
+        "monthly_revenue": "monthly_gmv",
+        "avg_revenue_per_booking": "avg_gmv_per_booking",
+        "revenue_growth_mom": "gmv_growth_mom",
+        "revenue_growth_yoy": "gmv_growth_yoy",
+        "revenue_growth_rolling": "gmv_growth_rolling",
+        "revenue_growth_mom_rolling": "gmv_growth_mom_rolling",
+        "revenue_growth_yoy_rolling": "gmv_growth_yoy_rolling",
+    }
+    applicable = {
+        old: new
+        for old, new in rename_map.items()
+        if old in df.columns and new not in df.columns
+    }
+    if not applicable:
+        return df
+    return df.rename(columns=applicable)
+
+
+def _to_numeric_series(df: pd.DataFrame, col: str, default: float = np.nan) -> pd.Series:
+    if col not in df.columns:
+        return pd.Series(default, index=df.index, dtype="float64")
+    series = df[col]
+    if isinstance(series, pd.DataFrame):
+        series = series.iloc[:, 0]
+    return pd.to_numeric(series, errors="coerce")
+
+
+def _safe_divide(numerator, denominator) -> pd.Series:
+    num = pd.to_numeric(numerator, errors="coerce")
+    den = pd.to_numeric(denominator, errors="coerce")
+    return num / den.replace(0, np.nan)
+
+
+def _min_max_norm(series: pd.Series, neutral: float = 0.5) -> pd.Series:
+    numeric = pd.to_numeric(series, errors="coerce")
+    valid = numeric.dropna()
+    if valid.empty:
+        return pd.Series(neutral, index=numeric.index, dtype="float64")
+    span = valid.max() - valid.min()
+    if pd.isna(span) or span == 0:
+        return pd.Series(neutral, index=numeric.index, dtype="float64")
+    normalized = (numeric - valid.min()) / span
+    return normalized.fillna(neutral)
+
+
+def _add_ga_derived_columns(df: pd.DataFrame) -> pd.DataFrame:
+    out = _normalize_metric_columns(df.copy())
+
+    if "year_month" in out.columns:
+        out["year_month"] = pd.to_datetime(out["year_month"], errors="coerce")
+
+    if "name" in out.columns:
+        out["name_norm"] = _normalize_name(out["name"])
+
+    ga_numeric_cols = [
+        "monthly_gmv",
+        "monthly_bookings",
+        "ga_items_viewed",
+        "ga_items_added_to_cart",
+        "ga_items_purchased",
+        "ga_item_revenue",
+        "ga_view_to_purchase_rate",
+        "ga_revenue_per_view",
+    ]
+    for col in ga_numeric_cols:
+        if col in out.columns:
+            out[col] = pd.to_numeric(out[col], errors="coerce")
+
+    if "ga_items_viewed" not in out.columns:
+        return out
+
+    out["gmv_per_ga_view"] = _safe_divide(out.get("monthly_gmv"), out["ga_items_viewed"])
+    out["bookings_per_ga_view"] = _safe_divide(out.get("monthly_bookings"), out["ga_items_viewed"])
+    out["ga_add_to_cart_rate"] = _safe_divide(out.get("ga_items_added_to_cart"), out["ga_items_viewed"])
+    out["ga_view_to_purchase_rate"] = _safe_divide(out.get("ga_items_purchased"), out["ga_items_viewed"])
+    out["ga_purchase_to_cart_rate"] = _safe_divide(out.get("ga_items_purchased"), out.get("ga_items_added_to_cart"))
+    out["ga_revenue_per_view"] = _safe_divide(out.get("ga_item_revenue"), out["ga_items_viewed"])
+    out["has_ga_data"] = out["ga_items_viewed"].fillna(0).gt(0)
+    return out
+
+
+def _latest_snapshot(df: pd.DataFrame, key_col: str = "name") -> pd.DataFrame:
+    if df.empty or key_col not in df.columns or "year_month" not in df.columns:
+        return df.copy()
+    return df.sort_values("year_month").groupby(key_col, as_index=False).last()
 
 
 # Sample data generator for development mode
@@ -99,16 +177,16 @@ def _make_sample_data() -> tuple[pd.DataFrame, pd.DataFrame]:
                     "name": name,
                     "year_month": month,
                     "monthly_bookings": bookings,
-                    "monthly_revenue": bookings * rng.uniform(300, 1200),
-                    "avg_revenue_per_booking": rng.uniform(300, 1200),
+                    "monthly_gmv": bookings * rng.uniform(300, 1200),
+                    "avg_gmv_per_booking": rng.uniform(300, 1200),
                     "avg_guests": rng.uniform(2.0, 4.5),
                     "active_days": rng.integers(10, 28),
                     "location": locations[i],
                     "cuisine": cuisines[i],
                     "booking_growth_rolling": rng.uniform(-0.3, 0.8),
-                    "revenue_growth_rolling": rng.uniform(-0.3, 0.8),
+                    "gmv_growth_rolling": rng.uniform(-0.3, 0.8),
                     "booking_growth_yoy": rng.uniform(-0.2, 0.6),
-                    "revenue_growth_yoy": rng.uniform(-0.2, 0.6),
+                    "gmv_growth_yoy": rng.uniform(-0.2, 0.6),
                     "growth_signal_used": rng.choice(["YoY", "MoM"], p=[0.6, 0.4]),
                     "score_perf": rng.uniform(0, 1),
                     "score_growth": rng.uniform(0, 1),
@@ -143,9 +221,9 @@ def _make_sample_data() -> tuple[pd.DataFrame, pd.DataFrame]:
                 "score_perf": rng.uniform(0.3, 1.0),
                 "score_growth": rng.uniform(0.3, 1.0),
                 "monthly_bookings": int(rng.integers(10, 150)),
-                "monthly_revenue": rng.uniform(5000, 200000),
+                "monthly_gmv": rng.uniform(5000, 200000),
                 "booking_growth_rolling": rng.uniform(0.05, 0.80),
-                "revenue_growth_rolling": rng.uniform(0.05, 0.80),
+                "gmv_growth_rolling": rng.uniform(0.05, 0.80),
                 "booking_growth_yoy": rng.uniform(0.03, 0.60),
                 "growth_signal_used": rng.choice(["YoY", "MoM"], p=[0.65, 0.35]),
                 "delta_growth_book": rng.uniform(-0.1, 0.3),
@@ -170,8 +248,9 @@ def _make_sample_data() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 @st.cache_data(ttl=300)
 def load_momentum() -> pd.DataFrame:
-    if MOMENTUM_PATH.exists():
-        df = pd.read_parquet(MOMENTUM_PATH)
+    source_path = MOMENTUM_GA_PATH if MOMENTUM_GA_PATH.exists() else MOMENTUM_PATH
+    if source_path.exists():
+        df = _add_ga_derived_columns(pd.read_parquet(source_path))
         if "year_month" in df.columns:
             df["year_month"] = pd.to_datetime(df["year_month"])
         if "latest_segment" not in df.columns and "name" in df.columns:
@@ -184,33 +263,181 @@ def load_momentum() -> pd.DataFrame:
         return df
     st.toast("Using sample momentum data. Run momentum_seasonality.ipynb to load real data.", icon="⚠️")
     momentum_df, _ = _make_sample_data()
-    return momentum_df
+    return _add_ga_derived_columns(momentum_df)
+
+
+@st.cache_data(ttl=300)
+def load_ga_restaurant_monthly() -> pd.DataFrame:
+    momentum_df = load_momentum()
+    if momentum_df.empty or "gmv_per_ga_view" not in momentum_df.columns:
+        return pd.DataFrame(
+            columns=[
+                "restaurant_id",
+                "name",
+                "name_norm",
+                "year_month",
+                "ga_items_viewed",
+                "ga_items_added_to_cart",
+                "ga_items_purchased",
+                "ga_item_revenue",
+                "gmv_per_ga_view",
+                "bookings_per_ga_view",
+                "ga_add_to_cart_rate",
+                "ga_view_to_purchase_rate",
+                "ga_purchase_to_cart_rate",
+                "ga_revenue_per_view",
+                "has_ga_data",
+            ]
+        )
+
+    if "name_norm" not in momentum_df.columns and "name" in momentum_df.columns:
+        momentum_df = momentum_df.copy()
+        momentum_df["name_norm"] = _normalize_name(momentum_df["name"])
+
+    keep_cols = [
+        c
+        for c in [
+            "restaurant_id",
+            "name",
+            "name_norm",
+            "year_month",
+            "monthly_gmv",
+            "monthly_bookings",
+            "ga_items_viewed",
+            "ga_items_added_to_cart",
+            "ga_items_purchased",
+            "ga_item_revenue",
+            "gmv_per_ga_view",
+            "bookings_per_ga_view",
+            "ga_add_to_cart_rate",
+            "ga_view_to_purchase_rate",
+            "ga_purchase_to_cart_rate",
+            "ga_revenue_per_view",
+            "has_ga_data",
+        ]
+        if c in momentum_df.columns
+    ]
+    ga_df = momentum_df[keep_cols].copy()
+    if "ga_items_viewed" in ga_df.columns:
+        ga_df = ga_df[ga_df["ga_items_viewed"].fillna(0) > 0]
+    return ga_df.reset_index(drop=True)
+
+
+def _merge_latest_ga_metrics(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty or "name" not in df.columns:
+        return df.copy()
+
+    ga_latest = _latest_snapshot(load_ga_restaurant_monthly())
+    if ga_latest.empty:
+        return df.copy()
+
+    ga_latest = ga_latest.copy()
+    if "name_norm" not in ga_latest.columns and "name" in ga_latest.columns:
+        ga_latest["name_norm"] = _normalize_name(ga_latest["name"])
+    ga_latest["ga_data_month"] = ga_latest.get("year_month")
+    ga_cols = [
+        c
+        for c in [
+            "gmv_per_ga_view",
+            "bookings_per_ga_view",
+            "ga_add_to_cart_rate",
+            "ga_view_to_purchase_rate",
+            "ga_purchase_to_cart_rate",
+            "ga_revenue_per_view",
+            "ga_items_viewed",
+            "ga_items_added_to_cart",
+            "ga_items_purchased",
+            "ga_item_revenue",
+            "ga_data_month",
+            "has_ga_data",
+        ]
+        if c in ga_latest.columns
+    ]
+
+    out = df.copy().drop(columns=ga_cols, errors="ignore")
+    out["name_norm"] = _normalize_name(out["name"])
+
+    if "restaurant_id" in out.columns and "restaurant_id" in ga_latest.columns:
+        out["restaurant_id"] = pd.to_numeric(out["restaurant_id"], errors="coerce").astype("Int64")
+        ga_latest["restaurant_id"] = pd.to_numeric(ga_latest["restaurant_id"], errors="coerce").astype("Int64")
+        ga_by_id = ga_latest[["restaurant_id"] + ga_cols].dropna(subset=["restaurant_id"]).drop_duplicates("restaurant_id")
+        out = out.merge(ga_by_id, on="restaurant_id", how="left")
+
+    ga_by_name = ga_latest[["name_norm"] + ga_cols].drop_duplicates("name_norm")
+    rename_map = {col: f"{col}_by_name" for col in ga_cols}
+    out = out.merge(ga_by_name.rename(columns=rename_map), on="name_norm", how="left")
+
+    for col in ga_cols:
+        fallback_col = f"{col}_by_name"
+        if col in out.columns:
+            out[col] = out[col].where(out[col].notna(), out[fallback_col])
+        else:
+            out[col] = out[fallback_col]
+        out = out.drop(columns=[fallback_col])
+
+    return out
+
+
+def score_priority_with_ga(df: pd.DataFrame) -> pd.DataFrame:
+    out = _merge_latest_ga_metrics(df)
+    out = _normalize_metric_columns(out)
+
+    if "priority_score_saved" not in out.columns:
+        out["priority_score_saved"] = _to_numeric_series(out, "priority_score")
+    if "rank_saved" not in out.columns and "rank" in out.columns:
+        out["rank_saved"] = _to_numeric_series(out, "rank")
+
+    out["score_growth_norm"] = _min_max_norm(_to_numeric_series(out, "score_growth"), neutral=0.5)
+    out["delta_growth_norm"] = _min_max_norm(_to_numeric_series(out, "delta_growth_book"), neutral=0.5)
+    out["growth_component"] = 0.60 * out["score_growth_norm"] + 0.40 * out["delta_growth_norm"]
+    out["gmv_per_ga_view_norm"] = _min_max_norm(_to_numeric_series(out, "gmv_per_ga_view"), neutral=0.5)
+    out["ga_component"] = out["gmv_per_ga_view_norm"]
+
+    out["priority_raw_recomputed"] = (
+        PRIORITY_GROWTH_WEIGHT * out["growth_component"]
+        + PRIORITY_GA_WEIGHT * out["ga_component"]
+    )
+    out["priority_score_recomputed"] = _min_max_norm(out["priority_raw_recomputed"], neutral=0.5) * 100
+    out["priority_score"] = out["priority_score_recomputed"].round(2)
+
+    ga_lead = out["ga_component"] - out["growth_component"]
+    growth_lead = out["growth_component"] - out["ga_component"]
+    out["priority_reason"] = np.select(
+        [
+            ga_lead >= 0.12,
+            growth_lead >= 0.12,
+            _to_numeric_series(out, "ga_add_to_cart_rate").fillna(0).ge(0.08),
+        ],
+        [
+            "High GMV per GA view",
+            "Strong growth momentum",
+            "Strong GA conversion intent",
+        ],
+        default="Balanced growth + GA efficiency",
+    )
+
+    if len(out):
+        out["rank"] = out["priority_score"].rank(method="first", ascending=False).astype(int)
+    return out
 
 
 @st.cache_data(ttl=300)
 def load_priority() -> pd.DataFrame:
     if PRIORITY_PATH.exists():
-        return pd.read_csv(PRIORITY_PATH)
+        return score_priority_with_ga(pd.read_csv(PRIORITY_PATH))
     _, priority_df = _make_sample_data()
-    return priority_df
-
-
-@st.cache_data(ttl=300)
-def load_marketing() -> pd.DataFrame:
-    if MARKETING_PATH.exists():
-        return pd.read_csv(MARKETING_PATH)
-    return pd.DataFrame()
+    return score_priority_with_ga(priority_df)
 
 
 @st.cache_data(ttl=300)
 def load_momentum_raw_bookings() -> pd.DataFrame:
-    if MOMENTUM_BOOKINGS_EXPORT_PATH.exists():
-        bookings_df = pd.read_parquet(MOMENTUM_BOOKINGS_EXPORT_PATH)
-    elif MOMENTUM_VALID_BOOKINGS_ENRICHED_PATH.exists():
-        bookings_df = pd.read_parquet(MOMENTUM_VALID_BOOKINGS_ENRICHED_PATH)
-    elif MOMENTUM_VALID_BOOKINGS_PATH.exists():
-        bookings_df = pd.read_parquet(MOMENTUM_VALID_BOOKINGS_PATH)
-    else:
+    bookings_df = None
+    for source_path in (MOMENTUM_BOOKINGS_EXPORT_PATH, MOMENTUM_VALID_BOOKINGS_PATH):
+        if source_path.exists():
+            bookings_df = pd.read_parquet(source_path)
+            break
+
+    if bookings_df is None:
         return pd.DataFrame(
             columns=[
                 "booking_id",
@@ -346,7 +573,7 @@ def get_restaurant_booking_history(
 @st.cache_data(ttl=300)
 def load_momentum_segments() -> pd.DataFrame:
     if MOMENTUM_LABELS_PATH.exists():
-        seg_df = pd.read_parquet(MOMENTUM_LABELS_PATH)
+        seg_df = _normalize_metric_columns(pd.read_parquet(MOMENTUM_LABELS_PATH))
         if "segment" in seg_df.columns and "latest_segment" not in seg_df.columns:
             seg_df = seg_df.rename(columns={"segment": "latest_segment"})
     else:
@@ -374,9 +601,8 @@ def load_momentum_segments() -> pd.DataFrame:
 
 @st.cache_data(ttl=300)
 def load_cluster_assignments() -> pd.DataFrame:
-    df = _read_table(CLUSTER_ASSIGN_EXPORT_PATH)
-
-    if df.empty and CLUSTER_RESULTS_PATH.exists():
+    df = pd.DataFrame()
+    if CLUSTER_RESULTS_PATH.exists():
         df = pd.read_csv(CLUSTER_RESULTS_PATH)
 
     if df.empty and VIZ_DF_PATH.exists():
@@ -450,65 +676,29 @@ def load_cluster_assignments() -> pd.DataFrame:
     latest_momentum["name_norm"] = _normalize_name(latest_momentum["name"])
     m_cols = [
         c
-        for c in ["name_norm", "monthly_bookings", "monthly_revenue", "score_perf", "score_growth", "growth_signal_used"]
+        for c in [
+            "name_norm",
+            "monthly_bookings",
+            "monthly_gmv",
+            "score_perf",
+            "score_growth",
+            "growth_signal_used",
+            "gmv_per_ga_view",
+            "bookings_per_ga_view",
+            "ga_add_to_cart_rate",
+            "ga_view_to_purchase_rate",
+            "ga_purchase_to_cart_rate",
+            "ga_revenue_per_view",
+            "ga_items_viewed",
+            "ga_items_added_to_cart",
+            "ga_items_purchased",
+            "ga_item_revenue",
+            "has_ga_data",
+        ]
         if c in latest_momentum.columns
     ]
     if m_cols:
         df = df.merge(latest_momentum[m_cols], on="name_norm", how="left")
-
-    # Ensure every restaurant from the momentum universe has a cluster category.
-    # Restaurants with no text/embedding assignment are explicitly categorized as "Unclustered".
-    momentum_ref_cols = [
-        c
-        for c in [
-            "restaurant_id",
-            "name",
-            "name_norm",
-            "monthly_bookings",
-            "monthly_revenue",
-            "score_perf",
-            "score_growth",
-            "growth_signal_used",
-        ]
-        if c in latest_momentum.columns or c == "name_norm"
-    ]
-    momentum_ref = latest_momentum[momentum_ref_cols].copy()
-    if "restaurant_id" in momentum_ref.columns:
-        momentum_ref["restaurant_id"] = pd.to_numeric(momentum_ref["restaurant_id"], errors="coerce").astype("Int64")
-
-    seg_ref = load_momentum_segments()[["name_norm", "latest_segment"]].drop_duplicates("name_norm")
-    momentum_ref = momentum_ref.merge(seg_ref, on="name_norm", how="left")
-
-    # if "restaurant_id" in df.columns and "restaurant_id" in momentum_ref.columns and df["restaurant_id"].notna().any():
-    #     existing_ids = set(pd.to_numeric(df["restaurant_id"], errors="coerce").dropna().astype(int))
-    #     missing_mask = ~pd.to_numeric(momentum_ref["restaurant_id"], errors="coerce").fillna(-1).astype(int).isin(existing_ids)
-    #     missing = momentum_ref[missing_mask].copy()
-    # else:
-    #     missing = momentum_ref[~momentum_ref["name_norm"].isin(set(df["name_norm"]))].copy()
-
-    # if len(missing):
-    #     x_series = pd.to_numeric(df.get("x"), errors="coerce")
-    #     y_series = pd.to_numeric(df.get("y"), errors="coerce")
-    #     anchor_x = float(x_series.min()) - 1.6 if x_series.notna().any() else -1.6
-    #     anchor_y = float(y_series.min()) - 1.6 if y_series.notna().any() else -1.6
-
-    #     n_missing = len(missing)
-    #     angles = np.linspace(0, 2 * np.pi, n_missing, endpoint=False)
-    #     radius = np.linspace(0.08, 0.28, n_missing)
-
-    #     missing["cluster_id"] = -1
-    #     missing["cluster_label"] = "Unclustered - no clustering text"
-    #     missing["cluster_confidence"] = 0.0
-    #     missing["x"] = anchor_x + radius * np.cos(angles)
-    #     missing["y"] = anchor_y + radius * np.sin(angles)
-
-    #     if "latest_segment" not in missing.columns:
-    #         missing["latest_segment"] = np.nan
-
-    #     common_cols = sorted(set(df.columns).union(set(missing.columns)))
-    #     df = df.reindex(columns=common_cols)
-    #     missing = missing.reindex(columns=common_cols)
-    #     df = pd.concat([df, missing], ignore_index=True)
 
     df["cluster_id"] = pd.to_numeric(df["cluster_id"], errors="coerce").fillna(-1).astype(int)
     df["cluster_label"] = df["cluster_label"].fillna(df["cluster_id"].apply(lambda v: f"Cluster {v}"))
@@ -527,10 +717,21 @@ def load_cluster_assignments() -> pd.DataFrame:
             "cluster_confidence",
             "latest_segment",
             "monthly_bookings",
-            "monthly_revenue",
+            "monthly_gmv",
             "score_perf",
             "score_growth",
             "growth_signal_used",
+            "gmv_per_ga_view",
+            "bookings_per_ga_view",
+            "ga_add_to_cart_rate",
+            "ga_view_to_purchase_rate",
+            "ga_purchase_to_cart_rate",
+            "ga_revenue_per_view",
+            "ga_items_viewed",
+            "ga_items_added_to_cart",
+            "ga_items_purchased",
+            "ga_item_revenue",
+            "has_ga_data",
         ]
         if c in df.columns
     ]
@@ -575,9 +776,8 @@ def _tokenize_text(text: str) -> list[str]:
 
 @st.cache_data(ttl=300)
 def load_cluster_text_corpus() -> pd.DataFrame:
-    text_df = _read_table(CLUSTER_TEXT_EXPORT_PATH)
-
-    if text_df.empty and REVIEWS_PATH.exists():
+    text_df = pd.DataFrame()
+    if REVIEWS_PATH.exists():
         text_df = pd.read_csv(REVIEWS_PATH)
 
     if text_df.empty:
@@ -619,15 +819,6 @@ def load_cluster_text_corpus() -> pd.DataFrame:
 
 @st.cache_data(ttl=300)
 def load_cluster_keywords() -> pd.DataFrame:
-    key_df = _read_table(CLUSTER_KEYWORDS_EXPORT_PATH)
-
-    if not key_df.empty:
-        rename_map = {"cluster": "cluster_id"}
-        key_df = key_df.rename(columns=rename_map)
-        if "rank" not in key_df.columns:
-            key_df["rank"] = key_df.groupby("cluster_id").cumcount() + 1
-        return key_df[[c for c in ["cluster_id", "keyword", "weight", "rank"] if c in key_df.columns]]
-
     text_df = load_cluster_text_corpus()
     if not text_df.empty:
         rows = []
@@ -650,6 +841,173 @@ def load_cluster_keywords() -> pd.DataFrame:
         return theme_df[[c for c in ["cluster_id", "keyword", "weight", "rank"] if c in theme_df.columns]]
 
     return pd.DataFrame(columns=["cluster_id", "keyword", "weight", "rank"])
+
+
+@st.cache_data(ttl=300)
+def load_ga_campaign_type_monthly() -> pd.DataFrame:
+    if not GA_OUTREACH_PATH.exists():
+        return pd.DataFrame(columns=["year_month", "googleAdsCampaignType", "total_sessions", "active_campaigns"])
+
+    outreach_df = pd.read_parquet(GA_OUTREACH_PATH)
+    if outreach_df.empty:
+        return pd.DataFrame(columns=["year_month", "googleAdsCampaignType", "total_sessions", "active_campaigns"])
+
+    outreach_df = outreach_df.copy()
+    outreach_df = outreach_df[
+        outreach_df["campaignId"].notna()
+        & outreach_df["campaignId"].astype(str).ne("(not set)")
+    ]
+    outreach_df["googleAdsCampaignType"] = outreach_df["googleAdsCampaignType"].fillna("Unknown").astype(str).str.strip()
+    outreach_df = outreach_df[
+        outreach_df["googleAdsCampaignType"].ne("")
+        & outreach_df["googleAdsCampaignType"].ne("(not set)")
+    ]
+    outreach_df["year_month"] = pd.to_datetime(outreach_df["yearMonth"].astype(str), format="%Y%m", errors="coerce")
+    outreach_df["sessions"] = pd.to_numeric(
+        outreach_df["sessions"].astype(str).str.replace(r"[^0-9.\-]", "", regex=True),
+        errors="coerce",
+    )
+    outreach_df = outreach_df.dropna(subset=["year_month", "sessions"])
+
+    return (
+        outreach_df.groupby(["year_month", "googleAdsCampaignType"], as_index=False)
+        .agg(
+            total_sessions=("sessions", "sum"),
+            active_campaigns=("campaignId", "nunique"),
+        )
+        .sort_values(["year_month", "googleAdsCampaignType"])
+        .reset_index(drop=True)
+    )
+
+
+@st.cache_data(ttl=300)
+def load_cluster_ga_campaign_effectiveness() -> pd.DataFrame:
+    ga_monthly = load_ga_restaurant_monthly()
+    cluster_assignments = load_cluster_assignments()
+    campaign_monthly = load_ga_campaign_type_monthly()
+
+    if ga_monthly.empty or cluster_assignments.empty or campaign_monthly.empty:
+        return pd.DataFrame(
+            columns=[
+                "cluster_id",
+                "cluster_label",
+                "googleAdsCampaignType",
+                "active_months",
+                "total_sessions",
+                "active_campaigns",
+                "session_weighted_gmv_per_ga_view",
+                "session_weighted_add_to_cart_rate",
+                "session_weighted_view_to_purchase_rate",
+                "sessions_to_gmv_correlation",
+                "ga_effectiveness_score",
+            ]
+        )
+
+    cluster_ref = cluster_assignments[["name_norm", "cluster_id", "cluster_label"]].drop_duplicates("name_norm")
+    cluster_monthly = (
+        ga_monthly.merge(cluster_ref, on="name_norm", how="inner")
+        .groupby(["cluster_id", "cluster_label", "year_month"], as_index=False)
+        .agg(
+            total_monthly_gmv=("monthly_gmv", "sum"),
+            total_ga_items_viewed=("ga_items_viewed", "sum"),
+            total_ga_items_added_to_cart=("ga_items_added_to_cart", "sum"),
+            total_ga_items_purchased=("ga_items_purchased", "sum"),
+            restaurants_with_ga_data=("name_norm", "nunique"),
+        )
+    )
+    cluster_monthly["gmv_per_ga_view"] = _safe_divide(
+        cluster_monthly["total_monthly_gmv"],
+        cluster_monthly["total_ga_items_viewed"],
+    )
+    cluster_monthly["ga_add_to_cart_rate"] = _safe_divide(
+        cluster_monthly["total_ga_items_added_to_cart"],
+        cluster_monthly["total_ga_items_viewed"],
+    )
+    cluster_monthly["ga_view_to_purchase_rate"] = _safe_divide(
+        cluster_monthly["total_ga_items_purchased"],
+        cluster_monthly["total_ga_items_viewed"],
+    )
+
+    merged = cluster_monthly.merge(campaign_monthly, on="year_month", how="inner")
+    if merged.empty:
+        return pd.DataFrame(
+            columns=[
+                "cluster_id",
+                "cluster_label",
+                "googleAdsCampaignType",
+                "active_months",
+                "total_sessions",
+                "active_campaigns",
+                "session_weighted_gmv_per_ga_view",
+                "session_weighted_add_to_cart_rate",
+                "session_weighted_view_to_purchase_rate",
+                "sessions_to_gmv_correlation",
+                "ga_effectiveness_score",
+            ]
+        )
+
+    rows = []
+    for (cluster_id, cluster_label, campaign_type), grp in merged.groupby(
+        ["cluster_id", "cluster_label", "googleAdsCampaignType"],
+        dropna=False,
+    ):
+        weights = pd.to_numeric(grp["total_sessions"], errors="coerce").fillna(0)
+        valid_weight = weights.gt(0)
+
+        def _weighted_metric_mean(col: str) -> float:
+            metric = pd.to_numeric(grp[col], errors="coerce")
+            valid = valid_weight & metric.notna()
+            if valid.any():
+                return float(np.average(metric[valid], weights=weights[valid]))
+            fallback = metric.mean()
+            return float(fallback) if pd.notna(fallback) else np.nan
+
+        gmv_weighted = _weighted_metric_mean("gmv_per_ga_view")
+        atc_weighted = _weighted_metric_mean("ga_add_to_cart_rate")
+        purchase_weighted = _weighted_metric_mean("ga_view_to_purchase_rate")
+
+        corr = np.nan
+        if grp["year_month"].nunique() >= 3:
+            corr = grp["total_sessions"].corr(grp["gmv_per_ga_view"])
+
+        rows.append(
+            {
+                "cluster_id": int(cluster_id),
+                "cluster_label": cluster_label,
+                "googleAdsCampaignType": campaign_type,
+                "active_months": int(grp["year_month"].nunique()),
+                "total_sessions": float(grp["total_sessions"].sum()),
+                "active_campaigns": int(grp["active_campaigns"].sum()),
+                "session_weighted_gmv_per_ga_view": float(gmv_weighted) if pd.notna(gmv_weighted) else np.nan,
+                "session_weighted_add_to_cart_rate": float(atc_weighted) if pd.notna(atc_weighted) else np.nan,
+                "session_weighted_view_to_purchase_rate": float(purchase_weighted) if pd.notna(purchase_weighted) else np.nan,
+                "sessions_to_gmv_correlation": float(corr) if pd.notna(corr) else np.nan,
+            }
+        )
+
+    effect_df = pd.DataFrame(rows)
+    if effect_df.empty:
+        return effect_df
+
+    effect_df["gmv_norm"] = effect_df.groupby("cluster_id")["session_weighted_gmv_per_ga_view"].transform(
+        lambda s: _min_max_norm(s, neutral=0.5)
+    )
+    effect_df["atc_norm"] = effect_df.groupby("cluster_id")["session_weighted_add_to_cart_rate"].transform(
+        lambda s: _min_max_norm(s, neutral=0.5)
+    )
+    corr_norm = effect_df["sessions_to_gmv_correlation"].clip(-1, 1)
+    corr_norm = (corr_norm.fillna(0) + 1) / 2
+    effect_df["ga_effectiveness_score"] = (
+        0.55 * effect_df["gmv_norm"]
+        + 0.25 * effect_df["atc_norm"]
+        + 0.20 * corr_norm
+    ) * 100
+    effect_df = effect_df.drop(columns=["gmv_norm", "atc_norm"])
+
+    return effect_df.sort_values(
+        ["cluster_id", "ga_effectiveness_score", "session_weighted_gmv_per_ga_view"],
+        ascending=[True, False, False],
+    ).reset_index(drop=True)
 
 
 def _series_or_default(df: pd.DataFrame, col: str, default: str = "") -> pd.Series:
@@ -739,75 +1097,72 @@ def _build_strategy_family(df: pd.DataFrame) -> pd.Series:
 
 @st.cache_data(ttl=300)
 def load_cluster_strategy_outcomes() -> pd.DataFrame:
-    out_df = _read_table(CLUSTER_STRATEGY_EXPORT_PATH)
+    marketing_df = _read_table(MARKETING_PATH)
+    assignments = load_cluster_assignments()
 
-    if out_df.empty:
-        marketing_df = load_marketing()
-        assignments = load_cluster_assignments()
-
-        if marketing_df.empty or assignments.empty:
-            return pd.DataFrame(
-                columns=[
-                    "cluster_id",
-                    "cluster_label",
-                    "strategy_name",
-                    "strategy_family",
-                    "restaurant_name",
-                    "restaurant_id",
-                    "latest_segment",
-                    "channel",
-                    "applied_date",
-                    "bookings_before",
-                    "bookings_after",
-                    "bookings_uplift_pct",
-                    "revenue_before",
-                    "revenue_after",
-                    "revenue_uplift_pct",
-                    "incremental_revenue_thb",
-                    "roi",
-                    "sample_size",
-                    "activity_id",
-                ]
-            )
-
-        df = marketing_df.copy()
-        df["restaurant_id"] = pd.to_numeric(df.get("restaurant_id"), errors="coerce").astype("Int64")
-
-        assignments_join = assignments[
-            ["restaurant_id", "name", "cluster_id", "cluster_label", "latest_segment"]
-        ].dropna(subset=["restaurant_id"])
-        assignments_join = assignments_join.drop_duplicates("restaurant_id")
-
-        merged = df.merge(assignments_join, on="restaurant_id", how="inner", suffixes=("", "_cluster"))
-        if merged.empty:
-            return pd.DataFrame()
-
-        merged["strategy_name"] = _build_strategy_name(merged)
-        merged["strategy_family"] = _build_strategy_family(merged)
-
-        merged["bookings_before"] = pd.to_numeric(merged.get("bookings_baseline"), errors="coerce")
-        merged["bookings_after"] = pd.to_numeric(merged.get("bookings_during"), errors="coerce")
-        merged["incremental_revenue_thb"] = pd.to_numeric(merged.get("incremental_revenue_thb"), errors="coerce")
-        merged["revenue_after"] = pd.to_numeric(merged.get("total_campaign_revenue"), errors="coerce")
-        merged["roi"] = pd.to_numeric(merged.get("roi"), errors="coerce")
-
-        merged["bookings_uplift_pct"] = np.where(
-            merged["bookings_before"] > 0,
-            (merged["bookings_after"] - merged["bookings_before"]) / merged["bookings_before"],
-            np.nan,
+    if marketing_df.empty or assignments.empty:
+        return pd.DataFrame(
+            columns=[
+                "cluster_id",
+                "cluster_label",
+                "strategy_name",
+                "strategy_family",
+                "restaurant_name",
+                "restaurant_id",
+                "latest_segment",
+                "channel",
+                "applied_date",
+                "bookings_before",
+                "bookings_after",
+                "bookings_uplift_pct",
+                "revenue_before",
+                "revenue_after",
+                "revenue_uplift_pct",
+                "incremental_revenue_thb",
+                "roi",
+                "sample_size",
+                "activity_id",
+            ]
         )
 
-        merged["revenue_before"] = merged["revenue_after"] - merged["incremental_revenue_thb"]
-        merged["revenue_uplift_pct"] = np.where(
-            merged["revenue_before"] > 0,
-            merged["incremental_revenue_thb"] / merged["revenue_before"],
-            np.nan,
-        )
+    df = marketing_df.copy()
+    df["restaurant_id"] = pd.to_numeric(df.get("restaurant_id"), errors="coerce").astype("Int64")
 
-        merged["applied_date"] = pd.to_datetime(merged.get("activity_start"), errors="coerce")
-        merged["sample_size"] = 1
+    assignments_join = assignments[
+        ["restaurant_id", "name", "cluster_id", "cluster_label", "latest_segment"]
+    ].dropna(subset=["restaurant_id"])
+    assignments_join = assignments_join.drop_duplicates("restaurant_id")
 
-        out_df = merged.rename(columns={"name": "restaurant_name"})
+    merged = df.merge(assignments_join, on="restaurant_id", how="inner", suffixes=("", "_cluster"))
+    if merged.empty:
+        return pd.DataFrame()
+
+    merged["strategy_name"] = _build_strategy_name(merged)
+    merged["strategy_family"] = _build_strategy_family(merged)
+
+    merged["bookings_before"] = pd.to_numeric(merged.get("bookings_baseline"), errors="coerce")
+    merged["bookings_after"] = pd.to_numeric(merged.get("bookings_during"), errors="coerce")
+    merged["incremental_revenue_thb"] = pd.to_numeric(merged.get("incremental_revenue_thb"), errors="coerce")
+    merged["revenue_after"] = pd.to_numeric(merged.get("total_campaign_revenue"), errors="coerce")
+    merged["roi"] = pd.to_numeric(merged.get("roi"), errors="coerce")
+
+    merged["bookings_uplift_pct"] = np.where(
+        merged["bookings_before"] > 0,
+        (merged["bookings_after"] - merged["bookings_before"]) / merged["bookings_before"],
+        np.nan,
+    )
+
+    merged["revenue_before"] = merged["revenue_after"] - merged["incremental_revenue_thb"]
+    merged["revenue_uplift_pct"] = np.where(
+        merged["revenue_before"] > 0,
+        merged["incremental_revenue_thb"] / merged["revenue_before"],
+        np.nan,
+    )
+
+    merged["applied_date"] = pd.to_datetime(merged.get("activity_start"), errors="coerce")
+    merged["sample_size"] = 1
+
+    out_df = merged.rename(columns={"name": "restaurant_name"})
 
     rename_pairs = [
         ("cluster", "cluster_id"),
@@ -1260,7 +1615,3 @@ def get_restaurant_priority_row(priority_df: pd.DataFrame, name: str) -> dict:
     if len(rows):
         return rows.iloc[0].to_dict()
     return {}
-
-
-def is_demo_mode() -> bool:
-    return not PRIORITY_PATH.exists()

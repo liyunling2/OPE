@@ -1,2 +1,5 @@
 venv/
 requirements.txt
+__pycache__/
+*.py[cod]
+.DS_Store
