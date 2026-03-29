@@ -12,7 +12,9 @@ from data.loader import (
     recommend_strategies_for_restaurant,
 )
 from theme import AXIS, BORDER_COLOR, MUTED_TEXT, SURFACE_COLOR, TEXT_COLOR
-
+from google import genai
+from dotenv import load_dotenv
+load_dotenv()
 
 def layout(height=300, **kwargs):
     base = dict(
@@ -580,73 +582,149 @@ def build_prompt(row: dict, hist: pd.DataFrame, recs: pd.DataFrame, grounded_bri
 
     ga_block = build_ga_snapshot_markdown(ga_context)
 
-    return """You are a senior restaurant marketing strategist.
-Use only the provided data. Do not invent metrics.
-GMV / GA view is the primary GA efficiency metric. If you recommend scaling spend or traffic, explain how the plan protects or improves that metric.
-Improve and tighten the grounded strategy brief below.
+    return f"""
+    You are a senior marketing strategist advising a restaurant owner.
 
-Restaurant: {name}
-Segment: {seg}
-Priority tier: {tier}
-Priority score: {score}
-Recommended channel (existing model): {channel}
-Priority reason: {priority_reason}
+    IMPORTANT RULES:
+    - Use ONLY the data provided below
+    - DO NOT invent any numbers or assumptions
+    - You MUST produce an answer (never return empty)
+    - If data is missing, say "insufficient data"
+    - Always mention the restaurant name at least once
+    - Be specific to THIS restaurant (no generic advice)
 
-GA diagnostic:
-{ga_block}
+    ---------------------
+    RESTAURANT CONTEXT
+    ---------------------
+    Name: {row.get("name")}
+    Segment: {row.get("latest_segment")}
+    Priority Tier: {row.get("priority_tier")}
+    Preferred Channel: {row.get("recommended_channel")}
 
-Top ranked strategies:
-{top}
+    ---------------------
+    GA PERFORMANCE (FUNNEL)
+    ---------------------
+    Items Viewed: {row.get("ga_items_viewed")}
+    Add-to-Cart Rate: {row.get("ga_add_to_cart_rate")}
+    Purchase Rate: {row.get("ga_view_to_purchase_rate")}
+    Revenue per View: {row.get("ga_revenue_per_view")}
 
-KPI targets:
-{targets}
+    ---------------------
+    TOP STRATEGIES (RANKED)
+    ---------------------
+    {top_block}
 
-Grounded brief draft:
-{brief}
+    ---------------------
+    KPI TARGETS
+    ---------------------
+    {targets_block}
 
-Return concise markdown with sections:
-## Situation Summary
-## GA Diagnostic
-## Recommended Strategy Mix
-## 30-Day Execution Plan
-## KPI Targets
-## Risks & Caveats""".format(
-        name=row.get("name", "-"),
-        seg=row.get("latest_segment", "Unknown"),
-        tier=row.get("priority_tier", "Unknown"),
-        score=row.get("priority_score", "-"),
-        channel=row.get("recommended_channel", "-"),
-        priority_reason=row.get("priority_reason", "-"),
-        ga_block=ga_block,
-        top=top_block,
-        targets=targets_block,
-        brief=grounded_brief,
-    )
+    ---------------------
+    TASK
+    ---------------------
+    Give a decisive, business-focused recommendation for THIS restaurant.
+
+    FORMAT (STRICT):
+
+    ## Key Issue
+    (1 short sentence — clearly state the MAIN revenue or conversion problem using GA data)
+
+    ## Priority Actions
+    (Choose EXACTLY 2 strategies from the list, ordered by impact)
+
+    For EACH strategy:
+    - Strategy name
+    - Specific campaign idea (what exactly to run — be concrete)
+    - What it will drive (conversion, bookings, or revenue)
+
+    Campaign ideas MUST:
+    - be realistic (e.g. bundle promo, limited-time offer, retargeting, CRM messaging)
+    - be tied to THIS restaurant’s situation (e.g. low conversion, high traffic)
+    - NOT be generic phrases like "run campaign"
+
+    ## Why This Will Work
+    (Explain causally using ONLY:
+    - GA performance signals
+    - restaurant context (segment, priority tier, channel)
+    - strategy evidence provided
+    Translate into BUSINESS impact — avoid technical terms like "rev_uplift")
+
+    ## Next 30 Days
+    (3 direct, actionable steps that can be executed immediately)
+
+    ## Expected Business Impact
+    (Use ONLY KPI targets provided — translate into outcomes like:
+    - higher conversion
+    - more bookings
+    - better revenue per visitor
+    If not available, say "insufficient data")
+
+    STYLE:
+    - Short, punchy, decisive
+    - Focus on revenue, bookings, conversion
+    - Use action words: "prioritise", "fix", "scale"
+    - No long explanations
+    - No repeating full data blocks
+    - Sounds like advice a business owner would act on immediately
+    """
+
+#     return """You are a senior restaurant marketing strategist.
+# Use only the provided data. Do not invent metrics.
+# GMV / GA view is the primary GA efficiency metric. If you recommend scaling spend or traffic, explain how the plan protects or improves that metric.
+# Improve and tighten the grounded strategy brief below.
+
+# Restaurant: {name}
+# Segment: {seg}
+# Priority tier: {tier}
+# Priority score: {score}
+# Recommended channel (existing model): {channel}
+# Priority reason: {priority_reason}
+
+# GA diagnostic:
+# {ga_block}
+
+# Top ranked strategies:
+# {top}
+
+# KPI targets:
+# {targets}
+
+# Grounded brief draft:
+# {brief}
+
+# Return concise markdown with sections:
+# ## Situation Summary
+# ## GA Diagnostic
+# ## Recommended Strategy Mix
+# ## 30-Day Execution Plan
+# ## KPI Targets
+# ## Risks & Caveats""".format(
+#         name=row.get("name", "-"),
+#         seg=row.get("latest_segment", "Unknown"),
+#         tier=row.get("priority_tier", "Unknown"),
+#         score=row.get("priority_score", "-"),
+#         channel=row.get("recommended_channel", "-"),
+#         priority_reason=row.get("priority_reason", "-"),
+#         ga_block=ga_block,
+#         top=top_block,
+#         targets=targets_block,
+#         brief=grounded_brief,
+#     )
 
 
-def call_claude(prompt: str) -> str:
-    api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+def call_gemini(prompt: str) -> str:
+    api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        raise RuntimeError("ANTHROPIC_API_KEY is not set.")
+        raise RuntimeError("GEMINI_API_KEY is not set.")
 
-    r = requests.post(
-        "https://api.anthropic.com/v1/messages",
-        headers={
-            "Content-Type": "application/json",
-            "x-api-key": api_key,
-            "anthropic-version": "2023-06-01",
-        },
-        json={
-            "model": "claude-sonnet-4-20250514",
-            "max_tokens": 1200,
-            "messages": [{"role": "user", "content": prompt}],
-        },
-        timeout=90,
+    client = genai.Client(api_key=api_key)
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt
     )
-    if r.status_code != 200:
-        raise RuntimeError("API error %d: %s" % (r.status_code, r.text))
-    data = r.json()
-    return "".join(block.get("text", "") for block in data.get("content", []) if isinstance(block, dict))
+
+    return response.text.strip()
 
 
 def render():
@@ -925,7 +1003,7 @@ def render():
             with st.spinner("Generating AI narrative..."):
                 try:
                     prompt = build_prompt(row, hist, strategy_recs, grounded_brief, ga_context)
-                    st.session_state[ai_key] = call_claude(prompt)
+                    st.session_state[ai_key] = call_gemini(prompt)
                 except Exception as e:
                     st.error("AI generation failed: %s" % e)
                     st.session_state[ai_key] = None
