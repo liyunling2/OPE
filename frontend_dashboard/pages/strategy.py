@@ -951,8 +951,7 @@ def render():
             st.dataframe(recs_display, width="stretch", hide_index=True, height=280)
         else:
             st.info("No strategy recommendations available for this restaurant yet.")
-
-    with strat_col:
+        
         st.markdown("### GA Diagnostic")
         if ga_context.get("has_ga_data"):
             snap_a, snap_b = st.columns(2)
@@ -974,6 +973,7 @@ def render():
         else:
             st.info("No restaurant-level GA data is available yet.")
 
+    with strat_col:
         st.markdown("### Grounded Strategy Brief")
         grounded_key  = "grounded_strategy_%s" % selected
         ai_key        = "ai_strategy_%s" % selected
@@ -989,31 +989,36 @@ def render():
             width="stretch",
         )
 
-        st.markdown("---")
-        st.markdown("### Optional AI Narrative")
-        st.caption("Uses `ANTHROPIC_API_KEY` if configured. The grounded brief and GA targets remain the source of truth.")
-        a_col, b_col = st.columns([2, 1])
-        with a_col:
-            generate_ai = st.button("Generate AI Narrative", key="gen_ai_%s" % selected, width="stretch")
-        with b_col:
-            if st.button("Clear AI", key="clr_ai_%s" % selected, width="stretch"):
+    # ===== FULL WIDTH AI SECTION =====
+    st.markdown("---")
+    st.markdown("### Optional AI Narrative")
+
+    st.caption("Uses `GEMINI_API_KEY` if configured. The grounded brief remains the source of truth.")
+
+    a_col, b_col = st.columns([2, 1])
+
+    with a_col:
+        generate_ai = st.button("Generate AI Narrative", key="gen_ai_%s" % selected, width="stretch")
+
+    with b_col:
+        if st.button("Clear AI", key="clr_ai_%s" % selected, width="stretch"):
+            st.session_state[ai_key] = None
+
+    if generate_ai:
+        with st.spinner("Generating AI narrative..."):
+            try:
+                prompt = build_prompt(row, hist, strategy_recs, grounded_brief, ga_context)
+                st.session_state[ai_key] = call_gemini(prompt)
+            except Exception as e:
+                st.error("AI generation failed: %s" % e)
                 st.session_state[ai_key] = None
 
-        if generate_ai:
-            with st.spinner("Generating AI narrative..."):
-                try:
-                    prompt = build_prompt(row, hist, strategy_recs, grounded_brief, ga_context)
-                    st.session_state[ai_key] = call_gemini(prompt)
-                except Exception as e:
-                    st.error("AI generation failed: %s" % e)
-                    st.session_state[ai_key] = None
-
-        if st.session_state.get(ai_key):
-            st.markdown(st.session_state[ai_key])
-            st.download_button(
-                label="Download AI Narrative",
-                data="AI STRATEGY NARRATIVE\n%s\n\n%s" % (selected, st.session_state[ai_key]),
-                file_name="ai_strategy_%s.txt" % selected.replace(" ", "_"),
-                mime="text/plain",
-                width="stretch",
-            )
+    if st.session_state.get(ai_key):
+        st.markdown(st.session_state[ai_key])
+        st.download_button(
+            label="Download AI Narrative",
+            data="AI STRATEGY NARRATIVE\n%s\n\n%s" % (selected, st.session_state[ai_key]),
+            file_name="ai_strategy_%s" % selected.replace(" ", "_"),
+            mime="text/plain",
+            width="stretch",
+        )
