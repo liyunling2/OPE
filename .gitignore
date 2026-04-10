@@ -1,7 +1,8 @@
 venv/
-requirements.txt
+#requirements.txt
 __pycache__/
 *.py[cod]
 .DS_Store
 .vscode/
 .ipynb_checkpoints/
+.env
