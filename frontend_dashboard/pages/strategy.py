@@ -585,13 +585,18 @@ def build_prompt(row: dict, hist: pd.DataFrame, recs: pd.DataFrame, grounded_bri
     return f"""
     You are a senior marketing strategist advising a restaurant owner.
 
-    IMPORTANT RULES:
-    - Use ONLY the data provided below
-    - DO NOT invent any numbers or assumptions
-    - You MUST produce an answer (never return empty)
-    - If data is missing, say "insufficient data"
-    - Always mention the restaurant name at least once
+    CRITICAL RULES:
+    - Use ONLY provided data
+    - DO NOT invent numbers or assumptions
+    - If unsure → say "insufficient data"
+    - Always reference REAL metrics (rates, quartiles, gaps)
     - Be specific to THIS restaurant (no generic advice)
+
+    STYLE RULES:
+    - Use bullet points (NO long paragraphs)
+    - Max 1–2 lines per point
+    - Use SIMPLE language (no jargon)
+    - Only metric names can be technical
 
     ---------------------
     RESTAURANT CONTEXT
@@ -602,15 +607,12 @@ def build_prompt(row: dict, hist: pd.DataFrame, recs: pd.DataFrame, grounded_bri
     Preferred Channel: {row.get("recommended_channel")}
 
     ---------------------
-    GA PERFORMANCE (FUNNEL)
+    GA DIAGNOSTIC
     ---------------------
-    Items Viewed: {row.get("ga_items_viewed")}
-    Add-to-Cart Rate: {row.get("ga_add_to_cart_rate")}
-    Purchase Rate: {row.get("ga_view_to_purchase_rate")}
-    Revenue per View: {row.get("ga_revenue_per_view")}
+    {ga_block}
 
     ---------------------
-    TOP STRATEGIES (RANKED)
+    TOP STRATEGIES
     ---------------------
     {top_block}
 
@@ -622,50 +624,211 @@ def build_prompt(row: dict, hist: pd.DataFrame, recs: pd.DataFrame, grounded_bri
     ---------------------
     TASK
     ---------------------
-    Give a decisive, business-focused recommendation for THIS restaurant.
 
-    FORMAT (STRICT):
+    ## 1. Key Issue
+    - State the MAIN problem using:
+    - metric
+    - benchmark (e.g. below median / top quartile)
+    - Translate into business pain
 
-    ## Key Issue
-    (1 short sentence — clearly state the MAIN revenue or conversion problem using GA data)
+    Example:
+    - "Add-to-cart is low (2.6%, below median) → traffic is not converting into orders → wasted demand"
 
-    ## Priority Actions
-    (Choose EXACTLY 2 strategies from the list, ordered by impact)
+    ---
 
-    For EACH strategy:
+    ## 2. Recommended Package 
+
+    - Package: (Basic / Standard / Premium)
+
+    AVAILABLE MARKETING PACKAGES (WITH CAPABILITIES)
+
+    BASIC PACKAGE (Awareness Starter – Low Cost, Entry Level)
+    Purpose:
+    - Drive initial awareness and light engagement
+    - Suitable for low traffic restaurants
+
+    Key Capabilities:
+    - Revenue Guarantee (30K+ THB)
+    - Revenue Guarantee (90 Day)
+    - Send Blogger to Review x1 (20k followers)
+    - Send Blogger to Review x2 (30k followers)
+    - Boost post THB 2,000 Baht
+    - Pop-up Banner: Individual 
+    - Photoshooting
+    - Guaranteed in Restaurants list home page 
+    - HH Facebook Post : Individual post
+    - Line@ Broadcasts :  Individual post
+    - Push Notification 
+
+
+    Limitations:
+    - No strong video content
+    - Limited reach and weak conversion tools
+
+    Use When:
+    - Traffic is low
+    - Need visibility, not deep conversion
+
+
+    STANDARD PACKAGE (Growth & Conversion – Balanced)
+    Purpose:
+    - Improve customer intent and conversion
+    - Best for mid-funnel problems (low add-to-cart, weak engagement)
+
+    Key Capabilities:
+    - Revenue Guarantee (40K+ THB)
+    - Revenue Guarantee (120 Day)
+    - Send Blogger to Review x1 (50k followers)
+    - Send Blogger to Review x2 (30k followers)
+    - Boost post THB 3,000 Baht
+    - Pop-up Banner: Individual 
+    - Guaranteed in Restaurants list home page 
+    - Photoshooting
+    - HH Facebook Post : Individual post
+    - Line@ Broadcasts :  Individual post
+    - Push Notification 
+    - Web Footer (2 days)
+    - Tiktok VDO or Instagram Reels VDO
+
+    Strengths:
+    - Combines awareness + conversion tools
+    - Strong for improving menu appeal and intent
+
+    Use When:
+    - Traffic exists but conversion is weak
+    - Add-to-cart or engagement is low
+
+
+    PREMIUM PACKAGE (High Impact – Scale + Conversion)
+    Purpose:
+    - Maximise reach AND conversion at scale
+    - Suitable for high-priority restaurants
+
+    Key Capabilities:
+    - Revenue Guarantee (100K+ THB)
+    - Revenue Guarantee (180 Day)
+    - Send Blogger to Review x1 (50k followers)
+    - Send Blogger to Review x2 (50k followers)
+    - Boost post THB 5,000 Baht
+    - Pop-up Banner: Individual 
+    - Guaranteed in Restaurants list home page 
+    - Photoshooting
+    - HH Facebook Post : Individual post
+    - Line@ Broadcasts :  Individual post
+    - Push Notification 
+    - Web Footer (2 days)
+    - Tiktok VDO or Instagram Reels VDO
+    - Guaranteed in Restaurants Promotion Banner (1 week)
+    - Blog: Advertorial: Individual
+
+    Strengths:
+    - Highest visibility + strongest conversion ecosystem
+    - Combines brand + performance marketing
+
+    Limitations:
+    - Highest cost → must justify ROI
+
+    Use When:
+    - High priority tier
+    - Need scale OR strong brand push
+    - Conversion AND reach both need improvement
+
+    PACKAGE DECISION REQUIREMENTS:
+    - You MUST reference specific package features when justifying your choice
+    - You MUST link features → funnel problem (e.g. "video content improves add-to-cart intent")
+    - You MUST explain:
+    - Why this package is sufficient
+    - Why cheaper option fails
+    - Why more expensive option is unnecessary (if applicable)
+    
+    - Why THIS package:
+    MUST include:
+    - exact funnel problem (traffic / intent / conversion)
+    - why this package directly fixes it
+    - why it is the MOST cost-effective choice
+
+    - Why NOT others:
+    - Basic → why insufficient
+    - Premium → why unnecessary / overspend
+
+    (Think ROI, not features)
+
+    ---
+
+    ## 3. Execution Plan
+
+    Use bullet points:
+
+    - Blogger Strategy:
+    - who + why (e.g. local food creators vs large influencers)
+
+    - Content:
+    - EXACT content idea (not generic)
+    - tie to food / experience
+
+    - Messaging:
+    - simple angle (value / premium / convenience)
+
+    - Paid + CRM:
+    - how ads + push + Line@ convert users
+
+    - Funnel Impact:
+    - traffic / conversion / revenue (be explicit)
+
+    ---
+
+    ## 4. Priority Actions
+
+    For EACH:
     - Strategy name
-    - Specific campaign idea (what exactly to run — be concrete)
-    - What it will drive (conversion, bookings, or revenue)
+    - Campaign idea (VERY concrete)
+    - What it improves (traffic / conversion / revenue)
 
-    Campaign ideas MUST:
-    - be realistic (e.g. bundle promo, limited-time offer, retargeting, CRM messaging)
-    - be tied to THIS restaurant’s situation (e.g. low conversion, high traffic)
-    - NOT be generic phrases like "run campaign"
+    ---
 
-    ## Why This Will Work
-    (Explain causally using ONLY:
-    - GA performance signals
-    - restaurant context (segment, priority tier, channel)
-    - strategy evidence provided
-    Translate into BUSINESS impact — avoid technical terms like "rev_uplift")
+    ## 5. Why This Will Work 
 
-    ## Next 30 Days
-    (3 direct, actionable steps that can be executed immediately)
+    Use bullet points:
+    - reference GA data
+    - reference strategy evidence
+    - connect to outcome
 
-    ## Expected Business Impact
-    (Use ONLY KPI targets provided — translate into outcomes like:
-    - higher conversion
-    - more bookings
-    - better revenue per visitor
-    If not available, say "insufficient data")
+    NO long paragraphs
 
-    STYLE:
-    - Short, punchy, decisive
-    - Focus on revenue, bookings, conversion
-    - Use action words: "prioritise", "fix", "scale"
-    - No long explanations
-    - No repeating full data blocks
-    - Sounds like advice a business owner would act on immediately
+    ---
+
+    ## 6. 30-Day Plan
+
+    - Launch
+    - Optimise
+    - Scale
+
+    (max 1 line each)
+
+    ---
+
+    ## 7. Expected Impact
+
+    - Use KPI targets
+    - Translate into outcomes:
+    - more orders
+    - better conversion
+    - higher revenue per visitor
+
+    DO NOT repeat raw numbers only
+
+    ---
+
+    DECISION RULES (VERY IMPORTANT):
+    - Mid-funnel issue (Add-to-cart low) → STANDARD
+    - Lower-funnel issue (conversion low) → STANDARD or PREMIUM
+    - Traffic issue → BASIC or STANDARD
+    - Only choose PREMIUM if:
+    - high priority tier AND
+    - need scale OR strong brand push
+
+    Always justify clearly.
+
     """
 
 #     return """You are a senior restaurant marketing strategist.
