@@ -31,10 +31,10 @@ def fmt_thb(val):
 
 def get_tier(tier):
     t = str(tier).lower()
-    if "proven"   in t: return "#e74c3c", "Proven"
-    if "untapped" in t: return "#e67e22", "Untapped"
-    if "review"   in t: return "#f1c40f", "Review"
-    return MUTED_TEXT, str(tier)
+    if "proven"   in t: return "red",    "Proven",   "#e74c3c"
+    if "untapped" in t: return "orange", "Untapped", "#e67e22"
+    if "review"   in t: return "yellow", "Review",   "#f1c40f"
+    return "gray", str(tier), "#7c82a0"
 
 
 def coerce_bool_series(df: pd.DataFrame, column: str, default: bool = False) -> pd.Series:
@@ -217,46 +217,177 @@ def render():
         "Restaurants outside the stable-growth priority universe are included as 'Monitor'."
     )
 
-    with st.expander("How Priority Score Is Calculated", expanded=False):
-        st.markdown(
-            "**Formula (GA-adjusted priority model)**\n\n"
-            "- `growth_component = 0.60 * score_growth_norm + 0.40 * delta_growth_norm`\n"
-            "- `ga_component = gmv_per_ga_view_norm`\n"
-            "- `priority_raw = 0.75 * growth_component + 0.25 * ga_component`\n"
-            "- Final score: `priority_score = min_max_norm(priority_raw) * 100`"
-        )
+    with st.expander("__How Priority Score Is Calculated__", expanded=False):
+        st.markdown("""
+        ### Priority Score Calculation
 
+        ##### Segment Stability Filter
+        Restaurants are narrowed down to those who are **consistently in a growth segment** over the last 3 months. All others are deprioritised before scoring begins.
+
+        ##### Priority Score
+        Overview of score composition
+        | Component | With Mkt History | No Mkt History | No GA records & Mkt History |
+        |---|---|---|---|
+        | `growth_component` | 0.30 | 0.40 |  0.50 |
+        | `booking_demand` | 0.30 | 0.40 | 0.50 |
+        | `ga4_demand` | 0.20 | 0.15 | 0 |
+        | `campaign_responsiveness` | 0.20 | 0.05 | 0 |
+        
+        > ⓘ For restaurants with no marketing history, campaign_responsiveness consists of gmv per ga view metric only
+                    
+        """)
+
+        with st.expander("__Sub score Calculations__", expanded=False):
+            st.markdown("""
+            **Growth Component**\n
+            `growth_component = (score_growth_norm × 0.60) + (delta_growth_norm × 0.40)`
+
+            **Booking Demand**\n
+            `
+            booking_demand = (booking_volume_norm × 0.40) + (revenue_per_booking_norm × 0.30) + (booking_consistency_norm  × 0.30)
+            `
+
+            **GA4 Demand**\n
+            `ga4_demand = (listing_pull_norm × 0.50) + (funnel_depth_norm × 0.50)`\n
+            - `listing_pull = avg(itemsViewed) across all months`
+            - `funnel_depth = view_to_cart_rate × 0.40 + cart_to_purchase_rate × 0.60`\n
+                └─ `view_to_cart_rate = itemsAddedToCart / itemsViewed`\n
+                └─ `cart_to_purchase_rate = itemsPurchased   / itemsAddedToCart`
+
+            **Campaign Responsiveness**\n
+            `
+            campaign_responsiveness = (internal_mkt_campaign_responsiveness × 0.60) + (ga_campaign_responsiveness × 0.40)
+            `
+            - `internal_mkt_campaign_responsiveness = lift_norm × 0.60 + roi_norm × 0.40`
+            - `ga_campaign_responsiveness = norm(avg_gmv_per_view)`
+        """)
+
+        st.markdown("""
+             ##### Risks Adjustments (Dynamic Weight Reduction)
+            After scoring, weights are reduced if data quality or signal reliability is poor.
+
+            | # | Condition | Interpretation | Penalty |
+            |---|---|---|---|
+            | R1 | < 3 consecutive months of GA4 data | High campaign reliance; organic demand unestablished | `ga4_demand × −20%` |
+            | R2 | `avg_lift_per_day > 0` AND `ga_campaign_responsiveness < 0` | Booking & GA4 signals move in opposite directions | `ga4_demand × −10%` |
+            | R3 | < 3 consecutive months of GA campaign data | Too few GA4 observations for reliable responsiveness | `ga_campaign_responsiveness × −20%` |
+            | R4 | avg GMV per view < 1 | Campaigns correlate with worse funnel performance | `ga_campaign_responsiveness × −10%` |
+
+            > ⓘ Risks are **additive** — a restaurant can trigger multiple penalties simultaneously.
+        """
+        )
+    
+    with st.expander("__View Restaurant's Individual Subscores__", expanded=False):
         breakdown_names = priority_df.sort_values("priority_score", ascending=False)["name"].tolist()
         breakdown_name = st.selectbox("Restaurant breakdown", breakdown_names, key="priority_breakdown_name")
         brow = priority_df[priority_df["name"] == breakdown_name].iloc[0]
+        st.metric("Priority Score", f"{brow.get('priority_score', 0):.2f}")
 
-        b1, b2, b3, b4 = st.columns(4)
-        b1.metric("Priority Score", f"{brow.get('priority_score', 0):.2f}")
-        b2.metric("Growth Component", f"{brow.get('growth_component', 0):.4f}")
-        b3.metric("GA Component", f"{brow.get('ga_component', 0):.4f}")
-        b4.metric("GMV / GA View", fmt_thb(brow.get("gmv_per_ga_view")))
-        st.caption(f"Priority reason: {brow.get('priority_reason', '-')}")
+        ### subscores display
+        b1, b2, b3 = st.columns(3)
+        b4, b5, b6 = st.columns(3)
+        b1.metric("Growth Component", f"{brow.get('growth_component', 0):.4f}")
+        b2.metric("Booking Demand", f"{brow.get('booking_demand', 0):.4f}")
+        b3.metric("GA4 Demand", f"{brow.get('ga4_demand', 0):.4f}")
+        b4.metric("Campaign Responsiveness", f"{brow.get('campaign_responsiveness', 0):.4f}")
+        b5.metric("Internal Campaign Responsiveness", f"{brow.get('internal_mkt_campaign_responsiveness', 0):.4f}")
+        b6.metric("GA Campaign Responsiveness", f"{brow.get('avg_gmv_per_view', 0):.4f}")
 
         breakdown_df = pd.DataFrame(
             [
-                ("score_growth", brow.get("score_growth", np.nan)),
-                ("delta_growth_book", brow.get("delta_growth_book", np.nan)),
                 ("score_growth_norm", brow.get("score_growth_norm", np.nan)),
                 ("delta_growth_norm", brow.get("delta_growth_norm", np.nan)),
-                ("growth_component", brow.get("growth_component", np.nan)),
-                ("gmv_per_ga_view", brow.get("gmv_per_ga_view", np.nan)),
-                ("gmv_per_ga_view_norm", brow.get("gmv_per_ga_view_norm", np.nan)),
-                ("ga_add_to_cart_rate", brow.get("ga_add_to_cart_rate", np.nan)),
-                ("ga_view_to_purchase_rate", brow.get("ga_view_to_purchase_rate", np.nan)),
-                ("ga_component", brow.get("ga_component", np.nan)),
-                ("priority_raw_recomputed", brow.get("priority_raw_recomputed", np.nan)),
-                ("priority_score_recomputed", brow.get("priority_score_recomputed", np.nan)),
-                ("priority_score_saved", brow.get("priority_score_saved", np.nan)),
+                ("booking_volume_norm", brow.get("booking_volume_norm", np.nan)),
+                ("revenue_per_booking_norm", brow.get("revenue_per_booking_norm", np.nan)),
+                ("booking_consistency_norm", brow.get("booking_consistency_norm", np.nan)),
+                ("listing_pull_norm", brow.get("listing_pull_norm", np.nan)),
+                ("funnel_depth_norm", brow.get("funnel_depth_norm", np.nan)),
+                ("view_to_cart_rate", brow.get("view_to_cart_rate", np.nan)),
+                ("cart_to_purchase_rate", brow.get("cart_to_purchase_rate", np.nan)),
             ],
             columns=["Figure Used In Calculation", "Value"],
         )
-        st.dataframe(breakdown_df, width="stretch", hide_index=True, height=430)
 
+        c1,c2 = st.columns([2, 1])
+        c1.dataframe(breakdown_df, width="stretch", hide_index=True)
+        with c2:
+            st.markdown("#### ⚠️ Risk Flags")
+            RISKS = [
+                ("risk_thin_ga_demand_data", "Thin GA4 Demand data",    "ga4_demand −20%"),
+                ("risk_inverse_attribution_rs","Inverse signal of Bookings data & GA demand", "ga4_demand −10%"),
+                ("risk_thin_gmv_data","Thin GMV data",          "ga_campaign_responsiveness −20%"),
+                ("risk_low_gmv_per_view","Low GMV/view metric",       "ga_campaign_responsiveness −10%"),
+            ]
+
+            active_risks = [label for col, label, desc in RISKS if brow.get(col) == True]
+
+            if not active_risks:
+                st.success("No risks identified in data.")
+            else:
+                for active_risks in RISKS:
+                    st.markdown(
+                        f"- :red-badge[{active_risks[1]}] :gray-badge[`{active_risks[2]}`]")
+                    
+    f1, f2, f3, f4, f5, f6 = st.columns([1, 1, 1, 1, 1, 1.4])
+    with f1:
+        t_opts = ["All"] + priority_df["priority_tier"].dropna().unique().tolist()
+        t_filt = st.selectbox("Tier", t_opts)
+    with f2:
+        has_seg = "latest_segment" in priority_df.columns
+        s_opts  = ["All"] + (priority_df["latest_segment"].dropna().unique().tolist() if has_seg else [])
+        s_filt  = st.selectbox("Segment", s_opts)
+    with f3:
+        sig_filt = st.selectbox("Signal", ["All", "YoY", "MoM"])
+    with f4:
+        seas_filt = st.selectbox("Seasonal", ["All", "Seasonal only", "Non-seasonal only"])
+    with f5:
+        min_sc = st.slider("Min Score", 0, 100, 0)
+    with f6:
+        name_search = st.text_input("Search Restaurant", placeholder="Type restaurant name", key="priority_name_search")
+
+    df = priority_df.copy()
+    if t_filt != "All": df = df[df["priority_tier"] == t_filt]
+    if s_filt != "All" and has_seg: df = df[df["latest_segment"] == s_filt]
+    if sig_filt != "All" and "growth_signal_used" in df.columns:
+        df = df[df["growth_signal_used"] == sig_filt]
+    if seas_filt == "Seasonal only" and "is_seasonal" in df.columns:
+        df = df[df["is_seasonal"] == True]
+    if seas_filt == "Non-seasonal only" and "is_seasonal" in df.columns:
+        df = df[df["is_seasonal"] == False]
+    if str(name_search).strip():
+        df = df[df["name"].str.contains(name_search.strip(), case=False, na=False)]
+    df = df[df["priority_score"] >= min_sc].sort_values("priority_score", ascending=False).reset_index(drop=True)
+
+    st.caption("Showing %d of %d" % (len(df), len(priority_df)))
+    if len(df) == 0:
+        st.info("No restaurants match filters.")
+        return
+
+    top_n = min(15, len(df))
+    tc    = df.head(top_n)
+    # Seasonal restaurants get amber bars; others use tier colour
+    _bar_colors = []
+    for _, _row in tc.iterrows():
+        if "is_seasonal" in _row and bool(_row.get("is_seasonal", False)):
+            _bar_colors.append("#f0a500")
+        else:
+            _bar_colors.append(get_tier(_row.get("priority_tier",""))[2])
+    fig_rank = go.Figure(go.Bar(
+        x=tc["priority_score"], y=tc["name"], orientation="h",
+        marker_color=_bar_colors, marker_opacity=0.85,
+        text=["%.0f" % s for s in tc["priority_score"]], textposition="inside",
+        textfont=dict(color="#fff", size=10),
+    ))
+    st.caption("\U0001F7E1 Amber bars = Seasonal flag - strong MoM but weak YoY. Timing-sensitive activation.")
+    fig_rank.update_layout(**layout(max(300, top_n*24),
+        xaxis=dict(**AXIS, title="Priority Score", range=[0,105]),
+        yaxis=dict(**AXIS, autorange="reversed", tickfont=dict(size=10))))
+    st.markdown("### Top %d Restaurants" % top_n)
+    st.plotly_chart(fig_rank, width="stretch")
+
+    st.markdown("---")
+
+        
     col1, col2 = st.columns(2)
 
     with col1:
@@ -321,137 +452,72 @@ def render():
             else:
                 st.info("Re-run notebooks to see MoM vs YoY score distribution.")
 
-    st.markdown("---")
-
-    f1, f2, f3, f4, f5, f6 = st.columns([1, 1, 1, 1, 1, 1.4])
-    with f1:
-        t_opts = ["All"] + priority_df["priority_tier"].dropna().unique().tolist()
-        t_filt = st.selectbox("Tier", t_opts)
-    with f2:
-        has_seg = "latest_segment" in priority_df.columns
-        s_opts  = ["All"] + (priority_df["latest_segment"].dropna().unique().tolist() if has_seg else [])
-        s_filt  = st.selectbox("Segment", s_opts)
-    with f3:
-        sig_filt = st.selectbox("Signal", ["All", "YoY", "MoM"])
-    with f4:
-        seas_filt = st.selectbox("Seasonal", ["All", "Seasonal only", "Non-seasonal only"])
-    with f5:
-        min_sc = st.slider("Min Score", 0, 100, 0)
-    with f6:
-        name_search = st.text_input("Search Restaurant", placeholder="Type restaurant name", key="priority_name_search")
-
-    df = priority_df.copy()
-    if t_filt != "All": df = df[df["priority_tier"] == t_filt]
-    if s_filt != "All" and has_seg: df = df[df["latest_segment"] == s_filt]
-    if sig_filt != "All" and "growth_signal_used" in df.columns:
-        df = df[df["growth_signal_used"] == sig_filt]
-    if seas_filt == "Seasonal only" and "is_seasonal" in df.columns:
-        df = df[df["is_seasonal"] == True]
-    if seas_filt == "Non-seasonal only" and "is_seasonal" in df.columns:
-        df = df[df["is_seasonal"] == False]
-    if str(name_search).strip():
-        df = df[df["name"].str.contains(name_search.strip(), case=False, na=False)]
-    df = df[df["priority_score"] >= min_sc].sort_values("priority_score", ascending=False).reset_index(drop=True)
-
-    st.caption("Showing %d of %d" % (len(df), len(priority_df)))
-    if len(df) == 0:
-        st.info("No restaurants match filters.")
-        return
-
-    top_n = min(25, len(df))
-    tc    = df.head(top_n)
-    # Seasonal restaurants get amber bars; others use tier colour
-    _bar_colors = []
-    for _, _row in tc.iterrows():
-        if "is_seasonal" in _row and bool(_row.get("is_seasonal", False)):
-            _bar_colors.append("#f0a500")
-        else:
-            _bar_colors.append(get_tier(_row.get("priority_tier",""))[0])
-    fig_rank = go.Figure(go.Bar(
-        x=tc["priority_score"], y=tc["name"], orientation="h",
-        marker_color=_bar_colors, marker_opacity=0.85,
-        text=["%.0f" % s for s in tc["priority_score"]], textposition="inside",
-        textfont=dict(color="#fff", size=10),
-    ))
-    st.caption("\U0001F7E1 Amber bars = Seasonal flag - strong MoM but weak YoY. Timing-sensitive activation.")
-    fig_rank.update_layout(**layout(max(300, top_n*24),
-        xaxis=dict(**AXIS, title="Priority Score", range=[0,105]),
-        yaxis=dict(**AXIS, autorange="reversed", tickfont=dict(size=10))))
-    st.markdown("### Top %d Restaurants" % top_n)
-    st.plotly_chart(fig_rank, width="stretch")
 
     st.markdown("---")
     st.markdown("### Full Ranked List")
-
     for idx, row in df.iterrows():
-        rank    = idx + 1
-        name    = row["name"]
-        score   = row["priority_score"]
-        color, label = get_tier(row.get("priority_tier","-"))
-        channel = row.get("recommended_channel", pd.NA)
+        rank     = idx + 1
+        name     = row["name"]
+        score    = row["priority_score"]
+        badge_color, label, hex_color = get_tier(row.get("priority_tier", "-"))
+        channel  = row.get("recommended_channel", pd.NA)
         if pd.isna(channel) or str(channel).strip() in {"", "-", "Unknown", "unknown", "N/A", "n/a", "nan"}:
             channel = "No channel assigned"
         bookings = int(row.get("monthly_bookings", 0))
-        growth  = row.get("booking_growth_rolling", None)
-        n_camp  = int(row.get("n_campaigns", 0)) if pd.notna(row.get("n_campaigns")) else 0
-        lift    = row.get("avg_lift_per_day", None)
-        signal  = row.get("growth_signal_used", "-")
-        gc      = "#2ecc71" if growth is not None and pd.notna(growth) and growth > 0 else "#e74c3c"
-        gmv_per_ga_view = row.get("gmv_per_ga_view", None)
-        priority_reason = row.get("priority_reason", "-")
+        growth   = row.get("booking_growth_rolling", None)
+        n_camp   = int(row.get("n_campaigns", 0)) if pd.notna(row.get("n_campaigns")) else 0
+        lift     = row.get("avg_lift_per_day", None)
+        signal   = row.get("growth_signal_used", "-")
+        gc       = "normal" if growth is not None and pd.notna(growth) and growth > 0 else "inverse"
+        growth_fmt = fmt_pct(growth) if growth is not None and pd.notna(growth) else "-"
+        lift_fmt   = ("%.2f" % lift) if lift is not None and pd.notna(lift) else "-"
 
-        st.markdown(
-                "<div style='background:{surface};border:1px solid {border};border-left:4px solid {c};border-radius:8px;padding:1.2rem;margin-bottom:1rem;box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>"
-                "<div style='display:flex;justify-content:space-between;align-items:flex-start;'>"
-                "<div><span style='font-size:1.2rem;font-weight:700;color:{text};'>#{r} {n}</span> "
-                "<span style='margin-left:8px;font-size:0.75rem;color:{c};border:1px solid {c};padding:2px 8px;border-radius:10px;'>{l}</span> "
-                "<span style='color:#3b82f6;font-size:0.72rem;font-weight:700;padding:2px 8px;"
-                "background:#f3f4f6;border-radius:6px;'>{ch}</span></div>"
-                "<span style='font-size:1.5rem;color:#cc0000;font-weight:700;'>{s:.0f}"
-                "<span style='font-size:0.75rem;color:{muted};'>/100</span></span></div>"
-                "<div style='margin-top:0.5rem;font-size:0.79rem;color:{muted};display:flex;gap:1.5rem;'>"
-                "<span>Bookings: <b style='color:{text};'>{b}</b></span>"
-                "<span>Growth: <b style='color:{gc};'>{g} ({sig})</b></span>"
-                "<span>GMV / GA View: <b style='color:{text};'>{ggv}</b></span>"
-                "<span>Campaigns: <b style='color:{text};'>{nc}</b></span>"
-                "<span>Lift/day: <b style='color:{text};'>{li}</b></span>"
-                "<span>Reason: <b style='color:{text};'>{reason}</b></span>"
-                "</div></div>".format(
-                    c=color, r=rank, n=name, l=label, ch=channel, s=score,
-                    b=bookings, g=fmt_pct(growth), sig=signal, gc=gc,
-                    ggv=fmt_thb(gmv_per_ga_view),
-                    nc=n_camp, li=("%.2f" % lift if lift is not None and pd.notna(lift) else "-"),
-                    reason=priority_reason,
-                    surface=SURFACE_COLOR,
-                    border=BORDER_COLOR,
-                    text=TEXT_COLOR,
-                    muted=MUTED_TEXT,
-                ),
-                unsafe_allow_html=True
+        with st.container(border=True):
+            col_name, col_score = st.columns([5, 1])
+
+            with col_name:
+                st.markdown(
+                    f"<div style='display:flex;align-items:center;gap:8px;'>"
+                    f"<span style='font-size:1.1rem;font-weight:700;'>#{rank} {name}</span>"
+                    f"<span style='font-size:0.75rem;padding:2px 10px;border-radius:999px;border:1px solid currentColor;color:{hex_color};'>{label}</span>"
+                    f"<span style='font-size:0.75rem;padding:2px 10px;border-radius:999px;background:#1a2744;color:#3b82f6;'>{channel}</span>"
+                    f"</div>",
+                    unsafe_allow_html=True
+                )
+
+            with col_score:
+                st.markdown(
+                    f"<div style='text-align:right;font-size:1.6rem;font-weight:700;color:#cc0000;'>"
+                    f"{score:.0f}<span style='font-size:0.8rem;color:#9ca3c4;'>/100</span></div>",
+                    unsafe_allow_html=True
+                )
+
+            st.caption(
+                f"Bookings: **{bookings:,}**  &nbsp;|&nbsp;  "
+                f"Growth: **{growth_fmt} ({signal})**  &nbsp;|&nbsp;  "
+                f"Campaigns: **{n_camp}**  &nbsp;|&nbsp;  "
+                f"Lift/day: **{lift_fmt}**"
             )
 
-        # MoM / YoY detail row
-        _mom = row.get("booking_growth_mom_rolling")
-        _yoy = row.get("booking_growth_yoy_rolling")
-        if _mom is not None and pd.notna(_mom):
-            _mc1, _mc2 = st.columns(2)
-            _mc1.metric("MoM Growth (3m)", fmt_pct(_mom),
-                        help="Month-over-month 3m rolling average")
-            if _yoy is not None and pd.notna(_yoy):
-                _mc2.metric("YoY Growth (3m)", fmt_pct(_yoy),
-                            help="Year-over-year 3m rolling (>=2 of 3 months valid)")
-            else:
-                _mc2.metric("YoY Growth", "N/A",
-                            help="Insufficient prior-year data or <12 months history")
-        if row.get("is_seasonal", False):
-            st.warning("\U0001F30A **Seasonal pattern** - strong recent MoM but YoY below portfolio median. "
-                       "Activate when timing aligns with seasonal peak for best ROI.")
+            # MoM / YoY detail row
+            _mom = row.get("booking_growth_mom_rolling")
+            _yoy = row.get("booking_growth_yoy_rolling")
 
-        can_generate = bool(row.get("is_in_priority_list", False))
-        if st.button("Generate Strategy for %s" % name, key="strat_%d" % rank, disabled=not can_generate):
-            st.session_state["strategy_restaurant"] = name
-            st.session_state["_nav_to_strategy"] = True
-            st.rerun()
+            if _mom is not None and pd.notna(_mom):
+                mom_str = f"MoM (3m): **{fmt_pct(_mom)}**"
+                yoy_str = f"YoY (3m): **{fmt_pct(_yoy)}**" if _yoy is not None and pd.notna(_yoy) else "YoY (3m): **N/A**"
+                st.caption(f"{mom_str} &nbsp;|&nbsp; {yoy_str}")
+
+            if row.get("is_seasonal", False):
+                st.caption("🌊 **Seasonal pattern** — strong recent MoM but YoY below portfolio median. Activate at seasonal peak for best ROI.")
+            
+
+            can_generate = bool(row.get("is_in_priority_list", False))
+            if st.button("Generate Strategy for %s" % name, key="strat_%d" % rank, disabled=not can_generate):
+                st.session_state["strategy_restaurant"] = name
+                st.session_state["_nav_to_strategy"] = True
+                st.rerun()
+
 
     st.caption(
         "`Monitor - outside stable-growth priority universe` means the restaurant is shown for full visibility, "
