@@ -221,10 +221,10 @@ def render():
         st.markdown("""
         ### Priority Score Calculation
 
-        ##### Segment Stability Filter
+        ##### 1. Segment Stability Filter
         Restaurants are narrowed down to those who are **consistently in a growth segment** over the last 3 months. All others are deprioritised before scoring begins.
 
-        ##### Priority Score
+        ##### 2. Priority Score
         Overview of score composition
         | Component | With Mkt History | No Mkt History | No GA records & Mkt History |
         |---|---|---|---|
@@ -263,7 +263,7 @@ def render():
         """)
 
         st.markdown("""
-             ##### Risks Adjustments (Dynamic Weight Reduction)
+             ##### 3. Risks Adjustments (Dynamic Weight Reduction)
             After scoring, weights are reduced if data quality or signal reliability is poor.
 
             | # | Condition | Interpretation | Penalty |
@@ -363,7 +363,7 @@ def render():
         st.info("No restaurants match filters.")
         return
 
-    top_n = min(15, len(df))
+    top_n = min(10, len(df))
     tc    = df.head(top_n)
     # Seasonal restaurants get amber bars; others use tier colour
     _bar_colors = []
@@ -372,17 +372,21 @@ def render():
             _bar_colors.append("#f0a500")
         else:
             _bar_colors.append(get_tier(_row.get("priority_tier",""))[2])
+
     fig_rank = go.Figure(go.Bar(
         x=tc["priority_score"], y=tc["name"], orientation="h",
         marker_color=_bar_colors, marker_opacity=0.85,
         text=["%.0f" % s for s in tc["priority_score"]], textposition="inside",
-        textfont=dict(color="#fff", size=10),
+        textfont=dict(color="#fff", size=13),
     ))
-    st.caption("\U0001F7E1 Amber bars = Seasonal flag - strong MoM but weak YoY. Timing-sensitive activation.")
-    fig_rank.update_layout(**layout(max(300, top_n*24),
-        xaxis=dict(**AXIS, title="Priority Score", range=[0,105]),
-        yaxis=dict(**AXIS, autorange="reversed", tickfont=dict(size=10))))
+
     st.markdown("### Top %d Restaurants" % top_n)
+    st.caption("🟡 Amber bars = Seasonal flag — strong MoM but weak YoY. Timing-sensitive activation.")
+
+    fig_rank.update_layout(**layout(max(180, top_n * 36),
+        xaxis=dict(**AXIS, title="Priority Score", range=[0, 105], tickfont=dict(size=13)),
+        yaxis=dict(**AXIS, autorange="reversed", tickfont=dict(size=13))))
+
     st.plotly_chart(fig_rank, width="stretch")
 
     st.markdown("---")
