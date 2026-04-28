@@ -615,55 +615,53 @@ def _merge_latest_ga_metrics(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def score_priority_with_ga(df: pd.DataFrame) -> pd.DataFrame:
-    out = _merge_latest_ga_metrics(df)
-    out = _normalize_metric_columns(out)
+# def score_priority_with_ga(df: pd.DataFrame) -> pd.DataFrame:
+#     out = _merge_latest_ga_metrics(df)
+#     out = _normalize_metric_columns(out)
 
-    if "priority_score_saved" not in out.columns:
-        out["priority_score_saved"] = _to_numeric_series(out, "priority_score")
-    if "rank_saved" not in out.columns and "rank" in out.columns:
-        out["rank_saved"] = _to_numeric_series(out, "rank")
+#     if "priority_score_saved" not in out.columns:
+#         out["priority_score_saved"] = _to_numeric_series(out, "priority_score")
+#     if "rank_saved" not in out.columns and "rank" in out.columns:
+#         out["rank_saved"] = _to_numeric_series(out, "rank")
 
-    out["score_growth_norm"] = _min_max_norm(_to_numeric_series(out, "score_growth"), neutral=0.5)
-    out["delta_growth_norm"] = _min_max_norm(_to_numeric_series(out, "delta_growth_book"), neutral=0.5)
-    out["growth_component"] = 0.60 * out["score_growth_norm"] + 0.40 * out["delta_growth_norm"]
-    out["gmv_per_ga_view_norm"] = _min_max_norm(_to_numeric_series(out, "gmv_per_ga_view"), neutral=0.5)
-    out["ga_component"] = out["gmv_per_ga_view_norm"]
+#     out["score_growth_norm"] = _min_max_norm(_to_numeric_series(out, "score_growth"), neutral=0.5)
+#     out["delta_growth_norm"] = _min_max_norm(_to_numeric_series(out, "delta_growth_book"), neutral=0.5)
+#     out["growth_component"] = 0.60 * out["score_growth_norm"] + 0.40 * out["delta_growth_norm"]
+#     out["gmv_per_ga_view_norm"] = _min_max_norm(_to_numeric_series(out, "gmv_per_ga_view"), neutral=0.5)
+#     out["ga_component"] = out["gmv_per_ga_view_norm"]
 
-    out["priority_raw_recomputed"] = (
-        PRIORITY_GROWTH_WEIGHT * out["growth_component"]
-        + PRIORITY_GA_WEIGHT * out["ga_component"]
-    )
-    out["priority_score_recomputed"] = _min_max_norm(out["priority_raw_recomputed"], neutral=0.5) * 100
-    out["priority_score"] = out["priority_score_recomputed"].round(2)
+#     out["priority_raw_recomputed"] = (
+#         PRIORITY_GROWTH_WEIGHT * out["growth_component"]
+#         + PRIORITY_GA_WEIGHT * out["ga_component"]
+#     )
+#     out["priority_score_recomputed"] = _min_max_norm(out["priority_raw_recomputed"], neutral=0.5) * 100
+#     out["priority_score"] = out["priority_score_recomputed"].round(2)
 
-    ga_lead = out["ga_component"] - out["growth_component"]
-    growth_lead = out["growth_component"] - out["ga_component"]
-    out["priority_reason"] = np.select(
-        [
-            ga_lead >= 0.12,
-            growth_lead >= 0.12,
-            _to_numeric_series(out, "ga_add_to_cart_rate").fillna(0).ge(0.08),
-        ],
-        [
-            "High GMV per GA view",
-            "Strong growth momentum",
-            "Strong GA conversion intent",
-        ],
-        default="Balanced growth + GA efficiency",
-    )
+#     ga_lead = out["ga_component"] - out["growth_component"]
+#     growth_lead = out["growth_component"] - out["ga_component"]
+#     out["priority_reason"] = np.select(
+#         [
+#             ga_lead >= 0.12,
+#             growth_lead >= 0.12,
+#             _to_numeric_series(out, "ga_add_to_cart_rate").fillna(0).ge(0.08),
+#         ],
+#         [
+#             "High GMV per GA view",
+#             "Strong growth momentum",
+#             "Strong GA conversion intent",
+#         ],
+#         default="Balanced growth + GA efficiency",
+#     )
 
-    if len(out):
-        out["rank"] = out["priority_score"].rank(method="first", ascending=False).astype(int)
-    return out
+#     if len(out):
+#         out["rank"] = out["priority_score"].rank(method="first", ascending=False).astype(int)
+#     return out
 
 
 @st.cache_data(ttl=300)
 def load_priority() -> pd.DataFrame:
     if PRIORITY_PATH.exists():
-        return score_priority_with_ga(pd.read_csv(PRIORITY_PATH))
-    _, priority_df = _make_sample_data()
-    return score_priority_with_ga(priority_df)
+        return pd.read_csv(PRIORITY_PATH)
 
 
 @st.cache_data(ttl=300)

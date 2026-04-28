@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-from data.loader import load_priority, load_momentum, load_momentum_segments, score_priority_with_ga
+from data.loader import load_priority, load_momentum, load_momentum_segments
 from theme import AXIS, BORDER_COLOR, MUTED_TEXT, SURFACE_COLOR, TEXT_COLOR
 
 
@@ -122,34 +122,42 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
     existing["is_in_priority_list"] = True
     base["is_in_priority_list"] = False
 
-    combined = base.merge(existing, on="name", how="left", suffixes=("_base", ""))
+    combined = existing.merge(base, on="restaurant_id", how="outer", suffixes=("_base", ""))
+
     coalesce_cols = [
-        "restaurant_id",
-        "latest_segment",
-        "score_perf",
-        "score_growth",
-        "monthly_bookings",
-        "monthly_gmv",
+        'restaurant_id',
+        'segment', 'growth_months', 'months_observed', 'is_stable_growth', 'has_marketing',
+        # Tier & final score
+        'priority_score', 'priority_tier', 'recommended_channel',
+        # Level-1 scores
+        'growth_component', 'booking_demand', 'ga4_demand',
+        'internal_mkt_campaign_responsiveness', 'campaign_responsiveness',
+        # Subscores — growth
+        'score_growth', 'score_growth_norm', 'delta_growth_norm',
+        # Subscores — booking
+        'monthly_bookings', 'monthly_gmv',
+        'booking_volume_norm', 'revenue_per_booking_norm', 'booking_consistency_norm',
+        # Subscores — GA4 demand
+        'listing_pull_raw', 'months_cnt', 'listing_pull_norm',
+        'view_to_cart_rate', 'cart_to_purchase_rate', 'funnel_depth_raw', 'funnel_depth_norm',
+        # Subscores — internal marketing
+        'n_campaigns', 'avg_lift_per_day', 'avg_roi',
+        'n_positive_lift', 'n_negative_lift', 'channels_used', 'best_channel',
+        'lift_norm', 'roi_norm',
+        # Subscores — GA campaign responsiveness
+        'avg_gmv_per_view', 'n_months_gmv', 'ga_campaign_responsiveness',
+        # Risk flags
+        'risk_thin_ga_demand_data', 'risk_inverse_attribution_rs',
+        'risk_thin_gmv_data', 'risk_low_gmv_per_view',
+        # prev dataset
+        "is_seasonal",
         "booking_growth_rolling",
         "booking_growth_mom_rolling",
         "booking_growth_yoy_rolling",
-        "gmv_growth_rolling",
-        "booking_growth_yoy",
-        "gmv_growth_yoy",
-        "growth_signal_used",
-        "delta_growth_book",
-        "delta_growth_rev",
-        "gmv_per_ga_view",
-        "bookings_per_ga_view",
-        "ga_add_to_cart_rate",
-        "ga_view_to_purchase_rate",
-        "ga_purchase_to_cart_rate",
-        "ga_revenue_per_view",
-        "ga_items_viewed",
-        "has_ga_data",
-        "has_full_year",
-        "is_seasonal",
+        'score_growth_mom', 'score_growth_yoy'
+
     ]
+    
     for col in coalesce_cols:
         bcol = f"{col}_base"
         if bcol in combined.columns:
@@ -160,30 +168,21 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
             combined = combined.drop(columns=[bcol])
 
     combined["is_in_priority_list"] = np.where(
-        combined["is_in_priority_list"].isna(),
-        False,
-        combined["is_in_priority_list"],
+        combined["is_in_priority_list"].isna(), False, combined["is_in_priority_list"]
     ).astype(bool)
-    combined["priority_tier"] = combined["priority_tier"].fillna("Monitor - outside stable-growth priority universe")
-    combined["recommended_channel"] = combined["recommended_channel"].where(
-        combined["recommended_channel"].notna(),
-        pd.NA,
-    )
-    combined["priority_score"] = pd.to_numeric(combined.get("priority_score"), errors="coerce")
-    if "has_marketing" in combined.columns:
-        combined["has_marketing"] = np.where(
-            combined["has_marketing"].isna(),
-            False,
-            combined["has_marketing"],
-        ).astype(bool)
-    else:
-        combined["has_marketing"] = False
-    combined["n_campaigns"] = pd.to_numeric(combined.get("n_campaigns"), errors="coerce").fillna(0).astype(int)
+    combined["priority_tier"]       = combined["priority_tier"].fillna("Monitor - outside stable-growth priority universe")
+    combined["recommended_channel"] = combined["recommended_channel"].where(combined["recommended_channel"].notna(), pd.NA)
+    combined["priority_score"]      = pd.to_numeric(combined.get("priority_score"), errors="coerce")
+    combined["has_marketing"]       = np.where(combined["has_marketing"].isna(), False, combined["has_marketing"]).astype(bool) \
+                                      if "has_marketing" in combined.columns else False
+    combined["n_campaigns"]         = pd.to_numeric(combined.get("n_campaigns"), errors="coerce").fillna(0).astype(int)
+
     return combined
+
 
 def render():
     base_priority_df = load_priority()
-    priority_df = score_priority_with_ga(build_priority_universe(base_priority_df))
+    priority_df = build_priority_universe(base_priority_df)
     st.markdown("## Priority List")
     st.markdown(
         f"<p style='color:{MUTED_TEXT};margin-top:-0.5rem;'>Stable-growth restaurants ranked by composite priority score.</p>",
@@ -195,11 +194,6 @@ def render():
         st.warning("No priority data. Run priority_scoring_seasonality.ipynb first.")
         return
 
-    ga_gmv_series = (
-        pd.to_numeric(priority_df["gmv_per_ga_view"], errors="coerce")
-        if "gmv_per_ga_view" in priority_df.columns
-        else pd.Series(dtype="float64")
-    )
     is_seasonal_series = coerce_bool_series(priority_df, "is_seasonal", default=False)
 
     k1, k2, k3, k4, k5, k6 = st.columns(6)
@@ -210,7 +204,7 @@ def render():
     k4.metric("Review",   str(ct("review")))
     seasonal_n = int(is_seasonal_series.sum())
     k5.metric("\U0001F30A Seasonal", str(seasonal_n))
-    k6.metric("Avg GMV / GA View", fmt_thb(ga_gmv_series.dropna().mean()))
+    k6.metric("Avg GMV / GA View", fmt_thb(priority_df["avg_gmv_per_view"].mean()))
     st.markdown("<br>", unsafe_allow_html=True)
     st.caption(
         f"Total restaurants shown: {len(priority_df):,}. "
@@ -315,26 +309,27 @@ def render():
             RISKS = [
                 ("risk_thin_ga_demand_data", "Thin GA4 Demand data",    "ga4_demand −20%"),
                 ("risk_inverse_attribution_rs","Inverse signal of Bookings data & GA demand", "ga4_demand −10%"),
-                ("risk_thin_gmv_data","Thin GMV data",          "ga_campaign_responsiveness −20%"),
+                ("risk_thin_gmv_data","Thin GMV/view data",          "ga_campaign_responsiveness −20%"),
                 ("risk_low_gmv_per_view","Low GMV/view metric",       "ga_campaign_responsiveness −10%"),
             ]
 
-            active_risks = [label for col, label, desc in RISKS if brow.get(col) == True]
+            active_risks = [(label, desc) for col, label, desc in RISKS if brow.get(col) == True]
 
             if not active_risks:
                 st.success("No risks identified in data.")
             else:
-                for active_risks in RISKS:
+                for label, desc in active_risks:
                     st.markdown(
-                        f"- :red-badge[{active_risks[1]}] :gray-badge[`{active_risks[2]}`]")
+                        f"- :red-badge[{label}] :gray-badge[`{desc}`]"
+                    )
                     
     f1, f2, f3, f4, f5, f6 = st.columns([1, 1, 1, 1, 1, 1.4])
     with f1:
         t_opts = ["All"] + priority_df["priority_tier"].dropna().unique().tolist()
         t_filt = st.selectbox("Tier", t_opts)
     with f2:
-        has_seg = "latest_segment" in priority_df.columns
-        s_opts  = ["All"] + (priority_df["latest_segment"].dropna().unique().tolist() if has_seg else [])
+        has_seg = "segment" in priority_df.columns
+        s_opts  = ["All"] + (priority_df["segment"].dropna().unique().tolist() if has_seg else [])
         s_filt  = st.selectbox("Segment", s_opts)
     with f3:
         sig_filt = st.selectbox("Signal", ["All", "YoY", "MoM"])
@@ -351,9 +346,9 @@ def render():
     if sig_filt != "All" and "growth_signal_used" in df.columns:
         df = df[df["growth_signal_used"] == sig_filt]
     if seas_filt == "Seasonal only" and "is_seasonal" in df.columns:
-        df = df[df["is_seasonal"] == True]
+        df = df[df["is_seasonal"].fillna(False) == True]
     if seas_filt == "Non-seasonal only" and "is_seasonal" in df.columns:
-        df = df[df["is_seasonal"] == False]
+        df = df[df["is_seasonal"].fillna(False) == False]
     if str(name_search).strip():
         df = df[df["name"].str.contains(name_search.strip(), case=False, na=False)]
     df = df[df["priority_score"] >= min_sc].sort_values("priority_score", ascending=False).reset_index(drop=True)
@@ -407,54 +402,93 @@ def render():
         st.plotly_chart(fig_box, width="stretch")
 
     with col2:
-        st.markdown("### MoM vs YoY Score - Priority Universe")
-        has_mom_sc = "score_growth_mom" in priority_df.columns
-        has_yoy_sc = "score_growth_yoy" in priority_df.columns
-        if has_mom_sc and has_yoy_sc:
-            pf = priority_df[priority_df["is_in_priority_list"]].copy() if "is_in_priority_list" in priority_df.columns else priority_df.copy()
-            is_seas = coerce_bool_series(pf, "is_seasonal", default=False)
-            fig_mv = go.Figure()
-            not_seas = pf[~is_seas]
-            if len(not_seas):
-                fig_mv.add_trace(go.Scatter(
-                    x=not_seas["score_growth_mom"], y=not_seas["score_growth_yoy"],
-                    mode="markers", name="Non-seasonal",
-                    marker=dict(color="#2ecc71", size=8, opacity=0.7, line=dict(color="#0f1117", width=1)),
-                    hovertemplate="<b>%{customdata}</b><br>MoM: %{x:.2f} | YoY: %{y:.2f}<extra></extra>",
-                    customdata=not_seas["name"].tolist()))
-            seas_sub = pf[is_seas]
-            if len(seas_sub):
-                fig_mv.add_trace(go.Scatter(
-                    x=seas_sub["score_growth_mom"], y=seas_sub["score_growth_yoy"],
-                    mode="markers", name="\U0001F30A Seasonal",
-                    marker=dict(color="#f0a500", size=10, symbol="diamond", opacity=0.85, line=dict(color="#0f1117", width=1)),
-                    hovertemplate="<b>%{customdata}</b><br>MoM: %{x:.2f} | YoY: %{y:.2f}<extra></extra>",
-                    customdata=seas_sub["name"].tolist()))
-            if "score_growth_mom" in pf.columns and "score_growth_yoy" in pf.columns:
-                fig_mv.add_vline(x=pf["score_growth_mom"].median(), line_dash="dash", line_color="#3b82f6", line_width=1)
-                fig_mv.add_hline(y=pf["score_growth_yoy"].dropna().median(), line_dash="dash", line_color="#f0a500", line_width=1)
-            fig_mv.update_layout(**layout(280, showlegend=True,
-                xaxis=dict(**AXIS, title="MoM Score (0-1)"),
-                yaxis=dict(**AXIS, title="YoY Score (0-1)"),
-                legend=dict(orientation="h", y=1.05, x=0, font_size=10)))
-            st.plotly_chart(fig_mv, width="stretch")
-            st.caption("Top-right = strong on both signals. Bottom-right = strong MoM, weak YoY = \U0001F30A Seasonal. Dashed lines = portfolio medians.")
-        else:
-            # Fallback to channel mix if scores not in data
-            channel_series = priority_df["recommended_channel"].dropna().astype(str).str.strip()
-            channel_series = channel_series[~channel_series.str.lower().isin(["", "-", "unknown", "n/a", "nan"])]
-            ch_counts = channel_series.value_counts()
-            cmap = {"FB":"#3b82f6","KOL":"#9b59b6","CRM":"#2ecc71"}
-            if len(ch_counts):
-                fig_ch = go.Figure(go.Bar(
-                    x=ch_counts.index, y=ch_counts.values,
-                    marker_color=[cmap.get(str(c), MUTED_TEXT) for c in ch_counts.index],
-                    text=ch_counts.values, textposition="outside", textfont=dict(color=TEXT_COLOR)))
-                fig_ch.update_layout(**layout(280, showlegend=False,
-                    xaxis=dict(**AXIS, title="Channel"), yaxis=dict(**AXIS, title="Restaurants")))
-                st.plotly_chart(fig_ch, width="stretch")
-            else:
-                st.info("Re-run notebooks to see MoM vs YoY score distribution.")
+        # has_mom_sc = "score_growth_mom" in priority_df.columns
+        # has_yoy_sc = "score_growth_yoy" in priority_df.columns
+        # if has_mom_sc and has_yoy_sc:
+        st.markdown("### Score Distribution by Normalised GMV/View")
+        pf = priority_df.copy()
+
+        pf = pf.sort_values("priority_score", ascending=False).reset_index(drop=True)
+
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(
+            x=pf['ga_campaign_responsiveness'],
+            y=pf["priority_score"],
+            mode="markers",
+            marker=dict(
+                size=8,
+                color=pf["priority_score"],
+                colorscale="Viridis",
+                showscale=True,
+                colorbar=dict(title="Priority Score"),
+                line=dict(color="rgba(255,255,255,0.3)", width=1),
+            ),
+            hovertemplate=(
+                "<b>%{customdata}</b><br>"
+                "Normalised GMV/View: %{x}<br>"
+                "Priority Score: %{y:.2f}"
+                "<extra></extra>"
+            ),
+            customdata=pf["name"].astype(str).values,
+        ))
+
+        fig.update_layout(
+            xaxis_title="Normalised GMV/View",
+            yaxis_title="Priority Score",
+            template="plotly_dark",
+            height=500,
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+           
+            #     st.markdown("### MoM vs YoY Score")
+            #     pf = priority_df[priority_df["is_in_priority_list"]].copy() if "is_in_priority_list" in priority_df.columns else priority_df.copy()
+            #     is_seas = coerce_bool_series(pf, "is_seasonal", default=False)
+            #     fig_mv = go.Figure()
+            #     not_seas = pf[~is_seas]
+            #     if len(not_seas):
+            #         fig_mv.add_trace(go.Scatter(
+            #             x=not_seas["score_growth_mom"], y=not_seas["score_growth_yoy"],
+            #             mode="markers", name="Non-seasonal",
+            #             marker=dict(color="#2ecc71", size=8, opacity=0.7, line=dict(color="#0f1117", width=1)),
+            #             hovertemplate="<b>%{customdata[0]}</b><br>MoM: %{x:.2f} | YoY: %{y:.2f}<extra></extra>",
+            #             customdata = not_seas["name"].astype(str).values.reshape(-1, 1)))
+            #     seas_sub = pf[is_seas]
+            #     if len(seas_sub):
+            #         fig_mv.add_trace(go.Scatter(
+            #             x=seas_sub["score_growth_mom"], y=seas_sub["score_growth_yoy"],
+            #             mode="markers", name="\U0001F30A Seasonal",
+            #             marker=dict(color="#f0a500", size=10, symbol="diamond", opacity=0.85, line=dict(color="#0f1117", width=1)),
+            #             hovertemplate="<b>%{customdata[0]}</b><br>MoM: %{x:.2f} | YoY: %{y:.2f}<extra></extra>",
+            #             customdata = seas_sub["name"].astype(str).values.reshape(-1, 1)))
+            #     if "score_growth_mom" in pf.columns and "score_growth_yoy" in pf.columns:
+            #         fig_mv.add_vline(x=pf["score_growth_mom"].median(), line_dash="dash", line_color="#3b82f6", line_width=1)
+            #         fig_mv.add_hline(y=pf["score_growth_yoy"].dropna().median(), line_dash="dash", line_color="#f0a500", line_width=1)
+            #     fig_mv.update_layout(**layout(280, showlegend=True,
+            #         xaxis=dict(**AXIS, title="MoM Score (0-1)"),
+            #         yaxis=dict(**AXIS, title="YoY Score (0-1)"),
+            #         legend=dict(orientation="h", y=1.05, x=0, font_size=10)))
+            #     st.plotly_chart(fig_mv, width="stretch")
+            #     st.caption("Top-right = strong on both signals. Bottom-right = strong MoM, weak YoY =Seasonal. Dashed lines = portfolio medians.")
+        # else:
+        #     st.markdown("### Channel Mix")
+
+        #     # Fallback to channel mix if scores not in data
+        #     channel_series = priority_df["recommended_channel"].dropna().astype(str).str.strip()
+        #     channel_series = channel_series[~channel_series.str.lower().isin(["", "-", "unknown", "n/a", "nan"])]
+        #     ch_counts = channel_series.value_counts()
+        #     cmap = {"FB":"#3b82f6","KOL":"#9b59b6","CRM":"#2ecc71"}
+        #     if len(ch_counts):
+        #         fig_ch = go.Figure(go.Bar(
+        #             x=ch_counts.index, y=ch_counts.values,
+        #             marker_color=[cmap.get(str(c), MUTED_TEXT) for c in ch_counts.index],
+        #             text=ch_counts.values, textposition="outside", textfont=dict(color=TEXT_COLOR)))
+        #         fig_ch.update_layout(**layout(280, showlegend=False,
+        #             xaxis=dict(**AXIS, title="Channel"), yaxis=dict(**AXIS, title="Restaurants")))
+        #         st.plotly_chart(fig_ch, width="stretch")
+        #     else:
+        #         st.info("Re-run notebooks to see MoM vs YoY score distribution.")
 
 
     st.markdown("---")
