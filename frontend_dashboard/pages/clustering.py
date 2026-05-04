@@ -281,6 +281,62 @@ def _prepare_campaign_breakdown_display(df: pd.DataFrame) -> pd.DataFrame:
         out["Session Share"] = out["Session Share"].apply(_fmt_pct)
     return out
 
+
+def _prepare_strategy_campaign_display(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty:
+        return df.copy()
+
+    display_cols = [
+        c
+        for c in [
+            "applied_date",
+            "campaign_name",
+            "strategy_family",
+            "strategy_name",
+            "channel",
+            "restaurant_name",
+            "cluster_label",
+            "latest_segment",
+            "bookings_before",
+            "bookings_after",
+            "bookings_uplift_pct",
+            "incremental_revenue_thb",
+            "roi",
+            "activity_id",
+        ]
+        if c in df.columns
+    ]
+    out = df[display_cols].copy().rename(
+        columns={
+            "applied_date": "Applied Date",
+            "campaign_name": "Campaign Name",
+            "strategy_family": "Assigned Strategy",
+            "strategy_name": "Strategy Label",
+            "channel": "Channel",
+            "restaurant_name": "Restaurant",
+            "cluster_label": "Cluster",
+            "latest_segment": "Momentum Category",
+            "bookings_before": "Bookings Before",
+            "bookings_after": "Bookings After",
+            "bookings_uplift_pct": "Bookings Uplift %",
+            "incremental_revenue_thb": "Incremental Revenue (THB)",
+            "roi": "ROI",
+            "activity_id": "Activity ID",
+        }
+    )
+    if "Applied Date" in out.columns:
+        out["Applied Date"] = pd.to_datetime(out["Applied Date"], errors="coerce").dt.strftime("%Y-%m-%d")
+    for col in ["Bookings Before", "Bookings After"]:
+        if col in out.columns:
+            out[col] = pd.to_numeric(out[col], errors="coerce").round(0)
+    if "Bookings Uplift %" in out.columns:
+        out["Bookings Uplift %"] = out["Bookings Uplift %"].apply(_fmt_pct)
+    if "Incremental Revenue (THB)" in out.columns:
+        out["Incremental Revenue (THB)"] = out["Incremental Revenue (THB)"].apply(_fmt_thb)
+    if "ROI" in out.columns:
+        out["ROI"] = pd.to_numeric(out["ROI"], errors="coerce").apply(_fmt_roi)
+    return out
+
 # Tokenize text into words, filter out short tokens and common stopwords, and return list of meaningful tokens for theme extraction
 def _tokenize(text: str) -> list[str]:
     tokens = re.findall(r"[a-zA-Z]{3,}", str(text).lower())
@@ -1305,6 +1361,66 @@ def render():
             rank_display["Rank Score"] = pd.to_numeric(rank_display["Rank Score"], errors="coerce").round(2)
 
             st.dataframe(rank_display.sort_values(["Eligible", "Rank Score"], ascending=[False, False]), hide_index=True, width="stretch", height=280)
+
+            st.markdown("#### Raw Campaign Strategy Breakdown")
+            with st.expander("How Campaign Names and Assigned Strategies Are Named", expanded=False):
+                st.markdown(
+                    """
+                    **Campaign Name** comes from the raw marketing activity fields: CRM uses `crm_campaign_name`,
+                    FB uses `fb_campaign`, KOL uses the creator username, and rows fall back to `activity_id`
+                    when a source-specific name is unavailable.
+
+                    **Assigned Strategy** is rule-based, not manually labeled. The dashboard reads the channel plus
+                    keywords from the campaign name, CRM topic, FB campaign, and KOL username, then assigns one
+                    category:
+
+                    - `CRM | Reactivation`: CRM campaigns with words like `reactivat`, `winback`, `inactive`,
+                      `lapsed`, `dormant`, `comeback`, or `churn`.
+                    - `CRM | Loyalty & Retention`: CRM campaigns with words like `loyal`, `member`, `vip`,
+                      `retention`, `repeat`, `reward`, or `point`.
+                    - `CRM | Promotional Blast`: CRM campaigns with words like `promo`, `discount`, `voucher`,
+                      `coupon`, `deal`, `sale`, `flash`, `bundle`, or `off`.
+                    - `CRM | Seasonal Campaign`: CRM campaigns with words like `season`, `festival`, `holiday`,
+                      `songkran`, `new year`, `christmas`, `valentine`, `ramadan`, or `lunar`.
+                    - `CRM | Lifecycle Nurture`: the default CRM category when the campaign is a normal CRM push
+                      or notification and does not match the reactivation, loyalty, promo, or seasonal keywords.
+
+                    For example, `TH_BKK_ctnoti_netcore_single_N_N_active_20260109_1100_yok-chinese-restaurant-jan26`
+                    is treated as `CRM | Lifecycle Nurture` because it is a CRM notification campaign for an active
+                    audience, and its topic `yok-chinese-restaurant-jan26` does not contain promo, discount,
+                    reactivation, loyalty, or seasonal keywords. The restaurant/month slug gives context, but it
+                    does not by itself imply a specific promotional strategy.
+
+                    FB campaigns use similar keyword rules: retargeting words map to `FB | Retargeting`, promo/deal
+                    words map to `FB | Conversion Offer`, and prospecting/acquisition/reach/awareness words map to
+                    `FB | Prospecting & Awareness`; otherwise they become `FB | Performance Campaign`. KOL campaigns
+                    map to creator collaboration or promo categories based on influencer/creator/promo keywords.
+                    """
+                )
+            raw_strategy_campaigns = outcomes_df.copy()
+            if active_cluster != all_clusters_option:
+                raw_strategy_campaigns = raw_strategy_campaigns[
+                    pd.to_numeric(raw_strategy_campaigns["cluster_id"], errors="coerce") == int(active_cluster)
+                ].copy()
+
+            if raw_strategy_campaigns.empty:
+                st.info("No raw campaign rows available for this strategy scope.")
+            else:
+                raw_strategy_campaigns = raw_strategy_campaigns.sort_values(
+                    ["applied_date", "channel", "campaign_name"],
+                    ascending=[False, True, True],
+                    na_position="last",
+                )
+                st.caption(
+                    f"{len(raw_strategy_campaigns):,} campaign rows mapped to "
+                    f"{raw_strategy_campaigns['strategy_family'].nunique():,} assigned strategies."
+                )
+                st.dataframe(
+                    _prepare_strategy_campaign_display(raw_strategy_campaigns),
+                    hide_index=True,
+                    width="stretch",
+                    height=320,
+                )
 
     st.markdown("---")
     st.markdown("### Peer-Based Strategy Recommendations")
