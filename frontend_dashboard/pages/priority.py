@@ -154,8 +154,7 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
         "booking_growth_rolling",
         "booking_growth_mom_rolling",
         "booking_growth_yoy_rolling",
-        'score_growth_mom', 'score_growth_yoy'
-
+        'score_growth_mom', 'score_growth_yoy',
     ]
     
     for col in coalesce_cols:
@@ -167,9 +166,12 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
                 combined[col] = combined[bcol]
             combined = combined.drop(columns=[bcol])
 
-    combined["is_in_priority_list"] = np.where(
-        combined["is_in_priority_list"].isna(), False, combined["is_in_priority_list"]
-    ).astype(bool)
+        if "is_in_priority_list_base" in combined.columns:
+            combined["is_in_priority_list"] = combined["is_in_priority_list_base"].fillna(False).astype(bool)
+            combined = combined.drop(columns=["is_in_priority_list_base"])
+        else:
+            combined["is_in_priority_list"] = combined["is_in_priority_list"].fillna(False).astype(bool)
+
     combined["priority_tier"]       = combined["priority_tier"].fillna("Monitor - outside stable-growth priority universe")
     combined["recommended_channel"] = combined["recommended_channel"].where(combined["recommended_channel"].notna(), pd.NA)
     combined["priority_score"]      = pd.to_numeric(combined.get("priority_score"), errors="coerce")
@@ -189,7 +191,8 @@ def render():
         unsafe_allow_html=True,
     )
     st.markdown("---")
-
+    print(priority_df["is_in_priority_list"].value_counts())
+    print(priority_df["is_in_priority_list"].dtype)
     if len(priority_df) == 0:
         st.warning("No priority data. Run priority_scoring_seasonality.ipynb first.")
         return
@@ -197,7 +200,7 @@ def render():
     is_seasonal_series = coerce_bool_series(priority_df, "is_seasonal", default=False)
 
     k1, k2, k3, k4, k5, k6 = st.columns(6)
-    k1.metric("In Priority List", str(int(priority_df["is_in_priority_list"].sum())))
+    k1.metric("In Priority List", int(priority_df["is_in_priority_list"].sum()))
     def ct(kw): return sum(kw in str(t).lower() for t in priority_df["priority_tier"])
     k2.metric("Proven",   str(ct("proven")))
     k3.metric("Untapped", str(ct("untapped")))

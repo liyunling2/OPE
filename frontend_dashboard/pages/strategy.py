@@ -50,17 +50,10 @@ def fmt_month(val):
     if val is None or pd.isna(val): return "-"
     return pd.to_datetime(val).strftime("%b %Y")
 
-def get_tier_color(tier):
-    t = str(tier).lower()
-    if "proven"   in t: return "#e74c3c"
-    if "untapped" in t: return "#e67e22"
-    if "review"   in t: return "#f1c40f"
-    return MUTED_TEXT
-
 
 def clean_tier_label(tier: str) -> str:
     """Strip emoji characters and mojibake prefixes from tier label strings.
-    priority_list.csv may contain emoji-prefixed tiers (e.g. '🔴 Activate...')
+    priority_list.csv may contain emoji-prefixed tiers (e.g. emoji-prefixed labels)
     which render as mojibake (ðŸ"´) when the CSV is written/read with mismatched
     encoding on Windows. We strip everything up to and including the first
     space-preceded word boundary so only the readable text remains.
@@ -72,6 +65,36 @@ def clean_tier_label(tier: str) -> str:
     # Also catch common mojibake prefixes like ðŸ"´, ðŸŸ , ðŸŸ¡
     s = re.sub(r'^[Ã°Å¸â€œÂ´\s\x80-\xff]+\s*', '', s)
     return s.strip()
+
+
+
+
+def factual_segment(row: dict, hist: pd.DataFrame | None = None):
+    """Return the segment only if it exists in the data. Do not invent 'Unknown'."""
+    candidates = [
+        row.get("latest_segment"),
+        row.get("segment"),
+    ]
+    if hist is not None and len(hist):
+        latest_hist = hist.sort_values("year_month").iloc[-1]
+        candidates.extend([latest_hist.get("latest_segment"), latest_hist.get("segment")])
+
+    for value in candidates:
+        if value is None or pd.isna(value):
+            continue
+        text = str(value).strip()
+        if text and text.lower() not in {"unknown", "nan", "none", "-", "<na>"}:
+            return text
+    return None
+
+def display_value(value):
+    """Display only real values; otherwise show a clear data-unavailable marker."""
+    if value is None or pd.isna(value):
+        return "Not available in data"
+    text = str(value).strip()
+    if not text or text.lower() in {"unknown", "nan", "none", "-", "<na>"}:
+        return "Not available in data"
+    return text
 
 
 def _to_float(val):
@@ -279,7 +302,7 @@ def build_ga_context(row: dict, hist: pd.DataFrame, priority_df: pd.DataFrame) -
         )
     else:
         out["primary_signal_code"] = "balanced_ga_profile"
-        out["primary_signal_short"] = "Balanced funnel"
+        out["primary_signal_short"] = None
         out["primary_signal"] = (
             "GA metrics are not flashing a single acute leak. "
             "Focus on incremental efficiency gains while leaning on the strongest historical strategy evidence."
@@ -325,80 +348,83 @@ def build_ga_context(row: dict, hist: pd.DataFrame, priority_df: pd.DataFrame) -
     return out
 
 
-def _score_strategy_ga_fit(strategy_name: str, ga_context: dict, preferred_channel: str = ""):
-    text = str(strategy_name).lower()
-    preferred_channel_l = str(preferred_channel).lower().strip()
-    code = ga_context.get("primary_signal_code", "balanced_ga_profile")
-    score = 0.0
-    reasons = []
+def _evidence_level(activities, restaurants) -> str:
+    """Evidence label based only on observed sample coverage."""
+    acts = pd.to_numeric(pd.Series([activities]), errors="coerce").iloc[0]
+    rests = pd.to_numeric(pd.Series([restaurants]), errors="coerce").iloc[0]
+    acts = 0 if pd.isna(acts) else float(acts)
+    rests = 0 if pd.isna(rests) else float(rests)
 
-    lower_funnel = ["retarget", "conversion", "crm", "loyalty", "retention", "reactivation", "lifecycle", "nurture", "performance", "promo"]
-    upper_funnel = ["awareness", "prospecting", "creator", "influencer", "kol"]
-
-    if code == "scale_efficient_demand":
-        if any(k in text for k in upper_funnel):
-            score += 8
-            reasons.append("should add qualified traffic volume")
-        if any(k in text for k in ["crm", "retarget", "lifecycle"]):
-            score += 2
-            reasons.append("helps protect existing conversion efficiency")
-    elif code == "convert_existing_intent":
-        if any(k in text for k in lower_funnel):
-            score += 8
-            reasons.append("fits the current lower-funnel conversion gap")
-        if any(k in text for k in upper_funnel):
-            score -= 2
-    elif code == "improve_pre_cart_message":
-        if any(k in text for k in ["creator", "influencer", "kol", "awareness", "prospecting", "promo"]):
-            score += 7
-            reasons.append("can improve intent before checkout")
-        if any(k in text for k in ["crm", "retarget"]):
-            score += 1
-            reasons.append("useful as a secondary conversion layer")
-    elif code == "repair_conversion_efficiency":
-        if any(k in text for k in lower_funnel):
-            score += 7
-            reasons.append("focuses on conversion efficiency first")
-        if any(k in text for k in upper_funnel):
-            score -= 2
-    elif code == "protect_efficiency_then_scale":
-        if any(k in text for k in ["crm", "loyalty", "retention", "retarget", "lifecycle"]):
-            score += 5
-            reasons.append("protects strong existing monetization")
-        if any(k in text for k in upper_funnel):
-            score += 4
-            reasons.append("can scale if targeting remains qualified")
-    else:
-        if any(k in text for k in lower_funnel):
-            score += 2
-            reasons.append("solid balanced GA fit")
-
-    if preferred_channel_l and text.startswith(preferred_channel_l):
-        score += 2
-        reasons.append("aligned with preferred channel")
-
-    if not reasons:
-        reasons.append("neutral GA fit")
-    return float(score), "; ".join(reasons)
+    if acts >= 12 and rests >= 6:
+        return "High"
+    if acts >= 6 and rests >= 3:
+        return "Medium"
+    return "Low"
 
 
-def apply_ga_strategy_overlay(recs: pd.DataFrame, row: dict, ga_context: dict) -> pd.DataFrame:
+def rank_strategies_factually(recs: pd.DataFrame, min_sample_size: int = 3) -> pd.DataFrame:
+    """
+    Rank strategies for the selected restaurant context using only observed historical evidence.
+
+    The recommendation source is contextual:
+    - cluster = restaurants in the selected restaurant's cluster
+    - segment = restaurants in the selected restaurant's momentum segment
+    - global = all restaurants, used as fallback evidence
+
+    Formula:
+    Contextual Strategy Score = Observed Impact × Evidence Strength × Scope Match
+
+    Observed Impact =
+        50% average revenue uplift +
+        30% average bookings uplift +
+        20% success rate
+
+    Evidence Strength =
+        60% activity coverage +
+        40% restaurant coverage
+
+    Scope Match =
+        1.00 for cluster evidence,
+        0.75 for segment evidence,
+        0.50 for global evidence.
+
+    No GA keyword matching, no ROI, no priority-tier boost, no hardcoded actions.
+    """
     if recs.empty:
         return recs
 
-    preferred_channel = row.get("recommended_channel", "")
-    scored = [_score_strategy_ga_fit(name, ga_context, preferred_channel=preferred_channel) for name in recs["strategy_name"]]
-
     out = recs.copy()
-    out["ga_fit_score"] = [score for score, _ in scored]
-    out["ga_fit_note"] = [note for _, note in scored]
-    out["ga_priority_score"] = pd.to_numeric(out["context_adjusted_score"], errors="coerce").fillna(0) + out["ga_fit_score"]
+
+    rev = pd.to_numeric(out.get("avg_revenue_uplift_pct"), errors="coerce").fillna(0)
+    bookings = pd.to_numeric(out.get("avg_bookings_uplift_pct"), errors="coerce").fillna(0)
+    success = pd.to_numeric(out.get("success_rate"), errors="coerce").fillna(0)
+    activities = pd.to_numeric(out.get("activities"), errors="coerce").fillna(0)
+    restaurants = pd.to_numeric(out.get("restaurants"), errors="coerce").fillna(0)
+
+    scope = out.get("recommendation_scope", pd.Series("global", index=out.index)).fillna("global").astype(str).str.lower()
+    scope_match = scope.map({"cluster": 1.00, "segment": 0.75, "global": 0.50}).fillna(0.50)
+
+    # Coverage is capped at 1 so one very large sample does not dominate only because of volume.
+    activity_coverage = (activities / max(float(min_sample_size) * 4.0, 1.0)).clip(0, 1)
+    restaurant_coverage = (restaurants / 6.0).clip(0, 1)
+
+    out["observed_impact_score"] = ((0.50 * rev) + (0.30 * bookings) + (0.20 * success)) * 100
+    out["evidence_strength"] = ((0.60 * activity_coverage) + (0.40 * restaurant_coverage)) * 100
+    out["scope_match"] = scope_match * 100
+    out["strategy_score"] = (
+        out["observed_impact_score"]
+        * (out["evidence_strength"] / 100)
+        * (out["scope_match"] / 100)
+    )
+    out["evidence_level"] = [
+        _evidence_level(a, r) for a, r in zip(activities, restaurants)
+    ]
+
     out = out.sort_values(
-        ["ga_priority_score", "ga_fit_score", "context_adjusted_score", "confidence_score"],
-        ascending=[False, False, False, False],
+        ["strategy_score", "scope_match", "observed_impact_score", "evidence_strength", "activities", "restaurants"],
+        ascending=[False, False, False, False, False, False],
     ).reset_index(drop=True)
     return out
-
 
 def build_ga_snapshot_markdown(ga_context: dict) -> str:
     if not ga_context.get("has_ga_data"):
@@ -418,8 +444,6 @@ def build_ga_snapshot_markdown(ga_context: dict) -> str:
             f"- **Traffic volume:** {fmt_int(ga_context.get('ga_items_viewed'))} GA item views ({views_b.get('label', 'No benchmark')}; median {fmt_int(views_b.get('median'))})",
             f"- **Funnel:** Add to cart {fmt_pct(ga_context.get('ga_add_to_cart_rate'))} | View to purchase {fmt_pct(ga_context.get('ga_view_to_purchase_rate'))} | Purchase / cart {fmt_pct(ga_context.get('ga_purchase_to_cart_rate'))}",
             f"- **Revenue productivity:** {fmt_thb(ga_context.get('ga_revenue_per_view'))} GA revenue per view | {fmt_ratio(ga_context.get('bookings_per_ga_view'))} bookings per view",
-            f"- **Primary read:** {ga_context.get('primary_signal', '-')}",
-            f"- **Strategy stance:** {ga_context.get('strategy_stance', '-')}",
         ]
     )
 
@@ -453,132 +477,61 @@ def _playbook_actions(strategy_name: str, ga_context=None) -> str:
 
 
 def build_grounded_brief(row: dict, hist: pd.DataFrame, recs: pd.DataFrame, ga_context: dict) -> str:
-    recent = hist.sort_values("year_month").tail(3)
-    score_val = pd.to_numeric(row.get("priority_score"), errors="coerce")
-    score_val = 0.0 if pd.isna(score_val) else float(score_val)
-    bookings_val = pd.to_numeric(row.get("monthly_bookings"), errors="coerce")
-    bookings_val = 0 if pd.isna(bookings_val) else int(bookings_val)
-    trend = " -> ".join(
-        [
-            "%s: %d bookings" % (
-                r["year_month"].strftime("%b %Y"),
-                int(
-                    0
-                    if pd.isna(pd.to_numeric(r.get("monthly_bookings"), errors="coerce"))
-                    else pd.to_numeric(r.get("monthly_bookings"), errors="coerce")
-                ),
-            )
-            for _, r in recent.iterrows()
-            if pd.notna(r.get("year_month"))
-        ]
-    ) if len(recent) else "insufficient data"
-
     lines = []
-    lines.append("## Situation Summary")
-    lines.append(
-        "- **Restaurant:** {name}\n- **Segment:** {seg}\n- **Priority Tier:** {tier}\n- **Priority Score:** {score:.1f}/100\n- **Recommended channel:** {channel}".format(
-            name=row.get("name", "-"),
-            seg=row.get("latest_segment", "Unknown"),
-            tier=row.get("priority_tier", "Unknown"),
-            score=score_val,
-            channel=row.get("recommended_channel", "Unknown"),
-        )
-    )
-    mom_gr = pd.to_numeric(row.get("booking_growth_mom_rolling", row.get("booking_growth_rolling")), errors="coerce")
-    yoy_gr = pd.to_numeric(row.get("booking_growth_yoy_rolling", row.get("booking_growth_yoy")), errors="coerce")
-    signal_used = row.get("growth_signal_used", "-")
-    is_seasonal = bool(row.get("is_seasonal", False))
-    latest_line = "- **Latest:** {bk:,} bookings, {rev} | MoM 3m: {mom} | YoY 3m: {yoy} | Signal: {sig}".format(
-        bk=bookings_val,
-        rev=fmt_thb(pd.to_numeric(row.get("monthly_gmv"), errors="coerce")),
-        mom=fmt_pct(mom_gr),
-        yoy=fmt_pct(yoy_gr),
-        sig=signal_used,
-    )
-    if ga_context.get("has_ga_data"):
-        latest_line += " | GMV / GA view: {gmv}".format(gmv=fmt_thb(ga_context.get("gmv_per_ga_view")))
-    lines.append(latest_line)
-    lines.append("- **Recent trend:** {trend}".format(trend=trend))
-    if is_seasonal:
-        lines.append(
-            "- **Seasonal flag** — strong MoM but YoY below portfolio median. "
-            "Activate at seasonal peak for best ROI."
-        )
-
-    if ga_context.get("has_ga_data"):
-        lines.append("## GA Diagnostic")
-        lines.append(build_ga_snapshot_markdown(ga_context))
-
     lines.append("## Data-Driven Recommended Playbook")
+    lines.append(
+        "Strategies are ranked using observed historical outcomes only: revenue uplift, bookings uplift, "
+        "success rate, number of activities, and number of restaurants."
+    )
+
     if recs.empty:
         lines.append("- No robust historical strategy signal is available yet for this restaurant's context.")
     else:
         for idx, (_, rec) in enumerate(recs.head(3).iterrows(), start=1):
             lines.append(
                 "{idx}. **{name}** ({scope})\n"
-                "- GA fit: {ga_fit}\n"
-                "- Expected revenue uplift: {rev_uplift}\n"
-                "- Expected bookings uplift: {book_uplift}\n"
-                "- Avg ROI: {roi}\n"
-                "- Evidence: {acts} activities, {rests} restaurants, {conf} confidence\n"
-                "- Action: {action}".format(
+                "- Strategy score: {score}\n"
+                "- Observed impact: {impact}\n"
+                "- Evidence strength: {strength} ({level})\n"
+                "- Revenue uplift: {rev_uplift}\n"
+                "- Bookings uplift: {book_uplift}\n"
+                "- Success rate: {success}\n"
+                "- Evidence base: {acts} activities across {rests} restaurants".format(
                     idx=idx,
                     name=rec.get("strategy_name", "-"),
                     scope=str(rec.get("recommendation_scope", "historical")).title(),
-                    ga_fit=rec.get("ga_fit_note", "Neutral GA fit"),
+                    score=fmt_ratio(pd.to_numeric(rec.get("strategy_score"), errors="coerce"), 2),
+                    impact=fmt_ratio(pd.to_numeric(rec.get("observed_impact_score"), errors="coerce"), 2),
+                    strength=fmt_pct(pd.to_numeric(rec.get("evidence_strength"), errors="coerce") / 100),
+                    level=rec.get("evidence_level", "Low"),
                     rev_uplift=fmt_pct(pd.to_numeric(rec.get("avg_revenue_uplift_pct"), errors="coerce")),
                     book_uplift=fmt_pct(pd.to_numeric(rec.get("avg_bookings_uplift_pct"), errors="coerce")),
-                    roi="-" if pd.isna(rec.get("avg_roi")) else "%.2f" % rec.get("avg_roi"),
+                    success=fmt_pct(pd.to_numeric(rec.get("success_rate"), errors="coerce")),
                     acts=int(pd.to_numeric(rec.get("activities"), errors="coerce") or 0),
                     rests=int(pd.to_numeric(rec.get("restaurants"), errors="coerce") or 0),
-                    conf=rec.get("confidence_level", "Unknown"),
-                    action=_playbook_actions(rec.get("strategy_name", ""), ga_context=ga_context),
                 )
             )
 
-    lines.append("## KPI Targets")
-    if ga_context.get("kpi_targets"):
-        for target in ga_context["kpi_targets"]:
-            lines.append("- **{label}:** {value} - {why}".format(
-                label=target["label"],
-                value=_format_target_value(target["value"], target["formatter"]),
-                why=target["why"],
-            ))
-    else:
-        lines.append("- No GA KPI targets are available because restaurant-level GA metrics are missing.")
-
-    lines.append("## Execution Guardrails")
-    lines.append("- Use GMV per GA view as the primary efficiency guardrail when budgets or channel mix change.")
-    lines.append("- Set weekly stop-loss on campaigns with negative incremental revenue after sufficient spend.")
-    lines.append("- Re-rank every month as new campaign outcomes and GA signals are added.")
     return "\n".join(lines)
-
 
 def build_prompt(row: dict, hist: pd.DataFrame, recs: pd.DataFrame, grounded_brief: str, ga_context: dict) -> str:
     top_rows = []
     for _, rec in recs.head(5).iterrows():
         top_rows.append(
-            "- {name} | scope={scope} | ga_fit={ga_fit} | rev_uplift={rev} | booking_uplift={book} | roi={roi} | final_score={score} | confidence={conf}".format(
+            "- {name} | scope={scope} | strategy_score={score} | observed_impact={impact} | evidence_strength={strength} | revenue_uplift={rev} | booking_uplift={book} | success_rate={success} | activities={acts} | restaurants={rests}".format(
                 name=rec.get("strategy_name", "-"),
                 scope=rec.get("recommendation_scope", "-"),
-                ga_fit=rec.get("ga_fit_note", "-"),
+                score=fmt_ratio(pd.to_numeric(rec.get("strategy_score"), errors="coerce"), 2),
+                impact=fmt_ratio(pd.to_numeric(rec.get("observed_impact_score"), errors="coerce"), 2),
+                strength=fmt_pct(pd.to_numeric(rec.get("evidence_strength"), errors="coerce") / 100),
                 rev=fmt_pct(pd.to_numeric(rec.get("avg_revenue_uplift_pct"), errors="coerce")),
                 book=fmt_pct(pd.to_numeric(rec.get("avg_bookings_uplift_pct"), errors="coerce")),
-                roi="-" if pd.isna(rec.get("avg_roi")) else "%.2f" % rec.get("avg_roi"),
-                score="-" if pd.isna(rec.get("ga_priority_score")) else "%.2f" % rec.get("ga_priority_score"),
-                conf=rec.get("confidence_level", "Unknown"),
+                success=fmt_pct(pd.to_numeric(rec.get("success_rate"), errors="coerce")),
+                acts=fmt_int(rec.get("activities")),
+                rests=fmt_int(rec.get("restaurants")),
             )
         )
     top_block = "\n".join(top_rows) if top_rows else "- No recommendation rows available"
-
-    target_rows = []
-    for target in ga_context.get("kpi_targets", []):
-        target_rows.append("- {label}: {value} ({why})".format(
-            label=target["label"],
-            value=_format_target_value(target["value"], target["formatter"]),
-            why=target["why"],
-        ))
-    targets_block = "\n".join(target_rows) if target_rows else "- No GA targets available"
 
     ga_block = build_ga_snapshot_markdown(ga_context)
 
@@ -589,8 +542,9 @@ def build_prompt(row: dict, hist: pd.DataFrame, recs: pd.DataFrame, grounded_bri
     - Use ONLY provided data
     - DO NOT invent numbers or assumptions
     - If unsure → say "insufficient data"
-    - Always reference REAL metrics (rates, quartiles, gaps)
     - Be specific to THIS restaurant (no generic advice)
+    - Do NOT mention or recreate priority-tier labels such as "Activate", "Proven", "Untapped", or "Review"
+    - Do NOT mention GA fit, ROI, action templates, KPI targets, or execution guardrails
 
     STYLE RULES:
     - Use bullet points (NO long paragraphs)
@@ -601,279 +555,52 @@ def build_prompt(row: dict, hist: pd.DataFrame, recs: pd.DataFrame, grounded_bri
     ---------------------
     RESTAURANT CONTEXT
     ---------------------
-    Name: {row.get("name")}
-    Segment: {row.get("latest_segment")}
-    Priority Tier: {row.get("priority_tier")}
-    Preferred Channel: {row.get("recommended_channel")}
+    Name: {display_value(row.get("name"))}
+    Segment: {display_value(factual_segment(row, hist))}
 
     ---------------------
-    GA DIAGNOSTIC
+    GA METRICS
     ---------------------
     {ga_block}
 
     ---------------------
-    TOP STRATEGIES
+    FACTUAL STRATEGY RANKING
     ---------------------
     {top_block}
 
     ---------------------
-    KPI TARGETS
+    RANKING FORMULA
     ---------------------
-    {targets_block}
+    Strategy Score = Observed Impact × Evidence Strength
+    Observed Impact = 50% revenue uplift + 30% bookings uplift + 20% success rate
+    Evidence Strength = 60% activity coverage + 40% restaurant coverage
 
     ---------------------
     TASK
     ---------------------
 
     ## 1. Key Issue
-    - State the MAIN problem using:
-    - metric
-    - benchmark (e.g. below median / top quartile)
-    - Translate into business pain
+    - State the main problem using the available GA or performance metrics.
+    - If there is not enough data, say "insufficient data".
 
-    Example:
-    - "Add-to-cart is low (2.6%, below median) → traffic is not converting into orders → wasted demand"
+    ## 2. Recommended Package
+    - Choose Basic / Standard / Premium.
+    - Justify using only the factual strategy ranking and available metrics.
+    - Explain why cheaper or more expensive packages are not suitable.
 
-    ---
+    ## 3. Why This Strategy Ranks Highest
+    - Explain using strategy score, observed impact, evidence strength, revenue uplift, bookings uplift, success rate, activities, and restaurants.
+    - Do not use GA fit or ROI.
 
-    ## 2. Recommended Package 
-
-    - Package: (Basic / Standard / Premium)
-
-    AVAILABLE MARKETING PACKAGES (WITH CAPABILITIES)
-
-    BASIC PACKAGE (Awareness Starter – Low Cost, Entry Level)
-    Purpose:
-    - Drive initial awareness and light engagement
-    - Suitable for low traffic restaurants
-
-    Key Capabilities:
-    - Revenue Guarantee (30K+ THB)
-    - Revenue Guarantee (90 Day)
-    - Send Blogger to Review x1 (20k followers)
-    - Send Blogger to Review x2 (30k followers)
-    - Boost post THB 2,000 Baht
-    - Pop-up Banner: Individual 
-    - Photoshooting
-    - Guaranteed in Restaurants list home page 
-    - HH Facebook Post : Individual post
-    - Line@ Broadcasts :  Individual post
-    - Push Notification 
-
-
-    Limitations:
-    - No strong video content
-    - Limited reach and weak conversion tools
-
-    Use When:
-    - Traffic is low
-    - Need visibility, not deep conversion
-
-
-    STANDARD PACKAGE (Growth & Conversion – Balanced)
-    Purpose:
-    - Improve customer intent and conversion
-    - Best for mid-funnel problems (low add-to-cart, weak engagement)
-
-    Key Capabilities:
-    - Revenue Guarantee (40K+ THB)
-    - Revenue Guarantee (120 Day)
-    - Send Blogger to Review x1 (50k followers)
-    - Send Blogger to Review x2 (30k followers)
-    - Boost post THB 3,000 Baht
-    - Pop-up Banner: Individual 
-    - Guaranteed in Restaurants list home page 
-    - Photoshooting
-    - HH Facebook Post : Individual post
-    - Line@ Broadcasts :  Individual post
-    - Push Notification 
-    - Web Footer (2 days)
-    - Tiktok VDO or Instagram Reels VDO
-
-    Strengths:
-    - Combines awareness + conversion tools
-    - Strong for improving menu appeal and intent
-
-    Use When:
-    - Traffic exists but conversion is weak
-    - Add-to-cart or engagement is low
-
-
-    PREMIUM PACKAGE (High Impact – Scale + Conversion)
-    Purpose:
-    - Maximise reach AND conversion at scale
-    - Suitable for high-priority restaurants
-
-    Key Capabilities:
-    - Revenue Guarantee (100K+ THB)
-    - Revenue Guarantee (180 Day)
-    - Send Blogger to Review x1 (50k followers)
-    - Send Blogger to Review x2 (50k followers)
-    - Boost post THB 5,000 Baht
-    - Pop-up Banner: Individual 
-    - Guaranteed in Restaurants list home page 
-    - Photoshooting
-    - HH Facebook Post : Individual post
-    - Line@ Broadcasts :  Individual post
-    - Push Notification 
-    - Web Footer (2 days)
-    - Tiktok VDO or Instagram Reels VDO
-    - Guaranteed in Restaurants Promotion Banner (1 week)
-    - Blog: Advertorial: Individual
-
-    Strengths:
-    - Highest visibility + strongest conversion ecosystem
-    - Combines brand + performance marketing
-
-    Limitations:
-    - Highest cost → must justify ROI
-
-    Use When:
-    - High priority tier
-    - Need scale OR strong brand push
-    - Conversion AND reach both need improvement
-
-    PACKAGE DECISION REQUIREMENTS:
-    - You MUST reference specific package features when justifying your choice
-    - You MUST link features → funnel problem (e.g. "video content improves add-to-cart intent")
-    - You MUST explain:
-    - Why this package is sufficient
-    - Why cheaper option fails
-    - Why more expensive option is unnecessary (if applicable)
-    
-    - Why THIS package:
-    MUST include:
-    - exact funnel problem (traffic / intent / conversion)
-    - why this package directly fixes it
-    - why it is the MOST cost-effective choice
-
-    - Why NOT others:
-    - Basic → why insufficient
-    - Premium → why unnecessary / overspend
-
-    (Think ROI, not features)
-
-    ---
-
-    ## 3. Execution Plan
-
-    Use bullet points:
-
-    - Blogger Strategy:
-    - who + why (e.g. local food creators vs large influencers)
-
-    - Content:
-    - EXACT content idea (not generic)
-    - tie to food / experience
-
-    - Messaging:
-    - simple angle (value / premium / convenience)
-
-    - Paid + CRM:
-    - how ads + push + Line@ convert users
-
-    - Funnel Impact:
-    - traffic / conversion / revenue (be explicit)
-
-    ---
-
-    ## 4. Priority Actions
-
-    For EACH:
-    - Strategy name
-    - Campaign idea (VERY concrete)
-    - What it improves (traffic / conversion / revenue)
-
-    ---
-
-    ## 5. Why This Will Work 
-
-    Use bullet points:
-    - reference GA data
-    - reference strategy evidence
-    - connect to outcome
-
-    NO long paragraphs
-
-    ---
-
-    ## 6. 30-Day Plan
-
+    ## 4. 30-Day Plan
     - Launch
     - Optimise
-    - Scale
+    - Review
 
-    (max 1 line each)
-
-    ---
-
-    ## 7. Expected Impact
-
-    - Use KPI targets
-    - Translate into outcomes:
-    - more orders
-    - better conversion
-    - higher revenue per visitor
-
-    DO NOT repeat raw numbers only
-
-    ---
-
-    DECISION RULES (VERY IMPORTANT):
-    - Mid-funnel issue (Add-to-cart low) → STANDARD
-    - Lower-funnel issue (conversion low) → STANDARD or PREMIUM
-    - Traffic issue → BASIC or STANDARD
-    - Only choose PREMIUM if:
-    - high priority tier AND
-    - need scale OR strong brand push
-
-    Always justify clearly.
-
+    ## 5. Expected Impact
+    - Translate factual historical uplift into likely business outcome.
+    - Do not promise exact results.
     """
-
-#     return """You are a senior restaurant marketing strategist.
-# Use only the provided data. Do not invent metrics.
-# GMV / GA view is the primary GA efficiency metric. If you recommend scaling spend or traffic, explain how the plan protects or improves that metric.
-# Improve and tighten the grounded strategy brief below.
-
-# Restaurant: {name}
-# Segment: {seg}
-# Priority tier: {tier}
-# Priority score: {score}
-# Recommended channel (existing model): {channel}
-# Priority reason: {priority_reason}
-
-# GA diagnostic:
-# {ga_block}
-
-# Top ranked strategies:
-# {top}
-
-# KPI targets:
-# {targets}
-
-# Grounded brief draft:
-# {brief}
-
-# Return concise markdown with sections:
-# ## Situation Summary
-# ## GA Diagnostic
-# ## Recommended Strategy Mix
-# ## 30-Day Execution Plan
-# ## KPI Targets
-# ## Risks & Caveats""".format(
-#         name=row.get("name", "-"),
-#         seg=row.get("latest_segment", "Unknown"),
-#         tier=row.get("priority_tier", "Unknown"),
-#         score=row.get("priority_score", "-"),
-#         channel=row.get("recommended_channel", "-"),
-#         priority_reason=row.get("priority_reason", "-"),
-#         ga_block=ga_block,
-#         top=top_block,
-#         targets=targets_block,
-#         brief=grounded_brief,
-#     )
-
 
 def call_gemini(prompt: str) -> str:
     api_key = os.getenv("GEMINI_API_KEY")
@@ -927,13 +654,24 @@ def render():
     row           = get_restaurant_priority_row(priority_df, selected)
     hist          = get_restaurant_history(momentum_df, selected)
     ga_context    = build_ga_context(row, hist, priority_df)
+    candidate_n = max(int(top_n) * 3, 10)
     strategy_recs = recommend_strategies_for_restaurant(
-        selected, top_n=int(top_n), min_sample_size=int(min_sample_size)
+        selected, top_n=candidate_n, min_sample_size=int(min_sample_size)
     )
-    strategy_recs = apply_ga_strategy_overlay(strategy_recs, row=row, ga_context=ga_context)
+    strategy_recs = rank_strategies_factually(strategy_recs, min_sample_size=int(min_sample_size)).head(int(top_n))
 
-    tier_color = get_tier_color(row.get("priority_tier", "-"))
     score      = row.get("priority_score", 0)
+    segment_value = factual_segment(row, hist)
+    segment_line = (
+        "<div style='font-size:0.75rem;color:{muted};margin-top:2px;'>Segment: {seg}</div>".format(
+            muted=MUTED_TEXT,
+            seg=segment_value,
+        )
+        if segment_value
+        else "<div style='font-size:0.75rem;color:{muted};margin-top:2px;'>Segment not available in data</div>".format(
+            muted=MUTED_TEXT
+        )
+    )
 
     with col_info:
         st.markdown(
@@ -943,20 +681,16 @@ def render():
             "<div style='display:flex;justify-content:space-between;align-items:center;'>"
             "<div>"
             "<div style='font-size:1.3rem;color:{text};font-weight:700;'>{n}</div>"
-            "<div style='font-size:0.8rem;color:{muted};margin-top:4px;'>{tier}</div>"
-            "<div style='font-size:0.75rem;color:{muted};margin-top:2px;'>Segment: {seg}</div>"
-            "<div style='font-size:0.75rem;color:{muted};margin-top:4px;'>GA focus: {ga_focus}</div>"
+            "{segment_line}"
             "</div>"
             "<div style='text-align:right;'>"
             "<div style='font-size:1.8rem;color:#cc0000;font-weight:700;'>{s:.0f}</div>"
             "<div style='font-size:0.7rem;color:{muted};'>SCORE</div>"
             "</div>"
             "</div></div>".format(
-                c=tier_color,
+                c=BORDER_COLOR,
                 n=selected,
-                tier=clean_tier_label(row.get("priority_tier", "-")),
-                seg=row.get("latest_segment", "Unknown"),
-                ga_focus=ga_context.get("primary_signal_short", "No GA diagnostic"),
+                segment_line=segment_line,
                 s=score,
                 surface=SURFACE_COLOR,
                 border=BORDER_COLOR,
@@ -985,12 +719,13 @@ def render():
         if ga_context.get("has_ga_data"):
             gmv_delta = ga_context["benchmarks"]["gmv_per_ga_view"].get("delta_vs_median")
             delta_text = None if gmv_delta is None else "%+.0f%% vs median" % (gmv_delta * 100)
-            ga_a, ga_b, ga_c, ga_d, ga_e = st.columns(5)
-            ga_a.metric("GMV / GA View", fmt_thb(ga_context.get("gmv_per_ga_view")), delta=delta_text)
-            ga_b.metric("Bookings / GA View", fmt_ratio(ga_context.get("bookings_per_ga_view")))
-            ga_c.metric("GA Add to Cart", fmt_pct(ga_context.get("ga_add_to_cart_rate")))
-            ga_d.metric("View to Purchase", fmt_pct(ga_context.get("ga_view_to_purchase_rate")))
-            ga_e.metric("GA Revenue / View", fmt_thb(ga_context.get("ga_revenue_per_view")))
+            ga_a, ga_b, ga_c, ga_d, ga_e, ga_f = st.columns(6)
+            ga_a.metric("Traffic Volume", fmt_int(ga_context.get("ga_items_viewed")))
+            ga_b.metric("GMV / GA View", fmt_thb(ga_context.get("gmv_per_ga_view")), delta=delta_text)
+            ga_c.metric("Bookings / GA View", fmt_ratio(ga_context.get("bookings_per_ga_view")))
+            ga_d.metric("GA Add to Cart", fmt_pct(ga_context.get("ga_add_to_cart_rate")))
+            ga_e.metric("View to Purchase", fmt_pct(ga_context.get("ga_view_to_purchase_rate")))
+            ga_f.metric("GA Revenue / View", fmt_thb(ga_context.get("ga_revenue_per_view")))
         else:
             st.info("No GA metrics are available for this restaurant yet.")
 
@@ -1004,7 +739,7 @@ def render():
             fig = go.Figure()
             fig.add_trace(go.Bar(
                 x=hs["year_month"], y=hs["monthly_bookings"],
-                marker_color=tier_color, marker_opacity=0.70, name="Bookings",
+                marker_color="#3b82f6", marker_opacity=0.70, name="Bookings",
                 hovertemplate="<b>%{x|%b %Y}</b><br>%{y:,} bookings<extra></extra>",
             ))
             if "gmv_per_ga_view" in hs.columns and pd.to_numeric(hs["gmv_per_ga_view"], errors="coerce").notna().any():
@@ -1066,75 +801,76 @@ def render():
         else:
             st.info("GA traffic and funnel history is not available.")
 
-        st.markdown("### Channel + Evidence Readout")
-        readout_rows = [
-            ("Recommended channel", row.get("recommended_channel", "-")),
-            ("Best historical channel", row.get("best_channel", "-")),
-            ("Priority reason", row.get("priority_reason", "-")),
-            ("GA focus", ga_context.get("primary_signal_short", "-")),
-            ("Campaigns", fmt_int(row.get("n_campaigns", 0))),
-            ("Positive campaigns", "%s / %s" % (fmt_int(row.get("n_positive_lift", 0)), fmt_int(row.get("n_campaigns", 0)))),
-        ]
-        for label, value in readout_rows:
-            ca, cb = st.columns([2, 3])
-            ca.markdown("<span style='color:%s;font-size:0.8rem;'>%s</span>" % (MUTED_TEXT, label), unsafe_allow_html=True)
-            cb.markdown("<span style='color:%s;font-size:0.85rem;font-weight:500;'>%s</span>" % (TEXT_COLOR, value), unsafe_allow_html=True)
-
         st.markdown("### Ranked Strategy Evidence")
         st.caption(
-            "Historical ranking is overlaid with a restaurant-specific GA fit score. "
-            "GMV / GA view and funnel leakage determine the extra boost."
+            "Strategies are ranked for the selected restaurant context. "
+            "Cluster evidence is preferred, then segment evidence, then global fallback. "
+            "No GA-fit keyword rules, ROI, priority-tier boost, or hardcoded action templates are used."
         )
+        with st.expander("__How Strategy Score Is Calculated__", expanded=False):
+            st.markdown("""
+            ### Strategy Score Calculation
+
+            ##### 1. Final Score
+            `strategy_score = observed_impact_score × evidence_strength × scope_match`
+
+            ##### 2. Observed Impact
+            `observed_impact_score = (revenue_uplift × 0.50) + (bookings_uplift × 0.30) + (success_rate × 0.20)`
+
+            ##### 3. Evidence Strength
+            `evidence_strength = (activity_coverage × 0.60) + (restaurant_coverage × 0.40)`
+
+            ##### 4. Scope Match
+            `scope_match =`
+            - `1.00 (cluster)`
+            - `0.75 (segment)`
+            - `0.50 (global)`
+            """)
         if len(strategy_recs):
-            recs_display = strategy_recs[[
+            display_cols = [
                 "strategy_name",
                 "recommendation_scope",
-                "recommendation_reason",
-                "ga_fit_note",
                 "activities",
                 "restaurants",
+                "success_rate",
                 "avg_revenue_uplift_pct",
                 "avg_bookings_uplift_pct",
-                "avg_roi",
-                "context_adjusted_score",
-                "ga_fit_score",
-                "ga_priority_score",
-                "confidence_level",
-            ]].copy()
-            recs_display.columns = [
-                "Strategy", "Scope", "Historical Basis", "GA Fit", "Activities", "Restaurants",
-                "Revenue Uplift", "Bookings Uplift", "Avg ROI", "Historical Score", "GA Overlay", "Final Score", "Confidence",
+                "observed_impact_score",
+                "evidence_strength",
+                "scope_match",
+                "evidence_level",
+                "strategy_score",
             ]
-            recs_display["Revenue Uplift"]  = recs_display["Revenue Uplift"].apply(fmt_pct)
-            recs_display["Bookings Uplift"] = recs_display["Bookings Uplift"].apply(fmt_pct)
-            recs_display["Avg ROI"]         = recs_display["Avg ROI"].apply(lambda v: "-" if pd.isna(v) else "%.2f" % v)
-            recs_display["Scope"]           = recs_display["Scope"].str.title()
-            for col in ["Historical Score", "GA Overlay", "Final Score"]:
-                recs_display[col] = pd.to_numeric(recs_display[col], errors="coerce").round(2)
+            display_cols = [c for c in display_cols if c in strategy_recs.columns]
+            recs_display = strategy_recs[display_cols].copy()
+            recs_display = recs_display.rename(columns={
+                "strategy_name": "Strategy",
+                "recommendation_scope": "Scope",
+                "activities": "Activities",
+                "restaurants": "Restaurants",
+                "success_rate": "Success Rate",
+                "avg_revenue_uplift_pct": "Revenue Uplift",
+                "avg_bookings_uplift_pct": "Bookings Uplift",
+                "observed_impact_score": "Observed Impact",
+                "evidence_strength": "Evidence Strength",
+                "scope_match": "Scope Match",
+                "evidence_level": "Evidence Level",
+                "strategy_score": "Strategy Score",
+            })
+            if "Scope" in recs_display.columns:
+                recs_display["Scope"] = recs_display["Scope"].astype(str).str.title()
+            for col in ["Success Rate", "Revenue Uplift", "Bookings Uplift"]:
+                if col in recs_display.columns:
+                    recs_display[col] = recs_display[col].apply(fmt_pct)
+            if "Evidence Strength" in recs_display.columns:
+                recs_display["Evidence Strength"] = (pd.to_numeric(recs_display["Evidence Strength"], errors="coerce") / 100).apply(fmt_pct)
+            for col in ["Observed Impact", "Strategy Score"]:
+                if col in recs_display.columns:
+                    recs_display[col] = pd.to_numeric(recs_display[col], errors="coerce").round(2)
             st.dataframe(recs_display, width="stretch", hide_index=True, height=280)
         else:
             st.info("No strategy recommendations available for this restaurant yet.")
-        
-        st.markdown("### GA Diagnostic")
-        if ga_context.get("has_ga_data"):
-            snap_a, snap_b = st.columns(2)
-            snap_a.metric("GMV / GA View Position", ga_context["benchmarks"]["gmv_per_ga_view"].get("label", "No benchmark"))
-            snap_b.metric("Current GA Focus", ga_context.get("primary_signal_short", "-"))
-            st.markdown(build_ga_snapshot_markdown(ga_context))
 
-            if ga_context.get("kpi_targets"):
-                target_df = pd.DataFrame([
-                    {
-                        "KPI": target["label"],
-                        "Target": _format_target_value(target["value"], target["formatter"]),
-                        "Why": target["why"],
-                    }
-                    for target in ga_context["kpi_targets"]
-                ])
-                st.markdown("### GA KPI Targets")
-                st.dataframe(target_df, width="stretch", hide_index=True)
-        else:
-            st.info("No restaurant-level GA data is available yet.")
 
     with strat_col:
         st.markdown("### Grounded Strategy Brief")
