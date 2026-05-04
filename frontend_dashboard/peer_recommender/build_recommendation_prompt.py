@@ -65,7 +65,7 @@ Write a strategic recommendation in exactly 3 paragraphs. Be specific — refere
 
 Paragraph 1 — Situation: What does this restaurant's GMV and momentum segment tell us about where it sits in its growth journey? What does the peer data reveal about what is working in this competitive set?
 
-Paragraph 2 — Primary Recommendation: Which specific campaign should this restaurant prioritise first, and why? Reference the exact campaign name, the uplift figure, how many peers used it, and what that implies about channel-market fit for this restaurant type.
+Paragraph 2 — Primary Recommendation: Which specific campaign should this restaurant prioritise first, and why? Reference the exact campaign name, the uplift figure, how many peers used it and which peers uses it, and what that implies about channel-market fit for this restaurant type.
 
 Paragraph 3 — Sequencing & Risk: Suggest how to sequence the top 2–3 campaigns over the next quarter. Flag one concrete risk (e.g. negative uplift in a specific campaign, low peer sample size, or single-channel dependency) visible in the data.
 

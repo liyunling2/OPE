@@ -1416,7 +1416,7 @@ def render():
                 peer_campaigns = o[o["_name_norm"].isin(set(peer_dist["name_norm"]))].copy() # Get campaign outcomes for the selected peers
                 peer_campaigns = peer_campaigns.merge(peer_dist, left_on="_name_norm", right_on="name_norm", how="left")
                 
-                rec = ( # 7. Join campaign and peer by strategy
+                rec = ( # 7. Join campaign and peer by strategy. Created by grouping peer campaign outcomes by strategy and channel, and calculating weighted performance metrics for each strategy based on the similarity weights of the peers that used it.
                     peer_campaigns.groupby(["strategy_name", "channel"], dropna=False)
                     .agg(
                         campaigns=("activity_id", "nunique"),
@@ -1429,7 +1429,7 @@ def render():
                     .reset_index()
                 )
 
-                # GUARDRAILS FOR RELIABILITY
+                # GUARDRAILS FOR RELIABILITY: Require ≥2 peers
                 MIN_PEERS = 2
                 rec["is_reliable"] = rec["peers_using"] >= MIN_PEERS
                 rec["score"] = (
@@ -1438,7 +1438,7 @@ def render():
                     + np.log1p(rec["total_sim_weight"]) * 20
                     + rec["is_reliable"].astype(int) * 30
                 )
-                rec = rec.sort_values(["is_reliable", "score"], ascending=[False, False]) # 8. Score & rank strats
+                rec = rec.sort_values(["is_reliable", "score"], ascending=[False, False]) # 8. Score & rank strats by a combination of median revenue uplift, median ROI, total similarity weight (popularity among similar peers), and a reliability boost for strategies used by at least MIN_PEERS peers. This multi-factor scoring helps surface strategies that are not only high-performing but also more likely to be relevant and reliable for the active restaurant.
 
                 # 9: FUNNEL STAGE DIVERSIFICATION (Funnel stage defined by the strategy's primary channel, e.g. Discovery, Consideration, Conversion)
                 # Avoid recommending multiple strategies from the same funnel stage or channel to ensure a more holistic growth approach.
@@ -1470,7 +1470,7 @@ def render():
                     for idx, (_, r) in enumerate(displayable_recs.iterrows()):
                         with cols[idx]:
                             roi_val = r["med_roi"]
-                            roi_str = f"ROI: {roi_val:.1f}x" if pd.notna(roi_val) else "ROI: N/A"
+                            roi_str = f"ROI: {roi_val:.1f}x" if pd.notna(roi_val) else " " #"ROI: N/A"
                             uplift_val = r["med_rev_uplift"]
                             uplift_str = _fmt_pct(uplift_val)
                             st.metric(
@@ -1482,20 +1482,23 @@ def render():
 
                 # 10. ENRICH TOP PEERS with their campaign strats FOR THE LLM
                 # calculate peer financial stats here so the LLM has context
-                if not o.empty and "restaurant_name" in o.columns:
-                    peer_names = set(top_peers["name"].dropna())
-                    o_peers = o[o["restaurant_name"].isin(peer_names)].copy()
+                if not o.empty and "_name_norm" in o.columns:
+                    # 1. Extract NORMALIZED names from top peers 
+                    peer_names_norm = set(top_peers["name_norm"].dropna())
+                    
+                    # 2. Filter the outcomes dataframe using its NORMALIZED column
+                    o_peers = o[o["_name_norm"].isin(peer_names_norm)].copy()
                     
                     if not o_peers.empty:
                         best_ch = (
-                            o_peers.groupby(["restaurant_name", "channel"])["revenue_uplift_pct"]
+                            o_peers.groupby(["_name_norm", "channel"])["revenue_uplift_pct"]
                             .median().reset_index()
                             .sort_values("revenue_uplift_pct", ascending=False)
-                            .drop_duplicates("restaurant_name")[["restaurant_name", "channel"]]
+                            .drop_duplicates("_name_norm")[["_name_norm", "channel"]]
                             .rename(columns={"channel": "best_channel"})
                         )
                         peer_stats = (
-                            o_peers.groupby("restaurant_name")
+                            o_peers.groupby("_name_norm")
                             .agg(
                                 n_campaigns=("activity_id", "nunique"),
                                 avg_roi=("roi", "median"),
@@ -1504,68 +1507,62 @@ def render():
                                 n_total=("revenue_uplift_pct", "count"),
                             ).reset_index()
                         )
-                        # Avoid division by zero
-                        peer_stats["lift_reliability"] = peer_stats["n_positive_lift"] / peer_stats["n_total"].replace(0, pd.NA)
-                        peer_stats = peer_stats.merge(best_ch, on="restaurant_name", how="left")
                         
-                        # Merge these stats back into top_peers so the LLM prompt can access them!
-                        top_peers = top_peers.merge(peer_stats, left_on="name", right_on="restaurant_name", how="left")
+                        peer_stats["lift_reliability"] = peer_stats["n_positive_lift"] / peer_stats["n_total"].replace(0, pd.NA)
+                        peer_stats = peer_stats.merge(best_ch, on="_name_norm", how="left")
+                        
+                        # 3. Merge using NORMALIZED names on both sides!
+                        top_peers = top_peers.merge(peer_stats, left_on="name_norm", right_on="_name_norm", how="inner")
 
                 # ENHANCED PEER EVIDENCE TABLE
                 with st.expander("🔍 View Raw Peer Evidence (Metadata & Scale)"):
+                    # display_peers ALREADY contains all the stats from Step 10!
                     display_peers = top_peers.copy()
 
-                    if not o.empty and "restaurant_name" in o.columns:
-                        peer_names = set(display_peers["name"].dropna())
-                        o_peers = o[o["restaurant_name"].isin(peer_names)].copy()
-                        if not o_peers.empty:
-                            best_ch = (
-                                o_peers.groupby(["restaurant_name", "channel"])["revenue_uplift_pct"]
-                                .median().reset_index()
-                                .sort_values("revenue_uplift_pct", ascending=False)
-                                .drop_duplicates("restaurant_name")[["restaurant_name", "channel"]]
-                                .rename(columns={"channel": "best_channel"})
+                    # 1. Flag high-quality peers and sort them to the top
+                    if "n_campaigns" in display_peers.columns and "avg_incremental_rev" in display_peers.columns:
+                        # Create a hidden column that is True if they meet your criteria, False otherwise
+                        display_peers["is_reliable_peer"] = (
+                            (display_peers["n_campaigns"].fillna(0) > 1) & 
+                            (display_peers["avg_incremental_rev"].fillna(0) > 0)
+                        )
+                        
+                        # Sort by reliability first (True at the top), then by similarity distance (closest first)
+                        if "distance" in display_peers.columns:
+                            display_peers = display_peers.sort_values(
+                                by=["is_reliable_peer", "distance"], 
+                                ascending=[False, True]  # False means 'True' goes first for boolean; True means smallest distance first
                             )
-                            peer_stats = (
-                                o_peers.groupby("restaurant_name")
-                                .agg(
-                                    n_campaigns=("activity_id", "nunique"),
-                                    avg_roi=("roi", "median"),
-                                    avg_incremental_rev=("incremental_revenue_thb", "median"),
-                                    n_positive_lift=("revenue_uplift_pct", lambda x: (x > 0).sum()),
-                                    n_total=("revenue_uplift_pct", "count"),
-                                ).reset_index()
+                        else:
+                            display_peers = display_peers.sort_values(
+                                by=["is_reliable_peer", "avg_incremental_rev"], 
+                                ascending=[False, False]
                             )
-                            peer_stats["lift_reliability"] = peer_stats["n_positive_lift"] / peer_stats["n_total"].replace(0, pd.NA)
-                            peer_stats = peer_stats.merge(best_ch, on="restaurant_name", how="left")
-                            display_peers = display_peers.merge(peer_stats, left_on="name", right_on="restaurant_name", how="left")
 
+                    # 2. Select columns to display
                     display_cols = [
-                        "name", "monthly_gmv", "best_channel",
-                        "avg_roi", "avg_incremental_rev", "n_campaigns",
-                        "lift_reliability", "latest_segment",
+                        "name", "monthly_gmv", "best_channel", "avg_incremental_rev", 
+                        "n_campaigns", "lift_reliability", "latest_segment",
                     ]
                     existing_cols = [c for c in display_cols if c in display_peers.columns]
 
+                    # 3. Rename for UI
                     renamed = display_peers[existing_cols].rename(columns={
                         "name":                "Peer Restaurant",
-                        #"distance":            "Similarity Dist.", # Remove distance for now
                         "monthly_gmv":         "Monthly GMV",
                         "best_channel":        "Best Channel",
-                        "avg_roi":             "Avg ROI",
                         "avg_incremental_rev": "Avg Incremental Rev (THB)",
                         "n_campaigns":         "Campaigns Run",
                         "lift_reliability":    "Lift Reliability",
                         "latest_segment":      "Momentum",
                     })
 
+                    # 4. Render Table
                     st.dataframe(
                         renamed.style.format({
-                            "Similarity Dist.":          lambda x: f"{x:.2f}" if pd.notna(x) else "-",
                             "Monthly GMV":               lambda x: f"THB {x:,.0f}" if pd.notna(x) else "-",
-                            "Avg ROI":                   _fmt_roi,
                             "Avg Incremental Rev (THB)": lambda x: f"THB {x:,.0f}" if pd.notna(x) else "-",
-                            "Lift Reliability":          _fmt_reliability,
+                            "Lift Reliability":          lambda x: f"{x:.1%}" if pd.notna(x) else "-",
                             "Campaigns Run":             lambda x: f"{int(x)}" if pd.notna(x) else "-",
                         }),
                         hide_index=True,
