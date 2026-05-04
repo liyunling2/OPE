@@ -2067,3 +2067,10 @@ def get_restaurant_priority_row(priority_df: pd.DataFrame, name: str) -> dict:
     if len(rows):
         return rows.iloc[0].to_dict()
     return {}
+
+@st.cache_data
+def load_priority_list() -> pd.DataFrame:
+    path = BASE_DIR / "priority_list.csv"
+    if not path.exists():
+        return pd.DataFrame()
+    return pd.read_csv(path)

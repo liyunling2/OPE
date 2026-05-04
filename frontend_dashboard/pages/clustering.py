@@ -6,15 +6,15 @@ Cluster exploration dashboard with cross-highlighting and strategy effectiveness
 
 from __future__ import annotations
 
-import html
-import re
+import html, re, hashlib
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-
+from peer_recommender.build_recommendation_prompt import build_recommendation_prompt
+from peer_recommender.generate_ai_playbook import generate_ai_playbook
 from data.loader import (
     get_cluster_strategy_recommendations,
     load_cluster_assignments,
@@ -26,26 +26,28 @@ from data.loader import (
     load_cluster_strategy_outcomes,
     load_cluster_strategy_rankings,
     load_cluster_text_corpus,
+    load_priority_list,
 )
 from theme import BASE_LAYOUT, CHART_THEME, MUTED_TEXT
 
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics.pairwise import euclidean_distances
 
-def _normalize_name(value: str) -> str:
+def _normalize_name(value: str) -> str:  # Match restaurant names for selection syncing
     return re.sub(r"\s+", " ", str(value)).strip().lower()
 
-
-def _fmt_pct(value: float | int | None) -> str:
+def _fmt_pct(value: float | int | None) -> str: # Format as % with handling for None/NaN
     if value is None or (isinstance(value, float) and pd.isna(value)):
         return "-"
     return f"{value:.1%}"
 
-
+# Format as THB with commas and no decimals, handling None/NaN
 def _fmt_thb(value: float | int | None) -> str:
     if value is None or (isinstance(value, float) and pd.isna(value)):
         return "-"
     return f"THB {value:,.0f}"
 
-
+# Format year-month with handling for None/NaN and invalid formats
 def _fmt_year_month(value) -> str:
     if value is None or pd.isna(value):
         return "Unknown month"
@@ -54,13 +56,28 @@ def _fmt_year_month(value) -> str:
         return str(value)
     return parsed.strftime("%Y-%m")
 
-
+# Format decimal with specified digits, handling None/NaN
 def _fmt_decimal(value, digits: int = 3) -> str:
     if value is None or (isinstance(value, float) and pd.isna(value)):
         return "-"
     return f"{value:,.{digits}f}"
 
+def _fmt_roi(v):
+    if pd.isna(v): return "-"
+    return f"{v:.1f}x"
 
+def _fmt_lift(v):
+    if pd.isna(v): return "-"
+    return f"+{v:.2f}/day"
+
+def _fmt_reliability(v):
+    if pd.isna(v): return "-"
+    # lift_reliability is typically a ratio: n_positive_lift / n_campaigns
+    pct = v * 100 if v <= 1 else v
+    color = "🟢" if pct >= 70 else "🟡" if pct >= 40 else "🔴"
+    return f"{color} {pct:.0f}%"
+
+# Summarise into concise string with max unique items and "more" indicator, handling empty/invalid values
 def _summarize_campaign_types(values: pd.Series, max_items: int = 3) -> str:
     unique_types = []
     for value in values.fillna("Unknown").astype(str).str.strip():
@@ -73,34 +90,34 @@ def _summarize_campaign_types(values: pd.Series, max_items: int = 3) -> str:
         return ", ".join(unique_types)
     return ", ".join(unique_types[:max_items]) + f" +{len(unique_types) - max_items} more"
 
-
+# Build campaign type context by month with primary type and summary of all types, handling various edge cases in the data
 def _build_campaign_type_context(campaign_type_monthly: pd.DataFrame) -> pd.DataFrame:
-    if campaign_type_monthly.empty:
+    if campaign_type_monthly.empty: # Handle empty input with correct columns
         return pd.DataFrame(columns=["year_month", "primary_ga_campaign_type", "ga_campaign_types"])
 
     required_cols = {"year_month", "googleAdsCampaignType"}
-    if not required_cols.issubset(campaign_type_monthly.columns):
+    if not required_cols.issubset(campaign_type_monthly.columns): # Handle missing required columns
         return pd.DataFrame(columns=["year_month", "primary_ga_campaign_type", "ga_campaign_types"])
 
-    context = campaign_type_monthly.copy()
+    context = campaign_type_monthly.copy() # Create columns 'year_month', 'googleAdsCampaignType', and optionally 'total_sessions' and 'active_campaigns'
     context["year_month"] = pd.to_datetime(context["year_month"], errors="coerce")
-    context["total_sessions"] = (
+    context["total_sessions"] = ( # Use total_sessions for sorting if available
         pd.to_numeric(context["total_sessions"], errors="coerce").fillna(0)
         if "total_sessions" in context.columns
-        else 0
+        else 0 # Default to zero if total_sessions column is missing
     )
     context["active_campaigns"] = (
         pd.to_numeric(context["active_campaigns"], errors="coerce").fillna(0)
         if "active_campaigns" in context.columns
-        else 0
+        else 0 # Default to zero if active_campaigns column is missing
     )
-    context = context.dropna(subset=["year_month"])
+    context = context.dropna(subset=["year_month"]) # Drop rows with invalid year_month after coercion
     if context.empty:
         return pd.DataFrame(columns=["year_month", "primary_ga_campaign_type", "ga_campaign_types"])
-
+    # Clean googleAdsCampaignType by filling NaN, stripping whitespace, and excluding empty or "(not set)" values
     context["googleAdsCampaignType"] = context["googleAdsCampaignType"].fillna("Unknown").astype(str).str.strip()
     context = context[
-        context["googleAdsCampaignType"].ne("")
+        context["googleAdsCampaignType"].ne("") # Exclude empty strings
         & context["googleAdsCampaignType"].ne("(not set)")
     ]
     if context.empty:
@@ -119,7 +136,8 @@ def _build_campaign_type_context(campaign_type_monthly: pd.DataFrame) -> pd.Data
         .reset_index(drop=True)
     )
 
-
+# Extract from plot selection state, handle both dict and Plotly event object formats,
+# Purpose is sync selection between scatter plot & restaurant list
 def _extract_selected_point(state) -> tuple[str | None, int | None]:
     if state is None:
         return None, None
@@ -132,21 +150,21 @@ def _extract_selected_point(state) -> tuple[str | None, int | None]:
 
     if not selection:
         return None, None
-
+    # selection plots can have multiple points but we only consider the first one for syncing selection
     points = selection.get("points", []) if isinstance(selection, dict) else []
     if not points:
         return None, None
 
     point = points[0]
     custom = point.get("customdata", [])
-    if isinstance(custom, (list, tuple)) and len(custom) >= 2:
+    if isinstance(custom, (list, tuple)) and len(custom) >= 2: # customdata: [restaurant_name, cluster_id, ...]
         try:
             return str(custom[0]), int(custom[1])
         except Exception:
             return str(custom[0]), None
     return None, None
 
-
+# Extract selected row indices from table selection state, handle both dict and Streamlit data frame state formats
 def _extract_selected_rows(state) -> list[int]:
     if state is None:
         return []
@@ -162,12 +180,12 @@ def _extract_selected_rows(state) -> list[int]:
     rows = selection.get("rows", []) if isinstance(selection, dict) else []
     return rows if isinstance(rows, list) else []
 
-
+# Prep GA campaign effectiveness data for display, including renaming, formatting, and optional inclusion of restaurant name column
 def _prepare_raw_ga_display(df: pd.DataFrame, include_restaurant: bool = False) -> pd.DataFrame:
     if df.empty:
         return df.copy()
 
-    display_cols = [
+    display_cols = [ # Select columns to rename
         c
         for c in [
             "name",
@@ -226,9 +244,9 @@ def _prepare_raw_ga_display(df: pd.DataFrame, include_restaurant: bool = False) 
     for col in ["Add to Cart Rate", "View to Purchase Rate", "Purchase to Cart Rate"]:
         if col in out.columns:
             out[col] = out[col].apply(_fmt_pct)
-    return out
+    return out 
 
-
+# Prep campaign breakdown data for display, including renaming and formatting
 def _prepare_campaign_breakdown_display(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty:
         return df.copy()
@@ -263,7 +281,7 @@ def _prepare_campaign_breakdown_display(df: pd.DataFrame) -> pd.DataFrame:
         out["Session Share"] = out["Session Share"].apply(_fmt_pct)
     return out
 
-
+# Tokenize text into words, filter out short tokens and common stopwords, and return list of meaningful tokens for theme extraction
 def _tokenize(text: str) -> list[str]:
     tokens = re.findall(r"[a-zA-Z]{3,}", str(text).lower())
     stopwords = {
@@ -295,7 +313,8 @@ def _tokenize(text: str) -> list[str]:
     }
     return [token for token in tokens if token not in stopwords]
 
-
+# Extract top N terms from a series of text, counting frequency of meaningful tokens 
+# and return a DataFrame of keywords and their weights for word cloud visualization
 def _terms_from_texts(text_series: pd.Series, top_n: int = 40) -> pd.DataFrame:
     counts: dict[str, int] = {}
     for text in text_series.fillna(""):
@@ -308,7 +327,8 @@ def _terms_from_texts(text_series: pd.Series, top_n: int = 40) -> pd.DataFrame:
     items = sorted(counts.items(), key=lambda kv: kv[1], reverse=True)[:top_n]
     return pd.DataFrame(items, columns=["keyword", "weight"])
 
-
+# Build a word cloud figure using Plotly, where word size corresponds to weight and highlighted terms 
+# are colored differently, with handling for empty data and customization options
 def _build_word_cloud_figure(
     word_df: pd.DataFrame,
     title: str,
@@ -327,7 +347,7 @@ def _build_word_cloud_figure(
             title=title,
         )
         return fig
-
+    # Ensure keywords are strings for display, weights are numeric for sizing
     words = word_df["keyword"].astype(str).tolist()
     weights = pd.to_numeric(word_df["weight"], errors="coerce").fillna(0).to_numpy()
 
@@ -336,15 +356,15 @@ def _build_word_cloud_figure(
     else:
         sizes = np.full(len(weights), 24)
 
-    n_terms = len(words)
-    angles = np.linspace(0.0, 5 * np.pi, n_terms)
-    radius = np.linspace(0.15, 1.0, n_terms)
-    rng = np.random.default_rng(42)
-    x = radius * np.cos(angles) + rng.normal(0, 0.08, n_terms)
-    y = radius * np.sin(angles) + rng.normal(0, 0.08, n_terms)
+    n_terms = len(words) # Generate positions in spiral pattern to distribute words, with some random noise for better aesthetics
+    angles = np.linspace(0.0, 5 * np.pi, n_terms) # More turns for better distribution of larger number of words
+    radius = np.linspace(0.15, 1.0, n_terms) # Start with small radius for first word and increase to max radius for last word to create spiral effect
+    rng = np.random.default_rng(42) # Fixed seed for reproducibility of random noise
+    x = radius * np.cos(angles) + rng.normal(0, 0.08, n_terms) # Add small random noise to x positions to avoid perfect alignment and create more natural word cloud appearance
+    y = radius * np.sin(angles) + rng.normal(0, 0.08, n_terms) # y positions to avoid perfect alignment and create more natural word cloud appearance
 
-    highlights = highlight_terms or set()
-    colors = ["#cc0000" if word in highlights else default_color for word in words]
+    highlights = highlight_terms or set() # Highlight terms from the restaurant's own text in a different color to show overlap with cluster themes
+    colors = ["#cc0000" if word in highlights else default_color for word in words] # Color highlighted terms in red and others in default color (blue) to visually distinguish them in the word cloud
 
     fig.add_trace(
         go.Scatter(
@@ -368,12 +388,14 @@ def _build_word_cloud_figure(
     )
     return fig
 
-
+# Highlight occurrences of query in the text by wrapping them in <mark> tags with styling, 
+# and escape HTML to prevent injection, also handle newlines for proper display in Streamlit
 def _highlight_text(value: str, query: str) -> str:
     escaped = html.escape(str(value))
     if not query.strip():
         return escaped.replace("\n", "<br>")
-
+    # Find case-insensitive matches of the query in the text, wrap them in styled <mark> tags for highlighting, 
+    # while preserving the original text and escaping HTML to prevent injection
     pattern = re.compile(re.escape(query.strip()), flags=re.IGNORECASE)
     parts: list[str] = []
     last_end = 0
@@ -388,7 +410,6 @@ def _highlight_text(value: str, query: str) -> str:
     parts.append(html.escape(str(value)[last_end:]))
     return "".join(parts).replace("\n", "<br>")
 
-
 def _render_raw_text_records(text_df: pd.DataFrame, search_text: str, max_rows: int) -> None:
     if text_df.empty:
         st.info("No raw text rows for this restaurant with the current filter.")
@@ -402,7 +423,7 @@ def _render_raw_text_records(text_df: pd.DataFrame, search_text: str, max_rows: 
         display_df = display_df.sort_values(sort_cols, ascending=ascending)
     display_df = display_df.head(int(max_rows))
 
-    for _, row in display_df.iterrows():
+    for _, row in display_df.iterrows(): # Render each text record as a styled card with source and date
         text_id = row.get("text_id", "-")
         year_month = _fmt_year_month(row.get("year_month"))
         text_source = str(row.get("text_source", "Review")).strip() or "Review"
@@ -461,7 +482,7 @@ def _render_raw_text_records(text_df: pd.DataFrame, search_text: str, max_rows: 
 
 
 def render():
-    assignments = load_cluster_assignments()
+    assignments = load_cluster_assignments() # Load from clustering_results
     ga_effectiveness_df = load_cluster_ga_campaign_effectiveness()
     ga_campaign_raw = load_ga_campaign_outreach_raw()
     ga_campaign_type_monthly = load_ga_campaign_type_monthly()
@@ -491,15 +512,15 @@ def render():
 
     all_clusters_option = "All Clusters"
     cluster_rows = assignments[["cluster_id", "cluster_label"]].drop_duplicates().sort_values(["cluster_id", "cluster_label"])
-    cluster_options = cluster_rows["cluster_id"].tolist()
-    cluster_options_ui = [all_clusters_option] + cluster_options
-    cluster_label_map = dict(zip(cluster_rows["cluster_id"], cluster_rows["cluster_label"]))
+    cluster_options = cluster_rows["cluster_id"].tolist() # Get list of unique cluster IDs for selection options, sorted by cluster_id
+    cluster_options_ui = [all_clusters_option] + cluster_options # UI options include "All Clusters" plus individual cluster IDs, with mapping to labels for display
+    cluster_label_map = dict(zip(cluster_rows["cluster_id"], cluster_rows["cluster_label"])) # Map cluster_id to cluster_label for display in selection box, handle missing labels
 
-    if not cluster_options:
+    if not cluster_options: # No valid clusters after processing, show warning and exit
         st.warning("No valid clusters available in clustering data.")
         return
 
-    if "cluster_active_cluster" not in st.session_state:
+    if "cluster_active_cluster" not in st.session_state: # Initialize active cluster selection in session state, default to "All Clusters"
         st.session_state["cluster_active_cluster"] = all_clusters_option
 
     if st.session_state["cluster_active_cluster"] not in cluster_options_ui:
@@ -507,10 +528,10 @@ def render():
 
     def _filter_by_selected_cluster(df: pd.DataFrame) -> pd.DataFrame:
         active_value = st.session_state["cluster_active_cluster"]
-        if active_value == all_clusters_option:
+        if active_value == all_clusters_option: # If "All Clusters" is selected, return the full DataFrame without filtering, otherwise filter by the selected cluster_id
             return df.copy()
-        return df[df["cluster_id"] == int(active_value)].copy()
-
+        return df[df["cluster_id"] == int(active_value)].copy() 
+# Filter DF to only include rows where cluster_id matches the selected cluster, handle potential issues with non-numeric cluster_id
     cluster_df = _filter_by_selected_cluster(assignments).sort_values("name")
 
     if "cluster_active_restaurant" not in st.session_state:
@@ -521,12 +542,12 @@ def render():
 
     control_a, control_b, control_c = st.columns([1.5, 2.5, 1])
 
-    with control_a:
+    with control_a: # Layout for cluster selection
         active_cluster = st.selectbox(
             "Cluster",
             options=cluster_options_ui,
             index=cluster_options_ui.index(st.session_state["cluster_active_cluster"]),
-            format_func=lambda cid: (
+            format_func=lambda cid: ( # Display "All Clusters" for the all_clusters_option
                 all_clusters_option if cid == all_clusters_option else f"Cluster {cid}: {cluster_label_map.get(cid, 'Unknown')}"
             ),
             key="cluster_selector",
@@ -539,14 +560,14 @@ def render():
 
     cluster_df = _filter_by_selected_cluster(assignments).sort_values("name")
 
-    with control_b:
+    with control_b: # Layout for restaurant selection within selected cluster
         restaurant_options = cluster_df["name"].tolist()
         default_restaurant = st.session_state["cluster_active_restaurant"]
         if default_restaurant not in restaurant_options and restaurant_options:
             default_restaurant = restaurant_options[0]
             st.session_state["cluster_active_restaurant"] = default_restaurant
 
-        active_restaurant = st.selectbox(
+        active_restaurant = st.selectbox( # Select restaurant from currently selected cluster
             "Restaurant (within selected scope)",
             options=restaurant_options,
             index=restaurant_options.index(default_restaurant) if restaurant_options else 0,
@@ -554,14 +575,14 @@ def render():
         )
         if active_restaurant != st.session_state["cluster_active_restaurant"]:
             st.session_state["cluster_active_restaurant"] = active_restaurant
-
+        # Display its cluster label and ID for reference, handle case where restaurant might not be found in the current cluster_df due to data issues
         selected_lookup = assignments[assignments["name"].eq(st.session_state["cluster_active_restaurant"])].head(1)
         if len(selected_lookup):
             selected_cluster_label = selected_lookup.iloc[0].get("cluster_label", "Unknown")
             selected_cluster_id = selected_lookup.iloc[0].get("cluster_id", "Unknown")
             st.caption(f"Selected restaurant cluster: {selected_cluster_label} (ID: {selected_cluster_id})")
 
-    with control_c:
+    with control_c: # Layout for minimum sample size input for strategy ranking, with help text
         min_sample_size = st.number_input(
             "Min sample",
             min_value=1,
@@ -575,17 +596,17 @@ def render():
     active_restaurant = st.session_state["cluster_active_restaurant"]
     active_rest_norm = _normalize_name(active_restaurant)
     scope_label = all_clusters_option if active_cluster == all_clusters_option else f"Cluster {active_cluster}"
-    scope_gmv_per_ga_view = (
+    scope_gmv_per_ga_view = ( # Avg gmv per view across cluster
         pd.to_numeric(cluster_df["gmv_per_ga_view"], errors="coerce").mean()
         if "gmv_per_ga_view" in cluster_df.columns
         else np.nan
     )
-    scope_ga_add_to_cart = (
+    scope_ga_add_to_cart = ( # Avg add to cart rate across cluster
         pd.to_numeric(cluster_df["ga_add_to_cart_rate"], errors="coerce").mean()
         if "ga_add_to_cart_rate" in cluster_df.columns
         else np.nan
     )
-
+    # Key metrics for selected cluster scope
     metric_a, metric_b, metric_c, metric_d, metric_e, metric_f = st.columns(6)
     metric_a.metric("Restaurants in Scope", f"{len(cluster_df):,}")
     metric_b.metric("Total Scope Bookings", f"{cluster_df['monthly_bookings'].fillna(0).sum():,.0f}")
@@ -598,7 +619,7 @@ def render():
 
     left, right = st.columns([1.7, 1.3])
 
-    with left:
+    with left: # cluster visuals, scatter plot of UMAP components colored by cluster label, with hover info and selection syncing to restaurant list, handle case where UMAP components might be missing or non-numeric
         st.markdown("### Cluster Map")
         scatter_df = assignments.copy()
 
@@ -667,7 +688,7 @@ def render():
             on_select="rerun",
             selection_mode=("points",),
         )
-
+# Selection point data 
         point_name, point_cluster = _extract_selected_point(plot_state)
         if point_name:
             should_rerun = False
@@ -683,7 +704,7 @@ def render():
             if should_rerun:
                 st.rerun()
 
-    with right:
+    with right: # Cluster restaurant list
         st.markdown(f"### Restaurants in {scope_label}")
         cluster_df = _filter_by_selected_cluster(assignments).sort_values(
             ["latest_segment", "name"], ascending=[True, True]
@@ -732,7 +753,7 @@ def render():
     active_cluster = st.session_state["cluster_active_cluster"]
     active_restaurant = st.session_state["cluster_active_restaurant"]
     active_rest_norm = _normalize_name(active_restaurant)
-
+    # Snapshot metrics for selected restaurant, also filter cluster-level data to selected cluster
     selected_cluster_df = _filter_by_selected_cluster(assignments).copy()
     selected_restaurant_row = assignments[assignments["name_norm"] == active_rest_norm].head(1)
 
@@ -764,7 +785,7 @@ def render():
         if cluster_keywords.empty:
             if active_cluster == all_clusters_option:
                 cluster_text = text_corpus["clean_text"]
-            else:
+            else: # Fall back to extracting terms directly from text corpus
                 cluster_text = text_corpus[text_corpus["cluster_id"] == active_cluster]["clean_text"]
             cluster_keywords = _terms_from_texts(cluster_text, top_n=40)
 
@@ -772,7 +793,7 @@ def render():
         restaurant_terms = _terms_from_texts(rest_text_df["clean_text"], top_n=30)
         highlight_terms = set(restaurant_terms["keyword"].tolist())
 
-        fig_cluster_wc = _build_word_cloud_figure(
+        fig_cluster_wc = _build_word_cloud_figure( # for cluster-level keywords
             cluster_keywords[["keyword", "weight"]].head(40),
             title=cloud_title,
             highlight_terms=highlight_terms,
@@ -1285,80 +1306,474 @@ def render():
 
             st.dataframe(rank_display.sort_values(["Eligible", "Rank Score"], ascending=[False, False]), hide_index=True, width="stretch", height=280)
 
-    st.markdown(f"### Strategy Activity Detail ({scope_label})")
-    if active_cluster == all_clusters_option or "cluster_id" not in outcomes_df.columns:
-        cluster_outcomes = outcomes_df.copy()
-    else:
-        cluster_outcomes = outcomes_df[outcomes_df["cluster_id"] == active_cluster].copy()
+    st.markdown("---")
+    st.markdown("### Peer-Based Strategy Recommendations")
+    st.caption(
+        "Recommendations are dynamically generated by learning from high-performing peers "
+        "with identical business models and digital funnel behaviors."
+    )
+    '''
+    Step by step implementing peer recommender logic:
+    1. Identify which restaurants have campaign data available for recommendation generation (using outcomes_df as proxy)
+    2. Create a priority peer pool of restaurants that are in high-momentum segments (Rising stars & Established players)
+    3. If there are enough high-momentum peers with campaign data, use them exclusively. 
+    4. If not, top up with closest peers by distance until we have K peers. Calculate distance using UMAP coordinates, GMV per GA view, and cluster membership (same cluster gets a distance bonus).
+    5. Conduct similarity-weighted aggregation of peer campaign outcomes, give more weight to peers closer in distance in the same cluster
+    6. Surface top recommended strategies based on aggregated peer performance, along with key campaign metrics from the peer group to provide context on why these strategies are recommended.
+    '''
 
-    if cluster_outcomes.empty:
-        st.info("No campaign-level records found for this cluster.")
-    else:
-        if "strategy_family" in cluster_outcomes.columns:
-            family_options = sorted(cluster_outcomes["strategy_family"].dropna().astype(str).unique().tolist())
-            family_choice = st.selectbox(
-                "Filter by strategy family",
-                options=["All Strategy Families"] + family_options,
-                key=f"cluster_activity_family_filter_{str(active_cluster)}",
-            )
-            if family_choice != "All Strategy Families":
-                cluster_outcomes = cluster_outcomes[
-                    cluster_outcomes["strategy_family"].fillna("Unknown") == family_choice
-                ].copy()
+    peer_k = st.slider("Number of similar peers to analyze", 3, 20, 6, key="peer_k_slider")
+    st.caption("Peers ranked by distance, with priority given to high-momentum segments. " \
+    "Distance calculated using UMAP coordinates, GMV per GA view, and cluster membership (same cluster gets a distance bonus).")
 
-        if cluster_outcomes.empty:
-            st.info("No campaign-level records found for the selected strategy family.")
-        else:
-            detail_cols = [
-                c
-                for c in [
-                    "strategy_family",
-                    "strategy_name",
-                    "cluster_label",
-                    "restaurant_name",
-                    "channel",
-                    "applied_date",
-                    "bookings_before",
-                    "bookings_after",
-                    "bookings_uplift_pct",
-                    "incremental_revenue_thb",
-                    "revenue_uplift_pct",
-                    "roi",
+    if not selected_restaurant_row.empty and not assignments.empty:
+        if outcomes_df.empty:
+            st.info("No marketing outcomes data available to generate recommendations.")
+        else: # 1. PRE-PROCESS: Identify which restaurants actually have campaign data
+            o = outcomes_df.copy() # Avoid editing original df
+            o["_name_norm"] = o["restaurant_name"].apply(_normalize_name) # Create normalised name for matching
+            restaurants_with_campaigns = set(o["_name_norm"].unique()) # Identify restaurants with campaign data for filtering peers later
+
+            active_gmv = selected_restaurant_row.iloc[0].get("monthly_gmv", 0) # Use montly GMV as key bz metric for momentum categorization and distance calculation
+            HIGH_MOMENTUM = {"Rising Stars", "Established Players"} # Only compare peers under these segments
+
+            # 2. Start with high-momentum peers that have campaign data, as they are more likely to yield relevant insights
+            high_momentum_peers = assignments[ # Start with Rising Stars & Established Players 
+                (assignments["name_norm"] != active_rest_norm) & # Exclude self
+                (assignments["latest_segment"].isin(HIGH_MOMENTUM)) & # Focus on high-momentum segments
+                (assignments["name_norm"].isin(restaurants_with_campaigns)) # Ensure campaign data is available
+            ].copy()
+            high_momentum_peers["momentum_bonus"] = 1.0 # Prioritize peers from high-momentum segments, reducing their distance in the ranking steps later
+
+            # 3. Fallback pool: all other segments with campaign data (Last resort)
+            fallback_peers = assignments[
+                (assignments["name_norm"] != active_rest_norm) &
+                (~assignments["latest_segment"].isin(HIGH_MOMENTUM)) &
+                (assignments["name_norm"].isin(restaurants_with_campaigns))
+            ].copy()
+            fallback_peers["momentum_bonus"] = 0.0
+
+            if len(high_momentum_peers) >= peer_k: # Enough high-momentum peers — use exclusively
+                peer_df = high_momentum_peers.copy()
+            elif len(high_momentum_peers) > 0: # Partial: top up with fallback peers sorted by distance later
+                slots_needed = peer_k - len(high_momentum_peers) # Fill in remaining slots with closest peers by distance (no momentum bonus)
+                peer_df = pd.concat( 
+                    [high_momentum_peers, fallback_peers.head(slots_needed)],
+                    ignore_index=True
+                )
+                st.caption(
+                    f"Only {len(high_momentum_peers)} high-performing peer(s) found. "
+                    f"{slots_needed} additional peer(s) included by proximity."
+                )
+            else: # No high-momentum peers at all — use fallback entirely
+                peer_df = fallback_peers.copy()
+                st.caption(
+                    "No Rising Stars or Established Players with campaign data found. "
+                    "Showing closest available peers by distance."
+                )
+
+            if peer_df.empty:
+                st.warning("No peers with campaign data found for this restaurant.")
+                top_peers = pd.DataFrame()
+                peer_campaigns = pd.DataFrame(columns=["strategy_name", "channel"])
+            else:
+                DISTANCE_FEATURES = ['x', 'y', 'avg_gmv_perview']
+                # Calculate distance using UMAP coordinates
+                for col in DISTANCE_FEATURES: # Ensure missing columns don't break the scaler
+                    if col not in peer_df.columns: peer_df[col] = 0
+                    if col not in selected_restaurant_row.columns: selected_restaurant_row[col] = 0
+
+                valid_features = [ # VARIANCE GUARD: drop any feature whose peer-pool std is ~0.
+                    col for col in DISTANCE_FEATURES
+                    if peer_df[col].fillna(0).std() > 1e-9
                 ]
-                if c in cluster_outcomes.columns
-            ]
-            detail_df = cluster_outcomes[detail_cols].copy()
-            detail_df = detail_df.rename(
-                columns={
-                    "strategy_family": "Strategy Family",
-                    "strategy_name": "Strategy",
-                    "cluster_label": "Cluster",
-                    "restaurant_name": "Restaurant",
-                    "channel": "Channel",
-                    "applied_date": "Applied Date",
-                    "bookings_before": "Bookings Before",
-                    "bookings_after": "Bookings After",
-                    "bookings_uplift_pct": "Bookings Uplift %",
-                    "incremental_revenue_thb": "Incremental Revenue (THB)",
-                    "revenue_uplift_pct": "Revenue Uplift %",
-                    "roi": "ROI",
-                }
-            )
+                if not valid_features: # Fall back to simple unweighted distance if all features are constant within the peer pool
+                    valid_features = ["avg_monthly_gmv"]  # last-resort fallback
 
-            if "Bookings Uplift %" in detail_df.columns:
-                detail_df["Bookings Uplift %"] = detail_df["Bookings Uplift %"].apply(_fmt_pct)
-            if "Revenue Uplift %" in detail_df.columns:
-                detail_df["Revenue Uplift %"] = detail_df["Revenue Uplift %"].apply(_fmt_pct)
-            if "Incremental Revenue (THB)" in detail_df.columns:
-                detail_df["Incremental Revenue (THB)"] = detail_df["Incremental Revenue (THB)"].apply(_fmt_thb)
-            if "ROI" in detail_df.columns:
-                detail_df["ROI"] = detail_df["ROI"].apply(lambda v: "-" if pd.isna(v) else f"{v:.2f}")
+                scaler = StandardScaler() # Scale features -> fair distance calculation
+                pool_scaled = scaler.fit_transform(peer_df[valid_features].fillna(0))
+                active_scaled = scaler.transform( # Scale active restaurant's features using the same scaler fitted on the peer pool
+                    selected_restaurant_row[valid_features].fillna(0).values
+                )
+                # Calculate distance from active restaurant to each peer in the pool
+                base_distances = euclidean_distances(pool_scaled, active_scaled).flatten()
 
-            st.dataframe(detail_df.sort_values("Applied Date", ascending=False), hide_index=True, width="stretch", height=300)
+                # 5. Add same-cluster bonus, cluster membership is strong signal of similarity.
+                active_cluster = selected_restaurant_row.iloc[0].get("cluster_id", -1)
+                same_cluster = (peer_df["cluster_id"] == active_cluster).astype(float)
 
-    if not selected_restaurant_row.empty:
-        st.caption(
-            f"Active restaurant: {active_restaurant} | "
-            f"Cluster: {selected_restaurant_row.iloc[0]['cluster_label']} | "
-            f"Momentum: {selected_restaurant_row.iloc[0].get('latest_segment', 'Unknown')}"
-        )
+                # Adjust distance: smaller is better. momentum_bonus pushes high-momentum peers closer.
+                peer_df["distance"] = base_distances - (same_cluster * 0.5) - (peer_df["momentum_bonus"] * 0.5)
+                peer_df["distance"] = np.maximum(peer_df["distance"], 0)
+
+                # Take top K — high-momentum peers naturally rank first due to momentum_bonus
+                top_peers = peer_df.sort_values("distance").head(peer_k).copy()
+
+                # 6. Compute SIMILARITY-WEIGHTED. Each peer is assigned a similarity weight that is the inverse of its distance
+                top_peers["sim_w"] = 1 / (top_peers["distance"] + 1e-6) # Similarity weight: inverse of distance, add small constant to avoid division by zero
+                # Kepp only necessary columns for merging with campaign data
+                peer_dist = top_peers[["name_norm", "sim_w", "distance"]].copy() # Keep only necessary columns for merging with campaign data
+                peer_campaigns = o[o["_name_norm"].isin(set(peer_dist["name_norm"]))].copy() # Get campaign outcomes for the selected peers
+                peer_campaigns = peer_campaigns.merge(peer_dist, left_on="_name_norm", right_on="name_norm", how="left")
+                
+                rec = ( # 7. Join campaign and peer by strategy
+                    peer_campaigns.groupby(["strategy_name", "channel"], dropna=False)
+                    .agg(
+                        campaigns=("activity_id", "nunique"),
+                        peers_using=("restaurant_name", "nunique"),
+                        med_rev_uplift=("revenue_uplift_pct", "median"),
+                        med_roi=("roi", "median"),
+                        total_incremental=("incremental_revenue_thb", "sum"),
+                        total_sim_weight=("sim_w", "sum")
+                    )
+                    .reset_index()
+                )
+
+                # GUARDRAILS FOR RELIABILITY
+                MIN_PEERS = 2
+                rec["is_reliable"] = rec["peers_using"] >= MIN_PEERS
+                rec["score"] = (
+                    rec["med_rev_uplift"].fillna(0) * 100
+                    + rec["med_roi"].fillna(0) * 50
+                    + np.log1p(rec["total_sim_weight"]) * 20
+                    + rec["is_reliable"].astype(int) * 30
+                )
+                rec = rec.sort_values(["is_reliable", "score"], ascending=[False, False]) # 8. Score & rank strats
+
+                # 9: FUNNEL STAGE DIVERSIFICATION (Funnel stage defined by the strategy's primary channel, e.g. Discovery, Consideration, Conversion)
+                # Avoid recommending multiple strategies from the same funnel stage or channel to ensure a more holistic growth approach.
+                # Pick top few by score alone, 
+                diverse_recs, seen_stages = [], set() # Track seen funnel stages or channels to ensure diversity in recommendations
+                for _, row in rec.iterrows(): # Iterate through sorted recommendations and pick top ones from different stages/channels
+                    stage = row.get("funnel_stage", row.get("channel", "Unknown"))
+                    if stage not in seen_stages or len(diverse_recs) == 0:
+                        diverse_recs.append(row) # Add recco if its stage / channel hasn't been seen yet, or if it's the first recommendation
+                        seen_stages.add(stage) # Mark this stage / channel as seen to avoid recommending another strategy from the same stage
+                    if len(diverse_recs) >= 3: # We only want to show top 3 recommendations, so
+                        break
+
+                if len(diverse_recs) < 3: # Fill in next best recco if not enought reccos
+                    remaining = rec[~rec.index.isin([r.name for r in diverse_recs])]
+                    for _, r in remaining.head(3 - len(diverse_recs)).iterrows():
+                        diverse_recs.append(r) # Add next best reccos regardless of stage to ensure we show 3 recommendations if possible
+
+                top_recs = pd.DataFrame(diverse_recs) # Convert list of recommendations back to DataFrame for display
+
+                # UI PRESENTATION
+                st.markdown("#### Top Strategies Recommended by Peers")
+                displayable_recs = top_recs[top_recs["med_rev_uplift"].notna()].head(3)
+
+                if displayable_recs.empty: # No valid reccos to display
+                    st.info("No peer-validated strategies with recorded performance data. Try increasing peers.")
+                else: # Only show reccos with valid revenue uplift data to ensure we're surfacing actionable insights
+                    cols = st.columns(len(displayable_recs))
+                    for idx, (_, r) in enumerate(displayable_recs.iterrows()):
+                        with cols[idx]:
+                            roi_val = r["med_roi"]
+                            roi_str = f"ROI: {roi_val:.1f}x" if pd.notna(roi_val) else "ROI: N/A"
+                            uplift_val = r["med_rev_uplift"]
+                            uplift_str = _fmt_pct(uplift_val)
+                            st.metric(
+                                label=f"{r['strategy_name']} ({r['channel']})",
+                                value=uplift_str,
+                                delta=roi_str,
+                                help=f"Used by {r['peers_using']} similar peers across {r['campaigns']} campaigns."
+                            )
+
+                # 10. ENRICH TOP PEERS with their campaign strats FOR THE LLM
+                # calculate peer financial stats here so the LLM has context
+                if not o.empty and "restaurant_name" in o.columns:
+                    peer_names = set(top_peers["name"].dropna())
+                    o_peers = o[o["restaurant_name"].isin(peer_names)].copy()
+                    
+                    if not o_peers.empty:
+                        best_ch = (
+                            o_peers.groupby(["restaurant_name", "channel"])["revenue_uplift_pct"]
+                            .median().reset_index()
+                            .sort_values("revenue_uplift_pct", ascending=False)
+                            .drop_duplicates("restaurant_name")[["restaurant_name", "channel"]]
+                            .rename(columns={"channel": "best_channel"})
+                        )
+                        peer_stats = (
+                            o_peers.groupby("restaurant_name")
+                            .agg(
+                                n_campaigns=("activity_id", "nunique"),
+                                avg_roi=("roi", "median"),
+                                avg_incremental_rev=("incremental_revenue_thb", "median"),
+                                n_positive_lift=("revenue_uplift_pct", lambda x: (x > 0).sum()),
+                                n_total=("revenue_uplift_pct", "count"),
+                            ).reset_index()
+                        )
+                        # Avoid division by zero
+                        peer_stats["lift_reliability"] = peer_stats["n_positive_lift"] / peer_stats["n_total"].replace(0, pd.NA)
+                        peer_stats = peer_stats.merge(best_ch, on="restaurant_name", how="left")
+                        
+                        # Merge these stats back into top_peers so the LLM prompt can access them!
+                        top_peers = top_peers.merge(peer_stats, left_on="name", right_on="restaurant_name", how="left")
+
+                # ENHANCED PEER EVIDENCE TABLE
+                with st.expander("🔍 View Raw Peer Evidence (Metadata & Scale)"):
+                    display_peers = top_peers.copy()
+
+                    if not o.empty and "restaurant_name" in o.columns:
+                        peer_names = set(display_peers["name"].dropna())
+                        o_peers = o[o["restaurant_name"].isin(peer_names)].copy()
+                        if not o_peers.empty:
+                            best_ch = (
+                                o_peers.groupby(["restaurant_name", "channel"])["revenue_uplift_pct"]
+                                .median().reset_index()
+                                .sort_values("revenue_uplift_pct", ascending=False)
+                                .drop_duplicates("restaurant_name")[["restaurant_name", "channel"]]
+                                .rename(columns={"channel": "best_channel"})
+                            )
+                            peer_stats = (
+                                o_peers.groupby("restaurant_name")
+                                .agg(
+                                    n_campaigns=("activity_id", "nunique"),
+                                    avg_roi=("roi", "median"),
+                                    avg_incremental_rev=("incremental_revenue_thb", "median"),
+                                    n_positive_lift=("revenue_uplift_pct", lambda x: (x > 0).sum()),
+                                    n_total=("revenue_uplift_pct", "count"),
+                                ).reset_index()
+                            )
+                            peer_stats["lift_reliability"] = peer_stats["n_positive_lift"] / peer_stats["n_total"].replace(0, pd.NA)
+                            peer_stats = peer_stats.merge(best_ch, on="restaurant_name", how="left")
+                            display_peers = display_peers.merge(peer_stats, left_on="name", right_on="restaurant_name", how="left")
+
+                    display_cols = [
+                        "name", "monthly_gmv", "best_channel",
+                        "avg_roi", "avg_incremental_rev", "n_campaigns",
+                        "lift_reliability", "latest_segment",
+                    ]
+                    existing_cols = [c for c in display_cols if c in display_peers.columns]
+
+                    renamed = display_peers[existing_cols].rename(columns={
+                        "name":                "Peer Restaurant",
+                        #"distance":            "Similarity Dist.", # Remove distance for now
+                        "monthly_gmv":         "Monthly GMV",
+                        "best_channel":        "Best Channel",
+                        "avg_roi":             "Avg ROI",
+                        "avg_incremental_rev": "Avg Incremental Rev (THB)",
+                        "n_campaigns":         "Campaigns Run",
+                        "lift_reliability":    "Lift Reliability",
+                        "latest_segment":      "Momentum",
+                    })
+
+                    st.dataframe(
+                        renamed.style.format({
+                            "Similarity Dist.":          lambda x: f"{x:.2f}" if pd.notna(x) else "-",
+                            "Monthly GMV":               lambda x: f"THB {x:,.0f}" if pd.notna(x) else "-",
+                            "Avg ROI":                   _fmt_roi,
+                            "Avg Incremental Rev (THB)": lambda x: f"THB {x:,.0f}" if pd.notna(x) else "-",
+                            "Lift Reliability":          _fmt_reliability,
+                            "Campaigns Run":             lambda x: f"{int(x)}" if pd.notna(x) else "-",
+                        }),
+                        hide_index=True,
+                        use_container_width=True,
+                    )
+                    st.caption(
+                        f"Similarity computed on: {', '.join(valid_features)}. "
+                        "Best Channel and ROI sourced from historical campaign outcomes."
+                    )
+
+                # ── GROUNDED BRIEF (always renders, no API needed) ──────────────────────────
+                active_momentum = selected_restaurant_row.iloc[0].get("latest_segment", "Unknown")
+
+                segment_advice = {
+                    "Rising Stars":            ("Scale what's working before momentum plateaus. Double down on your best-performing channel.", "🟢"),
+                    "Emerging Opportunities":  ("Conversion efficiency is the priority — get more bookings from existing traffic before increasing spend.", "🟡"),
+                    "Established Players":     ("Focus on retention and upsell. Acquisition costs are high; loyal guests have higher LTV.", "🔵"),
+                    "Needs Attention":         ("Diagnose the funnel before spending on campaigns. Traffic may not be the problem.", "🔴"),
+                }.get(active_momentum, ("Insufficient momentum data to generate directional advice.", "⚪"))
+
+                # st.markdown("#### 💡 Strategic Action Plan")
+
+                # if not top_recs.empty:
+                #     active_momentum = selected_restaurant_row.iloc[0].get("latest_segment", "Unknown")
+                #     segment_framing = {
+                #         "Rising Stars": (
+                #             "You are in a high-growth phase. Your priority is **scaling what works** "
+                #             "before momentum plateaus."
+                #         ),
+                #         "Emerging Opportunities": (
+                #             "You have strong growth signals but limited current scale. "
+                #             "The focus should be **conversion efficiency** — getting more bookings from existing traffic."
+                #         ),
+                #         "Established Players": (
+                #             "Growth has stabilised. The opportunity lies in **retention and upsell** "
+                #             "rather than pure acquisition."
+                #         ),
+                #         "Needs Attention": (
+                #             "Performance signals are weak. Before investing in new campaigns, "
+                #             "**diagnose the funnel** — traffic may not be the problem."
+                #         ),
+                #     }.get(active_momentum, "")
+
+                #     top_strat = top_recs.iloc[0]
+                #     s_name = top_strat['strategy_name']
+                #     s_channel = top_strat['channel']
+                #     s_roi = top_strat['med_roi']
+                #     s_uplift = top_strat['med_rev_uplift']
+
+                #     top_channels = top_recs['channel'].value_counts()
+                #     dominant_channel = top_channels.index[0] if top_channels.iloc[0] > 1 else None
+
+                #     narrative = ""
+                #     if segment_framing:
+                #         narrative += segment_framing + "\n\n"
+
+                #     narrative += (
+                #         f"Based on the behavior of high-momentum restaurants with similar digital conversion rates "
+                #         f"and themes, your immediate focus should be **{s_name}** via **{s_channel}**. "
+                #     )
+
+                #     if pd.notna(s_roi) and s_roi > 0:
+                #         narrative += (
+                #             f"Peers utilizing this exact approach have historically seen a median ROI of "
+                #             f"**{s_roi:.1f}x** and a revenue uplift of **{_fmt_pct(s_uplift)}**. "
+                #         )
+
+                #     if dominant_channel:
+                #         narrative += (
+                #             f"\n\n**Channel Insight:** Notice that **{dominant_channel}** appears frequently among "
+                #             f"your top matches. This strongly suggests that your target demographic is highly responsive "
+                #             f"to interventions on this specific platform, making it the safest bet for your ad spend."
+                #         )
+
+                #     if len(top_recs) > 1:
+                #         second_strat = top_recs.iloc[1]
+                #         narrative += (
+                #             f"\n\n**Execution Steps:** \n"
+                #             f"1. **Anchor:** Launch the `{s_name}` campaign first as your primary growth lever.\n"
+                #             f"2. **Layer:** Once baseline metrics stabilize, introduce `{second_strat['strategy_name']}` "
+                #             f"({second_strat['channel']}) to capture residual traffic and diversify your funnel."
+                #         )
+
+                #     st.success(narrative)
+                
+                grounded_advice, segment_icon = segment_advice
+
+                # # Derive top strategy stats for the brief
+                # top_strat        = top_recs.iloc[0] if not top_recs.empty else None
+                # has_data         = top_strat is not None and pd.notna(top_strat.get("med_rev_uplift"))
+                # reliable_peers   = int(top_recs["is_reliable"].sum()) if "is_reliable" in top_recs.columns else 0
+                # dominant_channel = top_recs["channel"].value_counts().index[0] if not top_recs.empty else "Unknown"
+
+                # grounded_lines = [
+                #     f"**{segment_icon} Segment:** {active_momentum} — {grounded_advice}",
+                #     "",
+                # ]
+
+                # if top_strat is not None:
+                #     uplift_str = f"{top_strat['med_rev_uplift']:.1%}" if has_data else "no uplift data recorded"
+                #     grounded_lines += [
+                #         f"**📌 Priority Campaign:** `{top_strat['strategy_name']}` via **{top_strat['channel']}** "
+                #         f"— {uplift_str} median uplift across {int(top_strat.get('peers_using', 0))} peer(s).",
+                #         "",
+                #         f"**📡 Dominant Channel:** {dominant_channel} appears in {int(top_recs['channel'].value_counts().iloc[0])} of "
+                #         f"{len(top_recs)} recommended strategies for this peer group.",
+                #         "",
+                #         f"**✅ Reliability:** {reliable_peers}/{len(top_recs)} strategies are backed by ≥2 peers with recorded outcomes.",
+                #     ]
+                # else:
+                #     grounded_lines.append("_No peer-validated strategies available. Try increasing the number of peers._")
+
+                # grounded_brief = "\n".join(grounded_lines)
+
+                # st.markdown("---")
+                # st.markdown("#### 📋 Strategy Brief")
+                # st.caption("Deterministic summary based on peer data — always available regardless of AI status.")
+                # with st.container(border=True):
+                #     st.markdown(grounded_brief)
+
+                # # Download button for the grounded brief (borrowed from strategy.py)
+                # st.download_button(
+                #     label="⬇️ Download Strategy Brief",
+                #     data="PEER STRATEGY BRIEF\n%s\n\n%s" % (
+                #         selected_restaurant_row.iloc[0].get("name", "Unknown"),
+                #         grounded_brief.replace("**", "").replace("`", "")   # strip markdown for plain text
+                #     ),
+                #     file_name="strategy_brief_%s.txt" % selected_restaurant_row.iloc[0].get("name", "Unknown").replace(" ", "_"),
+                #     mime="text/plain",
+                # )
+
+                # ── OPTIONAL AI NARRATIVE (button-triggered, borrowed from strategy.py) ──────
+                st.markdown("---")
+                st.markdown("#### 🤖 Optional AI Narrative")
+                st.caption("Uses Gemini to synthesise peer campaign evidence into a narrative. The Strategy Brief above is the source of truth.")
+
+                ai_key = "ai_playbook_%s" % selected_restaurant_row.iloc[0].get("name", "")
+
+                gen_col, clr_col = st.columns([3, 1])
+                with gen_col:
+                    generate_ai = st.button("✨ Generate AI Narrative", key="gen_ai_peer", use_container_width=True)
+                with clr_col:
+                    if st.button("🗑️ Clear", key="clr_ai_peer", use_container_width=True):
+                        st.session_state[ai_key] = None
+
+                if generate_ai:
+                    prompt = build_recommendation_prompt(
+                        restaurant_name=selected_restaurant_row.iloc[0].get("name", "Unknown"),
+                        momentum=active_momentum,
+                        theme=selected_restaurant_row.iloc[0].get("theme", "Unknown"),
+                        active_gmv=active_gmv,
+                        active_conv=selected_restaurant_row.iloc[0].get("avg_view_to_purchase", 0.0) or 0.0,
+                        top_recs=top_recs,
+                        top_peers=display_peers,   # enriched version with best_channel, reliability etc.
+                    )
+                    _phash = hashlib.sha256(prompt.encode()).hexdigest()
+                    with st.spinner("Gemini is analysing peer strategies..."):
+                        try:
+                            st.session_state[ai_key] = generate_ai_playbook(prompt, _prompt_hash=_phash)
+                        except Exception as e:
+                            st.error("AI generation failed: %s" % e)
+                            st.session_state[ai_key] = None
+
+                if st.session_state.get(ai_key):
+                    with st.container(border=True):
+                        st.markdown(st.session_state[ai_key])
+                    st.download_button(
+                        label="⬇️ Download AI Narrative",
+                        data="AI STRATEGY NARRATIVE\n%s\n\n%s" % (
+                            selected_restaurant_row.iloc[0].get("name", "Unknown"),
+                            st.session_state[ai_key]
+                        ),
+                        file_name="ai_narrative_%s.txt" % selected_restaurant_row.iloc[0].get("name", "Unknown").replace(" ", "_"),
+                        mime="text/plain",
+                    )
+
+                # st.markdown("---")
+                # st.markdown("#### 🧠 Strategic Playbook")
+                # st.caption(
+                #     f"Generated based on {len(top_peers)} similar peers · "
+                #     f"{len(top_recs)} validated strategies · Segment: {active_momentum}"
+                # )
+
+                # # Step 1: build the structured prompt from peer + strategy data
+                # prompt = build_recommendation_prompt(
+                #     restaurant_name=selected_restaurant_row.iloc[0].get("name", "Unknown"),
+                #     momentum=active_momentum,
+                #     theme=selected_restaurant_row.iloc[0].get("theme", "Unknown"),
+                #     active_gmv=active_gmv,
+                #     active_conv=selected_restaurant_row.iloc[0].get("avg_view_to_purchase", 0.0) or 0.0,
+                #     top_recs=top_recs,
+                #     top_peers=top_peers,
+                # )
+ 
+                # # Step 2: call the LLM and render the response
+                # # _prompt_hash ensures the cache key is based on prompt content, not call position
+                # _phash = hashlib.sha256(prompt.encode()).hexdigest()
+                # with st.spinner("Generating strategic playbook..."):
+                #     playbook_text = generate_ai_playbook(prompt, _prompt_hash=_phash)
+ 
+                # with st.container(border=True):
+                #     st.markdown(playbook_text)
+ 
+                # # Optional: let manager flag if it's useful
+                # col_fb1, col_fb2, _ = st.columns([1, 1, 6])
+                # with col_fb1:
+                #     if st.button("👍 Useful", key="playbook_up"):
+                #         st.toast("Feedback recorded — thanks!")
+                # with col_fb2:
+                #     if st.button("👎 Not relevant", key="playbook_down"):
+                #         st.toast("Noted — we'll improve the model.")
