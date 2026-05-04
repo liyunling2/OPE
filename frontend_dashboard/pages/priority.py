@@ -266,7 +266,7 @@ def render():
             | # | Condition | Interpretation | Penalty |
             |---|---|---|---|
             | R1 | < 3 consecutive months of GA4 data | High campaign reliance; organic demand unestablished | `ga4_demand × −20%` |
-            | R2 | `avg_lift_per_day > 0` AND `ga_campaign_responsiveness < 0` | Booking & GA4 signals move in opposite directions | `ga4_demand × −10%` |
+            | R2 | `avg_lift_per_day > 0` AND `ga_campaign_responsiveness < 0` | Internal campaign & GA4 signals move in opposite directions | `ga4_demand × −10%` |
             | R3 | < 3 consecutive months of GA campaign data | Too few GA4 observations for reliable responsiveness | `ga_campaign_responsiveness × −20%` |
             | R4 | avg GMV per view < 1 | Campaigns correlate with worse funnel performance | `ga_campaign_responsiveness × −10%` |
 
