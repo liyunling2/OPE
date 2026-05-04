@@ -1450,6 +1450,30 @@ def _build_strategy_name(df: pd.DataFrame) -> pd.Series:
     return pd.Series(strategy_name, index=df.index).str.replace(r"\s+", " ", regex=True).str.strip()
 
 
+def _build_marketing_campaign_name(df: pd.DataFrame) -> pd.Series:
+    channel = _series_or_default(df, "channel", "Unknown").str.upper().str.strip()
+    crm_name = _series_or_default(df, "crm_campaign_name", "").str.strip()
+    crm_topic = _series_or_default(df, "crm_topic", "").str.strip()
+    fb_campaign = _series_or_default(df, "fb_campaign", "").str.strip()
+    kol_user = _series_or_default(df, "kol_username", "").str.strip()
+    activity_id = _series_or_default(df, "activity_id", "").str.strip()
+
+    campaign_name = np.where(
+        channel.eq("CRM"),
+        np.where(crm_name.ne(""), crm_name, np.where(crm_topic.ne(""), crm_topic, activity_id)),
+        np.where(
+            channel.eq("FB"),
+            np.where(fb_campaign.ne(""), fb_campaign, activity_id),
+            np.where(
+                channel.eq("KOL"),
+                np.where(kol_user.ne(""), "@" + kol_user, activity_id),
+                activity_id,
+            ),
+        ),
+    )
+    return pd.Series(campaign_name, index=df.index).replace("", "Unknown Campaign").str.replace(r"\s+", " ", regex=True).str.strip()
+
+
 def _build_strategy_family(df: pd.DataFrame) -> pd.Series:
     channel = _series_or_default(df, "channel", "Unknown").str.upper().str.strip()
     raw_strategy = _series_or_default(df, "strategy_name", "")
@@ -1512,6 +1536,7 @@ def load_cluster_strategy_outcomes() -> pd.DataFrame:
             "cluster_label",
             "strategy_name",
             "strategy_family",
+            "campaign_name",
             "restaurant_name",
             "restaurant_id",
             "latest_segment",
@@ -1589,6 +1614,7 @@ def load_cluster_strategy_outcomes() -> pd.DataFrame:
 
     merged["strategy_name"] = _build_strategy_name(merged)
     merged["strategy_family"] = _build_strategy_family(merged)
+    merged["campaign_name"] = _build_marketing_campaign_name(merged)
 
     merged["bookings_before"] = pd.to_numeric(merged.get("bookings_baseline"), errors="coerce")
     merged["bookings_after"] = pd.to_numeric(merged.get("bookings_during"), errors="coerce")
@@ -1635,6 +1661,11 @@ def load_cluster_strategy_outcomes() -> pd.DataFrame:
     else:
         raw_family = _series_or_default(out_df, "strategy_family", "")
         out_df["strategy_family"] = raw_family.where(raw_family.str.strip().ne(""), _build_strategy_family(out_df))
+    if "campaign_name" not in out_df.columns:
+        out_df["campaign_name"] = _build_marketing_campaign_name(out_df)
+    else:
+        raw_campaign = _series_or_default(out_df, "campaign_name", "")
+        out_df["campaign_name"] = raw_campaign.where(raw_campaign.str.strip().ne(""), _build_marketing_campaign_name(out_df))
 
     numeric_cols = [
         "cluster_id",
@@ -1713,6 +1744,7 @@ def load_cluster_strategy_outcomes() -> pd.DataFrame:
             "cluster_label",
             "strategy_name",
             "strategy_family",
+            "campaign_name",
             "restaurant_name",
             "restaurant_id",
             "latest_segment",
