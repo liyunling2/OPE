@@ -197,7 +197,7 @@ def render():
     is_seasonal_series = coerce_bool_series(priority_df, "is_seasonal", default=False)
 
     k1, k2, k3, k4, k5, k6 = st.columns(6)
-    k1.metric("In Priority List", str(int(priority_df["is_in_priority_list"].sum())))
+    k1.metric("In Priority List", len(priority_df))
     def ct(kw): return sum(kw in str(t).lower() for t in priority_df["priority_tier"])
     k2.metric("Proven",   str(ct("proven")))
     k3.metric("Untapped", str(ct("untapped")))
