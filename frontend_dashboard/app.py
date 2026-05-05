@@ -5,7 +5,7 @@ Run with: streamlit run app.py
 import base64
 import sys
 from pathlib import Path
-
+from data.loader import load_priority, load_momentum, load_momentum_segments, SEGMENT_COLORS
 import streamlit as st
 
 APP_DIR = Path(__file__).resolve().parent
@@ -19,6 +19,17 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+
+priority_df = load_priority()
+momentum_df  = load_momentum()
+logo_b64  = base64.b64encode(LOGO_PATH.read_bytes()).decode("utf-8")
+
+if "selected_restaurant" not in st.session_state:
+    st.session_state["selected_restaurant"] = "All"
+
+if "selected_segment" not in st.session_state:
+    st.session_state["selected_segment"] = "All"
+
 
 st.markdown(
     """
@@ -76,17 +87,11 @@ section.main > div.block-container {
 }
 
 .header-shell {
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 0;
-    padding: 1rem 1.25rem 0.9rem;
-    border-radius: 26px 26px 0 0;
-    background:
-        radial-gradient(circle at top left, rgba(239, 68, 68, 0.18), transparent 28%),
-        linear-gradient(135deg, #0f172a 0%, #121c34 48%, #0b1220 100%);
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    border-bottom: none;
-    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.22);
+    padding: 1.5rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #0f172a 0%, #121c34 48%, #0b1220 100%);
+    color: #fff;
+    margin-bottom: 1.5rem;
 }
 
 .header-shell::after {
@@ -164,15 +169,15 @@ div.stRadio {
 }
 
 div.stRadio > div[role="radiogroup"] {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 0.4rem;
-    padding: 0.4rem;
-    background: rgba(15, 23, 42, 0.62);
+    display: flex !important;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #0f172a 0%, #121c34 48%, #0b1220 100%);
     border: 1px solid #22304b;
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 0 0 24px 24px;
-    box-shadow: 0 18px 34px rgba(15, 23, 42, 0.16);
+    border-radius: 16px;
+    box-shadow: 0 12px 24px rgba(17, 24, 39, 0.18);
+    padding: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 div.stRadio > div[role="radiogroup"] > label {
@@ -235,7 +240,6 @@ div.stRadio p {
     unsafe_allow_html=True,
 )
 
-logo_b64 = base64.b64encode(LOGO_PATH.read_bytes()).decode("utf-8")
 st.markdown(
     f"""
     <div class="header-shell">
@@ -244,17 +248,39 @@ st.markdown(
                 <img src="data:image/png;base64,{logo_b64}" alt="HungryHub logo" />
             </div>
             <div class="brand-copy">
-                <div class="brand-kicker">HungryHub Intelligence</div>
-                <h1 class="brand-title">Growth Command Center</h1>
-                <p class="brand-subtitle">
-                    Monitor restaurant momentum, priority, cluster themes, and Google Ads efficiency in one operating view.
-                </p>
+                <h2>Identify. <span style="color:#cc4c33;">Prioritise.</span> Grow.</h2>
+                <p>Monitor restaurant momentum, priority, cluster themes, and Google Ads efficiency in one operating view.</p>
             </div>
         </div>
     </div>
 """,
     unsafe_allow_html=True,
 )
+
+
+col1, col2  = st.columns([1, 1])
+
+all_names = sorted(momentum_df["name"].unique())
+segments_available = sorted(momentum_df["latest_segment"].dropna().unique()) if "latest_segment" in momentum_df.columns else []
+
+with col1:
+    st.session_state["selected_restaurant"] = st.selectbox(
+        "Restaurant",
+        all_names,
+        index=all_names.index(st.session_state["selected_restaurant"]) 
+        if st.session_state["selected_restaurant"] in all_names else 0
+    )
+
+with col2:
+    st.session_state["selected_segment"] = st.selectbox(
+        "Segment",
+        ["All"] + (segments_available if segments_available else list(SEGMENT_COLORS.keys())),
+        index=(["All"] + (segments_available if segments_available else list(SEGMENT_COLORS.keys()))).index(
+            st.session_state["selected_segment"]
+        )
+    )
+
+
 
 page = st.radio(
     "Navigation",
@@ -285,3 +311,6 @@ elif page == "Strategy":
     from pages import strategy
 
     strategy.render()
+
+
+

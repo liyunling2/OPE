@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-pages/overview.py
-Page 1 — Restaurant Explorer
-Shows restaurant details, current performance metrics, and booking trends.
-"""
-
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
@@ -21,446 +14,246 @@ from data.loader import (
 from theme import CHART_THEME, MUTED_TEXT, SOFT_DIVIDER
 
 
-def fmt_thb(val):
-    if pd.isna(val):
-        return "—"
-    if val >= 1_000_000:
-        return f"฿{val/1_000_000:.1f}M"
-    if val >= 1_000:
-        return f"฿{val/1_000:.0f}K"
-    return f"฿{val:.0f}"
+_CSS = """
+<style>
+
+.ov-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+}
+
+.ov-step-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+.ov-step-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: linear-gradient(90deg, #cc0000, #ef4444);
+    border-radius: 16px 16px 0 0;
+}
+.ov-step-num {
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+}
+.ov-step-title {
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 0.6rem;
+    line-height: 1.25;
+}
+.ov-step-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin: 0 0 1rem;
+}
+.ov-tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.ov-tag {
+    padding: 3px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+.ov-tag-red  { background: #fff0ee; color: #993c1d; border: 1px solid #f0997b; }
+.ov-tag-blue { background: #e6f1fb; color: #185fa5; border: 1px solid #85b7eb; }
+.ov-tag-teal { background: #e1f5ee; color: #0f6e56; border: 1px solid #5dcaa5; }
+
+.ov-howto-item {
+    display: flex;
+    gap: 1.1rem;
+    align-items: flex-start;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.ov-howto-item:last-child { border-bottom: none; }
+.ov-howto-num {
+    flex: 0 0 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+.ov-howto-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 4px;
+}
+.ov-howto-desc {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.ov-glossary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+.ov-glossary-row {
+    display: flex;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.87rem;
+    align-items: flex-start;
+}
+.ov-glossary-row:last-child { border-bottom: none; }
+.ov-glossary-term {
+    flex: 0 0 190px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.4;
+}
+.ov-glossary-def {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+</style>
+"""
 
 
-def fmt_pct(val):
-    if pd.isna(val):
-        return "-"
-    return f"{val:.1%}"
+def render() -> None:
+    st.markdown(_CSS, unsafe_allow_html=True)
 
+    # STEP CARDS
+    st.markdown('### Our Approach ')
+    c1, c2 = st.columns(2, gap="medium")
 
-def has_display_values(series: pd.Series) -> bool:
-    if series is None or len(series) == 0:
-        return False
-    if pd.api.types.is_numeric_dtype(series) or pd.api.types.is_bool_dtype(series) or pd.api.types.is_datetime64_any_dtype(series):
-        return series.notna().any()
-
-    text = series.astype("string").str.strip()
-    valid = text.notna() & ~text.isin(["", "-", "nan", "None", "<NA>"])
-    return bool(valid.any())
-
-
-def segment_pill(segment: str) -> str:
-    pill_map = {
-        "Rising Stars": ("rgba(34, 197, 94, 0.18)", "#dcfce7", "rgba(134, 239, 172, 0.28)"),
-        "Emerging Opportunities": ("rgba(59, 130, 246, 0.18)", "#dbeafe", "rgba(147, 197, 253, 0.28)"),
-        "Established Players": ("rgba(168, 85, 247, 0.18)", "#f3e8ff", "rgba(216, 180, 254, 0.28)"),
-        "Needs Attention": ("rgba(239, 68, 68, 0.18)", "#fee2e2", "rgba(252, 165, 165, 0.28)"),
-    }
-    bg, text, border = pill_map.get(
-        segment,
-        ("rgba(245, 158, 11, 0.18)", "#fef3c7", "rgba(253, 230, 138, 0.28)"),
-    )
-    return (
-        "<span style='display:inline-flex; align-items:center; padding:0.3rem 0.72rem; "
-        f"border-radius:999px; background:{bg}; border:1px solid {border}; color:{text}; "
-        "font-size:0.78rem; font-weight:700; line-height:1; white-space:nowrap;'>"
-        f"{segment}</span>"
-    )
-
-
-def render():
-    momentum_df  = load_momentum()
-    priority_df  = load_priority()
-    bookings_raw_df = load_momentum_raw_bookings()
-
-    st.markdown("## Restaurant Explorer")
-    st.markdown(
-        f"<p style='color:{MUTED_TEXT}; margin-top:-0.5rem;'>Drill into any restaurant's performance, growth trajectory, and momentum segment.</p>",
-        unsafe_allow_html=True,
-    )
-    st.markdown("---")
-
-    # ── Filters ───────────────────────────────────────────────────────────────
-    col_f1, col_f2, col_f3 = st.columns([2, 1, 1])
-
-    all_names = sorted(momentum_df["name"].unique())
-    with col_f1:
-        selected = st.selectbox("Select Restaurant", all_names)
-
-    # Segment filter for the summary table at the bottom
-    segments_available = sorted(momentum_df["latest_segment"].dropna().unique()) if "latest_segment" in momentum_df.columns else []
-    with col_f2:
-        seg_filter = st.selectbox(
-            "Filter table by segment",
-            ["All"] + (list(SEGMENT_COLORS.keys()) if not segments_available else segments_available)
-        )
-    with col_f3:
-        sort_by = st.selectbox(
-            "Sort table by",
-            ["monthly_bookings", "monthly_gmv", "gmv_per_ga_view", "score_growth", "score_perf"],
-        )
-
-    st.markdown("---")
-
-    # ── Restaurant detail ─────────────────────────────────────────────────────
-    hist    = get_restaurant_history(momentum_df, selected)
-    p_row   = get_restaurant_priority_row(priority_df, selected)
-    latest  = hist.sort_values("year_month").iloc[-1] if len(hist) else {}
-
-    if len(hist) == 0:
-        st.warning("No data found for this restaurant.")
-        return
-
-    # Header row
-    hc1, hc2 = st.columns([3, 1])
-    hero_title_color = "#f8fafc"
-    hero_meta_color = "#cbd5e1"
-    hero_subtle_color = "#94a3b8"
-    with hc1:
-        segment = p_row.get("latest_segment", latest.get("latest_segment", "—"))
-        location = latest.get("location", "Bangkok")
-        cuisine  = latest.get("cuisine", "—")
-        st.markdown(f"""
-        <div style='margin-bottom: 0.5rem; display:flex; align-items:center; gap:0.7rem; flex-wrap:wrap;'>
-            <span style='font-family: "DM Sans", sans-serif; font-size: 1.8rem; font-weight: 700; color: {hero_title_color};'>{selected}</span>
-            {segment_pill(segment)}
-        </div>
-        <div style='color: {hero_meta_color}; font-size: 0.85rem;'>
-            📍 {location} &nbsp;·&nbsp; 🍴 {cuisine}
-            &nbsp;·&nbsp; Growth signal: <b style='color:#cc0000;'>{latest.get("growth_signal_used", "—")}</b>
-        </div>
-        """, unsafe_allow_html=True)
-    with hc2:
-        priority_score = p_row.get("priority_score", None)
-        if priority_score is not None and pd.notna(priority_score):
-            tier = p_row.get("priority_tier", "—")
-            reason = p_row.get("priority_reason", "—")
-            st.markdown(f"""
-            <div style='text-align:right;'>
-                <div style='font-size:0.75rem; color:{hero_subtle_color}; text-transform:uppercase; letter-spacing:0.08em;'>Priority Score</div>
-                <div style='font-family: "DM Sans", sans-serif; font-weight: 700; font-size: 2rem; color: #cc0000;'>{priority_score:.0f}</div>
-                <div style='font-size:0.75rem; color:{hero_meta_color};'>{tier}</div>
-                <div style='font-size:0.75rem; color:{hero_subtle_color}; margin-top:0.2rem;'>{reason}</div>
+    with c1:
+        st.markdown(
+            """
+            <div class="ov-step-card">
+                <p class="ov-step-num">Step 1</p>
+                <p class="ov-step-title">Rank high-potential restaurants</p>
+                <p class="ov-step-desc">
+                    Three engines work together to identify and rank which restaurants
+                    deserve attention and investment based on momentum, peer benchmarking,
+                    and marketing responsiveness.
+                </p>
+                <div class="ov-tag-row">
+                    <span class="ov-tag ov-tag-red">Momentum Engine</span>
+                    <span class="ov-tag ov-tag-blue">Clustering</span>
+                    <span class="ov-tag ov-tag-teal">Priority Scoring</span>
+                </div>
             </div>
-            """, unsafe_allow_html=True)
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # ── KPI metrics ───────────────────────────────────────────────────────────
-    m1, m2, m3, m4 = st.columns(4)
-    m5, m6, m7, m8 = st.columns(4)
-    bk     = int(latest.get("monthly_bookings", 0))
-    rev    = latest.get("monthly_gmv", 0)
-    avg_rev = latest.get("avg_gmv_per_booking", 0)
-    guests  = latest.get("avg_guests", 0)
-    bk_growth = latest.get("booking_growth_rolling", 0)
-    gmv_per_ga_view = latest.get("gmv_per_ga_view", pd.NA)
-    ga_add_to_cart_rate = latest.get("ga_add_to_cart_rate", pd.NA)
-    ga_view_to_purchase_rate = latest.get("ga_view_to_purchase_rate", pd.NA)
-
-    # compute MoM delta for bookings
-    if len(hist) >= 2:
-        prev_bk = hist.sort_values("year_month").iloc[-2].get("monthly_bookings", bk)
-        bk_delta = int(bk - prev_bk)
-    else:
-        bk_delta = 0
-
-    m1.metric("Monthly Bookings",      f"{bk:,}",         f"{bk_delta:+,} vs prev month")
-    m2.metric("Monthly Revenue",       fmt_thb(rev),       "")
-    m3.metric("GMV / GA View",         fmt_thb(gmv_per_ga_view), "")
-    m4.metric("GA Add to Cart",        fmt_pct(ga_add_to_cart_rate), "")
-    m5.metric("Avg Rev / Booking",     fmt_thb(avg_rev),   "")
-    m6.metric("Avg Guests / Booking",  f"{guests:.1f}",    "")
-    m7.metric("GA View to Purchase",   fmt_pct(ga_view_to_purchase_rate), "")
-    m8.metric("Rolling Growth",        fmt_pct(bk_growth), "YoY" if latest.get("growth_signal_used") == "YoY" else "MoM")
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # ── Charts ────────────────────────────────────────────────────────────────
-    tab1, tab2, tab3 = st.tabs(["📦 Booking Volume", "💰 Revenue", "📈 MoM vs YoY Growth"])
-
-    with tab1:
-        fig = go.Figure()
-        fig.add_trace(go.Bar(
-            x=hist["year_month"], y=hist["monthly_bookings"],
-            marker_color="#3b82f6", marker_opacity=0.85,
-            name="Bookings",
-            hovertemplate="<b>%{x|%b %Y}</b><br>Bookings: %{y:,}<extra></extra>"
-        ))
-        # 3-month rolling average line
-        hist_sorted = hist.sort_values("year_month")
-        hist_sorted["bk_ma3"] = hist_sorted["monthly_bookings"].rolling(3, min_periods=1).mean()
-        fig.add_trace(go.Scatter(
-            x=hist_sorted["year_month"], y=hist_sorted["bk_ma3"],
-            mode="lines", line=dict(color="#f0a500", width=2, dash="dot"),
-            name="3m avg",
-            hovertemplate="3m avg: %{y:.0f}<extra></extra>"
-        ))
-        fig.update_layout(
-            **CHART_THEME,
-            height=280,
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
-            barmode="overlay",
+            """,
+            unsafe_allow_html=True,
         )
-        st.plotly_chart(fig, width="stretch")
 
-    with tab2:
-        fig2 = go.Figure()
-        fig2.add_trace(go.Scatter(
-            x=hist["year_month"], y=hist["monthly_gmv"],
-            fill="tozeroy",
-            line=dict(color="#2ecc71", width=2),
-            fillcolor="rgba(46,204,113,0.12)",
-            name="Revenue (THB)",
-            hovertemplate="<b>%{x|%b %Y}</b><br>฿%{y:,.0f}<extra></extra>"
-        ))
-        fig2.update_layout(**CHART_THEME, height=280)
-        st.plotly_chart(fig2, width="stretch")
-
-    with tab3:
-        has_mom = "booking_growth_mom_rolling" in hist.columns
-        has_yoy = (
-            "booking_growth_yoy_rolling" in hist.columns
-            and hist["booking_growth_yoy_rolling"].notna().any()
+    with c2:
+        st.markdown(
+            """
+            <div class="ov-step-card">
+                <p class="ov-step-num">Step 2</p>
+                <p class="ov-step-title">Define marketing strategy</p>
+                <p class="ov-step-desc">
+                    Measure how marketing activities translate to bookings, then get
+                    tailored channel-level strategy recommendations for each restaurant
+                    to maximise ROI.
+                </p>
+                <div class="ov-tag-row">
+                    <span class="ov-tag ov-tag-red">Marketing Effectiveness</span>
+                    <span class="ov-tag ov-tag-teal">Strategy Recommendations</span>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
-        mom_col = "booking_growth_mom_rolling" if has_mom else "booking_growth_rolling"
-        is_seasonal = bool(latest.get("is_seasonal", False))
 
-        c_mom, c_yoy = st.columns(2)
+    # HOW TO USE
+    st.markdown('<hr class="ov-divider">', unsafe_allow_html=True)
+    st.markdown('### A walkthrough on how to use this tool')
 
-        # ── MoM panel ────────────────────────────────────────────────────────
-        with c_mom:
-            st.markdown(
-                f"<p style='text-align:center;font-size:0.85rem;color:{MUTED_TEXT};margin-bottom:4px;'>"
-                "📅 <b style='color:#3b82f6;'>Month-over-Month</b> — short-term acceleration</p>",
-                unsafe_allow_html=True,
-            )
-            fm = go.Figure()
-            fm.add_trace(go.Scatter(
-                x=hist["year_month"], y=hist[mom_col],
-                mode="lines+markers",
-                line=dict(color="#3b82f6", width=2), marker=dict(size=5),
-                fill="tozeroy", fillcolor="rgba(59,130,246,0.08)", name="MoM 3m avg",
-                hovertemplate="<b>%{x|%b %Y}</b><br>MoM: %{y:.1%}<extra></extra>",
-            ))
-            fm.add_hline(y=0, line_dash="dash", line_color=SOFT_DIVIDER, line_width=1)
-            fm.update_layout(
-                **{k: v for k, v in CHART_THEME.items() if k != "yaxis"},
-                height=240, showlegend=False,
-                yaxis=dict(**CHART_THEME["yaxis"], tickformat=".0%"),
-            )
-            st.plotly_chart(fm, width="stretch")
+    steps = [
+        (
+            "Go to the Priority tab",
+            "The page shows how the restaurants are ranked by their priority scores, GMV per GA view and No. of campaigns. "
+        ),
+        (
+            "Filter by segments or clusters",
+            "Use the filter bar at the top to narrow down by segments and cluster type."
+            "Filters persist across all tabs.",
+        ),
+        (
+            "Inspect a restaurant's detail view in the clustering tab",
+            "something"
+        ),
+        (
+            "Review the Strategy tab",
+            "The Marketing Strategy panel shows which channels have worked historically "
+            "and what targeted actions are advised to increase future bookings for that restaurant.",
+        ),
+        (
+            "Data driven actions",
+            "With the insights gained, use it to curate marketing strategies to specific restaurants"
+        ),
+    ]
 
-        # ── YoY panel ────────────────────────────────────────────────────────
-        with c_yoy:
-            st.markdown(
-                f"<p style='text-align:center;font-size:0.85rem;color:{MUTED_TEXT};margin-bottom:4px;'>"
-                "📆 <b style='color:#f0a500;'>Year-over-Year</b> — seasonality-adjusted trend</p>",
-                unsafe_allow_html=True,
-            )
-            fy = go.Figure()
-            if has_yoy:
-                yv = hist[hist["booking_growth_yoy_rolling"].notna()]
-                fy.add_trace(go.Scatter(
-                    x=yv["year_month"], y=yv["booking_growth_yoy_rolling"],
-                    mode="lines+markers",
-                    line=dict(color="#f0a500", width=2), marker=dict(size=5),
-                    fill="tozeroy", fillcolor="rgba(240,165,0,0.08)", name="YoY 3m avg",
-                    hovertemplate="<b>%{x|%b %Y}</b><br>YoY: %{y:.1%}<extra></extra>",
-                ))
-                fy.add_hline(y=0, line_dash="dash", line_color=SOFT_DIVIDER, line_width=1)
-            else:
-                fy.add_annotation(
-                    text="YoY not available — <12 months of history",
-                    x=0.5, y=0.5, xref="paper", yref="paper",
-                    showarrow=False, font=dict(color=MUTED_TEXT, size=13),
-                )
-            fy.update_layout(
-                **{k: v for k, v in CHART_THEME.items() if k != "yaxis"},
-                height=240, showlegend=False,
-                yaxis=dict(**CHART_THEME["yaxis"], tickformat=".0%"),
-            )
-            st.plotly_chart(fy, width="stretch")
-
-        # ── Signal callout ────────────────────────────────────────────────────
-        if is_seasonal:
-            st.warning(
-                "🌊 **Seasonal pattern detected** — strong recent MoM but YoY is below portfolio "
-                "median. Growth may reflect a seasonal peak, not sustained momentum. Consider "
-                "timing activation to align with this restaurant's seasonal peak."
-            )
-        elif has_yoy:
-            last_mom = float(hist[mom_col].iloc[-1]) if len(hist) else 0
-            last_yoy = float(hist["booking_growth_yoy_rolling"].dropna().iloc[-1]) if has_yoy else 0
-            if last_mom > 0 and last_yoy > 0:
-                st.success(
-                    "✅ **Both signals positive** — MoM and YoY growth are both positive. "
-                    "Strong candidate for marketing activation."
-                )
-            elif last_yoy < 0:
-                st.info(
-                    "ℹ️ YoY growth is negative despite recent MoM gains — monitor before activating."
-                )
-
-    st.markdown("---")
-
-    # ── Portfolio summary table ───────────────────────────────────────────────
-    st.markdown("### All Restaurants — Latest Snapshot")
-
-    latest_all = (
-        momentum_df.sort_values("year_month")
-        .groupby("name", as_index=False)
-        .last()
+    rows = "".join(
+        f"""
+        <div class="ov-howto-item">
+            <div class="ov-howto-num">{i}</div>
+            <div>
+                <p class="ov-howto-title">{title}</p>
+                <p class="ov-howto-desc">{desc}</p>
+            </div>
+        </div>
+        """
+        for i, (title, desc) in enumerate(steps, 1)
     )
+    st.markdown(rows, unsafe_allow_html=True)
 
-    # Merge priority metadata only (keep segment source from momentum universe).
-    if "priority_score" in priority_df.columns:
-        merge_cols = ["name", "priority_score", "priority_tier", "recommended_channel"]
-        merge_cols = [c for c in merge_cols if c in priority_df.columns]
-        latest_all = latest_all.merge(priority_df[merge_cols].drop_duplicates("name"), on="name", how="left")
 
-    # Fallback if momentum table has no segment column.
-    if "latest_segment" not in latest_all.columns and "latest_segment" in priority_df.columns:
-        latest_all = latest_all.merge(
-            priority_df[["name", "latest_segment"]].drop_duplicates("name"),
-            on="name",
-            how="left",
-        )
+    st.markdown('<hr class="ov-divider">', unsafe_allow_html=True)
 
-    # Defensive handling in case an earlier merge produced suffixed segment columns.
-    if "latest_segment" not in latest_all.columns and (
-        "latest_segment_x" in latest_all.columns or "latest_segment_y" in latest_all.columns
-    ):
-        seg_x = latest_all["latest_segment_x"] if "latest_segment_x" in latest_all.columns else pd.Series([pd.NA] * len(latest_all))
-        seg_y = latest_all["latest_segment_y"] if "latest_segment_y" in latest_all.columns else pd.Series([pd.NA] * len(latest_all))
-        latest_all["latest_segment"] = seg_x.where(seg_x.notna(), seg_y)
-        latest_all = latest_all.drop(columns=[c for c in ["latest_segment_x", "latest_segment_y"] if c in latest_all.columns])
+   
+    terms = [
+        ("Momentum Engine",
+        "Algorithm that detects restaurants with accelerating booking and revenue trends over a given time window."),
+        ("Clustering",
+        "Machine learning grouping that places restaurants with similar characteristics "
+        "(cuisine, location, size, price point) into comparable peer groups."),
+        ("Priority Score",
+        "A composite 0–100 score combining momentum, cluster rank, and marketing "
+        "responsiveness used to shortlist and rank restaurants."),
+        ("Marketing Effectiveness",
+        "A measure of how much incremental booking uplift is attributable to specific "
+        "marketing channel activities for each restaurant."),
+        ("Strategy Recommendation",
+        "Tailored, restaurant-level playbook suggesting which marketing channels and "
+        "tactics are most likely to increase bookings and ROI."),
+        ("Behavioural signals",
+        "Engagement data including page views, search impressions, review activity, and "
+        "time-on-page that indicate consumer interest in a restaurant."),
+        ("Growth signal (YoY / MoM)",
+        "The comparison window used to measure momentum — Year-on-Year (YoY) for "
+        "long-term trends, Month-on-Month (MoM) for short-term acceleration."),
+        ("Seasonal restaurant",
+        "A restaurant whose booking volume shows a statistically significant periodic "
+        "pattern tied to time of year, flagged by the momentum engine."),
+    ]
 
-    if seg_filter != "All" and "latest_segment" in latest_all.columns:
-        latest_all = latest_all[latest_all["latest_segment"].fillna("Unknown") == seg_filter]
+    df = pd.DataFrame(terms, columns=["Term", "Definition"])
 
-    if "latest_segment" in latest_all.columns:
-        latest_all["latest_segment"] = latest_all["latest_segment"].fillna("Unknown")
-
-    display_cols = [c for c in [
-        "name", "latest_segment", "monthly_bookings", "monthly_gmv",
-        "gmv_per_ga_view", "ga_add_to_cart_rate", "ga_view_to_purchase_rate",
-        "avg_gmv_per_booking", "avg_guests", "booking_growth_mom_rolling", "booking_growth_yoy_rolling",
-        "growth_signal_used", "is_seasonal", "priority_score", "priority_reason", "recommended_channel"
-    ] if c in latest_all.columns]
-
-    display_df = latest_all[display_cols].copy()
-    if sort_by in display_df.columns:
-        display_df = display_df.sort_values(sort_by, ascending=False)
-
-    # Format
-    for col in ["monthly_gmv", "gmv_per_ga_view", "avg_gmv_per_booking"]:
-        if col in display_df.columns:
-            display_df[col] = display_df[col].apply(fmt_thb)
-    for col in ["ga_add_to_cart_rate", "ga_view_to_purchase_rate"]:
-        if col in display_df.columns:
-            display_df[col] = display_df[col].apply(fmt_pct)
-    for col in ["booking_growth_rolling", "booking_growth_mom_rolling", "booking_growth_yoy_rolling"]:
-        if col in display_df.columns:
-            display_df[col] = display_df[col].apply(lambda x: f"{x:.1%}" if pd.notna(x) else "—")
-    if "priority_score" in display_df.columns:
-        display_df["priority_score"] = display_df["priority_score"].apply(lambda x: f"{x:.0f}" if pd.notna(x) else "—")
-
-    st.dataframe(
-        display_df.reset_index(drop=True),
-        width="stretch",
-        height=400,
-    )
-
-    st.markdown("---")
-    st.markdown("### Historical Booking Records")
-
-    selected_restaurant_id = pd.to_numeric(pd.Series([latest.get("restaurant_id")]), errors="coerce").iloc[0]
-    booking_hist = get_restaurant_booking_history(
-        bookings_raw_df,
-        restaurant_name=selected,
-        restaurant_id=int(selected_restaurant_id) if pd.notna(selected_restaurant_id) else None,
-    )
-
-    if booking_hist.empty:
-        st.info("No raw booking records found for this restaurant.")
-    else:
-        c1, c2, c3 = st.columns(3)
-        c1.metric("Raw Bookings", f"{len(booking_hist):,}")
-
-        min_dt = booking_hist["booking_date"].min() if "booking_date" in booking_hist.columns else pd.NaT
-        max_dt = booking_hist["booking_date"].max() if "booking_date" in booking_hist.columns else pd.NaT
-        c2.metric("First Booking", min_dt.strftime("%Y-%m-%d") if pd.notna(min_dt) else "-")
-        c3.metric("Latest Booking", max_dt.strftime("%Y-%m-%d") if pd.notna(max_dt) else "-")
-
-        rows_default = int(min(300, len(booking_hist)))
-        rows_step = 1 if len(booking_hist) < 50 else 50
-        rows_to_show = int(
-            st.number_input(
-                "Rows to display",
-                min_value=1,
-                max_value=int(len(booking_hist)),
-                value=rows_default,
-                step=rows_step,
-                key="overview_raw_booking_rows",
-            )
-        )
-
-        raw_display = booking_hist.head(rows_to_show).copy()
-        if "booking_date" in raw_display.columns:
-            raw_display["booking_date"] = pd.to_datetime(raw_display["booking_date"], errors="coerce").dt.strftime("%Y-%m-%d")
-        if "created_at" in raw_display.columns:
-            raw_display["created_at"] = pd.to_datetime(raw_display["created_at"], errors="coerce").dt.strftime("%Y-%m-%d %H:%M:%S")
-
-        if "revenue_thb" in raw_display.columns:
-            raw_display["revenue_thb"] = pd.to_numeric(raw_display["revenue_thb"], errors="coerce").apply(
-                lambda x: f"THB {x:,.0f}" if pd.notna(x) else "-"
-            )
-        if "revenue_dollars" in raw_display.columns:
-            raw_display["revenue_dollars"] = pd.to_numeric(raw_display["revenue_dollars"], errors="coerce").apply(
-                lambda x: f"${x:,.2f}" if pd.notna(x) else "-"
-            )
-        for bool_col in ["arrived", "no_show", "adjusted"]:
-            if bool_col in raw_display.columns:
-                raw_display[bool_col] = raw_display[bool_col].map({True: "Yes", False: "No"})
-
-        candidate_cols = [
-            "booking_id",
-            "booking_date",
-            "created_at",
-            "start_time",
-            "end_time",
-            "channel",
-            "medium",
-            "adults",
-            "kids",
-            "total_guests",
-            "revenue_thb",
-            "revenue_dollars",
-            "arrived",
-            "no_show",
-            "refund",
-            "adjusted",
-        ]
-        display_cols = [c for c in candidate_cols if c in raw_display.columns and has_display_values(raw_display[c])]
-        raw_display = raw_display[display_cols].rename(
-            columns={
-                "booking_id": "Booking ID",
-                "booking_date": "Booking Date",
-                "created_at": "Created At",
-                "start_time": "Start Time",
-                "end_time": "End Time",
-                "channel": "Channel",
-                "medium": "Medium",
-                "adults": "Adults",
-                "kids": "Kids",
-                "total_guests": "Total Guests",
-                "revenue_thb": "Revenue (THB)",
-                "revenue_dollars": "Revenue (USD)",
-                "arrived": "Arrived",
-                "no_show": "No Show",
-                "refund": "Refund",
-                "adjusted": "Adjusted",
-            }
-        )
-
-        st.dataframe(raw_display, width="stretch", height=360)
+    st.markdown("### Key terms")
+    st.dataframe(df, use_container_width=True, hide_index=True)

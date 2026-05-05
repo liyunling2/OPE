@@ -8,7 +8,7 @@ SOFT_DIVIDER = "#cbd5e1"
 SURFACE_COLOR = "#ffffff"
 SURFACE_ALT = "#f8f9fa"
 BORDER_COLOR = "#e0e0e0"
-ACCENT_RED = "#cc0000"
+ACCENT_RED = "#e05a3a"
 HEADER_NAVY = "#0e1628"
 SOFT_NAVY = "#7e97b8"
 

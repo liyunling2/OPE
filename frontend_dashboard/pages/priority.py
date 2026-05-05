@@ -189,6 +189,8 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def render():
+    selected_restaurant = st.session_state["selected_restaurant"]
+    selected_segment = st.session_state["selected_segment"]
     base_priority_df = load_priority()
     priority_df = build_priority_universe(base_priority_df)
     
@@ -292,9 +294,8 @@ def render():
         """
         )
     
-    with st.expander("__View Restaurant's Individual Subscores__", expanded=False):
-        breakdown_names = priority_df.sort_values("priority_score", ascending=False)["name"].tolist()
-        breakdown_name = st.selectbox("Restaurant breakdown", breakdown_names, key="priority_breakdown_name")
+    with st.expander(f"__View {selected_restaurant}'s Individual Subscores__", expanded=False):
+        breakdown_name = selected_restaurant
         brow = priority_df[priority_df["name"] == breakdown_name].iloc[0]
         st.metric("Priority Score", f"{brow.get('priority_score', 0):.2f}")
 
@@ -344,43 +345,42 @@ def render():
                         f"- :red-badge[{label}] :gray-badge[`{desc}`]"
                     )
                     
-    f1, f2, f3, f4, f5, f6 = st.columns([1, 1, 1, 1, 1, 1.4])
+
+
+    df = priority_df.copy()
+    st.markdown(f"### _Top Restaurants based on Priority Scores_")
+    st.caption("🟡 Amber bars = Seasonal flag — strong MoM but weak YoY. Timing-sensitive activation.")
+
+    f1, f3, f4, f5 = st.columns([1, 1, 1, 1])
     with f1:
         t_opts = ["All"] + priority_df["priority_tier"].dropna().unique().tolist()
         t_filt = st.selectbox("Tier", t_opts)
-    with f2:
-        has_seg = "segment" in priority_df.columns
-        s_opts  = ["All"] + (priority_df["segment"].dropna().unique().tolist() if has_seg else [])
-        s_filt  = st.selectbox("Segment", s_opts)
     with f3:
         sig_filt = st.selectbox("Signal", ["All", "YoY", "MoM"])
     with f4:
         seas_filt = st.selectbox("Seasonal", ["All", "Seasonal only", "Non-seasonal only"])
     with f5:
         min_sc = st.slider("Min Score", 0, 100, 0)
-    with f6:
-        name_search = st.text_input("Search Restaurant", placeholder="Type restaurant name", key="priority_name_search")
 
-    df = priority_df.copy()
     if t_filt != "All": df = df[df["priority_tier"] == t_filt]
-    if s_filt != "All" and has_seg: df = df[df["latest_segment"] == s_filt]
+    if selected_segment != "All": df = df[df["latest_segment"] == selected_segment]
     if sig_filt != "All" and "growth_signal_used" in df.columns:
         df = df[df["growth_signal_used"] == sig_filt]
     if seas_filt == "Seasonal only" and "is_seasonal" in df.columns:
         df = df[df["is_seasonal"].fillna(False) == True]
     if seas_filt == "Non-seasonal only" and "is_seasonal" in df.columns:
         df = df[df["is_seasonal"].fillna(False) == False]
-    if str(name_search).strip():
-        df = df[df["name"].str.contains(name_search.strip(), case=False, na=False)]
+
     df = df[df["priority_score"] >= min_sc].sort_values("priority_score", ascending=False).reset_index(drop=True)
+
+    top_n = min(10, len(df))
+    tc    = df.head(top_n)
+    st.caption(f"_Showing {top_n} restaurants_")
 
     st.caption("Showing %d of %d" % (len(df), len(priority_df)))
     if len(df) == 0:
         st.info("No restaurants match filters.")
         return
-
-    top_n = min(10, len(df))
-    tc    = df.head(top_n)
     # Seasonal restaurants get amber bars; others use tier colour
     _bar_colors = []
     for _, _row in tc.iterrows():
@@ -395,9 +395,6 @@ def render():
         text=["%.0f" % s for s in tc["priority_score"]], textposition="inside",
         textfont=dict(color="#fff", size=13),
     ))
-
-    st.markdown(f"### _Top {top_n} Restaurants based on Priority Scores_")
-    st.caption("🟡 Amber bars = Seasonal flag — strong MoM but weak YoY. Timing-sensitive activation.")
 
     fig_rank.update_layout(**layout(max(180, top_n * 36),
         xaxis=dict(**AXIS, title="Priority Score", range=[0, 105], tickfont=dict(size=13)),
@@ -414,7 +411,6 @@ def render():
     seg_col = "latest_segment" if "latest_segment" in latest_all.columns else "segment"
 
     has_segments = seg_col in latest_all.columns
-    selected_segment = None
 
     col_left, col_right = st.columns([1, 2])
     with col_left:
