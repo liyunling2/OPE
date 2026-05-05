@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-from data.loader import load_priority, load_momentum, load_momentum_segments
+from data.loader import load_cluster_assignments, load_priority, load_momentum, load_momentum_segments
 from theme import BASE_LAYOUT, AXIS, CHART_THEME, GRID_COLOR, BORDER_COLOR, MUTED_TEXT, SURFACE_COLOR, TEXT_COLOR
 
 
@@ -34,6 +34,21 @@ def fmt_pct(val):
 def fmt_thb(val):
     if val is None or pd.isna(val): return "-"
     return f"THB {val:,.2f}" if abs(val) < 1000 else f"THB {val:,.0f}"
+
+def normalize_name_series(series: pd.Series) -> pd.Series:
+    return series.fillna("").astype(str).str.strip().str.lower().str.replace(r"\s+", " ", regex=True)
+
+def fmt_cluster(row: pd.Series) -> str:
+    cluster_id = pd.to_numeric(pd.Series([row.get("cluster_id")]), errors="coerce").iloc[0]
+    cluster_label = row.get("cluster_label", None)
+    has_label = pd.notna(cluster_label) and str(cluster_label).strip() not in {"", "nan", "None"}
+    if pd.notna(cluster_id) and has_label:
+        return f"Cluster {int(cluster_id)} - {cluster_label}"
+    if pd.notna(cluster_id):
+        return f"Cluster {int(cluster_id)}"
+    if has_label:
+        return str(cluster_label)
+    return "Unclustered"
 
 def get_tier(tier):
     t = str(tier).lower()
@@ -185,6 +200,61 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
                                       if "has_marketing" in combined.columns else False
     combined["n_campaigns"]         = pd.to_numeric(combined.get("n_campaigns"), errors="coerce").fillna(0).astype(int)
 
+    cluster_df = load_cluster_assignments()
+    cluster_cols = [c for c in ["restaurant_id", "cluster_id", "cluster_label", "latest_segment"] if c in cluster_df.columns]
+    if not cluster_df.empty and "restaurant_id" in combined.columns and "restaurant_id" in cluster_cols:
+        cluster_ref = (
+            cluster_df[cluster_cols]
+            .dropna(subset=["restaurant_id"])
+            .drop_duplicates("restaurant_id")
+        )
+        combined = combined.merge(cluster_ref, on="restaurant_id", how="left", suffixes=("", "_cluster"))
+
+        for col in ["cluster_id", "cluster_label", "latest_segment"]:
+            cluster_col = f"{col}_cluster"
+            if cluster_col in combined.columns:
+                if col in combined.columns:
+                    combined[col] = combined[col].where(combined[col].notna(), combined[cluster_col])
+                else:
+                    combined[col] = combined[cluster_col]
+                combined = combined.drop(columns=[cluster_col])
+
+    if not cluster_df.empty and "name" in combined.columns and "name" in cluster_df.columns:
+        name_ref_cols = [c for c in ["name", "cluster_id", "cluster_label", "latest_segment"] if c in cluster_df.columns]
+        name_ref = cluster_df[name_ref_cols].copy()
+        name_ref["name_norm_join"] = normalize_name_series(name_ref["name"])
+        name_ref = (
+            name_ref.drop(columns=["name"])
+            .drop_duplicates("name_norm_join")
+            .rename(
+                columns={
+                    "cluster_id": "cluster_id_name_match",
+                    "cluster_label": "cluster_label_name_match",
+                    "latest_segment": "latest_segment_name_match",
+                }
+            )
+        )
+        combined["name_norm_join"] = normalize_name_series(combined["name"])
+        combined = combined.merge(name_ref, on="name_norm_join", how="left")
+
+        for col in ["cluster_id", "cluster_label", "latest_segment"]:
+            name_match_col = f"{col}_name_match"
+            if name_match_col in combined.columns:
+                if col in combined.columns:
+                    combined[col] = combined[col].where(combined[col].notna(), combined[name_match_col])
+                else:
+                    combined[col] = combined[name_match_col]
+                combined = combined.drop(columns=[name_match_col])
+        combined = combined.drop(columns=["name_norm_join"])
+
+    if "latest_segment" in combined.columns and "segment" in combined.columns:
+        combined["latest_segment"] = combined["latest_segment"].where(combined["latest_segment"].notna(), combined["segment"])
+        combined["segment"] = combined["segment"].where(combined["segment"].notna(), combined["latest_segment"])
+    elif "segment" in combined.columns:
+        combined["latest_segment"] = combined["segment"]
+    elif "latest_segment" in combined.columns:
+        combined["segment"] = combined["latest_segment"]
+
     return combined
 
 
@@ -209,10 +279,15 @@ def render():
         n_camp   = int(row.get("n_campaigns", 0)) if pd.notna(row.get("n_campaigns")) else 0
         lift     = row.get("avg_lift_per_day", None)
         gmv = row["avg_gmv_per_view"]
+        segment = row.get("latest_segment", row.get("segment", "Unknown"))
+        if pd.isna(segment) or str(segment).strip() in {"", "nan", "None"}:
+            segment = "Unknown"
         
         
         cols.append({
                 "Restaurant": name,
+                "Segment": segment,
+                "Cluster": fmt_cluster(row),
                 "Priority Score": f"{score:.0f}",
                 "GMV/GA View": f"{gmv:.0f}",
                 "No. of Campaigns": n_camp,
@@ -226,7 +301,7 @@ def render():
     sorted_display_df = display_df.sort_values(by=['GMV/GA View','Priority Score','No. of Campaigns'], ascending=[False, False, True])
     st.dataframe(
         sorted_display_df,
-        use_container_width=True,
+        width="stretch",
         height=300, hide_index=True
         )
 
@@ -294,56 +369,60 @@ def render():
         """
         )
     
-    with st.expander(f"__View {selected_restaurant}'s Individual Subscores__", expanded=False):
-        breakdown_name = selected_restaurant
-        brow = priority_df[priority_df["name"] == breakdown_name].iloc[0]
-        st.metric("Priority Score", f"{brow.get('priority_score', 0):.2f}")
-
-        ### subscores display
-        b1, b2, b3 = st.columns(3)
-        b4, b5, b6 = st.columns(3)
-        b1.metric("Growth Component", f"{brow.get('growth_component', 0):.4f}")
-        b2.metric("Booking Demand", f"{brow.get('booking_demand', 0):.4f}")
-        b3.metric("GA4 Demand", f"{brow.get('ga4_demand', 0):.4f}")
-        b4.metric("Campaign Responsiveness", f"{brow.get('campaign_responsiveness', 0):.4f}")
-        b5.metric("Internal Campaign Responsiveness", f"{brow.get('internal_mkt_campaign_responsiveness', 0):.4f}")
-        b6.metric("GA Campaign Responsiveness", f"{brow.get('avg_gmv_per_view', 0):.4f}")
-
-        breakdown_df = pd.DataFrame(
-            [
-                ("score_growth_norm", brow.get("score_growth_norm", np.nan)),
-                ("delta_growth_norm", brow.get("delta_growth_norm", np.nan)),
-                ("booking_volume_norm", brow.get("booking_volume_norm", np.nan)),
-                ("revenue_per_booking_norm", brow.get("revenue_per_booking_norm", np.nan)),
-                ("booking_consistency_norm", brow.get("booking_consistency_norm", np.nan)),
-                ("listing_pull_norm", brow.get("listing_pull_norm", np.nan)),
-                ("funnel_depth_norm", brow.get("funnel_depth_norm", np.nan)),
-                ("view_to_cart_rate", brow.get("view_to_cart_rate", np.nan)),
-                ("cart_to_purchase_rate", brow.get("cart_to_purchase_rate", np.nan)),
-            ],
-            columns=["Figure Used In Calculation", "Value"],
-        )
-
-        c1,c2 = st.columns([2, 1])
-        c1.dataframe(breakdown_df, width="stretch", hide_index=True)
-        with c2:
-            st.markdown("#### ⚠️ Risk Flags")
-            RISKS = [
-                ("risk_thin_ga_demand_data", "Thin GA4 Demand data",    "ga4_demand −20%"),
-                ("risk_inverse_attribution_rs","Inverse signal of Bookings data & GA demand", "ga4_demand −10%"),
-                ("risk_thin_gmv_data","Thin GMV/view data",          "ga_campaign_responsiveness −20%"),
-                ("risk_low_gmv_per_view","Low GMV/view metric",       "ga_campaign_responsiveness −10%"),
-            ]
-
-            active_risks = [(label, desc) for col, label, desc in RISKS if brow.get(col) == True]
-
-            if not active_risks:
-                st.success("No risks identified in data.")
+    if selected_restaurant != "All":
+        selected_breakdown = priority_df[priority_df["name"] == selected_restaurant]
+        with st.expander(f"__View {selected_restaurant}'s Individual Subscores__", expanded=False):
+            if selected_breakdown.empty:
+                st.info("No priority subscore row is available for the selected restaurant.")
             else:
-                for label, desc in active_risks:
-                    st.markdown(
-                        f"- :red-badge[{label}] :gray-badge[`{desc}`]"
-                    )
+                brow = selected_breakdown.iloc[0]
+                st.metric("Priority Score", f"{brow.get('priority_score', 0):.2f}")
+
+                ### subscores display
+                b1, b2, b3 = st.columns(3)
+                b4, b5, b6 = st.columns(3)
+                b1.metric("Growth Component", f"{brow.get('growth_component', 0):.4f}")
+                b2.metric("Booking Demand", f"{brow.get('booking_demand', 0):.4f}")
+                b3.metric("GA4 Demand", f"{brow.get('ga4_demand', 0):.4f}")
+                b4.metric("Campaign Responsiveness", f"{brow.get('campaign_responsiveness', 0):.4f}")
+                b5.metric("Internal Campaign Responsiveness", f"{brow.get('internal_mkt_campaign_responsiveness', 0):.4f}")
+                b6.metric("GA Campaign Responsiveness", f"{brow.get('avg_gmv_per_view', 0):.4f}")
+
+                breakdown_df = pd.DataFrame(
+                    [
+                        ("score_growth_norm", brow.get("score_growth_norm", np.nan)),
+                        ("delta_growth_norm", brow.get("delta_growth_norm", np.nan)),
+                        ("booking_volume_norm", brow.get("booking_volume_norm", np.nan)),
+                        ("revenue_per_booking_norm", brow.get("revenue_per_booking_norm", np.nan)),
+                        ("booking_consistency_norm", brow.get("booking_consistency_norm", np.nan)),
+                        ("listing_pull_norm", brow.get("listing_pull_norm", np.nan)),
+                        ("funnel_depth_norm", brow.get("funnel_depth_norm", np.nan)),
+                        ("view_to_cart_rate", brow.get("view_to_cart_rate", np.nan)),
+                        ("cart_to_purchase_rate", brow.get("cart_to_purchase_rate", np.nan)),
+                    ],
+                    columns=["Figure Used In Calculation", "Value"],
+                )
+
+                c1,c2 = st.columns([2, 1])
+                c1.dataframe(breakdown_df, width="stretch", hide_index=True)
+                with c2:
+                    st.markdown("#### ⚠️ Risk Flags")
+                    RISKS = [
+                        ("risk_thin_ga_demand_data", "Thin GA4 Demand data",    "ga4_demand −20%"),
+                        ("risk_inverse_attribution_rs","Inverse signal of Bookings data & GA demand", "ga4_demand −10%"),
+                        ("risk_thin_gmv_data","Thin GMV/view data",          "ga_campaign_responsiveness −20%"),
+                        ("risk_low_gmv_per_view","Low GMV/view metric",       "ga_campaign_responsiveness −10%"),
+                    ]
+
+                    active_risks = [(label, desc) for col, label, desc in RISKS if brow.get(col) == True]
+
+                    if not active_risks:
+                        st.success("No risks identified in data.")
+                    else:
+                        for label, desc in active_risks:
+                            st.markdown(
+                                f"- :red-badge[{label}] :gray-badge[`{desc}`]"
+                            )
                     
 
 
@@ -546,9 +625,5 @@ def render():
         #         else f"Strategic matrix position: Perf {'-' if pd.isna(perf_val) else f'{perf_val:.2f}'} / "
         #              f"Growth {'-' if pd.isna(growth_val) else f'{growth_val:.2f}'}"
         #     )
-
-
-
-
 
 

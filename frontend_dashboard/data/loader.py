@@ -40,6 +40,7 @@ MOMENTUM_PATH = MOMENTUM_OUTPUT_DIR / "restaurants_agg_performance.parquet"
 MOMENTUM_GA_PATH = GA_OUTPUT_DIR / "combined_restaurant_ga.parquet"
 MOMENTUM_LABELS_PATH = MOMENTUM_OUTPUT_DIR / "priority_latest_momentum_labels.parquet"
 MARKETING_PATH = MARKETING_OUTPUT_DIR / "activity_performance_with_roi.csv"
+MARKETING_VALID_BOOKINGS_PATH = MOMENTUM_OUTPUT_DIR / "valid_bookings_for_marketing.parquet"
 PRIORITY_PATH = PRIORITY_OUTPUT_DIR / "priority_list_ga4.csv"
 GA_OUTREACH_PATH = BASE_DIR / "data" / "marketing" / "googleAPI" / "campaigns_outreach.parquet"
 GA_GMV_VIEW_PATH = GA_OUTPUT_DIR / "gmv" / "gmv_view.parquet"
@@ -1334,6 +1335,11 @@ def load_cluster_ga_campaign_effectiveness() -> pd.DataFrame:
         cluster_monthly["total_ga_items_purchased"],
         cluster_monthly["total_ga_items_viewed"],
     )
+    month_total_ga_views = cluster_monthly.groupby("year_month")["total_ga_items_viewed"].transform("sum")
+    cluster_monthly["cluster_ga_view_share"] = _safe_divide(
+        cluster_monthly["total_ga_items_viewed"],
+        month_total_ga_views,
+    ).fillna(0)
 
     merged = cluster_monthly.merge(campaign_monthly, on="year_month", how="inner")
     if merged.empty:
@@ -1352,6 +1358,15 @@ def load_cluster_ga_campaign_effectiveness() -> pd.DataFrame:
                 "ga_effectiveness_score",
             ]
         )
+
+    merged["platform_total_sessions"] = pd.to_numeric(merged["total_sessions"], errors="coerce").fillna(0)
+    merged["total_sessions"] = merged["platform_total_sessions"] * pd.to_numeric(
+        merged["cluster_ga_view_share"], errors="coerce"
+    ).fillna(0)
+    if "active_campaigns" in merged.columns:
+        merged["active_campaigns"] = pd.to_numeric(merged["active_campaigns"], errors="coerce").fillna(0) * pd.to_numeric(
+            merged["cluster_ga_view_share"], errors="coerce"
+        ).fillna(0)
 
     rows = []
     for (cluster_id, cluster_label, campaign_type), grp in merged.groupby(
@@ -1384,7 +1399,7 @@ def load_cluster_ga_campaign_effectiveness() -> pd.DataFrame:
                 "googleAdsCampaignType": campaign_type,
                 "active_months": int(grp["year_month"].nunique()),
                 "total_sessions": float(grp["total_sessions"].sum()),
-                "active_campaigns": int(grp["active_campaigns"].sum()),
+                "active_campaigns": float(grp["active_campaigns"].sum()),
                 "session_weighted_gmv_per_ga_view": float(gmv_weighted) if pd.notna(gmv_weighted) else np.nan,
                 "session_weighted_add_to_cart_rate": float(atc_weighted) if pd.notna(atc_weighted) else np.nan,
                 "session_weighted_view_to_purchase_rate": float(purchase_weighted) if pd.notna(purchase_weighted) else np.nan,
@@ -1526,6 +1541,139 @@ def _build_strategy_family(df: pd.DataFrame) -> pd.Series:
     return families.str.replace(r"\s+", " ", regex=True).str.strip()
 
 
+def _load_valid_bookings_for_marketing() -> pd.DataFrame:
+    for source_path in (
+        MARKETING_VALID_BOOKINGS_PATH,
+        BASE_DIR / "data_output" / "valid_bookings_for_marketing.parquet",
+    ):
+        if not source_path.exists():
+            continue
+
+        bookings = pd.read_parquet(source_path)
+        if "booking_date" in bookings.columns:
+            bookings["booking_datetime"] = pd.to_datetime(bookings["booking_date"], errors="coerce")
+        elif "date" in bookings.columns:
+            bookings["booking_datetime"] = pd.to_datetime(bookings["date"], errors="coerce")
+        elif "created_at" in bookings.columns:
+            bookings["booking_datetime"] = pd.to_datetime(bookings["created_at"], errors="coerce")
+        else:
+            bookings["booking_datetime"] = pd.NaT
+
+        if "revenue_thb" not in bookings.columns:
+            if "revenue" in bookings.columns:
+                bookings["revenue_thb"] = pd.to_numeric(bookings["revenue"], errors="coerce")
+            elif "gmv" in bookings.columns:
+                bookings["revenue_thb"] = pd.to_numeric(bookings["gmv"], errors="coerce")
+            else:
+                bookings["revenue_thb"] = np.nan
+
+        keep_cols = [c for c in ["id", "restaurant_id", "booking_datetime", "revenue_thb"] if c in bookings.columns]
+        bookings = bookings[keep_cols].copy()
+        bookings["restaurant_id"] = pd.to_numeric(bookings["restaurant_id"], errors="coerce").astype("Int64")
+        bookings["revenue_thb"] = pd.to_numeric(bookings["revenue_thb"], errors="coerce").fillna(0)
+        return bookings.dropna(subset=["restaurant_id", "booking_datetime"]).reset_index(drop=True)
+
+    return pd.DataFrame(columns=["id", "restaurant_id", "booking_datetime", "revenue_thb"])
+
+
+def _empty_activity_window_metrics() -> pd.DataFrame:
+    return pd.DataFrame(
+        columns=[
+            "activity_id",
+            "analysis_start",
+            "analysis_end",
+            "actual_bookings_before",
+            "actual_bookings_after",
+            "actual_revenue_before",
+            "actual_revenue_after",
+        ]
+    )
+
+
+def _compute_actual_activity_windows(marketing_df: pd.DataFrame) -> pd.DataFrame:
+    required_cols = ["activity_id", "restaurant_id", "channel", "activity_start", "activity_end"]
+    if marketing_df.empty or not set(required_cols).issubset(marketing_df.columns):
+        return _empty_activity_window_metrics()
+
+    bookings = _load_valid_bookings_for_marketing()
+    if bookings.empty:
+        return _empty_activity_window_metrics()
+
+    windows = marketing_df[required_cols].copy()
+    windows["activity_id"] = windows["activity_id"].astype(str)
+    windows["channel"] = windows["channel"].fillna("Unknown").astype(str).str.upper().str.strip()
+    windows["restaurant_id"] = pd.to_numeric(windows["restaurant_id"], errors="coerce").astype("Int64")
+    windows["activity_start"] = pd.to_datetime(windows["activity_start"], errors="coerce").dt.normalize()
+    windows["activity_end"] = pd.to_datetime(windows["activity_end"], errors="coerce").dt.normalize()
+    windows = windows.dropna(subset=["activity_id", "restaurant_id", "activity_start", "activity_end"])
+    windows = windows.loc[windows["activity_end"] >= windows["activity_start"]].drop_duplicates("activity_id")
+    if windows.empty:
+        return _empty_activity_window_metrics()
+
+    duration = windows["activity_end"] - windows["activity_start"]
+    duration = duration.mask(duration <= pd.Timedelta(0), pd.Timedelta(days=2))
+    windows["before_start"] = windows["activity_start"] - duration
+    windows["before_end"] = windows["activity_start"]
+    windows["after_start"] = windows["activity_start"]
+    windows["after_end"] = windows["activity_end"]
+
+    kol_mask = windows["channel"].eq("KOL")
+    windows.loc[kol_mask, "before_start"] = windows.loc[kol_mask, "activity_start"] - pd.Timedelta(days=7)
+    windows.loc[kol_mask, "before_end"] = windows.loc[kol_mask, "activity_start"]
+    windows.loc[kol_mask, "after_start"] = windows.loc[kol_mask, "activity_start"]
+    windows.loc[kol_mask, "after_end"] = windows.loc[kol_mask, "activity_start"] + pd.Timedelta(days=7)
+
+    fb_mask = windows["channel"].eq("FB")
+    windows.loc[fb_mask, "before_start"] = windows.loc[fb_mask, "activity_start"].apply(lambda d: d - pd.DateOffset(months=1))
+    windows.loc[fb_mask, "before_end"] = windows.loc[fb_mask, "activity_start"]
+    windows.loc[fb_mask, "after_start"] = windows.loc[fb_mask, "activity_start"]
+    windows.loc[fb_mask, "after_end"] = windows.loc[fb_mask, "activity_start"].apply(lambda d: d + pd.DateOffset(months=1))
+
+    windows["analysis_start"] = windows["before_start"]
+    windows["analysis_end"] = windows["after_end"]
+
+    booking_cols = ["restaurant_id", "booking_datetime", "revenue_thb"]
+    after_candidates = bookings[booking_cols].merge(
+        windows[["activity_id", "restaurant_id", "after_start", "after_end"]],
+        on="restaurant_id",
+        how="inner",
+    )
+    after = after_candidates[
+        (after_candidates["booking_datetime"] >= after_candidates["after_start"])
+        & (after_candidates["booking_datetime"] < after_candidates["after_end"])
+    ]
+    after_metrics = after.groupby("activity_id").agg(
+        actual_bookings_after=("booking_datetime", "size"),
+        actual_revenue_after=("revenue_thb", "sum"),
+    )
+
+    before_candidates = bookings[booking_cols].merge(
+        windows[["activity_id", "restaurant_id", "before_start", "before_end"]],
+        on="restaurant_id",
+        how="inner",
+    )
+    before = before_candidates[
+        (before_candidates["booking_datetime"] >= before_candidates["before_start"])
+        & (before_candidates["booking_datetime"] < before_candidates["before_end"])
+    ]
+    before_metrics = before.groupby("activity_id").agg(
+        actual_bookings_before=("booking_datetime", "size"),
+        actual_revenue_before=("revenue_thb", "sum"),
+    )
+
+    window_metrics = windows[["activity_id", "analysis_start", "analysis_end"]].set_index("activity_id")
+    window_metrics = window_metrics.join(before_metrics, how="left").join(after_metrics, how="left").reset_index()
+    for metric_col in [
+        "actual_bookings_before",
+        "actual_bookings_after",
+        "actual_revenue_before",
+        "actual_revenue_after",
+    ]:
+        if metric_col in window_metrics.columns:
+            window_metrics[metric_col] = pd.to_numeric(window_metrics[metric_col], errors="coerce").fillna(0)
+    return window_metrics
+
+
 @st.cache_data(ttl=300)
 def load_cluster_strategy_outcomes() -> pd.DataFrame:
     marketing_df = _read_table(MARKETING_PATH)
@@ -1542,6 +1690,7 @@ def load_cluster_strategy_outcomes() -> pd.DataFrame:
             "latest_segment",
             "channel",
             "applied_date",
+            "end_date",
             "bookings_before",
             "bookings_after",
             "bookings_uplift_pct",
@@ -1616,26 +1765,53 @@ def load_cluster_strategy_outcomes() -> pd.DataFrame:
     merged["strategy_family"] = _build_strategy_family(merged)
     merged["campaign_name"] = _build_marketing_campaign_name(merged)
 
-    merged["bookings_before"] = pd.to_numeric(merged.get("bookings_baseline"), errors="coerce")
-    merged["bookings_after"] = pd.to_numeric(merged.get("bookings_during"), errors="coerce")
-    merged["incremental_revenue_thb"] = pd.to_numeric(merged.get("incremental_revenue_thb"), errors="coerce")
-    merged["revenue_after"] = pd.to_numeric(merged.get("total_campaign_revenue"), errors="coerce")
-    merged["roi"] = pd.to_numeric(merged.get("roi"), errors="coerce")
+    actual_windows = _compute_actual_activity_windows(df)
+    if not actual_windows.empty:
+        merged = merged.merge(actual_windows, on="activity_id", how="left")
+
+    actual_bookings_before = _to_numeric_series(merged, "actual_bookings_before")
+    actual_bookings_after = _to_numeric_series(merged, "actual_bookings_after")
+    merged["bookings_before"] = actual_bookings_before.where(
+        actual_bookings_before.notna(),
+        _to_numeric_series(merged, "bookings_baseline"),
+    )
+    merged["bookings_after"] = actual_bookings_after.where(
+        actual_bookings_after.notna(),
+        _to_numeric_series(merged, "bookings_during"),
+    )
+    merged["revenue_before"] = _to_numeric_series(merged, "actual_revenue_before")
+    merged["revenue_after"] = _to_numeric_series(merged, "actual_revenue_after")
+    actual_incremental_revenue = merged["revenue_after"] - merged["revenue_before"]
+    merged["incremental_revenue_thb"] = actual_incremental_revenue.where(
+        merged["revenue_before"].notna() & merged["revenue_after"].notna(),
+        _to_numeric_series(merged, "incremental_revenue_thb"),
+    )
+    fb_spend = _to_numeric_series(merged, "fb_amount_spent_thb")
+    current_roi = _to_numeric_series(merged, "roi")
+    actual_roi = np.where(
+        _series_or_default(merged, "channel", "").str.upper().eq("FB") & fb_spend.gt(0),
+        (merged["incremental_revenue_thb"] - fb_spend) / fb_spend,
+        np.nan,
+    )
+    merged["roi"] = pd.Series(actual_roi, index=merged.index).where(pd.notna(actual_roi), current_roi)
 
     merged["bookings_uplift_pct"] = np.where(
         merged["bookings_before"] > 0,
         (merged["bookings_after"] - merged["bookings_before"]) / merged["bookings_before"],
         np.nan,
     )
-
-    merged["revenue_before"] = merged["revenue_after"] - merged["incremental_revenue_thb"]
     merged["revenue_uplift_pct"] = np.where(
         merged["revenue_before"] > 0,
-        merged["incremental_revenue_thb"] / merged["revenue_before"],
+        (merged["revenue_after"] - merged["revenue_before"]) / merged["revenue_before"],
         np.nan,
     )
 
     merged["applied_date"] = pd.to_datetime(merged.get("activity_start"), errors="coerce")
+    merged["end_date"] = pd.to_datetime(merged.get("analysis_end"), errors="coerce")
+    merged["end_date"] = merged["end_date"].where(
+        merged["end_date"].notna(),
+        pd.to_datetime(merged.get("activity_end"), errors="coerce"),
+    )
     merged["sample_size"] = 1
 
     out_df = merged.rename(columns={"name": "restaurant_name"})
@@ -1696,21 +1872,13 @@ def load_cluster_strategy_outcomes() -> pd.DataFrame:
     else:
         out_df["latest_segment"] = out_df["latest_segment"].fillna("Unknown").replace("", "Unknown")
 
-    # Guard against unstable uplift ratios from tiny/zero baselines.
-    # Example: revenue_before ~= 0 with positive incremental revenue would explode to absurd % values.
-    if {"revenue_after", "incremental_revenue_thb"}.issubset(out_df.columns):
-        calc_revenue_before = out_df["revenue_after"] - out_df["incremental_revenue_thb"]
-        if "revenue_before" not in out_df.columns:
-            out_df["revenue_before"] = calc_revenue_before
-        else:
-            out_df["revenue_before"] = out_df["revenue_before"].where(out_df["revenue_before"].notna(), calc_revenue_before)
-
-    if {"revenue_before", "incremental_revenue_thb"}.issubset(out_df.columns):
+    # Guard against unstable uplift ratios from tiny/zero actual baseline windows.
+    if {"revenue_before", "revenue_after"}.issubset(out_df.columns):
         min_revenue_baseline_thb = 100.0
         valid_revenue_baseline = out_df["revenue_before"] >= min_revenue_baseline_thb
         out_df["revenue_uplift_pct"] = np.where(
             valid_revenue_baseline,
-            out_df["incremental_revenue_thb"] / out_df["revenue_before"],
+            (out_df["revenue_after"] - out_df["revenue_before"]) / out_df["revenue_before"],
             np.nan,
         )
         out_df["revenue_uplift_pct"] = pd.to_numeric(out_df["revenue_uplift_pct"], errors="coerce")
@@ -1736,6 +1904,7 @@ def load_cluster_strategy_outcomes() -> pd.DataFrame:
         )
 
     out_df["applied_date"] = pd.to_datetime(out_df.get("applied_date"), errors="coerce")
+    out_df["end_date"] = pd.to_datetime(out_df.get("end_date"), errors="coerce")
 
     keep_cols = [
         c
@@ -1750,6 +1919,7 @@ def load_cluster_strategy_outcomes() -> pd.DataFrame:
             "latest_segment",
             "channel",
             "applied_date",
+            "end_date",
             "bookings_before",
             "bookings_after",
             "bookings_uplift_pct",

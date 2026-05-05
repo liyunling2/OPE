@@ -5,7 +5,8 @@ Run with: streamlit run app.py
 import base64
 import sys
 from pathlib import Path
-from data.loader import load_priority, load_momentum, load_momentum_segments, SEGMENT_COLORS
+import pandas as pd
+from data.loader import load_cluster_assignments, load_priority, load_momentum, load_momentum_segments, SEGMENT_COLORS
 import streamlit as st
 
 APP_DIR = Path(__file__).resolve().parent
@@ -22,6 +23,7 @@ st.set_page_config(
 
 priority_df = load_priority()
 momentum_df  = load_momentum()
+cluster_df = load_cluster_assignments()
 logo_b64  = base64.b64encode(LOGO_PATH.read_bytes()).decode("utf-8")
 
 if "selected_restaurant" not in st.session_state:
@@ -29,6 +31,9 @@ if "selected_restaurant" not in st.session_state:
 
 if "selected_segment" not in st.session_state:
     st.session_state["selected_segment"] = "All"
+
+if "selected_cluster" not in st.session_state:
+    st.session_state["selected_cluster"] = "All"
 
 
 st.markdown(
@@ -258,26 +263,70 @@ st.markdown(
 )
 
 
-col1, col2  = st.columns([1, 1])
+col1, col2, col3 = st.columns([1, 1, 1.2])
 
-all_names = sorted(momentum_df["name"].unique())
 segments_available = sorted(momentum_df["latest_segment"].dropna().unique()) if "latest_segment" in momentum_df.columns else []
+if cluster_df.empty or "cluster_id" not in cluster_df.columns:
+    cluster_options = ["All"]
+    cluster_label_map = {}
+else:
+    cluster_rows = (
+        cluster_df[["cluster_id", "cluster_label"]]
+        .drop_duplicates()
+        .assign(cluster_id=lambda df: pd.to_numeric(df["cluster_id"], errors="coerce"))
+        .dropna(subset=["cluster_id"])
+        .sort_values(["cluster_id", "cluster_label"])
+    )
+    cluster_options = ["All"] + cluster_rows["cluster_id"].astype(int).tolist()
+    cluster_label_map = dict(zip(cluster_rows["cluster_id"].astype(int), cluster_rows["cluster_label"]))
 
 with col1:
-    st.session_state["selected_restaurant"] = st.selectbox(
-        "Restaurant",
-        all_names,
-        index=all_names.index(st.session_state["selected_restaurant"]) 
-        if st.session_state["selected_restaurant"] in all_names else 0
-    )
-
-with col2:
     st.session_state["selected_segment"] = st.selectbox(
         "Segment",
         ["All"] + (segments_available if segments_available else list(SEGMENT_COLORS.keys())),
         index=(["All"] + (segments_available if segments_available else list(SEGMENT_COLORS.keys()))).index(
             st.session_state["selected_segment"]
         )
+    )
+
+with col2:
+    st.session_state["selected_cluster"] = st.selectbox(
+        "Cluster",
+        cluster_options,
+        index=cluster_options.index(st.session_state["selected_cluster"])
+        if st.session_state["selected_cluster"] in cluster_options else 0,
+        format_func=lambda cid: (
+            "All" if cid == "All" else f"Cluster {cid}: {cluster_label_map.get(cid, 'Unknown')}"
+        ),
+    )
+
+restaurant_scope = momentum_df.copy()
+if (
+    st.session_state["selected_segment"] != "All"
+    or st.session_state["selected_cluster"] != "All"
+) and not cluster_df.empty:
+    restaurant_scope = cluster_df.copy()
+    if st.session_state["selected_segment"] != "All" and "latest_segment" in restaurant_scope.columns:
+        restaurant_scope = restaurant_scope[
+            restaurant_scope["latest_segment"].astype(str).eq(st.session_state["selected_segment"])
+        ].copy()
+    if st.session_state["selected_cluster"] != "All" and "cluster_id" in restaurant_scope.columns:
+        cluster_value = pd.to_numeric(pd.Series([st.session_state["selected_cluster"]]), errors="coerce").iloc[0]
+        if pd.notna(cluster_value):
+            restaurant_scope = restaurant_scope[
+                pd.to_numeric(restaurant_scope["cluster_id"], errors="coerce").eq(int(cluster_value))
+            ].copy()
+
+all_names = ["All"] + sorted(restaurant_scope["name"].dropna().unique())
+if st.session_state["selected_restaurant"] not in all_names:
+    st.session_state["selected_restaurant"] = "All"
+
+with col3:
+    st.session_state["selected_restaurant"] = st.selectbox(
+        "Restaurant",
+        all_names,
+        index=all_names.index(st.session_state["selected_restaurant"])
+        if st.session_state["selected_restaurant"] in all_names else 0,
     )
 
 
@@ -311,6 +360,3 @@ elif page == "Strategy":
     from pages import strategy
 
     strategy.render()
-
-
-
