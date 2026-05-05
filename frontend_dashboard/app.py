@@ -258,7 +258,7 @@ st.markdown(
 
 page = st.radio(
     "Navigation",
-    ["Overview", "Momentum", "Priority", "Clustering", "Strategy"],
+    ["Overview", "Priority", "Clustering", "Strategy"],
     label_visibility="collapsed",
     horizontal=True,
 )
@@ -269,10 +269,10 @@ if page == "Overview":
     from pages import overview
 
     overview.render()
-elif page == "Momentum":
-    from pages import momentum
+# elif page == "Momentum":
+#     from pages import momentum
 
-    momentum.render()
+    # momentum.render()
 elif page == "Priority":
     from pages import priority
 

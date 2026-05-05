@@ -4,9 +4,15 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 from data.loader import load_priority, load_momentum, load_momentum_segments
-from theme import AXIS, BORDER_COLOR, MUTED_TEXT, SURFACE_COLOR, TEXT_COLOR
+from theme import BASE_LAYOUT, AXIS, CHART_THEME, GRID_COLOR, BORDER_COLOR, MUTED_TEXT, SURFACE_COLOR, TEXT_COLOR
 
 
+SEG_COLOR_LIST = {
+    "Rising Stars": "#2ecc71",
+    "Emerging Opportunities": "#3b82f6",
+    "Established Players": "#9b59b6",
+    "Needs Attention": "#e74c3c",
+}
 def layout(height=300, **kwargs):
     base = dict(
         paper_bgcolor="rgba(0,0,0,0)",
@@ -185,34 +191,46 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
 def render():
     base_priority_df = load_priority()
     priority_df = build_priority_universe(base_priority_df)
-    st.markdown("## Priority List")
-    st.markdown(
-        f"<p style='color:{MUTED_TEXT};margin-top:-0.5rem;'>Stable-growth restaurants ranked by composite priority score.</p>",
-        unsafe_allow_html=True,
-    )
+    
+    st.markdown("## Prioritised Ranked List")
+    st.markdown('List is derived by ranking highest GMV/GA View, highest priority score and lowest number of marketing efforts')
+    cols = []
+    for idx, row in priority_df.iterrows():
+        rank     = idx + 1
+        name     = row["name"]
+        score    = row["priority_score"]
+        badge_color, label, hex_color = get_tier(row.get("priority_tier", "-"))
+        channel  = row.get("recommended_channel", pd.NA)
+        if pd.isna(channel) or str(channel).strip() in {"", "-", "Unknown", "unknown", "N/A", "n/a", "nan"}:
+            channel = "No channel assigned"
+        growth   = row.get("booking_growth_rolling", None)
+        n_camp   = int(row.get("n_campaigns", 0)) if pd.notna(row.get("n_campaigns")) else 0
+        lift     = row.get("avg_lift_per_day", None)
+        gmv = row["avg_gmv_per_view"]
+        
+        
+        cols.append({
+                "Restaurant": name,
+                "Priority Score": f"{score:.0f}",
+                "GMV/GA View": f"{gmv:.0f}",
+                "No. of Campaigns": n_camp,
+                "Tier": label,
+            })
+   
+    display_df = pd.DataFrame(cols)
+    display_df["Priority Score"] = pd.to_numeric(display_df["Priority Score"], errors="coerce")
+    display_df["GMV/GA View"] = pd.to_numeric(display_df["GMV/GA View"], errors="coerce")
+    display_df["No. of Campaigns"] = pd.to_numeric(display_df["No. of Campaigns"], errors="coerce")
+    sorted_display_df = display_df.sort_values(by=['GMV/GA View','Priority Score','No. of Campaigns'], ascending=[False, False, True])
+    st.dataframe(
+        sorted_display_df,
+        use_container_width=True,
+        height=300, hide_index=True
+        )
+
     st.markdown("---")
-    print(priority_df["is_in_priority_list"].value_counts())
-    print(priority_df["is_in_priority_list"].dtype)
-    if len(priority_df) == 0:
-        st.warning("No priority data. Run priority_scoring_seasonality.ipynb first.")
-        return
 
-    is_seasonal_series = coerce_bool_series(priority_df, "is_seasonal", default=False)
-
-    k1, k2, k3, k4, k5, k6 = st.columns(6)
-    k1.metric("In Priority List", int(priority_df["is_in_priority_list"].sum()))
-    def ct(kw): return sum(kw in str(t).lower() for t in priority_df["priority_tier"])
-    k2.metric("Proven",   str(ct("proven")))
-    k3.metric("Untapped", str(ct("untapped")))
-    k4.metric("Review",   str(ct("review")))
-    seasonal_n = int(is_seasonal_series.sum())
-    k5.metric("\U0001F30A Seasonal", str(seasonal_n))
-    k6.metric("Avg GMV / GA View", fmt_thb(priority_df["avg_gmv_per_view"].mean()))
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.caption(
-        f"Total restaurants shown: {len(priority_df):,}. "
-        "Restaurants outside the stable-growth priority universe are included as 'Monitor'."
-    )
+    st.markdown("## Priority Scoring")
 
     with st.expander("__How Priority Score Is Calculated__", expanded=False):
         st.markdown("""
@@ -378,7 +396,7 @@ def render():
         textfont=dict(color="#fff", size=13),
     ))
 
-    st.markdown("### Top %d Restaurants" % top_n)
+    st.markdown(f"### _Top {top_n} Restaurants based on Priority Scores_")
     st.caption("🟡 Amber bars = Seasonal flag — strong MoM but weak YoY. Timing-sensitive activation.")
 
     fig_rank.update_layout(**layout(max(180, top_n * 36),
@@ -387,189 +405,151 @@ def render():
 
     st.plotly_chart(fig_rank, width="stretch")
 
+
+    ## show quadrant
     st.markdown("---")
+    st.markdown("## Momentum Quadrants")
+    momentum_df = load_momentum()
+    latest_all = momentum_df.sort_values("year_month").groupby("name", as_index=False).last()
+    seg_col = "latest_segment" if "latest_segment" in latest_all.columns else "segment"
 
-        
-    col1, col2 = st.columns(2)
+    has_segments = seg_col in latest_all.columns
+    selected_segment = None
 
-    with col1:
-        st.markdown("### Score Distribution by Tier")
-        fig_box = go.Figure()
-        for kw, color, label in [("proven","#e74c3c","Proven"),("untapped","#e67e22","Untapped"),("review","#f1c40f","Review")]:
-            mask = priority_df["priority_tier"].apply(lambda t: kw in str(t).lower())
-            sub  = priority_df[mask]["priority_score"].dropna()
-            if len(sub):
-                fig_box.add_trace(go.Box(y=sub, name=label, marker_color=color, line_color=color))
-        fig_box.update_layout(**layout(280, showlegend=False,
-            xaxis=dict(**AXIS), yaxis=dict(**AXIS)))
-        st.plotly_chart(fig_box, width="stretch")
-
-    with col2:
-        # has_mom_sc = "score_growth_mom" in priority_df.columns
-        # has_yoy_sc = "score_growth_yoy" in priority_df.columns
-        # if has_mom_sc and has_yoy_sc:
-        st.markdown("### Score Distribution by Normalised GMV/View")
-        pf = priority_df.copy()
-
-        pf = pf.sort_values("priority_score", ascending=False).reset_index(drop=True)
-
-        fig = go.Figure()
-
-        fig.add_trace(go.Scatter(
-            x=pf['ga_campaign_responsiveness'],
-            y=pf["priority_score"],
-            mode="markers",
-            marker=dict(
-                size=8,
-                color=pf["priority_score"],
-                colorscale="Viridis",
-                showscale=True,
-                colorbar=dict(title="Priority Score"),
-                line=dict(color="rgba(255,255,255,0.3)", width=1),
-            ),
-            hovertemplate=(
-                "<b>%{customdata}</b><br>"
-                "Normalised GMV/View: %{x}<br>"
-                "Priority Score: %{y:.2f}"
-                "<extra></extra>"
-            ),
-            customdata=pf["name"].astype(str).values,
-        ))
-
-        fig.update_layout(
-            xaxis_title="Normalised GMV/View",
-            yaxis_title="Priority Score",
-            template="plotly_dark",
-            height=500,
-        )
-
-        st.plotly_chart(fig, use_container_width=True)
-           
-            #     st.markdown("### MoM vs YoY Score")
-            #     pf = priority_df[priority_df["is_in_priority_list"]].copy() if "is_in_priority_list" in priority_df.columns else priority_df.copy()
-            #     is_seas = coerce_bool_series(pf, "is_seasonal", default=False)
-            #     fig_mv = go.Figure()
-            #     not_seas = pf[~is_seas]
-            #     if len(not_seas):
-            #         fig_mv.add_trace(go.Scatter(
-            #             x=not_seas["score_growth_mom"], y=not_seas["score_growth_yoy"],
-            #             mode="markers", name="Non-seasonal",
-            #             marker=dict(color="#2ecc71", size=8, opacity=0.7, line=dict(color="#0f1117", width=1)),
-            #             hovertemplate="<b>%{customdata[0]}</b><br>MoM: %{x:.2f} | YoY: %{y:.2f}<extra></extra>",
-            #             customdata = not_seas["name"].astype(str).values.reshape(-1, 1)))
-            #     seas_sub = pf[is_seas]
-            #     if len(seas_sub):
-            #         fig_mv.add_trace(go.Scatter(
-            #             x=seas_sub["score_growth_mom"], y=seas_sub["score_growth_yoy"],
-            #             mode="markers", name="\U0001F30A Seasonal",
-            #             marker=dict(color="#f0a500", size=10, symbol="diamond", opacity=0.85, line=dict(color="#0f1117", width=1)),
-            #             hovertemplate="<b>%{customdata[0]}</b><br>MoM: %{x:.2f} | YoY: %{y:.2f}<extra></extra>",
-            #             customdata = seas_sub["name"].astype(str).values.reshape(-1, 1)))
-            #     if "score_growth_mom" in pf.columns and "score_growth_yoy" in pf.columns:
-            #         fig_mv.add_vline(x=pf["score_growth_mom"].median(), line_dash="dash", line_color="#3b82f6", line_width=1)
-            #         fig_mv.add_hline(y=pf["score_growth_yoy"].dropna().median(), line_dash="dash", line_color="#f0a500", line_width=1)
-            #     fig_mv.update_layout(**layout(280, showlegend=True,
-            #         xaxis=dict(**AXIS, title="MoM Score (0-1)"),
-            #         yaxis=dict(**AXIS, title="YoY Score (0-1)"),
-            #         legend=dict(orientation="h", y=1.05, x=0, font_size=10)))
-            #     st.plotly_chart(fig_mv, width="stretch")
-            #     st.caption("Top-right = strong on both signals. Bottom-right = strong MoM, weak YoY =Seasonal. Dashed lines = portfolio medians.")
-        # else:
-        #     st.markdown("### Channel Mix")
-
-        #     # Fallback to channel mix if scores not in data
-        #     channel_series = priority_df["recommended_channel"].dropna().astype(str).str.strip()
-        #     channel_series = channel_series[~channel_series.str.lower().isin(["", "-", "unknown", "n/a", "nan"])]
-        #     ch_counts = channel_series.value_counts()
-        #     cmap = {"FB":"#3b82f6","KOL":"#9b59b6","CRM":"#2ecc71"}
-        #     if len(ch_counts):
-        #         fig_ch = go.Figure(go.Bar(
-        #             x=ch_counts.index, y=ch_counts.values,
-        #             marker_color=[cmap.get(str(c), MUTED_TEXT) for c in ch_counts.index],
-        #             text=ch_counts.values, textposition="outside", textfont=dict(color=TEXT_COLOR)))
-        #         fig_ch.update_layout(**layout(280, showlegend=False,
-        #             xaxis=dict(**AXIS, title="Channel"), yaxis=dict(**AXIS, title="Restaurants")))
-        #         st.plotly_chart(fig_ch, width="stretch")
-        #     else:
-        #         st.info("Re-run notebooks to see MoM vs YoY score distribution.")
-
-
-    st.markdown("---")
-    st.markdown("### Full Ranked List")
-    for idx, row in df.iterrows():
-        rank     = idx + 1
-        name     = row["name"]
-        score    = row["priority_score"]
-        badge_color, label, hex_color = get_tier(row.get("priority_tier", "-"))
-        channel  = row.get("recommended_channel", pd.NA)
-        if pd.isna(channel) or str(channel).strip() in {"", "-", "Unknown", "unknown", "N/A", "n/a", "nan"}:
-            channel = "No channel assigned"
-        bookings = int(row.get("monthly_bookings", 0))
-        growth   = row.get("booking_growth_rolling", None)
-        n_camp   = int(row.get("n_campaigns", 0)) if pd.notna(row.get("n_campaigns")) else 0
-        lift     = row.get("avg_lift_per_day", None)
-        signal   = row.get("growth_signal_used", "-")
-        gc       = "normal" if growth is not None and pd.notna(growth) and growth > 0 else "inverse"
-        growth_fmt = fmt_pct(growth) if growth is not None and pd.notna(growth) else "-"
-        lift_fmt   = ("%.2f" % lift) if lift is not None and pd.notna(lift) else "-"
-
-        with st.container(border=True):
-            col_name, col_score = st.columns([5, 1])
-
-            with col_name:
-                st.markdown(
-                    f"<div style='display:flex;align-items:center;gap:8px;'>"
-                    f"<span style='font-size:1.1rem;font-weight:700;'>#{rank} {name}</span>"
-                    f"<span style='font-size:0.75rem;padding:2px 10px;border-radius:999px;border:1px solid currentColor;color:{hex_color};'>{label}</span>"
-                    f"<span style='font-size:0.75rem;padding:2px 10px;border-radius:999px;background:#1a2744;color:#3b82f6;'>{channel}</span>"
-                    f"</div>",
-                    unsafe_allow_html=True
+    col_left, col_right = st.columns([1, 2])
+    with col_left:
+        st.markdown("#### Segment Distribution")
+        if has_segments:
+            seg_counts = latest_all[seg_col].value_counts().reset_index()
+            seg_counts.columns = ["segment", "count"]
+            colors = [SEG_COLOR_LIST.get(s, MUTED_TEXT) for s in seg_counts["segment"]]
+            pull_vals = [
+                0.1 if selected_segment is not None and seg == selected_segment else 0
+                for seg in seg_counts["segment"]
+            ]
+            fig_donut = go.Figure(
+                go.Pie(
+                    labels=seg_counts["segment"],
+                    values=seg_counts["count"],
+                    hole=0.55,
+                    pull=pull_vals,
+                    marker=dict(colors=colors, line=dict(color="#0f1117", width=3)),
+                    textinfo="percent+label",
+                    textfont=dict(size=11),
+                    hovertemplate="<b>%{label}</b><br>%{value} restaurants (%{percent})<extra></extra>",
                 )
+            )
+            center_text = (
+                f"<b>{latest_all['name'].nunique()}</b><br>"
+                "<span style='font-size:10px'>restaurants</span>"
+            )
+            if selected_segment is not None:
+                center_text += f"<br><span style='font-size:10px;color:#cc0000'>Selected segment: {selected_segment}</span>"
+            fig_donut.update_layout(
+                **CHART_THEME,
+                height=300,
+                showlegend=False,
+                annotations=[
+                    dict(
+                        text=center_text,
+                        x=0.5,
+                        y=0.5,
+                        font_size=14,
+                        showarrow=False,
+                        font_color=TEXT_COLOR,
+                    )
+                ],
+            )
+            st.plotly_chart(fig_donut, width="stretch")
+        else:
+            st.info("Run notebooks to see segment distribution.")
 
-            with col_score:
-                st.markdown(
-                    f"<div style='text-align:right;font-size:1.6rem;font-weight:700;color:#cc0000;'>"
-                    f"{score:.0f}<span style='font-size:0.8rem;color:#9ca3c4;'>/100</span></div>",
-                    unsafe_allow_html=True
+    with col_right:
+        st.markdown("#### Performance vs Growth (Strategic Matrix)")
+        scatter_df = latest_all.copy()
+        if "location" in scatter_df.columns:
+            scatter_df["location_plot"] = scatter_df["location"].fillna("Unknown")
+        else:
+            scatter_df["location_plot"] = "Unknown"
+
+        fig_scatter = go.Figure()
+        if has_segments:
+            for seg, color in SEG_COLOR_LIST.items():
+                sub = scatter_df[scatter_df[seg_col] == seg]
+                if len(sub):
+                    fig_scatter.add_trace(
+                        go.Scatter(
+                            x=sub["score_perf"],
+                            y=sub["score_growth"],
+                            mode="markers",
+                            name=seg,
+                            marker=dict(
+                                color=color,
+                                size=8,
+                                opacity=0.75,
+                                line=dict(color="#0f1117", width=1),
+                            ),
+                            hovertemplate="<b>%{customdata[0]}</b><br>Location: %{customdata[1]}<br>Perf: %{x:.2f} | Growth: %{y:.2f}<extra></extra>",
+                            customdata=sub[["name", "location_plot"]].to_numpy(),
+                        )
+                    )
+        else:
+            fig_scatter.add_trace(
+                go.Scatter(
+                    x=scatter_df["score_perf"],
+                    y=scatter_df["score_growth"],
+                    mode="markers",
+                    marker=dict(color="#3b82f6", size=7, opacity=0.7),
+                    hovertemplate="<b>%{customdata[0]}</b><br>Location: %{customdata[1]}<br>Perf: %{x:.2f} | Growth: %{y:.2f}<extra></extra>",
+                    customdata=scatter_df[["name", "location_plot"]].to_numpy(),
                 )
-
-            st.caption(
-                f"Bookings: **{bookings:,}**  &nbsp;|&nbsp;  "
-                f"Growth: **{growth_fmt} ({signal})**  &nbsp;|&nbsp;  "
-                f"Campaigns: **{n_camp}**  &nbsp;|&nbsp;  "
-                f"Lift/day: **{lift_fmt}**"
             )
 
-            # MoM / YoY detail row
-            _mom = row.get("booking_growth_mom_rolling")
-            _yoy = row.get("booking_growth_yoy_rolling")
+        # if not selected_row.empty:
+        #     hi = selected_row.iloc[0]
+        #     if pd.notna(hi.get("score_perf")) and pd.notna(hi.get("score_growth")):
+        #         fig_scatter.add_trace(
+        #             go.Scatter(
+        #                 x=[hi["score_perf"]],
+        #                 y=[hi["score_growth"]],
+        #                 mode="markers+text",
+        #                 name="Selected Restaurant",
+        #                 marker=dict(color="#cc0000", size=16, symbol="diamond", line=dict(color="#111827", width=2)),
+        #                 text=[selected_restaurant],
+        #                 textposition="top center",
+        #                 hovertemplate=(
+        #                     f"<b>{selected_restaurant}</b><br>"
+        #                     f"Location: {hi.get('location_plot', 'Unknown')}<br>"
+        #                     "Perf: %{x:.2f} | Growth: %{y:.2f}<extra></extra>"
+        #                 ),
+        #                 showlegend=True,
+        #             )
+        #         )
 
-            if _mom is not None and pd.notna(_mom):
-                mom_str = f"MoM (3m): **{fmt_pct(_mom)}**"
-                yoy_str = f"YoY (3m): **{fmt_pct(_yoy)}**" if _yoy is not None and pd.notna(_yoy) else "YoY (3m): **N/A**"
-                st.caption(f"{mom_str} &nbsp;|&nbsp; {yoy_str}")
+        p75_perf = scatter_df["score_perf"].quantile(0.75)
+        p75_growth = scatter_df["score_growth"].quantile(0.75)
+        fig_scatter.add_vline(x=p75_perf, line_dash="dash", line_color=GRID_COLOR, line_width=1)
+        fig_scatter.add_hline(y=p75_growth, line_dash="dash", line_color=GRID_COLOR, line_width=1)
 
-            if row.get("is_seasonal", False):
-                st.caption("🌊 **Seasonal pattern** — strong recent MoM but YoY below portfolio median. Activate at seasonal peak for best ROI.")
-            
-
-            can_generate = bool(row.get("is_in_priority_list", False))
-            if st.button("Generate Strategy for %s" % name, key="strat_%d" % rank, disabled=not can_generate):
-                st.session_state["strategy_restaurant"] = name
-                st.session_state["_nav_to_strategy"] = True
-                st.rerun()
-
-
-    st.caption(
-        "`Monitor - outside stable-growth priority universe` means the restaurant is shown for full visibility, "
-        "but it did not meet the stable-growth criteria used to build the ranked priority list. "
-        "These restaurants are not prioritized for immediate activation and should be monitored until momentum stabilizes."
-    )
-
-    if st.session_state.get("_nav_to_strategy"):
-        st.session_state["_nav_to_strategy"] = False
-        st.info("Go to Strategy Engine in sidebar for: %s" % st.session_state.get("strategy_restaurant",""))
-
+        fig_scatter.update_layout(
+            **BASE_LAYOUT,
+            height=300,
+            xaxis=dict(**CHART_THEME["xaxis"], title="Performance Score"),
+            yaxis=dict(**CHART_THEME["yaxis"], title="Growth Score"),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0, font_size=11),
+        )
+        st.plotly_chart(fig_scatter, width="stretch")
+        # if not selected_row.empty:
+        #     perf_val = pd.to_numeric(pd.Series([hi.get("score_perf")]), errors="coerce").iloc[0]
+        #     growth_val = pd.to_numeric(pd.Series([hi.get("score_growth")]), errors="coerce").iloc[0]
+        #     st.caption(
+        #         f"Selected: {selected_restaurant} | Segment: {hi.get(seg_col, 'Unknown')} | "
+        #         f"Location: {hi.get('location_plot', 'Unknown')} | "
+        #         f"Strategic matrix position: Perf {perf_val:.2f} / Growth {growth_val:.2f}"
+        #         if pd.notna(perf_val) and pd.notna(growth_val)
+        #         else f"Strategic matrix position: Perf {'-' if pd.isna(perf_val) else f'{perf_val:.2f}'} / "
+        #              f"Growth {'-' if pd.isna(growth_val) else f'{growth_val:.2f}'}"
+        #     )
 
 
 
