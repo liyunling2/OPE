@@ -36,6 +36,14 @@ if "selected_cluster" not in st.session_state:
     st.session_state["selected_cluster"] = "All"
 
 
+def clear_navbar_filters():
+    st.session_state["selected_segment"] = "All"
+    st.session_state["selected_cluster"] = "All"
+    st.session_state["selected_restaurant"] = "All"
+    st.session_state["selected_strategy_family"] = "All"
+    st.session_state["selected_ga_campaign_type"] = "All"
+
+
 st.markdown(
     """
 <style>
@@ -263,7 +271,7 @@ st.markdown(
 )
 
 
-col1, col2, col3 = st.columns([1, 1, 1.2])
+col1, col2, col3, col4 = st.columns([1, 1, 1.2, 0.55])
 
 segments_available = sorted(momentum_df["latest_segment"].dropna().unique()) if "latest_segment" in momentum_df.columns else []
 if cluster_df.empty or "cluster_id" not in cluster_df.columns:
@@ -329,6 +337,9 @@ with col3:
         if st.session_state["selected_restaurant"] in all_names else 0,
     )
 
+with col4:
+    st.markdown("<div style='height:1.72rem;'></div>", unsafe_allow_html=True)
+    st.button("Clear filters", on_click=clear_navbar_filters, width="stretch")
 
 
 page = st.radio(

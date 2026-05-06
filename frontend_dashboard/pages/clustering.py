@@ -10,6 +10,7 @@ import html, re, hashlib
 
 import numpy as np
 import pandas as pd
+import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 import streamlit.components.v1 as components
@@ -17,7 +18,6 @@ from data.loader import (
     load_cluster_assignments,
     load_ga_restaurant_monthly,
     load_ga_campaign_outreach_raw,
-    load_ga_campaign_type_monthly,
     load_cluster_strategy_outcomes,
 )
 from theme import BASE_LAYOUT, CHART_THEME, MUTED_TEXT
@@ -51,31 +51,34 @@ def _fmt_pct_value(value) -> str:
 def _fmt_thb_value(value) -> str:
     return f"THB {_num_or_zero(value):,.0f}"
 
-def _min_max_norm(series: pd.Series, neutral: float = 0.5) -> pd.Series:
-    numeric = pd.to_numeric(series, errors="coerce")
-    valid = numeric.dropna()
-    if valid.empty:
-        return pd.Series(neutral, index=series.index, dtype=float)
-    span = valid.max() - valid.min()
-    if span == 0 or pd.isna(span):
-        return pd.Series(neutral, index=series.index, dtype=float)
-    return (numeric - valid.min()) / span
 
-def _empty_ga_effectiveness() -> pd.DataFrame:
-    return pd.DataFrame(
-        columns=[
-            "scope_label",
-            "googleAdsCampaignType",
-            "active_months",
-            "total_sessions",
-            "active_campaigns",
-            "session_weighted_gmv_per_ga_view",
-            "session_weighted_add_to_cart_rate",
-            "session_weighted_view_to_purchase_rate",
-            "sessions_to_gmv_correlation",
-            "ga_effectiveness_score",
-        ]
-    )
+def _clear_strategy_filter() -> None:
+    st.session_state["selected_strategy_family"] = "All"
+
+
+def _clear_ga_campaign_type_filter() -> None:
+    st.session_state["selected_ga_campaign_type"] = "All"
+
+
+def _get_plotly_selected_x(event) -> str | None:
+    selection = getattr(event, "selection", None)
+    if selection is None and isinstance(event, dict):
+        selection = event.get("selection", {})
+
+    points = getattr(selection, "points", None)
+    if points is None and isinstance(selection, dict):
+        points = selection.get("points", [])
+    if not points:
+        return None
+
+    point = points[0]
+    value = getattr(point, "x", None)
+    if value is None and isinstance(point, dict):
+        value = point.get("x")
+    if value is None:
+        return None
+    value = str(value).strip()
+    return value or None
 
 def _prepare_scope_ga_monthly(
     ga_restaurant_monthly: pd.DataFrame,
@@ -156,110 +159,70 @@ def _prepare_scope_ga_monthly(
     )
     return scope_monthly.sort_values("year_month").reset_index(drop=True)
 
-def _build_scope_ga_effectiveness(
-    scope_monthly: pd.DataFrame,
-    campaign_type_monthly: pd.DataFrame,
-    scope_label: str,
+def _prepare_scope_ga_restaurant_rows(
+    ga_restaurant_monthly: pd.DataFrame,
+    assignments: pd.DataFrame,
+    scope_name_norms: set[str],
 ) -> pd.DataFrame:
-    if scope_monthly.empty or campaign_type_monthly.empty:
-        return _empty_ga_effectiveness()
+    if ga_restaurant_monthly.empty or assignments.empty or not scope_name_norms:
+        return pd.DataFrame()
 
-    campaign_monthly = campaign_type_monthly.copy()
-    campaign_monthly["year_month"] = pd.to_datetime(campaign_monthly["year_month"], errors="coerce")
-    campaign_monthly["total_sessions"] = pd.to_numeric(campaign_monthly.get("total_sessions"), errors="coerce").fillna(0)
-    campaign_monthly["active_campaigns"] = pd.to_numeric(campaign_monthly.get("active_campaigns"), errors="coerce").fillna(0)
-    campaign_monthly = campaign_monthly.dropna(subset=["year_month"])
-    if campaign_monthly.empty:
-        return _empty_ga_effectiveness()
+    ga = ga_restaurant_monthly.copy()
+    if "name_norm" not in ga.columns and "name" in ga.columns:
+        ga["name_norm"] = ga["name"].apply(_normalize_name)
+    required_cols = {"name_norm", "name", "year_month", "ga_items_viewed"}
+    if not required_cols.issubset(ga.columns):
+        return pd.DataFrame()
 
-    merged = scope_monthly.merge(campaign_monthly, on="year_month", how="inner")
-    if merged.empty:
-        return _empty_ga_effectiveness()
+    ga["name_norm"] = ga["name_norm"].fillna("").astype(str)
+    ga = ga[ga["name_norm"].isin(scope_name_norms)].copy()
+    if ga.empty:
+        return pd.DataFrame()
 
-    merged["total_sessions"] = (
-        pd.to_numeric(merged["total_sessions"], errors="coerce").fillna(0)
-        * pd.to_numeric(merged["scope_ga_view_share"], errors="coerce").fillna(0)
-    )
-    merged["active_campaigns"] = (
-        pd.to_numeric(merged["active_campaigns"], errors="coerce").fillna(0)
-        * pd.to_numeric(merged["scope_ga_view_share"], errors="coerce").fillna(0)
-    )
+    ga["year_month"] = pd.to_datetime(ga["year_month"], errors="coerce")
+    ga["ga_items_viewed"] = pd.to_numeric(ga["ga_items_viewed"], errors="coerce").fillna(0)
+    ga = ga.dropna(subset=["year_month"])
+    if ga.empty:
+        return pd.DataFrame()
 
-    rows = []
-    for campaign_type, grp in merged.groupby("googleAdsCampaignType", dropna=False):
-        weights = pd.to_numeric(grp["total_sessions"], errors="coerce").fillna(0)
-        valid_weight = weights.gt(0)
+    ref_cols = [c for c in ["name_norm", "cluster_id", "cluster_label", "latest_segment"] if c in assignments.columns]
+    if ref_cols and "name_norm" in ref_cols:
+        cluster_ref = assignments[ref_cols].drop_duplicates("name_norm")
+        ga = ga.merge(cluster_ref, on="name_norm", how="left", suffixes=("", "_assignment"))
+        for col in ["cluster_id", "cluster_label", "latest_segment"]:
+            assignment_col = f"{col}_assignment"
+            if assignment_col in ga.columns:
+                ga[col] = ga[col].where(ga[col].notna(), ga[assignment_col]) if col in ga.columns else ga[assignment_col]
+                ga = ga.drop(columns=[assignment_col])
 
-        def _weighted_metric_mean(col: str) -> float:
-            metric = pd.to_numeric(grp[col], errors="coerce")
-            valid = valid_weight & metric.notna()
-            if valid.any():
-                return float(np.average(metric[valid], weights=weights[valid]))
-            fallback = metric.mean()
-            return float(fallback) if pd.notna(fallback) else np.nan
+    for col in ["monthly_gmv", "ga_items_added_to_cart", "ga_items_purchased"]:
+        if col not in ga.columns:
+            ga[col] = 0
+        ga[col] = pd.to_numeric(ga[col], errors="coerce").fillna(0)
 
-        corr = np.nan
-        if grp["year_month"].nunique() >= 3:
-            corr = grp["total_sessions"].corr(grp["gmv_per_ga_view"])
-
-        rows.append(
-            {
-                "scope_label": scope_label,
-                "googleAdsCampaignType": campaign_type,
-                "active_months": int(grp["year_month"].nunique()),
-                "total_sessions": float(grp["total_sessions"].sum()),
-                "active_campaigns": float(grp["active_campaigns"].sum()),
-                "session_weighted_gmv_per_ga_view": _weighted_metric_mean("gmv_per_ga_view"),
-                "session_weighted_add_to_cart_rate": _weighted_metric_mean("ga_add_to_cart_rate"),
-                "session_weighted_view_to_purchase_rate": _weighted_metric_mean("ga_view_to_purchase_rate"),
-                "sessions_to_gmv_correlation": float(corr) if pd.notna(corr) else np.nan,
-            }
+    out = (
+        ga.groupby(
+            [
+                c
+                for c in ["name_norm", "name", "cluster_id", "cluster_label", "latest_segment", "year_month"]
+                if c in ga.columns
+            ],
+            dropna=False,
+            as_index=False,
         )
-
-    effect_df = pd.DataFrame(rows)
-    if effect_df.empty:
-        return _empty_ga_effectiveness()
-
-    effect_df["gmv_norm"] = _min_max_norm(effect_df["session_weighted_gmv_per_ga_view"], neutral=0.5)
-    effect_df["atc_norm"] = _min_max_norm(effect_df["session_weighted_add_to_cart_rate"], neutral=0.5)
-    corr_norm = effect_df["sessions_to_gmv_correlation"].clip(-1, 1)
-    corr_norm = (corr_norm.fillna(0) + 1) / 2
-    effect_df["ga_effectiveness_score"] = (
-        0.55 * effect_df["gmv_norm"]
-        + 0.25 * effect_df["atc_norm"]
-        + 0.20 * corr_norm
-    ) * 100
-    effect_df = effect_df.drop(columns=["gmv_norm", "atc_norm"])
-    return effect_df.sort_values(
-        ["ga_effectiveness_score", "session_weighted_gmv_per_ga_view"],
-        ascending=[False, False],
-    ).reset_index(drop=True)
-
-def _allocate_campaign_breakdown_to_scope(
-    ga_campaign_raw: pd.DataFrame,
-    scope_monthly: pd.DataFrame,
-) -> pd.DataFrame:
-    if ga_campaign_raw.empty or scope_monthly.empty:
-        return pd.DataFrame()
-
-    allocation = scope_monthly[["year_month", "scope_ga_view_share"]].copy()
-    allocation["year_month"] = pd.to_datetime(allocation["year_month"], errors="coerce")
-    allocation["scope_ga_view_share"] = pd.to_numeric(allocation["scope_ga_view_share"], errors="coerce").fillna(0)
-    allocation = allocation.dropna(subset=["year_month"])
-    if allocation.empty:
-        return pd.DataFrame()
-
-    campaign_scope = ga_campaign_raw.copy()
-    campaign_scope["year_month"] = pd.to_datetime(campaign_scope["year_month"], errors="coerce")
-    campaign_scope["platform_sessions"] = pd.to_numeric(campaign_scope.get("sessions"), errors="coerce").fillna(0)
-    campaign_scope = campaign_scope.dropna(subset=["year_month"])
-    campaign_scope = campaign_scope.merge(allocation, on="year_month", how="inner")
-    if campaign_scope.empty:
-        return campaign_scope
-
-    campaign_scope["allocation_share"] = campaign_scope["scope_ga_view_share"]
-    campaign_scope["sessions"] = campaign_scope["platform_sessions"] * campaign_scope["allocation_share"]
-    return campaign_scope.drop(columns=["scope_ga_view_share"]).reset_index(drop=True)
+        .agg(
+            ga_items_viewed=("ga_items_viewed", "sum"),
+            monthly_gmv=("monthly_gmv", "sum"),
+            ga_items_added_to_cart=("ga_items_added_to_cart", "sum"),
+            ga_items_purchased=("ga_items_purchased", "sum"),
+        )
+        .sort_values(["year_month", "cluster_id", "name"])
+        .reset_index(drop=True)
+    )
+    out["gmv_per_ga_view"] = out["monthly_gmv"] / out["ga_items_viewed"].replace(0, np.nan)
+    out["ga_add_to_cart_rate"] = out["ga_items_added_to_cart"] / out["ga_items_viewed"].replace(0, np.nan)
+    out["ga_view_to_purchase_rate"] = out["ga_items_purchased"] / out["ga_items_viewed"].replace(0, np.nan)
+    return out
 
 def _aggregate_strategy_scope(df: pd.DataFrame, scope_label: str, min_sample_size: int = 3) -> pd.DataFrame:
     if df.empty:
@@ -313,6 +276,150 @@ def _aggregate_strategy_scope(df: pd.DataFrame, scope_label: str, min_sample_siz
     agg["scope_label"] = scope_label
     return agg.sort_values(["meets_sample_guardrail", "ranking_score"], ascending=[False, False]).reset_index(drop=True)
 
+def _prepare_ga_quality_display(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty:
+        return df.copy()
+
+    display_cols = [
+        c
+        for c in [
+            "year_month",
+            "latest_segment",
+            "cluster_label",
+            "name",
+            "ga_items_viewed",
+            "gmv_per_ga_view",
+            "ga_add_to_cart_rate",
+            "ga_view_to_purchase_rate",
+        ]
+        if c in df.columns
+    ]
+    out = df[display_cols].copy().rename(
+        columns={
+            "year_month": "Month",
+            "latest_segment": "Segment",
+            "cluster_label": "Cluster",
+            "name": "Restaurant",
+            "ga_items_viewed": "GA Item Views",
+            "gmv_per_ga_view": "GMV / GA View",
+            "ga_add_to_cart_rate": "Add to Cart Rate",
+            "ga_view_to_purchase_rate": "View to Purchase Rate",
+        }
+    )
+    if "Month" in out.columns:
+        out["Month"] = pd.to_datetime(out["Month"], errors="coerce").dt.strftime("%Y-%m")
+    for col in ["Segment", "Cluster", "Restaurant"]:
+        if col in out.columns:
+            out[col] = out[col].fillna("Unknown").astype(str)
+    if "GA Item Views" in out.columns:
+        out["GA Item Views"] = pd.to_numeric(out["GA Item Views"], errors="coerce").round(0)
+    if "GMV / GA View" in out.columns:
+        out["GMV / GA View"] = out["GMV / GA View"].apply(_fmt_thb)
+    for col in ["Add to Cart Rate", "View to Purchase Rate"]:
+        if col in out.columns:
+            out[col] = out[col].apply(_fmt_pct)
+    return out
+
+
+def _prepare_restaurant_ga_view_contribution(
+    restaurant_rows: pd.DataFrame,
+    max_restaurants: int = 15,
+) -> pd.DataFrame:
+    if restaurant_rows.empty:
+        return pd.DataFrame()
+
+    required_cols = {"year_month", "name", "monthly_gmv", "ga_items_viewed"}
+    if not required_cols.issubset(restaurant_rows.columns):
+        return pd.DataFrame()
+
+    rows = restaurant_rows.copy()
+    rows["year_month"] = pd.to_datetime(rows["year_month"], errors="coerce")
+    rows["name"] = rows["name"].fillna("Unknown").astype(str)
+    rows["monthly_gmv"] = pd.to_numeric(rows["monthly_gmv"], errors="coerce").fillna(0)
+    rows["ga_items_viewed"] = pd.to_numeric(rows["ga_items_viewed"], errors="coerce").fillna(0)
+    rows = rows.dropna(subset=["year_month"])
+    if rows.empty:
+        return pd.DataFrame()
+
+    top_names = (
+        rows.groupby("name")["monthly_gmv"]
+        .sum()
+        .sort_values(ascending=False)
+        .head(max_restaurants)
+        .index
+    )
+    rows["restaurant_group"] = np.where(rows["name"].isin(top_names), rows["name"], "Other restaurants")
+
+    contribution = (
+        rows.groupby(["year_month", "restaurant_group"], as_index=False)
+        .agg(
+            monthly_gmv=("monthly_gmv", "sum"),
+            ga_items_viewed=("ga_items_viewed", "sum"),
+        )
+        .sort_values(["year_month", "monthly_gmv"], ascending=[True, False])
+    )
+    contribution["restaurant_gmv_per_ga_view"] = (
+        contribution["monthly_gmv"] / contribution["ga_items_viewed"].replace(0, np.nan)
+    )
+    month_views = contribution.groupby("year_month")["ga_items_viewed"].transform("sum").replace(0, np.nan)
+    contribution["ga_view_share"] = contribution["ga_items_viewed"] / month_views
+    contribution["month_label"] = contribution["year_month"].dt.strftime("%Y-%m")
+    return contribution.reset_index(drop=True)
+
+
+def _prepare_campaign_start_markers(strategy_rows: pd.DataFrame, month_labels: list[str]) -> pd.DataFrame:
+    if strategy_rows.empty or "applied_date" not in strategy_rows.columns or not month_labels:
+        return pd.DataFrame()
+
+    markers = strategy_rows.copy()
+    markers["applied_date"] = pd.to_datetime(markers["applied_date"], errors="coerce")
+    markers = markers.dropna(subset=["applied_date"])
+    if markers.empty:
+        return pd.DataFrame()
+
+    if "strategy_family" not in markers.columns:
+        markers["strategy_family"] = markers.get("strategy_name", "Unknown Strategy")
+    markers["strategy_family"] = markers["strategy_family"].fillna("Unknown Strategy").astype(str)
+    markers["campaign_name"] = markers.get("campaign_name", pd.Series("Unknown Campaign", index=markers.index))
+    markers["campaign_name"] = markers["campaign_name"].fillna("Unknown Campaign").astype(str)
+    markers["month_label"] = markers["applied_date"].dt.strftime("%Y-%m")
+    markers = markers[markers["month_label"].isin(month_labels)].copy()
+    if markers.empty:
+        return pd.DataFrame()
+
+    if "activity_id" in markers.columns:
+        markers = markers.drop_duplicates(["activity_id", "month_label", "strategy_family"])
+    else:
+        markers = markers.drop_duplicates(["applied_date", "campaign_name", "strategy_family"])
+
+    def _join_examples(group: pd.DataFrame) -> str:
+        examples = (
+            group.sort_values("applied_date")
+            .assign(example=lambda df: df["applied_date"].dt.strftime("%Y-%m-%d") + " | " + df["campaign_name"])
+            ["example"]
+            .head(6)
+            .tolist()
+        )
+        more = len(group) - len(examples)
+        suffix = f"<br>+ {more} more" if more > 0 else ""
+        return "<br>".join(html.escape(item) for item in examples) + suffix
+
+    out = (
+        markers.groupby(["month_label", "strategy_family"], as_index=False)
+        .apply(
+            lambda g: pd.Series(
+                {
+                    "campaign_count": len(g),
+                    "examples": _join_examples(g),
+                }
+            )
+        )
+        .reset_index(drop=True)
+    )
+    out["month_strategy_rank"] = out.groupby("month_label")["campaign_count"].rank(method="first", ascending=False) - 1
+    return out.sort_values(["month_label", "month_strategy_rank"]).reset_index(drop=True)
+
+
 # Prep campaign breakdown data for display, including renaming and formatting
 def _prepare_campaign_breakdown_display(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty:
@@ -324,8 +431,6 @@ def _prepare_campaign_breakdown_display(df: pd.DataFrame) -> pd.DataFrame:
         "campaign_name",
         "campaign_id",
         "sessions",
-        "platform_sessions",
-        "allocation_share",
         "session_share",
     ]
     display_cols = [c for c in priority_cols if c in df.columns]
@@ -339,20 +444,16 @@ def _prepare_campaign_breakdown_display(df: pd.DataFrame) -> pd.DataFrame:
         "campaignName": "Campaign Name",
         "campaign_id": "Campaign ID",
         "campaignId": "Campaign ID",
-        "sessions": "Allocated Sessions",
-        "platform_sessions": "Platform Sessions",
-        "allocation_share": "Scope GA View Share",
-        "session_share": "Allocated Session Share",
+        "sessions": "Sessions",
+        "session_share": "Session Share",
     }
     out = df[display_cols].copy().rename(columns=rename_map)
     if "Year Month" in out.columns:
         out["Year Month"] = pd.to_datetime(out["Year Month"], errors="coerce").dt.strftime("%Y-%m")
-    for col in ["Allocated Sessions", "Platform Sessions"]:
-        if col in out.columns:
-            out[col] = pd.to_numeric(out[col], errors="coerce").round(0)
-    for col in ["Scope GA View Share", "Allocated Session Share"]:
-        if col in out.columns:
-            out[col] = out[col].apply(_fmt_pct)
+    if "Sessions" in out.columns:
+        out["Sessions"] = pd.to_numeric(out["Sessions"], errors="coerce").round(0)
+    if "Session Share" in out.columns:
+        out["Session Share"] = out["Session Share"].apply(_fmt_pct)
     return out
 
 
@@ -701,9 +802,12 @@ def _render_scope_bar(
 def render():
     assignments = load_cluster_assignments() # Load from clustering_results
     ga_campaign_raw = load_ga_campaign_outreach_raw()
-    ga_campaign_type_monthly = load_ga_campaign_type_monthly()
     ga_restaurant_monthly = load_ga_restaurant_monthly()
     outcomes_df = load_cluster_strategy_outcomes()
+    if "selected_strategy_family" not in st.session_state:
+        st.session_state["selected_strategy_family"] = "All"
+    if "selected_ga_campaign_type" not in st.session_state:
+        st.session_state["selected_ga_campaign_type"] = "All"
 
     st.markdown("## Clustering Explorer")
     st.markdown(
@@ -902,7 +1006,8 @@ def render():
                 top_cols = st.columns(min(3, len(best_recs)))
                 for idx, (_, rec) in enumerate(best_recs.iterrows()):
                     with top_cols[idx]:
-                        strategy_name = html.escape(str(rec.get("strategy_name", "Unknown Strategy")))
+                        strategy_value = str(rec.get("strategy_name", "Unknown Strategy"))
+                        strategy_name = html.escape(strategy_value)
                         revenue_uplift = _fmt_pct_value(rec.get("avg_revenue_uplift_pct"))
                         bookings_uplift = _fmt_pct_value(rec.get("avg_bookings_uplift_pct"))
                         activities = rec.get("activities")
@@ -949,6 +1054,12 @@ def render():
                             """,
                             unsafe_allow_html=True,
                         )
+                        if st.button(
+                            f"Filter: {strategy_value}",
+                            key=f"strategy_card_filter_{idx}_{hashlib.md5(strategy_value.encode('utf-8')).hexdigest()[:8]}",
+                            width="stretch",
+                        ):
+                            st.session_state["selected_strategy_family"] = strategy_value
                 st.markdown("<div style='height:0.95rem;'></div>", unsafe_allow_html=True)
 
             rank_display_source = cluster_rank.sort_values(
@@ -989,9 +1100,36 @@ def render():
             if raw_strategy_campaigns.empty:
                 st.info("No raw campaign rows available for this strategy scope.")
             else:
+                if "strategy_family" not in raw_strategy_campaigns.columns:
+                    raw_strategy_campaigns["strategy_family"] = "Unknown"
+                raw_strategy_campaigns["strategy_family"] = raw_strategy_campaigns["strategy_family"].fillna("Unknown")
+                available_strategies = sorted(raw_strategy_campaigns["strategy_family"].dropna().astype(str).unique())
+                selected_strategy_family = str(st.session_state.get("selected_strategy_family", "All") or "All")
+                if selected_strategy_family != "All" and selected_strategy_family not in available_strategies:
+                    selected_strategy_family = "All"
+                    st.session_state["selected_strategy_family"] = "All"
+
+                strategy_filter_cols = st.columns([2, 1])
+                with strategy_filter_cols[0]:
+                    strategy_options = ["All"] + available_strategies
+                    selected_strategy_family = st.selectbox(
+                        "Assigned Strategy",
+                        strategy_options,
+                        index=strategy_options.index(selected_strategy_family)
+                        if selected_strategy_family in strategy_options else 0,
+                        key="selected_strategy_family",
+                    )
+                with strategy_filter_cols[1]:
+                    st.markdown("<div style='height:1.72rem;'></div>", unsafe_allow_html=True)
+                    st.button("Clear strategy filter", on_click=_clear_strategy_filter, width="stretch")
+
+                if selected_strategy_family != "All":
+                    raw_strategy_campaigns = raw_strategy_campaigns[
+                        raw_strategy_campaigns["strategy_family"].astype(str).eq(selected_strategy_family)
+                    ].copy()
+
                 strategy_mix = (
                     raw_strategy_campaigns.assign(
-                        strategy_family=raw_strategy_campaigns["strategy_family"].fillna("Unknown"),
                         bookings_uplift_pct=pd.to_numeric(raw_strategy_campaigns.get("bookings_uplift_pct"), errors="coerce"),
                         revenue_uplift_pct=pd.to_numeric(raw_strategy_campaigns.get("revenue_uplift_pct"), errors="coerce"),
                     )
@@ -1112,29 +1250,30 @@ def render():
         ga_scope_assignments = ga_scope_assignments[ga_scope_assignments["name_norm"] == active_rest_norm].copy()
     scope_name_norms = set(ga_scope_assignments.get("name_norm", pd.Series(dtype=str)).dropna().astype(str))
     scope_ga_monthly = _prepare_scope_ga_monthly(ga_restaurant_monthly, assignments, scope_name_norms)
-    scope_ga = _build_scope_ga_effectiveness(scope_ga_monthly, ga_campaign_type_monthly, scope_label)
+    scope_ga_rows = _prepare_scope_ga_restaurant_rows(ga_restaurant_monthly, assignments, scope_name_norms)
 
-    if scope_ga.empty:
+    if scope_ga_monthly.empty:
         st.info("No GA campaign effectiveness data available for this scope.")
     else:
         st.caption(
-            "Campaign effectiveness is inferred from month-level overlap between cluster GMV per GA view "
-            "and the platform Google Ads campaign mix. Sessions are allocated to the current navbar scope by "
-            "that scope's monthly share of GA item views. The raw GA breakdown below uses the same allocation, "
-            "so campaign-row totals reconcile with this section."
+            "Observed GA quality for the current navbar scope. GMV / GA View, Add to Cart Rate, "
+            "and View to Purchase Rate come from restaurant-level GA item activity and GMV; no sessions "
+            "are allocated in this section."
         )
 
-        ga_card_source = scope_ga.copy()
-        top_ga = ga_card_source.sort_values("ga_effectiveness_score", ascending=False).head(3)
-        st.caption("Top GA campaign cards show GMV / GA View and Add to Cart Rate.")
-        ga_cols = st.columns(min(3, len(top_ga)))
-        for idx, (_, rec) in enumerate(top_ga.iterrows()):
-            with ga_cols[idx]:
-                campaign_type = html.escape(str(rec.get("googleAdsCampaignType", "Unknown Campaign Type")))
-                gmv_per_ga = _fmt_thb_value(rec.get("session_weighted_gmv_per_ga_view"))
-                atc_rate = _fmt_pct_value(rec.get("session_weighted_add_to_cart_rate"))
-                sessions = rec.get("total_sessions")
-                session_text = "0" if pd.isna(sessions) else f"{int(_num_or_zero(sessions)):,}"
+        total_ga_views = pd.to_numeric(scope_ga_monthly["total_ga_items_viewed"], errors="coerce").fillna(0).sum()
+        total_gmv = pd.to_numeric(scope_ga_monthly["total_monthly_gmv"], errors="coerce").fillna(0).sum()
+        total_added_to_cart = pd.to_numeric(scope_ga_monthly["total_ga_items_added_to_cart"], errors="coerce").fillna(0).sum()
+        total_purchased = pd.to_numeric(scope_ga_monthly["total_ga_items_purchased"], errors="coerce").fillna(0).sum()
+        summary_metrics = [
+            ("GA Item Views", f"{total_ga_views:,.0f}", "#111827"),
+            ("GMV / GA View", _fmt_thb(total_gmv / total_ga_views) if total_ga_views > 0 else "-", "#cc0000"),
+            ("Add to Cart Rate", _fmt_pct(total_added_to_cart / total_ga_views) if total_ga_views > 0 else "-", "#2563eb"),
+            ("View to Purchase Rate", _fmt_pct(total_purchased / total_ga_views) if total_ga_views > 0 else "-", "#047857"),
+        ]
+        metric_cols = st.columns(4)
+        for idx, (label, value, color) in enumerate(summary_metrics):
+            with metric_cols[idx]:
                 st.markdown(
                     f"""
                     <div style="
@@ -1142,108 +1281,209 @@ def render():
                         border-radius:8px;
                         padding:0.85rem 0.9rem;
                         background:#ffffff;
-                        min-height:150px;
+                        min-height:96px;
                     ">
-                        <div style="font-size:0.78rem; color:#6b7280; font-weight:700;">#{idx + 1} GA Campaign Type</div>
+                        <div style="font-size:0.74rem; color:#6b7280; font-weight:750;">{html.escape(label)}</div>
                         <div style="
-                            margin-top:0.15rem;
-                            font-size:0.95rem;
-                            color:#111827;
-                            font-weight:800;
-                            line-height:1.25;
-                            min-height:2.4rem;
-                        ">{campaign_type}</div>
-                        <div style="
-                            display:grid;
-                            grid-template-columns:1fr 1fr;
-                            gap:0.65rem;
-                            margin-top:0.85rem;
-                        ">
-                            <div>
-                                <div style="font-size:0.72rem; color:#6b7280; font-weight:700;">GMV / GA View</div>
-                                <div style="font-size:1.35rem; color:#cc0000; font-weight:850;">{gmv_per_ga}</div>
-                            </div>
-                            <div>
-                                <div style="font-size:0.72rem; color:#6b7280; font-weight:700;">Add to Cart Rate</div>
-                                <div style="font-size:1.35rem; color:#111827; font-weight:850;">{atc_rate}</div>
-                            </div>
-                        </div>
-                        <div style="margin-top:0.75rem; font-size:0.75rem; color:#6b7280;">
-                            <span style="font-weight:800; color:#374151;">{session_text}</span> allocated sessions
-                        </div>
+                            margin-top:0.35rem;
+                            font-size:1.45rem;
+                            line-height:1.15;
+                            color:{color};
+                            font-weight:850;
+                        ">{html.escape(value)}</div>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
-        st.markdown("<div style='height:0.95rem;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='height:0.85rem;'></div>", unsafe_allow_html=True)
 
-        ga_display_source = scope_ga.sort_values("ga_effectiveness_score", ascending=False)
-        ga_display_cols = [
-            c
-            for c in [
-                "scope_label",
-                "googleAdsCampaignType",
-                "total_sessions",
-                "session_weighted_gmv_per_ga_view",
-                "session_weighted_add_to_cart_rate",
-                "session_weighted_view_to_purchase_rate",
-            ]
-            if c in scope_ga.columns
-        ]
-        ga_display = ga_display_source[ga_display_cols].copy().rename(
-            columns={
-                "scope_label": "Scope",
-                "googleAdsCampaignType": "GA Campaign Type",
-                "total_sessions": "Allocated Sessions",
-                "session_weighted_gmv_per_ga_view": "GMV / GA View",
-                "session_weighted_add_to_cart_rate": "Add to Cart Rate",
-                "session_weighted_view_to_purchase_rate": "View to Purchase Rate",
-            }
+        chart_df = scope_ga_monthly.copy()
+        chart_df["month_label"] = pd.to_datetime(chart_df["year_month"], errors="coerce").dt.strftime("%Y-%m")
+        fig_ga_quality = go.Figure()
+        restaurant_contribution = _prepare_restaurant_ga_view_contribution(scope_ga_rows)
+        if restaurant_contribution.empty:
+            fig_ga_quality.add_trace(
+                go.Bar(
+                    x=chart_df["month_label"],
+                    y=chart_df["total_ga_items_viewed"],
+                    name="GA Item Views",
+                    marker_color="#cc0000",
+                    hovertemplate="%{x}<br>GA Item Views: %{y:,.0f}<extra></extra>",
+                )
+            )
+        else:
+            restaurant_names = (
+                restaurant_contribution.groupby("restaurant_group")["monthly_gmv"]
+                .sum()
+                .sort_values(ascending=False)
+                .index
+                .tolist()
+            )
+            palette = px.colors.qualitative.Safe + px.colors.qualitative.Vivid + px.colors.qualitative.Set3
+            for idx, restaurant_name in enumerate(restaurant_names):
+                rest_df = restaurant_contribution[
+                    restaurant_contribution["restaurant_group"].eq(restaurant_name)
+                ].copy()
+                rest_df = chart_df[["month_label"]].merge(rest_df, on="month_label", how="left")
+                customdata = np.stack(
+                    [
+                        rest_df["restaurant_gmv_per_ga_view"],
+                        rest_df["monthly_gmv"],
+                        rest_df["ga_view_share"],
+                    ],
+                    axis=-1,
+                )
+                fig_ga_quality.add_trace(
+                    go.Bar(
+                        x=rest_df["month_label"],
+                        y=rest_df["ga_items_viewed"].fillna(0),
+                        name=restaurant_name,
+                        marker_color="#9ca3af" if restaurant_name == "Other restaurants" else palette[idx % len(palette)],
+                        customdata=customdata,
+                        hovertemplate=(
+                            "<b>%{fullData.name}</b><br>"
+                            "%{x}<br>"
+                            "GA item views: %{y:,.0f}<br>"
+                            "Restaurant GMV / GA View: THB %{customdata[0]:,.0f}<br>"
+                            "GMV: THB %{customdata[1]:,.0f}<br>"
+                            "GA view share: %{customdata[2]:.1%}<extra></extra>"
+                        ),
+                    )
+                )
+        fig_ga_quality.add_trace(
+            go.Scatter(
+                x=chart_df["month_label"],
+                y=chart_df["gmv_per_ga_view"],
+                name="GMV / GA View",
+                mode="lines+markers",
+                line=dict(color="#cc0000", width=3),
+                marker=dict(size=7),
+                yaxis="y2",
+                hovertemplate="%{x}<br>GMV / GA View: THB %{y:,.0f}<extra></extra>",
+            )
         )
-        if "Scope" in ga_display.columns:
-            ga_display = ga_display.drop(columns=["Scope"])
+        fig_ga_quality.add_trace(
+            go.Scatter(
+                x=chart_df["month_label"],
+                y=chart_df["ga_add_to_cart_rate"],
+                name="Add to Cart Rate",
+                mode="lines+markers",
+                line=dict(color="#2563eb", width=3, dash="dot"),
+                marker=dict(size=7),
+                yaxis="y3",
+                hovertemplate="%{x}<br>Add to Cart Rate: %{y:.1%}<extra></extra>",
+            )
+        )
+        campaign_markers = _prepare_campaign_start_markers(
+            strategy_scope_outcomes,
+            chart_df["month_label"].dropna().astype(str).tolist(),
+        )
+        if not campaign_markers.empty:
+            marker_positions = chart_df[["month_label", "total_ga_items_viewed"]].copy()
+            marker_positions["total_ga_items_viewed"] = pd.to_numeric(
+                marker_positions["total_ga_items_viewed"], errors="coerce"
+            ).fillna(0)
+            campaign_markers = campaign_markers.merge(marker_positions, on="month_label", how="left")
+            campaign_markers["marker_y"] = campaign_markers["total_ga_items_viewed"] * (
+                1.08 + campaign_markers["month_strategy_rank"] * 0.08
+            )
+            campaign_markers["marker_y"] = campaign_markers["marker_y"].where(
+                campaign_markers["marker_y"].gt(0),
+                1 + campaign_markers["month_strategy_rank"],
+            )
+            marker_palette = px.colors.qualitative.Bold + px.colors.qualitative.Safe + px.colors.qualitative.Vivid
+            strategy_color_map = {
+                strategy: marker_palette[idx % len(marker_palette)]
+                for idx, strategy in enumerate(sorted(campaign_markers["strategy_family"].unique()))
+            }
+            marker_customdata = np.stack(
+                [
+                    campaign_markers["strategy_family"],
+                    campaign_markers["campaign_count"],
+                    campaign_markers["examples"],
+                ],
+                axis=-1,
+            )
+            fig_ga_quality.add_trace(
+                go.Scatter(
+                    x=campaign_markers["month_label"],
+                    y=campaign_markers["marker_y"],
+                    name="Marketing starts",
+                    mode="markers",
+                    marker=dict(
+                        symbol="triangle-down",
+                        size=13,
+                        color=campaign_markers["strategy_family"].map(strategy_color_map),
+                        line=dict(color="#111827", width=1),
+                    ),
+                    customdata=marker_customdata,
+                    hovertemplate=(
+                        "<b>%{customdata[0]}</b><br>"
+                        "%{x}<br>"
+                        "Campaign starts: %{customdata[1]}<br>"
+                        "%{customdata[2]}<extra></extra>"
+                    ),
+                )
+            )
+        fig_ga_quality.update_layout(
+            **BASE_LAYOUT,
+            height=340,
+            barmode="stack",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
+            xaxis=dict(**CHART_THEME["xaxis"], title="Month"),
+            yaxis=dict(**CHART_THEME["yaxis"], title="GA Item Views"),
+            yaxis2=dict(
+                title="GMV / GA View",
+                overlaying="y",
+                side="right",
+                showgrid=False,
+                zeroline=False,
+            ),
+            yaxis3=dict(
+                title="Add to Cart Rate",
+                overlaying="y",
+                side="right",
+                anchor="free",
+                position=0.94,
+                tickformat=".0%",
+                showgrid=False,
+                zeroline=False,
+            ),
+        )
+        st.plotly_chart(fig_ga_quality, width="stretch")
+        st.caption("Triangle markers show marketing strategy campaign starts in that month; hover to see campaign dates and names.")
 
-        if "Allocated Sessions" in ga_display.columns:
-            ga_display["Allocated Sessions"] = pd.to_numeric(ga_display["Allocated Sessions"], errors="coerce").round(0)
-        if "GMV / GA View" in ga_display.columns:
-            ga_display["GMV / GA View"] = ga_display["GMV / GA View"].apply(_fmt_thb)
-        for col in ["Add to Cart Rate", "View to Purchase Rate"]:
-            if col in ga_display.columns:
-                ga_display[col] = ga_display[col].apply(_fmt_pct)
-
-        st.dataframe(
-            ga_display,
-            hide_index=True,
-            width="stretch",
-            height=280,
+        ga_quality_display = _prepare_ga_quality_display(scope_ga_rows)
+        st.caption("Restaurant-month GA quality rows for the current navbar scope.")
+        _render_filterable_table(
+            ga_quality_display,
+            key=f"ga_quality_table_{str(active_cluster)}_{active_rest_norm}_{selected_segment_filter}",
+            height=380,
+            initial_sort_column="Month",
+            initial_sort_direction="desc",
         )
 
     st.markdown("#### Raw GA Campaign Breakdown")
     st.caption(
         "Source: `data/marketing/googleAPI/campaigns_outreach.parquet`. "
-        "Rows are raw Google Ads campaigns, but session counts are allocated to the current navbar scope using "
-        "the same monthly GA item-view share as GA Campaign Effectiveness."
+        "Rows are raw GA campaign sessions by campaign and month. These are not allocated to clusters "
+        "or restaurants."
     )
 
     if ga_campaign_raw.empty:
         st.info("No raw GA campaign outreach rows found.")
     else:
-        campaign_scope = _allocate_campaign_breakdown_to_scope(ga_campaign_raw, scope_ga_monthly)
+        campaign_scope = ga_campaign_raw.copy()
+        if not scope_ga_monthly.empty:
+            scope_months = set(pd.to_datetime(scope_ga_monthly["year_month"], errors="coerce").dropna())
+            campaign_scope = campaign_scope[pd.to_datetime(campaign_scope["year_month"], errors="coerce").isin(scope_months)].copy()
 
         if campaign_scope.empty:
-            st.info("No campaign outreach rows match the available month window for this navbar scope.")
+            st.info("No campaign outreach rows match the available month window.")
         else:
             campaign_scope["sessions"] = pd.to_numeric(campaign_scope["sessions"], errors="coerce").fillna(0)
             total_sessions = campaign_scope["sessions"].sum()
-            effectiveness_total_sessions = (
-                pd.to_numeric(scope_ga.get("total_sessions"), errors="coerce").fillna(0).sum()
-                if not scope_ga.empty
-                else 0
-            )
-            st.caption(
-                f"Allocated campaign rows total {total_sessions:,.0f} sessions; "
-                f"GA Campaign Effectiveness total {effectiveness_total_sessions:,.0f} sessions."
-            )
+            st.caption(f"Raw GA campaign rows total {total_sessions:,.0f} sessions in the visible month window.")
             campaign_scope["session_share"] = np.where(
                 total_sessions > 0,
                 campaign_scope["sessions"] / total_sessions,
@@ -1268,7 +1508,7 @@ def render():
                     marker_color="#3b82f6",
                     text=mix_df["session_share"].apply(lambda v: "-" if pd.isna(v) else f"{v:.0%}"),
                     textposition="outside",
-                    hovertemplate="%{x}<br>Allocated Sessions: %{y:,.0f}<br>Share: %{text}<extra></extra>",
+                    hovertemplate="%{x}<br>Sessions: %{y:,.0f}<br>Share: %{text}<extra></extra>",
                 )
             )
             fig_campaign_mix.update_layout(
@@ -1276,18 +1516,60 @@ def render():
                 height=260,
                 showlegend=False,
                 xaxis=dict(**CHART_THEME["xaxis"], title="GA Campaign Type", tickangle=-20),
-                yaxis=dict(**CHART_THEME["yaxis"], title="Allocated Sessions"),
+                yaxis=dict(**CHART_THEME["yaxis"], title="Sessions"),
             )
-            st.plotly_chart(fig_campaign_mix, width="stretch")
+            campaign_mix_event = st.plotly_chart(
+                fig_campaign_mix,
+                width="stretch",
+                key=f"raw_ga_campaign_mix_{str(active_cluster)}_{active_rest_norm}_{selected_segment_filter}",
+                on_select="rerun",
+                selection_mode="points",
+            )
+            selected_campaign_type_from_chart = _get_plotly_selected_x(campaign_mix_event)
+            if selected_campaign_type_from_chart:
+                st.session_state["selected_ga_campaign_type"] = selected_campaign_type_from_chart
+
+            available_campaign_types = sorted(
+                campaign_scope["googleAdsCampaignType"].fillna("Unknown").astype(str).unique()
+            )
+            selected_ga_campaign_type = str(st.session_state.get("selected_ga_campaign_type", "All") or "All")
+            if selected_ga_campaign_type != "All" and selected_ga_campaign_type not in available_campaign_types:
+                selected_ga_campaign_type = "All"
+                st.session_state["selected_ga_campaign_type"] = "All"
+
+            ga_filter_cols = st.columns([2, 1])
+            with ga_filter_cols[0]:
+                st.caption(
+                    "Click a bar to filter the raw table by GA Campaign Type."
+                    + (
+                        f" Active filter: {selected_ga_campaign_type}."
+                        if selected_ga_campaign_type != "All"
+                        else ""
+                    )
+                )
+            with ga_filter_cols[1]:
+                st.button("Clear GA type filter", on_click=_clear_ga_campaign_type_filter, width="stretch")
+
+            filtered_campaign_scope = campaign_scope.copy()
+            if selected_ga_campaign_type != "All":
+                filtered_campaign_scope = filtered_campaign_scope[
+                    filtered_campaign_scope["googleAdsCampaignType"]
+                    .fillna("Unknown")
+                    .astype(str)
+                    .eq(selected_ga_campaign_type)
+                ].copy()
 
             campaign_display = _prepare_campaign_breakdown_display(
-                campaign_scope.sort_values(["sessions", "campaign_name"], ascending=[False, True])
+                filtered_campaign_scope.sort_values(["sessions", "campaign_name"], ascending=[False, True])
             )
             st.caption("Click column headers to toggle ASC/DESC and use the filter boxes inside the table headers.")
             _render_filterable_table(
                 campaign_display,
-                key=f"raw_ga_campaign_table_{str(active_cluster)}_{active_rest_norm}_{selected_segment_filter}",
+                key=(
+                    f"raw_ga_campaign_table_{str(active_cluster)}_{active_rest_norm}_"
+                    f"{selected_segment_filter}_{selected_ga_campaign_type}"
+                ),
                 height=320,
-                initial_sort_column="Allocated Sessions",
+                initial_sort_column="Sessions",
                 initial_sort_direction="desc",
             )

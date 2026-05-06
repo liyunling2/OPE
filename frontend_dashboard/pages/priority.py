@@ -58,6 +58,58 @@ def get_tier(tier):
     return "gray", str(tier), "#7c82a0"
 
 
+def sync_navbar_restaurant_from_ranked_list(row: pd.Series) -> None:
+    restaurant_name = str(row.get("Restaurant", "")).strip()
+    if not restaurant_name or restaurant_name.lower() in {"nan", "none"}:
+        return
+
+    if st.session_state.get("selected_restaurant") == restaurant_name:
+        return
+
+    row_segment = str(row.get("Segment", "")).strip()
+    if (
+        st.session_state.get("selected_segment", "All") != "All"
+        and row_segment
+        and row_segment != st.session_state.get("selected_segment")
+    ):
+        st.session_state["selected_segment"] = "All"
+
+    row_cluster = str(row.get("Cluster", "")).strip()
+    selected_cluster = st.session_state.get("selected_cluster", "All")
+    if selected_cluster != "All":
+        try:
+            cluster_matches = row_cluster.startswith(f"Cluster {int(selected_cluster)}")
+        except (TypeError, ValueError):
+            cluster_matches = False
+        if not cluster_matches:
+            st.session_state["selected_cluster"] = "All"
+
+    st.session_state["selected_restaurant"] = restaurant_name
+    st.rerun()
+
+
+def filter_priority_for_navbar(
+    priority_df: pd.DataFrame,
+    selected_restaurant: str,
+    selected_segment: str,
+    selected_cluster,
+) -> pd.DataFrame:
+    scoped = priority_df.copy()
+
+    if selected_segment != "All" and "latest_segment" in scoped.columns:
+        scoped = scoped[scoped["latest_segment"].astype(str).eq(str(selected_segment))].copy()
+
+    if selected_cluster != "All" and "cluster_id" in scoped.columns:
+        cluster_value = pd.to_numeric(pd.Series([selected_cluster]), errors="coerce").iloc[0]
+        if pd.notna(cluster_value):
+            scoped = scoped[pd.to_numeric(scoped["cluster_id"], errors="coerce").eq(int(cluster_value))].copy()
+
+    if selected_restaurant != "All" and "name" in scoped.columns:
+        scoped = scoped[scoped["name"].astype(str).eq(str(selected_restaurant))].copy()
+
+    return scoped
+
+
 def coerce_bool_series(df: pd.DataFrame, column: str, default: bool = False) -> pd.Series:
     if column not in df.columns:
         return pd.Series(default, index=df.index, dtype=bool)
@@ -261,13 +313,20 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
 def render():
     selected_restaurant = st.session_state["selected_restaurant"]
     selected_segment = st.session_state["selected_segment"]
+    selected_cluster = st.session_state.get("selected_cluster", "All")
     base_priority_df = load_priority()
     priority_df = build_priority_universe(base_priority_df)
+    ranked_priority_df = filter_priority_for_navbar(
+        priority_df,
+        selected_restaurant,
+        selected_segment,
+        selected_cluster,
+    )
     
     st.markdown("## Prioritised Ranked List")
     st.markdown('List is derived by ranking highest GMV/GA View, highest priority score and lowest number of marketing efforts')
     cols = []
-    for idx, row in priority_df.iterrows():
+    for idx, row in ranked_priority_df.iterrows():
         rank     = idx + 1
         name     = row["name"]
         score    = row["priority_score"]
@@ -295,19 +354,40 @@ def render():
             })
    
     display_df = pd.DataFrame(cols)
-    display_df["Priority Score"] = pd.to_numeric(display_df["Priority Score"], errors="coerce")
-    display_df["GMV/GA View"] = pd.to_numeric(display_df["GMV/GA View"], errors="coerce")
-    display_df["No. of Campaigns"] = pd.to_numeric(display_df["No. of Campaigns"], errors="coerce")
-    sorted_display_df = display_df.sort_values(by=['GMV/GA View','Priority Score','No. of Campaigns'], ascending=[False, False, True])
-    st.dataframe(
-        sorted_display_df,
-        width="stretch",
-        height=300, hide_index=True
+    if display_df.empty:
+        st.info("No restaurants match the current navbar filters.")
+        st.markdown("---")
+        st.markdown("## Priority Scoring")
+    else:
+        display_df["Priority Score"] = pd.to_numeric(display_df["Priority Score"], errors="coerce")
+        display_df["GMV/GA View"] = pd.to_numeric(display_df["GMV/GA View"], errors="coerce")
+        display_df["No. of Campaigns"] = pd.to_numeric(display_df["No. of Campaigns"], errors="coerce")
+        sorted_display_df = display_df.sort_values(
+            by=['GMV/GA View','Priority Score','No. of Campaigns'],
+            ascending=[False, False, True],
+        ).reset_index(drop=True)
+        ranked_list_event = st.dataframe(
+            sorted_display_df,
+            width="stretch",
+            height=300,
+            hide_index=True,
+            key="priority_ranked_list_table",
+            on_select="rerun",
+            selection_mode="single-row",
         )
+        selection = getattr(ranked_list_event, "selection", None)
+        if selection is None and isinstance(ranked_list_event, dict):
+            selection = ranked_list_event.get("selection", {})
+        selected_rows = getattr(selection, "rows", None)
+        if selected_rows is None and isinstance(selection, dict):
+            selected_rows = selection.get("rows", [])
+        selected_rows = selected_rows or []
+        if selected_rows:
+            sync_navbar_restaurant_from_ranked_list(sorted_display_df.iloc[selected_rows[0]])
 
-    st.markdown("---")
+        st.markdown("---")
 
-    st.markdown("## Priority Scoring")
+        st.markdown("## Priority Scoring")
 
     with st.expander("__How Priority Score Is Calculated__", expanded=False):
         st.markdown("""
@@ -426,7 +506,12 @@ def render():
                     
 
 
-    df = priority_df.copy()
+    df = filter_priority_for_navbar(
+        priority_df,
+        selected_restaurant,
+        selected_segment,
+        selected_cluster,
+    )
     st.markdown(f"### _Top Restaurants based on Priority Scores_")
     st.caption("🟡 Amber bars = Seasonal flag — strong MoM but weak YoY. Timing-sensitive activation.")
 
@@ -442,7 +527,6 @@ def render():
         min_sc = st.slider("Min Score", 0, 100, 0)
 
     if t_filt != "All": df = df[df["priority_tier"] == t_filt]
-    if selected_segment != "All": df = df[df["latest_segment"] == selected_segment]
     if sig_filt != "All" and "growth_signal_used" in df.columns:
         df = df[df["growth_signal_used"] == sig_filt]
     if seas_filt == "Seasonal only" and "is_seasonal" in df.columns:
@@ -625,5 +709,3 @@ def render():
         #         else f"Strategic matrix position: Perf {'-' if pd.isna(perf_val) else f'{perf_val:.2f}'} / "
         #              f"Growth {'-' if pd.isna(growth_val) else f'{growth_val:.2f}'}"
         #     )
-
-
