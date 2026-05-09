@@ -137,7 +137,14 @@ def _restaurant_ga_snapshot(row: dict, hist: pd.DataFrame) -> str:
     )
 
 
-def call_cohere(selected: str, row: dict, hist: pd.DataFrame, segment: str, cluster_id: int, cluster_label: str, ga_cluster_table: list , ga_segment_table: list, ga_global_table: list, m_cluster_table: list, m_segment_table: list, m_global_table: list ) -> str:
+def call_cohere(selected: str,
+    row: dict,
+    hist: pd.DataFrame,
+    segment: str | None,
+    cluster_id,
+    cluster_label,
+    ga_rankings:pd.DataFrame,
+    momentum_df:pd.DataFrame) -> str:
     try:
         api_key = os.getenv("COHERE_API_KEY")
 
@@ -150,14 +157,9 @@ def call_cohere(selected: str, row: dict, hist: pd.DataFrame, segment: str, clus
                     segment=segment,
                     cluster_id=cluster_id,
                     cluster_label=cluster_label,
-                    ga_cluster_table=ga_cluster_table,
-                    ga_segment_table=ga_segment_table,
-                    ga_global_table=ga_global_table,
-                    m_cluster_table=m_cluster_table,
-                    m_segment_table=m_segment_table,
-                    m_global_table=m_global_table,
-                )
-
+                    ga_rankings=ga_rankings,
+                    momentum_df=momentum_df
+        )
         # Analyze the text without RAG
         response = co.chat(
             model="command-a-03-2025",
@@ -183,221 +185,128 @@ def build_ai_prompt(
     segment: str | None,
     cluster_id,
     cluster_label,
-    ga_cluster_table: pd.DataFrame,
-    ga_segment_table: pd.DataFrame,
-    ga_global_table: pd.DataFrame,
-    m_cluster_table: pd.DataFrame,
-    m_segment_table: pd.DataFrame,
-    m_global_table: pd.DataFrame,
+    ga_rankings:pd.DataFrame,
+    momentum_df:pd.DataFrame
 ) -> str:
     priority_score = fmt_num(pd.to_numeric(pd.Series([row.get("priority_score")]), errors="coerce").iloc[0], 1)
-    preferred_channel = display_value(row.get("recommended_channel"))
     priority_tier = display_value(row.get("priority_tier"))
 
     return f"""
-You are a senior marketing strategist advising a restaurant owner.
-
-IMPORTANT RULES:
-- Use ONLY the data provided below.
-- DO NOT invent any numbers or assumptions.
-- You MUST produce an answer; never return empty.
-- If data is missing, say "insufficient data".
-- Always mention the restaurant name at least once.
-- Always reference REAL metrics from the GA and CRM/KOL/FB tables.
-- Be specific to THIS restaurant; no generic advice.
-
-STYLE RULES:
-- Use bullet points only; no long paragraphs.
-- Max 1-2 lines per point.
-- Use simple language.
-- Only metric names can be technical.
-
----------------------
-RESTAURANT CONTEXT
----------------------
-Restaurant: {selected}
+You are a senior marketing strategist at a restaurant reservation platform. Your job is to write a precise,
+data-grounded strategy brief for ONE restaurant. Every claim must be traceable to a
+specific number in the data below. Vague advice is a failure.
+ 
+# ABSOLUTE RULES
+1. USE ONLY the data provided. Do not invent benchmarks, percentages, or outcomes.
+2. Every identified issue MUST include:
+   (a) the restaurant's actual metric value
+   (b) the cluster/segment/global benchmark it is being compared to
+   (c) the quantified gap (pp or absolute)
+   (d) WHY this gap is the priority — not just that it exists
+3. If multiple issues exist, RANK them by business impact (revenue loss > conversion
+   gap > traffic gap) and state the ranking with justification.
+4. The strategy for each issue must be directly traceable to the evidence:
+   - GA campaign type strategy → cite specific campaign type from GA ranking table
+   - CRM/KOL/FB action → cite specific strategy from marketing ranking table
+   - Package choice → link to funnel stage the package addresses
+5. Peer citations must name the specific strategy and its outcome metrics.
+6. If data is missing for a metric, say "insufficient data" and exclude it from
+   the issue ranking — do NOT estimate or assume.
+7. Use bullet points only. One finding per bullet. No paragraphs.
+8. Do not repeat the same metric twice across different sections.
+ 
+# DATA
+RESTAURANT IDENTITY
+Restaurant:     {selected}
 Cluster: {cluster_id} - {display_value(cluster_label)}
 Segment: {display_value(segment)}
 Priority Score: {priority_score}
 Priority Tier: {priority_tier}
-Preferred Channel: {preferred_channel}
-
----------------------
-RESTAURANT GA DIAGNOSTIC
----------------------
+ 
+ 
+RESTAURANT METRICS (latest available)
+GA FUNNEL:
 {_restaurant_ga_snapshot(row, hist)}
 
----------------------
-GA STRATEGY RANKINGS
-Formula: GA Strategy Score = (GMV/GA x 0.40) + (Add to Cart x 0.30) + (View to Purchase x 0.30)
-Note: GA Count = estimated sessions allocated to the selected scope using scope GA-view share by month. It is not reused platform-wide sessions.
----------------------
-Cluster Level:
-{_table_for_prompt(ga_cluster_table, 'ga')}
 
-Segment Level:
-{_table_for_prompt(ga_segment_table, 'ga')}
+RESTAURANT CLUSTER COMPARISON (raw dataframe — do not modify, do not recalculate):
+{ga_rankings}
 
-Global Level:
-{_table_for_prompt(ga_global_table, 'ga')}
+RESTAURANT BOOKING HISTORY (raw dataframe — do not filter, do not aggregate, do not transform):
+{momentum_df}
 
----------------------
-CRM / KOL / FB STRATEGY RANKINGS
-Formula: Marketing Strategy Score = (Average Revenue Uplift x 0.60) + (Average Booking Uplift x 0.40)
----------------------
-Cluster Level:
-{_table_for_prompt(m_cluster_table, 'marketing')}
 
-Segment Level:
-{_table_for_prompt(m_segment_table, 'marketing')}
+AVAILABLE PACKAGES
+1. BASIC   — Awareness Starter. Key tools: Blogger 20k×1/30k×1, Boost 2K THB, Pop-up Banner,
+          Homepage guarantee, Line@, Push. Revenue guarantee: 30K THB / 90 days.
+          Use when: traffic is the primary gap.
+ 
+2. STANDARD — Growth & Conversion. Key tools: Blogger 50k×1/30k×1, TikTok/Reels VDO,
+           Web Footer 2 days, Boost 3K THB, Line@, Push. Revenue guarantee: 40K THB / 120 days.
+           Use when: traffic exists but add-to-cart or view-to-purchase is weak.
+ 
+3. PREMIUM — High Impact. Key tools: Blogger 50k×2, TikTok/Reels VDO, Promotion Banner 1 week,
+          Blog Advertorial, Boost 5K THB, Line@, Push. Revenue guarantee: 100K THB / 180 days.
+          Use when: high priority tier AND both scale and conversion need addressing.
+ 
 
-Global Level:
-{_table_for_prompt(m_global_table, 'marketing')}
+# REQUIRED OUTPUT FORMAT — follow EXACTLY, no deviations
+> Return the response ONLY in valid JSON format. Do not give any comments to note..any reasoning must go into the json
+> Arrays must always be returned, even if only one item exists 
+> For EACH issue found, use the sub-structure below.
+> If there is more than one issue, number them and rank by business impact.
+> The most impactful issue (highest revenue consequence) must be Issue #1.
 
----------------------
-AVAILABLE MARKETING PACKAGES (WITH CAPABILITIES)
----------------------
 
-BASIC PACKAGE (Awareness Starter – Low Cost, Entry Level)
-Purpose:
-- Drive initial awareness and light engagement
-- Suitable for low traffic restaurants
+The JSON structure must strictly follow this schema:
+{{
+  "issues": [
+    {{
+      "issue_no": "integer",
+      "description": "string"
+    }}
+  ],
 
-Key Capabilities:
-- Revenue Guarantee (30K+ THB)
-- Revenue Guarantee (90 Day)
-- Send Blogger to Review x1 (20k followers)
-- Send Blogger to Review x2 (30k followers)
-- Boost post THB 2,000 Baht
-- Pop-up Banner: Individual
-- Photoshooting
-- Guaranteed in Restaurants list home page
-- HH Facebook Post : Individual post
-- Line@ Broadcasts :  Individual post
-- Push Notification
+  "strategy": "string",
 
-Limitations:
-- No strong video content
-- Limited reach and weak conversion tools
+  "package_recommendation_summary": {{
+    "recommended_package": "string",
+    "rationale": "string"
+  }}
+}}
 
-Use When:
-- Traffic is low
-- Need visibility, not deep conversion
+## Instructions for each section:
+1. issues
+- Identify the restaurant's key business or funnel problems using the provided metrics, benchmarks, gaps, booking trends, GMV performance, risk signals, and peer comparisons.
+- Rank issues by business impact:
+  - Issue #1 must represent the highest revenue or conversion impact.
+  - Lower-ranked issues should have smaller or secondary impact.
+- Each issue description must:
+  - Clearly explain the root problem.
+  - Reference supporting evidence from the provided data.
+  - Mention the affected funnel stage where relevant (traffic, add-to-cart, view-to-purchase).
+  - Explain why the issue matters commercially.
+- Keep descriptions concise but data-driven.
+- Do not invent metrics or unsupported claims.
 
-STANDARD PACKAGE (Growth & Conversion – Balanced)
-Purpose:
-- Improve customer intent and conversion
-- Best for mid-funnel problems (low add-to-cart, weak engagement)
+2. strategy
+- Provide a single consolidated strategic recommendation covering the identified issues.
+- The strategy should:
+  - Explain what actions should be taken.
+  - Reference relevant GA campaign types, CRM strategies, KOL activities, or Facebook actions when applicable.
+  - Align recommendations to the identified funnel gaps.
+  - Mention why the strategy is suitable for this restaurant segment or cluster.
+  - Focus on practical growth actions that improve bookings, GMV, conversion, or traffic quality.
+- Write as a concise executive recommendation paragraph.
 
-Key Capabilities:
-- Revenue Guarantee (40K+ THB)
-- Revenue Guarantee (120 Day)
-- Send Blogger to Review x1 (50k followers)
-- Send Blogger to Review x2 (30k followers)
-- Boost post THB 3,000 Baht
-- Pop-up Banner: Individual
-- Guaranteed in Restaurants list home page
-- Photoshooting
-- HH Facebook Post : Individual post
-- Line@ Broadcasts :  Individual post
-- Push Notification
-- Web Footer (2 days)
-- Tiktok VDO or Instagram Reels VDO
-
-Strengths:
-- Combines awareness + conversion tools
-- Strong for improving menu appeal and intent
-
-Use When:
-- Traffic exists but conversion is weak
-- Add-to-cart or engagement is low
-
-PREMIUM PACKAGE (High Impact – Scale + Conversion)
-Purpose:
-- Maximise reach AND conversion at scale
-- Suitable for high-priority restaurants
-
-Key Capabilities:
-- Revenue Guarantee (100K+ THB)
-- Revenue Guarantee (180 Day)
-- Send Blogger to Review x1 (50k followers)
-- Send Blogger to Review x2 (50k followers)
-- Boost post THB 5,000 Baht
-- Pop-up Banner: Individual
-- Guaranteed in Restaurants list home page
-- Photoshooting
-- HH Facebook Post : Individual post
-- Line@ Broadcasts :  Individual post
-- Push Notification
-- Web Footer (2 days)
-- Tiktok VDO or Instagram Reels VDO
-- Guaranteed in Restaurants Promotion Banner (1 week)
-- Blog: Advertorial: Individual
-
-Strengths:
-- Highest visibility + strongest conversion ecosystem
-- Combines brand + performance marketing
-
-Limitations:
-- Highest cost → must justify ROI
-
-Use When:
-- High priority tier
-- Need scale OR strong brand push
-- Conversion AND reach both need improvement
-
----------------------
-TASK
----------------------
-Give a decisive, business-focused recommendation for THIS restaurant.
-
-FORMAT STRICTLY:
-
-## 1. Key Issue
-- State the MAIN problem using GA and/or marketing ranking evidence.
-- Include the metric, benchmark/context, and business pain.
-
-## 2. Recommended Package
-- Package: Basic / Standard / Premium
-- Explain why this package fixes the exact funnel problem.
-- Mention specific package features.
-- Explain why cheaper option fails.
-- Explain why more expensive option is unnecessary, unless Premium is chosen.
-
-Decision rules:
-- Mid-funnel issue, e.g. add-to-cart low → Standard.
-- Lower-funnel issue, e.g. view-to-purchase low → Standard or Premium.
-- Traffic issue → Basic or Standard.
-- Only choose Premium if high priority tier AND scale or strong brand push is needed.
-
-## 3. GA Support Strategy
-- Choose up to 2 GA activities from the GA rankings.
-- Explain what each improves: traffic, add-to-cart, view-to-purchase, or revenue per view.
-- Explain what the GA metrics suggest about traffic quality, add-to-cart intent, view-to-purchase conversion, or revenue per view.
-
-## 4. CRM / KOL / FB Priority Actions
-- Choose EXACTLY 2 strategies from the CRM/KOL/FB rankings.
-- For each: strategy name, concrete campaign idea, and what it improves.
-
-## 5. Execution Plan
-- Blogger Strategy:
-- Content:
-- Messaging:
-- Paid + CRM:
-- Funnel Impact:
-
-## 6. Why This Will Work
-- Reference GA data.
-- Reference strategy evidence.
-- Connect to outcome.
-
-## 7. 30-Day Plan
-- Launch:
-- Optimise:
-- Scale:
-
-## 8. Expected Impact
-- Translate into more orders, better conversion, or higher revenue per visitor.
-- Do not promise exact results.
+3. package_recommendation_summary
+- Recommend ONLY one package:
+  - Basic
+  - Standard
+  - Premium
+- The recommendation must align with the restaurant's highest-priority issue and required growth support.
+- Prefer:
+  - Basic for smaller or lower-risk growth gaps.
+  - Standard for moderate funnel or acquisition gaps.
+  - Premium for major conversion, retention, or revenue recovery problems requiring stronger CRM/retargeting support.
 """
-

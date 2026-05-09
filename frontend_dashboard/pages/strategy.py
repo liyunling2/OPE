@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import json
 import os
 import re
 from textwrap import dedent
 from html import escape
 import numpy as np
 import pandas as pd
+from frontend_dashboard.peer_recommender.llm_strategy import call_cohere
 import streamlit as st
 from dotenv import load_dotenv
 from google import genai
@@ -30,6 +32,13 @@ load_dotenv()
 # Formatting helpers
 # =============================================================================
 
+def extract_json(text):
+    # extract content between ```json ... ```
+    match = re.search(r"```json\s*(.*?)\s*```", text, re.DOTALL)
+    if match:
+        text = match.group(1)
+
+    return json.loads(text)
 def _normalize_name(value: str) -> str:
     return re.sub(r"\s+", " ", str(value)).strip().lower()
 
@@ -893,316 +902,6 @@ def filter_marketing_scopes(outcomes_df: pd.DataFrame, cluster_id, segment: str 
     global_df = df.copy()
     return cluster_df, segment_df, global_df
 
-
-# =============================================================================
-# AI narrative helpers
-# =============================================================================
-
-def _table_for_prompt(table: pd.DataFrame, table_type: str, top_n: int = 5) -> str:
-    if table is None or table.empty:
-        return "- insufficient data"
-
-    lines = []
-    for _, rec in table.head(top_n).iterrows():
-        if table_type == "ga":
-            lines.append(
-                "- Rank {rank}: {name} | GMV/GA={gmv} | Add-to-cart={atc} | View-to-purchase={v2p} | GA score={score}".format(
-                    rank=int(rec.get("rank", 0)),
-                    name=rec.get("strategy", "-"),
-                    gmv=fmt_thb(rec.get("gmv_per_ga")),
-                    atc=fmt_pct(rec.get("add_to_cart")),
-                    v2p=fmt_pct(rec.get("view_to_purchase")),
-                    score=fmt_num(rec.get("ga_strategy_score"), 3),
-                )
-            )
-        else:
-            lines.append(
-                "- Rank {rank}: {name} | count={count} | revenue uplift={rev} | booking uplift={book} | score={score}".format(
-                    rank=int(rec.get("rank", 0)),
-                    name=rec.get("strategy_name", "-"),
-                    count=fmt_int(rec.get("count")),
-                    rev=fmt_pct(rec.get("avg_revenue_uplift_pct")),
-                    book=fmt_pct(rec.get("avg_bookings_uplift_pct")),
-                    score=fmt_num(rec.get("marketing_strategy_score"), 3),
-                )
-            )
-    return "\n".join(lines) if lines else "- insufficient data"
-
-
-def _restaurant_ga_snapshot(row: dict, hist: pd.DataFrame) -> str:
-    source = row.copy()
-    if hist is not None and len(hist):
-        latest = hist.sort_values("year_month").iloc[-1].to_dict()
-        source.update({k: v for k, v in latest.items() if k not in source or pd.isna(source.get(k))})
-    return "\n".join(
-        [
-            f"- Items viewed: {fmt_int(source.get('ga_items_viewed'))}",
-            f"- GMV/GA view: {fmt_thb(source.get('gmv_per_ga_view'))}",
-            f"- Add-to-cart rate: {fmt_pct(source.get('ga_add_to_cart_rate'))}",
-            f"- View-to-purchase rate: {fmt_pct(source.get('ga_view_to_purchase_rate'))}",
-            f"- GA revenue/view: {fmt_thb(source.get('ga_revenue_per_view'))}",
-        ]
-    )
-
-
-def call_gemini(prompt: str) -> str:
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        raise RuntimeError("GEMINI_API_KEY is not set.")
-
-    client = genai.Client(api_key=api_key)
-    response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
-    return response.text.strip()
-
-def call_cohere(prompt: str) -> str:
-    try:
-        api_key = os.getenv("COHERE_API_KEY")
-
-        co = cohere.ClientV2(api_key) 
-
-        # Analyze the text without RAG
-        response = co.chat(
-            model="command-a-03-2025",
-            messages=[
-                {
-                    "role": "user", 
-                    "content": f"{prompt}"
-                }
-            ]
-        )
-        if response and response.message.content[0].text:
-            return response.message.content[0].text
-        return "_(No response generated)_"
-        
-    except Exception as e:
-        return f"_(Playbook generation unavailable: {e})_"
-    
-def build_ai_prompt(
-    selected: str,
-    row: dict,
-    hist: pd.DataFrame,
-    segment: str | None,
-    cluster_id,
-    cluster_label,
-    ga_cluster_table: pd.DataFrame,
-    ga_segment_table: pd.DataFrame,
-    ga_global_table: pd.DataFrame,
-    m_cluster_table: pd.DataFrame,
-    m_segment_table: pd.DataFrame,
-    m_global_table: pd.DataFrame,
-) -> str:
-    priority_score = fmt_num(pd.to_numeric(pd.Series([row.get("priority_score")]), errors="coerce").iloc[0], 1)
-    preferred_channel = display_value(row.get("recommended_channel"))
-    priority_tier = display_value(row.get("priority_tier"))
-
-    return f"""
-You are a senior marketing strategist advising a restaurant owner.
-
-IMPORTANT RULES:
-- Use ONLY the data provided below.
-- DO NOT invent any numbers or assumptions.
-- You MUST produce an answer; never return empty.
-- If data is missing, say "insufficient data".
-- Always mention the restaurant name at least once.
-- Always reference REAL metrics from the GA and CRM/KOL/FB tables.
-- Be specific to THIS restaurant; no generic advice.
-
-STYLE RULES:
-- Use bullet points only; no long paragraphs.
-- Max 1-2 lines per point.
-- Use simple language.
-- Only metric names can be technical.
-
----------------------
-RESTAURANT CONTEXT
----------------------
-Restaurant: {selected}
-Cluster: {cluster_id} - {display_value(cluster_label)}
-Segment: {display_value(segment)}
-Priority Score: {priority_score}
-Priority Tier: {priority_tier}
-Preferred Channel: {preferred_channel}
-
----------------------
-RESTAURANT GA DIAGNOSTIC
----------------------
-{_restaurant_ga_snapshot(row, hist)}
-
----------------------
-GA STRATEGY RANKINGS
-Formula: GA Strategy Score = (GMV/GA x 0.40) + (Add to Cart x 0.30) + (View to Purchase x 0.30)
-Note: GA Count = estimated sessions allocated to the selected scope using scope GA-view share by month. It is not reused platform-wide sessions.
----------------------
-Cluster Level:
-{_table_for_prompt(ga_cluster_table, 'ga')}
-
-Segment Level:
-{_table_for_prompt(ga_segment_table, 'ga')}
-
-Global Level:
-{_table_for_prompt(ga_global_table, 'ga')}
-
----------------------
-CRM / KOL / FB STRATEGY RANKINGS
-Formula: Marketing Strategy Score = (Average Revenue Uplift x 0.60) + (Average Booking Uplift x 0.40)
----------------------
-Cluster Level:
-{_table_for_prompt(m_cluster_table, 'marketing')}
-
-Segment Level:
-{_table_for_prompt(m_segment_table, 'marketing')}
-
-Global Level:
-{_table_for_prompt(m_global_table, 'marketing')}
-
----------------------
-AVAILABLE MARKETING PACKAGES (WITH CAPABILITIES)
----------------------
-
-BASIC PACKAGE (Awareness Starter – Low Cost, Entry Level)
-Purpose:
-- Drive initial awareness and light engagement
-- Suitable for low traffic restaurants
-
-Key Capabilities:
-- Revenue Guarantee (30K+ THB)
-- Revenue Guarantee (90 Day)
-- Send Blogger to Review x1 (20k followers)
-- Send Blogger to Review x2 (30k followers)
-- Boost post THB 2,000 Baht
-- Pop-up Banner: Individual
-- Photoshooting
-- Guaranteed in Restaurants list home page
-- HH Facebook Post : Individual post
-- Line@ Broadcasts :  Individual post
-- Push Notification
-
-Limitations:
-- No strong video content
-- Limited reach and weak conversion tools
-
-Use When:
-- Traffic is low
-- Need visibility, not deep conversion
-
-STANDARD PACKAGE (Growth & Conversion – Balanced)
-Purpose:
-- Improve customer intent and conversion
-- Best for mid-funnel problems (low add-to-cart, weak engagement)
-
-Key Capabilities:
-- Revenue Guarantee (40K+ THB)
-- Revenue Guarantee (120 Day)
-- Send Blogger to Review x1 (50k followers)
-- Send Blogger to Review x2 (30k followers)
-- Boost post THB 3,000 Baht
-- Pop-up Banner: Individual
-- Guaranteed in Restaurants list home page
-- Photoshooting
-- HH Facebook Post : Individual post
-- Line@ Broadcasts :  Individual post
-- Push Notification
-- Web Footer (2 days)
-- Tiktok VDO or Instagram Reels VDO
-
-Strengths:
-- Combines awareness + conversion tools
-- Strong for improving menu appeal and intent
-
-Use When:
-- Traffic exists but conversion is weak
-- Add-to-cart or engagement is low
-
-PREMIUM PACKAGE (High Impact – Scale + Conversion)
-Purpose:
-- Maximise reach AND conversion at scale
-- Suitable for high-priority restaurants
-
-Key Capabilities:
-- Revenue Guarantee (100K+ THB)
-- Revenue Guarantee (180 Day)
-- Send Blogger to Review x1 (50k followers)
-- Send Blogger to Review x2 (50k followers)
-- Boost post THB 5,000 Baht
-- Pop-up Banner: Individual
-- Guaranteed in Restaurants list home page
-- Photoshooting
-- HH Facebook Post : Individual post
-- Line@ Broadcasts :  Individual post
-- Push Notification
-- Web Footer (2 days)
-- Tiktok VDO or Instagram Reels VDO
-- Guaranteed in Restaurants Promotion Banner (1 week)
-- Blog: Advertorial: Individual
-
-Strengths:
-- Highest visibility + strongest conversion ecosystem
-- Combines brand + performance marketing
-
-Limitations:
-- Highest cost → must justify ROI
-
-Use When:
-- High priority tier
-- Need scale OR strong brand push
-- Conversion AND reach both need improvement
-
----------------------
-TASK
----------------------
-Give a decisive, business-focused recommendation for THIS restaurant.
-
-FORMAT STRICTLY:
-
-## 1. Key Issue
-- State the MAIN problem using GA and/or marketing ranking evidence.
-- Include the metric, benchmark/context, and business pain.
-
-## 2. Recommended Package
-- Package: Basic / Standard / Premium
-- Explain why this package fixes the exact funnel problem.
-- Mention specific package features.
-- Explain why cheaper option fails.
-- Explain why more expensive option is unnecessary, unless Premium is chosen.
-
-Decision rules:
-- Mid-funnel issue, e.g. add-to-cart low → Standard.
-- Lower-funnel issue, e.g. view-to-purchase low → Standard or Premium.
-- Traffic issue → Basic or Standard.
-- Only choose Premium if high priority tier AND scale or strong brand push is needed.
-
-## 3. GA Support Strategy
-- Choose up to 2 GA activities from the GA rankings.
-- Explain what each improves: traffic, add-to-cart, view-to-purchase, or revenue per view.
-- Explain what the GA metrics suggest about traffic quality, add-to-cart intent, view-to-purchase conversion, or revenue per view.
-
-## 4. CRM / KOL / FB Priority Actions
-- Choose EXACTLY 2 strategies from the CRM/KOL/FB rankings.
-- For each: strategy name, concrete campaign idea, and what it improves.
-
-## 5. Execution Plan
-- Blogger Strategy:
-- Content:
-- Messaging:
-- Paid + CRM:
-- Funnel Impact:
-
-## 6. Why This Will Work
-- Reference GA data.
-- Reference strategy evidence.
-- Connect to outcome.
-
-## 7. 30-Day Plan
-- Launch:
-- Optimise:
-- Scale:
-
-## 8. Expected Impact
-- Translate into more orders, better conversion, or higher revenue per visitor.
-- Do not promise exact results.
-"""
-
-
 # =============================================================================
 # Package details frontend
 # =============================================================================
@@ -1368,15 +1067,15 @@ def render():
     # Strategy diagnosis boxes
     # -------------------------------------------------------------------------
     ga_rankings = build_ga_scope_rankings(ga_monthly_df, ga_campaign_monthly_df, assignments)
-    ga_cluster_df, ga_segment_df, ga_global_df = filter_ga_scopes(ga_rankings, cluster_id, segment)
-    ga_cluster_table = build_ga_rank_table(ga_cluster_df)
-    ga_segment_table = build_ga_rank_table(ga_segment_df)
-    ga_global_table = build_ga_rank_table(ga_global_df)
+    # ga_cluster_df, ga_segment_df, ga_global_df = filter_ga_scopes(ga_rankings, cluster_id, segment)
+    # ga_cluster_table = build_ga_rank_table(ga_cluster_df)
+    # ga_segment_table = build_ga_rank_table(ga_segment_df)
+    # ga_global_table = build_ga_rank_table(ga_global_df)
 
     marketing_outcomes = load_cluster_strategy_outcomes()
     cluster_rank_df, segment_rank_df, global_rank_df = filter_marketing_scopes(marketing_outcomes, cluster_id, segment)
     m_cluster_table = build_marketing_rank_table(cluster_rank_df)
-    m_segment_table = build_marketing_rank_table(segment_rank_df)
+    # m_segment_table = build_marketing_rank_table(segment_rank_df)
     m_global_table = build_marketing_rank_table(global_rank_df)
     restaurant_rank_df = _filter_marketing_for_restaurant(marketing_outcomes, selected)
     m_restaurant_table = build_marketing_rank_table(restaurant_rank_df)
@@ -1384,46 +1083,71 @@ def render():
     st.markdown("## Strategy Diagnosis")
     st.markdown("<div style='height:0.35rem;'></div>", unsafe_allow_html=True)
 
-    render_placeholder_section(
-        1,
-        "Key issue 1, 2, 3",
-        "Hardcoded problem statements for revenue, booking, and GA funnel gaps.",
-        [
-            (
-                "Key issue 1",
-                "Revenue and booking uplift problem placeholder. Replace this with logic that picks the main growth pain from priority, bookings, and GMV signals.",
-            ),
-            (
-                "Key issue 2",
-                "GA funnel problem placeholder. Use this for low item views, weak add-to-cart intent, or poor view-to-purchase conversion once rules are added.",
-            ),
-            (
-                "Key issue 3",
-                "Audience and channel fit placeholder. Use cluster and segment evidence to explain why similar restaurants need stronger CRM, KOL, or FB support.",
-            ),
-        ],
-    )
+    ## generate issue and strat
 
-    render_placeholder_section(
-        2,
-        "Recommended strategy 1, 2, 3",
-        "Hardcoded action plan mapped to each issue.",
-        [
-            (
-                "Strategy 1",
-                "Prioritise a conversion-focused package with visible offers, CRM reminders, and booking-oriented messaging.",
-            ),
-            (
-                "Strategy 2",
-                "Improve funnel intent with stronger menu presentation, clearer value anchors, and retargeting for high-intent visitors.",
-            ),
-            (
-                "Strategy 3",
-                "Use peer-proven CRM/KOL/FB activities from the ranking below to reinforce the restaurant's best-fit growth channel.",
-            ),
-        ],
-        accent="#111827",
-    )
+    ai_key = "ai_strategy_%s" % selected
+    a_col, b_col = st.columns([2, 1])
+    with a_col:
+        generate_ai = st.button("Generate AI Narrative", key="gen_ai_%s" % selected, width="stretch")
+    with b_col:
+        if st.button("Clear AI", key="clr_ai_%s" % selected, width="stretch"):
+            st.session_state[ai_key] = None
+
+    if generate_ai:
+        with st.spinner("Generating AI narrative..."):
+            try:
+                st.session_state[ai_key] = call_cohere(selected=selected,
+                    row=row,
+                    hist=hist,
+                    segment=segment,
+                    cluster_id=cluster_id,
+                    cluster_label=cluster_label,
+                    ga_rankings=ga_rankings,
+                    momentum_df=momentum_df
+                    )
+            except Exception as e:
+                st.error("AI generation failed: %s" % e)
+                st.session_state[ai_key] = None
+
+    if st.session_state.get(ai_key):
+        response = extract_json(st.session_state[ai_key])
+
+        # st.markdown(st.session_state[ai_key])
+
+        st.download_button(
+            label="Download AI Narrative",
+            data="AI STRATEGY NARRATIVE\n%s\n\n%s" % (selected, st.session_state[ai_key]),
+            file_name="ai_strategy_%s.txt" % selected.replace(" ", "_"),
+            mime="text/plain",
+            width="stretch",
+        )
+
+       
+        issues = response.get("issues", [])
+
+        render_placeholder_section(
+            1,
+            "Key issues Identified",
+            "An analysis on the restaurant's metrics against their cluster",
+            [
+                (f"Issue {issue.get('issue_no', i+1)}", issue.get("description", ""))
+                for i, issue in enumerate(issues)
+            ],
+        )
+
+        strategy = response.get("strategy", "")
+
+        render_placeholder_section(
+            2,
+            "Recommended strategy",
+            "Personalised action plan based on restaurant's issues identified",
+            [
+                ("Strategy", strategy),
+            ],
+            accent="#111827",
+        )
+    
+    st.markdown("---")
 
     with st.container(border=True):
         _strategy_box_header(
@@ -1498,49 +1222,46 @@ def render():
 
     render_peer_recommender_section()
 
-    st.markdown("---")
-    st.markdown("## Optional AI Narrative")
-    st.caption("Uses `GEMINI_API_KEY` if configured. The ranking tables above remain the source of truth.")
+    # st.markdown("---")
+    # st.markdown("## Optional AI Narrative")
+    # st.caption("Uses `GEMINI_API_KEY` if configured. The ranking tables above remain the source of truth.")
 
-    ai_key = "ai_strategy_%s" % selected
-    a_col, b_col = st.columns([2, 1])
-    with a_col:
-        generate_ai = st.button("Generate AI Narrative", key="gen_ai_%s" % selected, width="stretch")
-    with b_col:
-        if st.button("Clear AI", key="clr_ai_%s" % selected, width="stretch"):
-            st.session_state[ai_key] = None
+    # ai_key = "ai_strategy_%s" % selected
+    # a_col, b_col = st.columns([2, 1])
+    # with a_col:
+    #     generate_ai = st.button("Generate AI Narrative", key="gen_ai_%s" % selected, width="stretch")
+    # with b_col:
+    #     if st.button("Clear AI", key="clr_ai_%s" % selected, width="stretch"):
+    #         st.session_state[ai_key] = None
 
-    if generate_ai:
-        with st.spinner("Generating AI narrative..."):
-            try:
-                prompt = build_ai_prompt(
-                    selected=selected,
-                    row=row,
-                    hist=hist,
-                    segment=segment,
-                    cluster_id=cluster_id,
-                    cluster_label=cluster_label,
-                    ga_cluster_table=ga_cluster_table,
-                    ga_segment_table=ga_segment_table,
-                    ga_global_table=ga_global_table,
-                    m_cluster_table=m_cluster_table,
-                    m_segment_table=m_segment_table,
-                    m_global_table=m_global_table,
-                )
-                st.session_state[ai_key] = call_cohere(prompt)
-            except Exception as e:
-                st.error("AI generation failed: %s" % e)
-                st.session_state[ai_key] = None
+    # if generate_ai:
+    #     with st.spinner("Generating AI narrative..."):
+    #         try:
+    #             prompt = build_ai_prompt(
+    #                 selected=selected,
+    #                 row=row,
+    #                 hist=hist,
+    #                 segment=segment,
+    #                 cluster_id=cluster_id,
+    #                 cluster_label=cluster_label,
+    #                 ga_rankings=ga_rankings,
+    #                 momentum_df=momentum_df
+    #             )
+    #             st.session_state[ai_key] = call_cohere(prompt)
+    #         except Exception as e:
+    #             st.error("AI generation failed: %s" % e)
+    #             st.session_state[ai_key] = None
 
-    if st.session_state.get(ai_key):
-        st.markdown(st.session_state[ai_key])
-        st.download_button(
-            label="Download AI Narrative",
-            data="AI STRATEGY NARRATIVE\n%s\n\n%s" % (selected, st.session_state[ai_key]),
-            file_name="ai_strategy_%s.txt" % selected.replace(" ", "_"),
-            mime="text/plain",
-            width="stretch",
-        )
+
+    # if st.session_state.get(ai_key):
+    #     st.markdown(st.session_state[ai_key])
+    #     st.download_button(
+    #         label="Download AI Narrative",
+    #         data="AI STRATEGY NARRATIVE\n%s\n\n%s" % (selected, st.session_state[ai_key]),
+    #         file_name="ai_strategy_%s.txt" % selected.replace(" ", "_"),
+    #         mime="text/plain",
+    #         width="stretch",
+    #     )
 
 
 if __name__ == "__main__":
