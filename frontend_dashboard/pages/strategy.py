@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import os
 import re
+from textwrap import dedent
+from html import escape
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -426,6 +428,306 @@ def display_marketing_rank_table(title: str, table: pd.DataFrame) -> None:
     out["Strategy Score"] = out["Strategy Score"].apply(lambda v: fmt_num(v, 3))
 
     st.dataframe(out, hide_index=True, width="stretch", height=min(320, 72 + len(out) * 36))
+
+
+# =============================================================================
+# Strategy dashboard cards
+# =============================================================================
+
+def _badge_html(number: int) -> str:
+    return (
+        "<span style='display:inline-flex;align-items:center;justify-content:center;"
+        "width:1.95rem;height:1.95rem;border-radius:999px;background:#cc0000;color:#fff;"
+        "font-weight:800;font-size:0.95rem;margin-right:0.75rem;flex:0 0 auto;'>%d</span>" % number
+    )
+
+
+def _strategy_box_header(number: int, title: str, subtitle: str) -> None:
+    st.markdown(
+        dedent(f"""
+        <div style='display:flex;align-items:flex-start;margin-bottom:1rem;'>
+            {_badge_html(number)}
+            <div>
+                <div style='font-size:1.18rem;font-weight:800;color:{TEXT_COLOR};line-height:1.2;'>
+                    {escape(title)}
+                </div>
+                <div style='font-size:0.92rem;color:{MUTED_TEXT};margin-top:0.2rem;line-height:1.35;'>
+                    {escape(subtitle)}
+                </div>
+            </div>
+        </div>
+        """).strip(),
+        unsafe_allow_html=True,
+    )
+
+
+def render_placeholder_list_box(items: list[tuple[str, str]], accent: str = "#cc0000") -> None:
+    rows = []
+    for label, body in items:
+        rows.append(
+            dedent(f"""
+            <div style='border:1px solid {BORDER_COLOR};border-left:4px solid {accent};
+                        border-radius:10px;padding:0.95rem 1rem;background:#fff;min-height:8rem;'>
+                <div style='font-size:0.78rem;font-weight:850;color:{accent};
+                            text-transform:uppercase;letter-spacing:0.02em;'>{escape(label)}</div>
+                <div style='font-size:0.95rem;color:{TEXT_COLOR};line-height:1.45;margin-top:0.35rem;'>
+                    {escape(body)}
+                </div>
+            </div>
+            """).strip()
+        )
+    st.markdown(
+        "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.9rem;'>"
+        + "".join(rows)
+        + "</div>",
+        unsafe_allow_html=True,
+    )
+
+
+def render_strategy_context(selected: str, cluster_text: str, segment_text: str) -> None:
+    st.markdown(
+        dedent(f"""
+        <div style='background:{SURFACE_COLOR};border:1px solid {BORDER_COLOR};border-radius:12px;
+                    padding:1rem 1.15rem;margin:0.4rem 0 1.15rem 0;
+                    box-shadow:0 8px 20px rgba(15,23,42,0.04);'>
+            <div style='font-size:0.78rem;font-weight:800;color:{MUTED_TEXT};
+                        text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.55rem;'>
+                Restaurant context
+            </div>
+            <div style='display:flex;flex-wrap:wrap;gap:0.55rem;align-items:center;'>
+                <span style='display:inline-flex;align-items:center;border:1px solid {BORDER_COLOR};
+                             border-radius:999px;padding:0.42rem 0.72rem;background:#f8f9fa;
+                             color:{TEXT_COLOR};font-size:0.9rem;font-weight:700;'>
+                    {escape(selected)}
+                </span>
+                <span style='display:inline-flex;align-items:center;border:1px solid {BORDER_COLOR};
+                             border-radius:999px;padding:0.42rem 0.72rem;background:#fff;
+                             color:{TEXT_COLOR};font-size:0.9rem;font-weight:650;'>
+                    {escape(cluster_text)}
+                </span>
+                <span style='display:inline-flex;align-items:center;border:1px solid {BORDER_COLOR};
+                             border-radius:999px;padding:0.42rem 0.72rem;background:#fff;
+                             color:{TEXT_COLOR};font-size:0.9rem;font-weight:650;'>
+                    Segment: {escape(segment_text)}
+                </span>
+            </div>
+        </div>
+        """).strip(),
+        unsafe_allow_html=True,
+    )
+
+
+def _render_rank_html_table(table: pd.DataFrame) -> None:
+    if table.empty:
+        st.info("No CRM/KOL/FB strategy outcome data available for this scope.")
+        return
+
+    rows = []
+    for _, rec in table.head(8).iterrows():
+        rank = int(rec.get("rank", 0))
+        rank_html = (
+            f"<span style='display:inline-flex;align-items:center;justify-content:center;"
+            f"width:1.8rem;height:1.8rem;border-radius:999px;"
+            f"background:{'#d90000' if rank <= 2 else '#f7f7f2'};"
+            f"color:{'#fff' if rank <= 2 else TEXT_COLOR};font-weight:850;'>{rank}</span>"
+        )
+        rows.append(
+            dedent(f"""
+            <tr style='border-bottom:1px solid {BORDER_COLOR};'>
+                <td style='padding:0.8rem 1rem;'>{rank_html}</td>
+                <td style='padding:0.8rem 1rem;font-weight:{850 if rank <= 2 else 650};'>{escape(str(rec.get("strategy_name", "-")))}</td>
+                <td style='padding:0.8rem 1rem;'>{fmt_int(rec.get("count"))}</td>
+                <td style='padding:0.8rem 1rem;'>{fmt_pct(rec.get("avg_revenue_uplift_pct"))}</td>
+                <td style='padding:0.8rem 1rem;'>{fmt_pct(rec.get("avg_bookings_uplift_pct"))}</td>
+                <td style='padding:0.8rem 1rem;'>{fmt_num(rec.get("marketing_strategy_score"), 3)}</td>
+            </tr>
+            """).strip()
+        )
+
+    st.markdown(
+        dedent(f"""
+        <div style='overflow-x:auto;'>
+            <table style='width:100%;border-collapse:collapse;font-size:0.95rem;color:{TEXT_COLOR};'>
+                <thead>
+                    <tr style='border-bottom:1px solid {BORDER_COLOR};color:#3f3f46;text-align:left;background:#f8f9fa;'>
+                        <th style='padding:0.8rem 1rem;'>Rank</th>
+                        <th style='padding:0.8rem 1rem;'>Activity</th>
+                        <th style='padding:0.8rem 1rem;'>Count</th>
+                        <th style='padding:0.8rem 1rem;'>Revenue uplift</th>
+                        <th style='padding:0.8rem 1rem;'>Booking uplift</th>
+                        <th style='padding:0.8rem 1rem;'>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {''.join(rows)}
+                </tbody>
+            </table>
+        </div>
+        """).strip(),
+        unsafe_allow_html=True,
+    )
+
+
+def _latest_restaurant_ga(selected: str, ga_monthly: pd.DataFrame) -> dict:
+    if ga_monthly.empty:
+        return {}
+    ga = ga_monthly.copy()
+    if "name_norm" not in ga.columns and "name" in ga.columns:
+        ga["name_norm"] = ga["name"].apply(_normalize_name)
+    if "year_month" in ga.columns:
+        ga["year_month"] = pd.to_datetime(ga["year_month"], errors="coerce")
+    selected_rows = ga[ga.get("name_norm", pd.Series(dtype=str)).eq(_normalize_name(selected))].copy()
+    if selected_rows.empty:
+        return {}
+    return selected_rows.sort_values("year_month").iloc[-1].to_dict()
+
+
+def build_ga_snapshot_cards(
+    selected: str,
+    ga_monthly: pd.DataFrame,
+    assignments: pd.DataFrame,
+    cluster_id,
+) -> list[dict]:
+    if ga_monthly.empty:
+        return []
+
+    ga = ga_monthly.copy()
+    if "name_norm" not in ga.columns and "name" in ga.columns:
+        ga["name_norm"] = ga["name"].apply(_normalize_name)
+    if "year_month" in ga.columns:
+        ga["year_month"] = pd.to_datetime(ga["year_month"], errors="coerce")
+
+    if "cluster_id" not in ga.columns and not assignments.empty:
+        a = assignments.copy()
+        if "name_norm" not in a.columns and "name" in a.columns:
+            a["name_norm"] = a["name"].apply(_normalize_name)
+        merge_cols = [c for c in ["name_norm", "cluster_id"] if c in a.columns]
+        if merge_cols:
+            ga = ga.merge(a[merge_cols].drop_duplicates("name_norm"), on="name_norm", how="left")
+
+    latest = _latest_restaurant_ga(selected, ga)
+    if not latest:
+        return []
+
+    latest_month = latest.get("year_month")
+    cluster_scope = ga.copy()
+    if pd.notna(latest_month) and "year_month" in cluster_scope.columns:
+        cluster_scope = cluster_scope[cluster_scope["year_month"].eq(latest_month)].copy()
+    if cluster_id is not None and "cluster_id" in cluster_scope.columns:
+        cluster_scope = cluster_scope[pd.to_numeric(cluster_scope["cluster_id"], errors="coerce").eq(cluster_id)].copy()
+
+    if cluster_scope.empty:
+        cluster_scope = ga.copy()
+
+    for col in ["ga_items_viewed", "ga_add_to_cart_rate", "ga_view_to_purchase_rate"]:
+        if col in cluster_scope.columns:
+            cluster_scope[col] = pd.to_numeric(cluster_scope[col], errors="coerce")
+
+    benchmarks = {
+        "ga_items_viewed": cluster_scope["ga_items_viewed"].mean() if "ga_items_viewed" in cluster_scope.columns else np.nan,
+        "ga_add_to_cart_rate": cluster_scope["ga_add_to_cart_rate"].mean() if "ga_add_to_cart_rate" in cluster_scope.columns else np.nan,
+        "ga_view_to_purchase_rate": cluster_scope["ga_view_to_purchase_rate"].mean() if "ga_view_to_purchase_rate" in cluster_scope.columns else np.nan,
+    }
+
+    def _status(metric: str, higher_text: str, lower_text: str) -> tuple[str, str]:
+        value = _to_float(latest.get(metric))
+        benchmark = _to_float(benchmarks.get(metric))
+        if pd.isna(value) or pd.isna(benchmark):
+            return ("#6b7280", "Benchmark unavailable")
+        if value >= benchmark:
+            return ("#3f7f2f", higher_text)
+        return ("#cc0000", lower_text)
+
+    traffic_color, traffic_status = _status("ga_items_viewed", "Traffic is healthy", "Traffic is below benchmark")
+    atc_color, atc_status = _status("ga_add_to_cart_rate", "Add-to-cart is above benchmark", "below benchmark")
+    vtp_color, vtp_status = _status("ga_view_to_purchase_rate", "Purchase conversion is above benchmark", "below benchmark")
+
+    def _delta(metric: str, pct: bool = False) -> str:
+        value = _to_float(latest.get(metric))
+        benchmark = _to_float(benchmarks.get(metric))
+        if pd.isna(value) or pd.isna(benchmark):
+            return ""
+        diff = value - benchmark
+        if pct:
+            return f"{diff * 100:+.1f}pp "
+        return "above benchmark" if diff >= 0 else "below benchmark"
+
+    return [
+        {
+            "label": "Items viewed / month",
+            "value": fmt_int(latest.get("ga_items_viewed")),
+            "benchmark": f"Cluster avg: {fmt_int(benchmarks.get('ga_items_viewed'))} {_delta('ga_items_viewed')}",
+            "status": traffic_status,
+            "color": traffic_color,
+        },
+        {
+            "label": "Add-to-cart rate",
+            "value": fmt_pct(latest.get("ga_add_to_cart_rate")),
+            "benchmark": f"Cluster avg: {fmt_pct(benchmarks.get('ga_add_to_cart_rate'))}",
+            "status": f"{_delta('ga_add_to_cart_rate', pct=True)}{atc_status}".strip(),
+            "color": atc_color,
+        },
+        {
+            "label": "View-to-purchase rate",
+            "value": fmt_pct(latest.get("ga_view_to_purchase_rate")),
+            "benchmark": f"Cluster avg: {fmt_pct(benchmarks.get('ga_view_to_purchase_rate'))}",
+            "status": f"{_delta('ga_view_to_purchase_rate', pct=True)}{vtp_status}".strip(),
+            "color": vtp_color,
+        },
+    ]
+
+
+def render_ga_snapshot_cards(cards: list[dict]) -> None:
+    if not cards:
+        st.info("No restaurant GA snapshot available.")
+        return
+
+    card_html = []
+    for card in cards:
+        border = card["color"] if card["color"] == "#cc0000" else BORDER_COLOR
+        card_html.append(
+            dedent(f"""
+            <div style='background:#fff;border:1px solid {border};border-radius:10px;
+                        padding:1rem 1.15rem;min-height:8rem;'>
+                <div style='font-size:0.95rem;color:#3f3f46;font-weight:650;'>{escape(card["label"])}</div>
+                <div style='font-size:1.55rem;color:{card["color"]};font-weight:850;line-height:1.2;margin-top:0.35rem;'>
+                    {escape(card["value"])}
+                </div>
+                <div style='font-size:0.92rem;color:#3f3f46;margin-top:0.2rem;'>{escape(card["benchmark"])}</div>
+                <div style='font-size:0.92rem;color:{card["color"]};font-weight:800;margin-top:0.15rem;'>
+                    {escape(card["status"])}
+                </div>
+            </div>
+            """).strip()
+        )
+
+    st.markdown(
+        "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0.9rem;'>"
+        + "".join(card_html)
+        + "</div>",
+        unsafe_allow_html=True,
+    )
+
+
+def _filter_marketing_for_scope(
+    outcomes_df: pd.DataFrame,
+    cluster_id,
+    selected_segment: str | None,
+    scope: str,
+) -> pd.DataFrame:
+    if outcomes_df.empty:
+        return pd.DataFrame()
+
+    df = outcomes_df.copy()
+    if scope in {"Cluster", "Segment"}:
+        if cluster_id is None or "cluster_id" not in df.columns:
+            return pd.DataFrame()
+        df = df[pd.to_numeric(df["cluster_id"], errors="coerce").eq(cluster_id)].copy()
+    if scope == "Segment":
+        if not selected_segment or "latest_segment" not in df.columns:
+            return pd.DataFrame()
+        df = df[df["latest_segment"].astype(str).eq(str(selected_segment))].copy()
+    return df
 
 
 # =============================================================================
@@ -911,39 +1213,68 @@ def render():
 
     st.markdown("---")
 
-    # -------------------------------------------------------------------------
-    # Section 1: Google Analytics metrics
-    # -------------------------------------------------------------------------
-    st.markdown("## Section 1: Google Analytics Metrics")
-    formula_card(
-        "GA Strategy Ranking Formula",
-        ["GA Strategy Score = (GMV/GA × 0.40) + (Add to Cart × 0.30) + (View to Purchase × 0.30)"],
-    )
+    # # -------------------------------------------------------------------------
+    # # Section 1: Google Analytics metrics
+    # # -------------------------------------------------------------------------
+    # st.markdown("## Section 1: Google Analytics Metrics")
+    # formula_card(
+    #     "GA Strategy Ranking Formula",
+    #     ["GA Strategy Score = (GMV/GA × 0.40) + (Add to Cart × 0.30) + (View to Purchase × 0.30)"],
+    # )
 
+    # ga_rankings = build_ga_scope_rankings(ga_monthly_df, ga_campaign_monthly_df, assignments)
+    # ga_cluster_df, ga_segment_df, ga_global_df = filter_ga_scopes(ga_rankings, cluster_id, segment)
+    # ga_cluster_table = build_ga_rank_table(ga_cluster_df)
+    # ga_segment_table = build_ga_rank_table(ga_segment_df)
+    # ga_global_table = build_ga_rank_table(ga_global_df)
+
+    # ga_tabs = st.tabs(["Cluster Level", "Segment Level", "Global Level"])
+    # with ga_tabs[0]:
+    #     display_ga_rank_table("Cluster Level Ranking", ga_cluster_table)
+    # with ga_tabs[1]:
+    #     display_ga_rank_table("Segment Level Ranking", ga_segment_table)
+    # with ga_tabs[2]:
+    #     display_ga_rank_table("Global Level Ranking", ga_global_table)
+
+    # st.markdown("---")
+
+    # # -------------------------------------------------------------------------
+    # # Section 2: CRM/KOL/FB metrics
+    # # -------------------------------------------------------------------------
+    # st.markdown("## Section 2: CRM / KOL / FB Metrics")
+    # formula_card(
+    #     "Marketing Strategy Ranking Formula",
+    #     ["Marketing Strategy Score = (Revenue Uplift × 0.60) + (Booking Uplift × 0.40)"],
+    # )
+
+    # marketing_outcomes = load_cluster_strategy_outcomes()
+    # cluster_rank_df, segment_rank_df, global_rank_df = filter_marketing_scopes(marketing_outcomes, cluster_id, segment)
+    # m_cluster_table = build_marketing_rank_table(cluster_rank_df)
+    # m_segment_table = build_marketing_rank_table(segment_rank_df)
+    # m_global_table = build_marketing_rank_table(global_rank_df)
+
+    # marketing_tabs = st.tabs(["Cluster Level", "Segment Level", "Global Level"])
+    # with marketing_tabs[0]:
+    #     display_marketing_rank_table("Cluster Level Ranking", m_cluster_table)
+    # with marketing_tabs[1]:
+    #     display_marketing_rank_table("Segment Level Ranking", m_segment_table)
+    # with marketing_tabs[2]:
+    #     display_marketing_rank_table("Global Level Ranking", m_global_table)
+
+    # -------------------------------------------------------------------------
+    # Package details + AI Narrative
+    # -------------------------------------------------------------------------
+    # st.markdown("---")
+    # render_package_details()
+
+    # -------------------------------------------------------------------------
+    # Strategy diagnosis boxes
+    # -------------------------------------------------------------------------
     ga_rankings = build_ga_scope_rankings(ga_monthly_df, ga_campaign_monthly_df, assignments)
     ga_cluster_df, ga_segment_df, ga_global_df = filter_ga_scopes(ga_rankings, cluster_id, segment)
     ga_cluster_table = build_ga_rank_table(ga_cluster_df)
     ga_segment_table = build_ga_rank_table(ga_segment_df)
     ga_global_table = build_ga_rank_table(ga_global_df)
-
-    ga_tabs = st.tabs(["Cluster Level", "Segment Level", "Global Level"])
-    with ga_tabs[0]:
-        display_ga_rank_table("Cluster Level Ranking", ga_cluster_table)
-    with ga_tabs[1]:
-        display_ga_rank_table("Segment Level Ranking", ga_segment_table)
-    with ga_tabs[2]:
-        display_ga_rank_table("Global Level Ranking", ga_global_table)
-
-    st.markdown("---")
-
-    # -------------------------------------------------------------------------
-    # Section 2: CRM/KOL/FB metrics
-    # -------------------------------------------------------------------------
-    st.markdown("## Section 2: CRM / KOL / FB Metrics")
-    formula_card(
-        "Marketing Strategy Ranking Formula",
-        ["Marketing Strategy Score = (Revenue Uplift × 0.60) + (Booking Uplift × 0.40)"],
-    )
 
     marketing_outcomes = load_cluster_strategy_outcomes()
     cluster_rank_df, segment_rank_df, global_rank_df = filter_marketing_scopes(marketing_outcomes, cluster_id, segment)
@@ -951,19 +1282,145 @@ def render():
     m_segment_table = build_marketing_rank_table(segment_rank_df)
     m_global_table = build_marketing_rank_table(global_rank_df)
 
-    marketing_tabs = st.tabs(["Cluster Level", "Segment Level", "Global Level"])
-    with marketing_tabs[0]:
-        display_marketing_rank_table("Cluster Level Ranking", m_cluster_table)
-    with marketing_tabs[1]:
-        display_marketing_rank_table("Segment Level Ranking", m_segment_table)
-    with marketing_tabs[2]:
-        display_marketing_rank_table("Global Level Ranking", m_global_table)
+    st.markdown("## Strategy Diagnosis")
+    render_strategy_context(selected, cluster_text, segment_text)
 
-    # -------------------------------------------------------------------------
-    # Package details + AI Narrative
-    # -------------------------------------------------------------------------
-    st.markdown("---")
-    render_package_details()
+    with st.container(border=True):
+        _strategy_box_header(
+            1,
+            "Key issue 1, 2, 3",
+            "Hardcoded problem statements for revenue, booking, and GA funnel gaps.",
+        )
+        render_placeholder_list_box(
+            [
+                (
+                    "Key issue 1",
+                    "Revenue and booking uplift problem placeholder. Replace this with logic that picks the main growth pain from priority, bookings, and GMV signals.",
+                ),
+                (
+                    "Key issue 2",
+                    "GA funnel problem placeholder. Use this for low item views, weak add-to-cart intent, or poor view-to-purchase conversion once rules are added.",
+                ),
+                (
+                    "Key issue 3",
+                    "Audience and channel fit placeholder. Use cluster and segment evidence to explain why similar restaurants need stronger CRM, KOL, or FB support.",
+                ),
+            ]
+        )
+    st.markdown("<div style='height:0.65rem;'></div>", unsafe_allow_html=True)
+
+    with st.container(border=True):
+        _strategy_box_header(
+            2,
+            "Recommended strategy 1, 2, 3",
+            "Hardcoded action plan mapped to each issue.",
+        )
+        render_placeholder_list_box(
+            [
+                (
+                    "Strategy 1",
+                    "Prioritise a conversion-focused package with visible offers, CRM reminders, and booking-oriented messaging.",
+                ),
+                (
+                    "Strategy 2",
+                    "Improve funnel intent with stronger menu presentation, clearer value anchors, and retargeting for high-intent visitors.",
+                ),
+                (
+                    "Strategy 3",
+                    "Use peer-proven CRM/KOL/FB activities from the ranking below to reinforce the restaurant's best-fit growth channel.",
+                ),
+            ],
+            accent="#111827",
+        )
+    st.markdown("<div style='height:0.65rem;'></div>", unsafe_allow_html=True)
+
+    with st.container(border=True):
+        _strategy_box_header(
+            3,
+            "CRM / KOL / FB strategy ranking",
+            "What has driven revenue and booking uplift for similar restaurants.",
+        )
+
+        available_segments = []
+        if not marketing_outcomes.empty and "latest_segment" in marketing_outcomes.columns:
+            available_segments = (
+                marketing_outcomes["latest_segment"]
+                .dropna()
+                .astype(str)
+                .sort_values()
+                .unique()
+                .tolist()
+            )
+        cluster_segments = available_segments
+        if not marketing_outcomes.empty and cluster_id is not None and "cluster_id" in marketing_outcomes.columns:
+            cluster_segment_rows = marketing_outcomes[
+                pd.to_numeric(marketing_outcomes["cluster_id"], errors="coerce").eq(cluster_id)
+            ].copy()
+            if "latest_segment" in cluster_segment_rows.columns:
+                cluster_segments = (
+                    cluster_segment_rows["latest_segment"]
+                    .dropna()
+                    .astype(str)
+                    .sort_values()
+                    .unique()
+                    .tolist()
+                ) or available_segments
+
+        default_segment = segment if segment in cluster_segments else (cluster_segments[0] if cluster_segments else None)
+
+        rank_tabs = st.tabs(["Cluster", "Segment", "Global"])
+        with rank_tabs[0]:
+            st.caption(cluster_text)
+            _render_rank_html_table(m_cluster_table)
+        with rank_tabs[1]:
+            seg_col, note_col = st.columns([1, 2])
+            with seg_col:
+                scope_segment = st.selectbox(
+                    "Segment filter",
+                    cluster_segments if cluster_segments else ["No segment data"],
+                    index=cluster_segments.index(default_segment) if default_segment in cluster_segments else 0,
+                    disabled=not cluster_segments,
+                    key=f"marketing_segment_filter_{selected}",
+                )
+            with note_col:
+                st.caption(f"{cluster_text} | Segment: {scope_segment if cluster_segments else 'Not available'}")
+            scoped_marketing = _filter_marketing_for_scope(
+                marketing_outcomes,
+                cluster_id,
+                scope_segment if cluster_segments else None,
+                "Segment",
+            )
+            _render_rank_html_table(build_marketing_rank_table(scoped_marketing))
+        with rank_tabs[2]:
+            st.caption("All restaurants")
+            _render_rank_html_table(m_global_table)
+    st.markdown("<div style='height:0.65rem;'></div>", unsafe_allow_html=True)
+
+    with st.container(border=True):
+        _strategy_box_header(
+            4,
+            "Restaurant GA snapshot",
+            "This restaurant's own funnel metrics vs cluster benchmark.",
+        )
+        render_ga_snapshot_cards(build_ga_snapshot_cards(selected, ga_monthly_df, assignments, cluster_id))
+    st.markdown("<div style='height:0.65rem;'></div>", unsafe_allow_html=True)
+
+    with st.container(border=True):
+        _strategy_box_header(
+            5,
+            "Peer recommender",
+            "Reserved for peer-based recommendations.",
+        )
+        st.markdown(
+            dedent(f"""
+            <div style='background:#fff;border:1px dashed {BORDER_COLOR};border-radius:8px;
+                        padding:1rem 1.15rem;color:{TEXT_COLOR};line-height:1.5;'>
+                Peer recommender placeholder. This box will later show matched peer restaurants,
+                the winning peer strategy, and evidence-backed recommendation text.
+            </div>
+            """).strip(),
+            unsafe_allow_html=True,
+        )
 
     st.markdown("---")
     st.markdown("## Optional AI Narrative")
