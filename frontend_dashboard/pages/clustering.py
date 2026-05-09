@@ -798,7 +798,6 @@ def _render_scope_bar(
         unsafe_allow_html=True,
     )
 
-
 def render():
     assignments = load_cluster_assignments() # Load from clustering_results
     ga_campaign_raw = load_ga_campaign_outreach_raw()
@@ -808,6 +807,8 @@ def render():
         st.session_state["selected_strategy_family"] = "All"
     if "selected_ga_campaign_type" not in st.session_state:
         st.session_state["selected_ga_campaign_type"] = "All"
+    if "selected_city" not in st.session_state:
+        st.session_state["selected_city"] = "All"
 
     st.markdown("## Clustering Explorer")
     st.markdown(
@@ -839,10 +840,13 @@ def render():
     selected_restaurant_filter = str(st.session_state.get("selected_restaurant", "All") or "All").strip()
     selected_segment_filter = str(st.session_state.get("selected_segment", "All") or "All").strip()
     selected_cluster_filter = st.session_state.get("selected_cluster", "All")
+    selected_city_filter = str(st.session_state.get("selected_city", "All") or "All").strip()
     if not selected_restaurant_filter or selected_restaurant_filter.lower() in {"none", "nan"}:
         selected_restaurant_filter = "All"
     if not selected_segment_filter or selected_segment_filter.lower() in {"none", "nan"}:
         selected_segment_filter = "All"
+    if not selected_city_filter or selected_city_filter.lower() in {"none", "nan"}:
+        selected_city_filter = "All"
     selected_cluster_value = None
     if str(selected_cluster_filter).strip() not in {"", "All", "All Clusters", "None", "nan"}:
         selected_cluster_numeric = pd.to_numeric(pd.Series([selected_cluster_filter]), errors="coerce").iloc[0]
@@ -857,6 +861,7 @@ def render():
     restaurant_selected = selected_restaurant_filter != "All"
     segment_selected = selected_segment_filter != "All"
     cluster_selected = selected_cluster_value is not None
+    city_selected = selected_city_filter != "All"
 
     segment_assignments = assignments.copy()
     if cluster_selected:
@@ -866,6 +871,12 @@ def render():
             segment_assignments["latest_segment"].astype(str).eq(selected_segment_filter)
         ].copy()
     elif segment_selected:
+        segment_assignments = segment_assignments.iloc[0:0].copy()
+    if city_selected and "city" in segment_assignments.columns:
+        segment_assignments = segment_assignments[
+            segment_assignments["city"].astype(str).eq(selected_city_filter)
+        ].copy()
+    elif city_selected:
         segment_assignments = segment_assignments.iloc[0:0].copy()
 
     restaurant_lookup = pd.DataFrame()
@@ -924,6 +935,8 @@ def render():
                     out = out.iloc[0:0].copy()
         if segment_selected and "latest_segment" in out.columns:
             out = out[out["latest_segment"].astype(str).eq(selected_segment_filter)].copy()
+            if city_selected and "city" in out.columns:
+                out = out[out["city"].astype(str).eq(selected_city_filter)].copy()
         return out
 
     scope_parts = []
@@ -937,7 +950,12 @@ def render():
             scope_parts.append(f"{active_restaurant} / Cluster {active_cluster}: {cluster_name}")
     if segment_selected:
         scope_parts.append(f"Segment: {selected_segment_filter}")
+    if city_selected:
+        scope_parts.append(f"City: {selected_city_filter}")
     scope_label = " | ".join(scope_parts) if scope_parts else all_clusters_option
+
+    def _clear_city_filter() -> None:
+       st.session_state["selected_city"] = "All"
 
     min_sample_size = 3
     _render_scope_bar(
@@ -947,6 +965,28 @@ def render():
         selected_segment_filter,
         selected_cluster_label,
     )
+
+    # Fix
+    if "city" in assignments.columns:
+        available_cities = sorted(assignments["city"].dropna().astype(str).unique())
+        city_options = ["All"] + available_cities
+        current_city = str(st.session_state.get("selected_city", "All") or "All")
+        if current_city not in city_options:
+            current_city = "All"
+        city_cols = st.columns([2, 1])
+        with city_cols[0]:
+            st.selectbox(
+                "Filter by City",
+                city_options,
+                index=city_options.index(current_city),
+                key="selected_city",
+            )
+        with city_cols[1]:
+            st.markdown("<div style='height:1.72rem;'></div>", unsafe_allow_html=True)
+            st.button("Clear city filter", on_click=_clear_city_filter, width="stretch")
+    else:
+        st.warning("No 'city' column found in clustering assignments — city filter unavailable.")  # ← tells you exactly what's wrong
+
     if restaurant_selected and active_rest_norm not in set(cluster_df.get("name_norm", pd.Series(dtype=str))):
         st.warning(
             "The selected restaurant is outside the current cluster/segment scope, so restaurant-specific rows may be empty."
