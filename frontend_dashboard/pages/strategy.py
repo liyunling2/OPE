@@ -1142,7 +1142,8 @@ def render():
             "Recommended strategy",
             "Personalised action plan based on restaurant's issues identified",
             [
-                ("Strategy", strategy),
+                (f"{strat.get('title', i+1)}", strat.get("description", ""))
+                for i, strat in enumerate(strategy)
             ],
             accent="#111827",
         )

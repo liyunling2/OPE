@@ -223,17 +223,16 @@ Segment: {display_value(segment)}
 Priority Score: {priority_score}
 Priority Tier: {priority_tier}
  
- 
 RESTAURANT METRICS (latest available)
 GA FUNNEL:
 {_restaurant_ga_snapshot(row, hist)}
-
 
 RESTAURANT CLUSTER COMPARISON (raw dataframe — do not modify, do not recalculate):
 {ga_rankings}
 
 RESTAURANT BOOKING HISTORY (raw dataframe — do not filter, do not aggregate, do not transform):
 {momentum_df}
+
 
 
 AVAILABLE PACKAGES
@@ -267,17 +266,26 @@ The JSON structure must strictly follow this schema:
     }}
   ],
 
-  "strategy": "string",
-
-  "package_recommendation_summary": {{
-    "recommended_package": "string",
-    "rationale": "string"
-  }}
+  "strategy": [
+    {{
+      "title": "Overview",
+      "description": "string"
+    }},
+    {{
+      "title":       "GA campaign strategy",
+      "description": "string"    // GA campaign actions aligned to funnel gaps
+    }},
+    {{
+      "title":       "CRM / KOL / FB strategy",
+      "description": "string"    // CRM, KOL, and Facebook actions with peer evidence
+    }}
+  ]
 }}
 
 ## Instructions for each section:
 1. issues
-- Identify the restaurant's key business or funnel problems using the provided metrics, benchmarks, gaps, booking trends, GMV performance, risk signals, and peer comparisons.
+- Identify the restaurant's key business or funnel problems using the provided metrics, benchmarks, gaps, booking trends, GMV performance, risk signals, and peer comparisons. 
+- Identify a maximum of 3 issues only.
 - Rank issues by business impact:
   - Issue #1 must represent the highest revenue or conversion impact.
   - Lower-ranked issues should have smaller or secondary impact.
@@ -290,23 +298,36 @@ The JSON structure must strictly follow this schema:
 - Do not invent metrics or unsupported claims.
 
 2. strategy
-- Provide a single consolidated strategic recommendation covering the identified issues.
-- The strategy should:
-  - Explain what actions should be taken.
-  - Reference relevant GA campaign types, CRM strategies, KOL activities, or Facebook actions when applicable.
-  - Align recommendations to the identified funnel gaps.
-  - Mention why the strategy is suitable for this restaurant segment or cluster.
-  - Focus on practical growth actions that improve bookings, GMV, conversion, or traffic quality.
-- Write as a concise executive recommendation paragraph.
+The strategy array must always contain exactly 3 objects in the fixed order below.
+Do not rename titles, reorder entries, or use bullet points inside JSON string values.
+All descriptions must be concise, data-driven paragraphs. Do not invent metrics or unsupported claims.
 
-3. package_recommendation_summary
-- Recommend ONLY one package:
-  - Basic
-  - Standard
-  - Premium
-- The recommendation must align with the restaurant's highest-priority issue and required growth support.
-- Prefer:
-  - Basic for smaller or lower-risk growth gaps.
-  - Standard for moderate funnel or acquisition gaps.
-  - Premium for major conversion, retention, or revenue recovery problems requiring stronger CRM/retargeting support.
+2a. "Overview"
+- Write a single consolidated executive paragraph that synthesises the identified issues into one coherent growth narrative.
+- The overview must:
+    - Summarise the restaurant's primary growth challenge and the funnel stages most at risk.
+    - Explain the overall strategic direction and why it is appropriate for this restaurant's segment or cluster.
+    - Connect the GA and CRM/KOL/FB strategies into a unified recommendation.
+    - Directly describe the motivation of the strategy to address the issues identified
+    - State the expected commercial outcome (bookings, GMV, conversion, or traffic quality improvement).
+    - Do not repeat raw issue descriptions verbatim; synthesise and elevate into an executive recommendation.
+
+2b. "GA campaign strategy"
+- Write a concise paragraph covering all Google Ads campaign actions.
+- The description must:
+- Name the campaign type from the GA ranking table (cluster scope preferred).
+- State which funnel stage is targeted (Traffic / Add-to-cart / View-to-purchase).
+- Cite the exact Score, Add-to-cart rate, or View-to-purchase rate as supporting evidence.
+- Explain which funnel metric the campaign is expected to move and why.
+- Note why this campaign type is suitable for the restaurant's segment or cluster.
+
+2c. "CRM / KOL / FB strategy"
+- Write a concise paragraph covering retention, influencer, and paid social actions.
+- The description must:
+    - Name the strategy from the marketing ranking table.
+    - Cite exact Revenue uplift and Booking uplift figures from the table.
+    - Reference a specific peer campaign by name and state its outcome.
+    - Explain which funnel gap the strategy closes.
+    - Include one sentence on messaging direction — what the content or campaign must communicate to address the root issue.
+
 """
