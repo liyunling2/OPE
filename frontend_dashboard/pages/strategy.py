@@ -636,11 +636,12 @@ def build_ga_snapshot_cards(
     if cluster_scope.empty:
         cluster_scope = ga.copy()
 
-    for col in ["ga_items_viewed", "ga_add_to_cart_rate", "ga_view_to_purchase_rate"]:
+    for col in ["monthly_bookings", "ga_items_viewed", "ga_add_to_cart_rate", "ga_view_to_purchase_rate"]:
         if col in cluster_scope.columns:
             cluster_scope[col] = pd.to_numeric(cluster_scope[col], errors="coerce")
 
     benchmarks = {
+        "monthly_bookings": cluster_scope["monthly_bookings"].mean() if "monthly_bookings" in cluster_scope.columns else np.nan,
         "ga_items_viewed": cluster_scope["ga_items_viewed"].mean() if "ga_items_viewed" in cluster_scope.columns else np.nan,
         "ga_add_to_cart_rate": cluster_scope["ga_add_to_cart_rate"].mean() if "ga_add_to_cart_rate" in cluster_scope.columns else np.nan,
         "ga_view_to_purchase_rate": cluster_scope["ga_view_to_purchase_rate"].mean() if "ga_view_to_purchase_rate" in cluster_scope.columns else np.nan,
@@ -656,6 +657,7 @@ def build_ga_snapshot_cards(
         return ("#cc0000", lower_text)
 
     traffic_color, traffic_status = _status("ga_items_viewed", "Traffic is healthy", "Traffic is below benchmark")
+    bookings_color, bookings_status = _status("monthly_bookings", "Booking volume is healthy", "Booking volume is below benchmark")
     atc_color, atc_status = _status("ga_add_to_cart_rate", "Add-to-cart is above benchmark", "below benchmark")
     vtp_color, vtp_status = _status("ga_view_to_purchase_rate", "Purchase conversion is above benchmark", "below benchmark")
 
@@ -676,6 +678,13 @@ def build_ga_snapshot_cards(
             "benchmark": f"Cluster avg: {fmt_int(benchmarks.get('ga_items_viewed'))} {_delta('ga_items_viewed')}",
             "status": traffic_status,
             "color": traffic_color,
+        },
+        {
+            "label": "Booking volume / month",
+            "value": fmt_int(latest.get("monthly_bookings")),
+            "benchmark": f"Cluster avg: {fmt_int(benchmarks.get('monthly_bookings'))} {_delta('monthly_bookings')}",
+            "status": bookings_status,
+            "color": bookings_color,
         },
         {
             "label": "Add-to-cart rate",
