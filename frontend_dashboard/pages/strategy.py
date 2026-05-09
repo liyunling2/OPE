@@ -484,34 +484,51 @@ def render_placeholder_list_box(items: list[tuple[str, str]], accent: str = "#cc
     )
 
 
-def render_strategy_context(selected: str, cluster_text: str, segment_text: str) -> None:
+def render_placeholder_section(
+    number: int,
+    title: str,
+    subtitle: str,
+    items: list[tuple[str, str]],
+    accent: str = "#cc0000",
+) -> None:
+    rows = []
+    for label, body in items:
+        rows.append(
+            dedent(f"""
+            <div style='border:1px solid {BORDER_COLOR};border-left:4px solid {accent};
+                        border-radius:10px;padding:1.05rem 1.1rem;background:#fff;
+                        min-height:7.2rem;display:flex;flex-direction:column;'>
+                <div style='font-size:0.76rem;font-weight:800;color:{accent};
+                            text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.55rem;'>
+                    {escape(label)}
+                </div>
+                <div style='font-size:0.94rem;color:{TEXT_COLOR};line-height:1.5;'>
+                    {escape(body)}
+                </div>
+            </div>
+            """).strip()
+        )
+
     st.markdown(
         dedent(f"""
-        <div style='background:{SURFACE_COLOR};border:1px solid {BORDER_COLOR};border-radius:12px;
-                    padding:1rem 1.15rem;margin:0.4rem 0 1.15rem 0;
-                    box-shadow:0 8px 20px rgba(15,23,42,0.04);'>
-            <div style='font-size:0.78rem;font-weight:800;color:{MUTED_TEXT};
-                        text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.55rem;'>
-                Restaurant context
+        <section style='background:{SURFACE_COLOR};border:1px solid {BORDER_COLOR};border-radius:12px;
+                        padding:1.25rem 1.35rem 1.35rem;margin:0 0 1.15rem 0;
+                        box-shadow:0 8px 20px rgba(15,23,42,0.035);'>
+            <div style='display:flex;align-items:flex-start;margin-bottom:1.15rem;'>
+                {_badge_html(number)}
+                <div>
+                    <div style='font-size:1.18rem;font-weight:800;color:{TEXT_COLOR};line-height:1.2;'>
+                        {escape(title)}
+                    </div>
+                    <div style='font-size:0.92rem;color:{MUTED_TEXT};margin-top:0.24rem;line-height:1.35;'>
+                        {escape(subtitle)}
+                    </div>
+                </div>
             </div>
-            <div style='display:flex;flex-wrap:wrap;gap:0.55rem;align-items:center;'>
-                <span style='display:inline-flex;align-items:center;border:1px solid {BORDER_COLOR};
-                             border-radius:999px;padding:0.42rem 0.72rem;background:#f8f9fa;
-                             color:{TEXT_COLOR};font-size:0.9rem;font-weight:700;'>
-                    {escape(selected)}
-                </span>
-                <span style='display:inline-flex;align-items:center;border:1px solid {BORDER_COLOR};
-                             border-radius:999px;padding:0.42rem 0.72rem;background:#fff;
-                             color:{TEXT_COLOR};font-size:0.9rem;font-weight:650;'>
-                    {escape(cluster_text)}
-                </span>
-                <span style='display:inline-flex;align-items:center;border:1px solid {BORDER_COLOR};
-                             border-radius:999px;padding:0.42rem 0.72rem;background:#fff;
-                             color:{TEXT_COLOR};font-size:0.9rem;font-weight:650;'>
-                    Segment: {escape(segment_text)}
-                </span>
+            <div style='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;align-items:stretch;'>
+                {''.join(rows)}
             </div>
-        </div>
+        </section>
         """).strip(),
         unsafe_allow_html=True,
     )
@@ -682,6 +699,10 @@ def render_ga_snapshot_cards(cards: list[dict]) -> None:
         st.info("No restaurant GA snapshot available.")
         return
 
+    st.markdown(_ga_snapshot_cards_html(cards), unsafe_allow_html=True)
+
+
+def _ga_snapshot_cards_html(cards: list[dict]) -> str:
     card_html = []
     for card in cards:
         border = card["color"] if card["color"] == "#cc0000" else BORDER_COLOR
@@ -701,10 +722,66 @@ def render_ga_snapshot_cards(cards: list[dict]) -> None:
             """).strip()
         )
 
-    st.markdown(
+    return (
         "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0.9rem;'>"
         + "".join(card_html)
-        + "</div>",
+        + "</div>"
+    )
+
+
+def render_ga_snapshot_section(number: int, title: str, subtitle: str, cards: list[dict]) -> None:
+    body = (
+        _ga_snapshot_cards_html(cards)
+        if cards
+        else f"<div style='color:{MUTED_TEXT};font-size:0.95rem;'>No restaurant GA snapshot available.</div>"
+    )
+    st.markdown(
+        dedent(f"""
+        <section style='background:{SURFACE_COLOR};border:1px solid {BORDER_COLOR};border-radius:12px;
+                        padding:1.25rem 1.35rem 1.35rem;margin:0 0 1.15rem 0;
+                        box-shadow:0 8px 20px rgba(15,23,42,0.035);'>
+            <div style='display:flex;align-items:flex-start;margin-bottom:1.15rem;'>
+                {_badge_html(number)}
+                <div>
+                    <div style='font-size:1.18rem;font-weight:800;color:{TEXT_COLOR};line-height:1.2;'>
+                        {escape(title)}
+                    </div>
+                    <div style='font-size:0.92rem;color:{MUTED_TEXT};margin-top:0.24rem;line-height:1.35;'>
+                        {escape(subtitle)}
+                    </div>
+                </div>
+            </div>
+            {body}
+        </section>
+        """).strip(),
+        unsafe_allow_html=True,
+    )
+
+
+def render_peer_recommender_section() -> None:
+    st.markdown(
+        dedent(f"""
+        <section style='background:{SURFACE_COLOR};border:1px solid {BORDER_COLOR};border-radius:12px;
+                        padding:1.25rem 1.35rem 1.35rem;margin:0 0 1.15rem 0;
+                        box-shadow:0 8px 20px rgba(15,23,42,0.035);'>
+            <div style='display:flex;align-items:flex-start;margin-bottom:1.15rem;'>
+                {_badge_html(5)}
+                <div>
+                    <div style='font-size:1.18rem;font-weight:800;color:{TEXT_COLOR};line-height:1.2;'>
+                        Peer recommender
+                    </div>
+                    <div style='font-size:0.92rem;color:{MUTED_TEXT};margin-top:0.24rem;line-height:1.35;'>
+                        Reserved for peer-based recommendations.
+                    </div>
+                </div>
+            </div>
+            <div style='background:#fff;border:1px dashed {BORDER_COLOR};border-radius:10px;
+                        padding:1.05rem 1.1rem;color:{TEXT_COLOR};font-size:0.95rem;line-height:1.5;'>
+                Peer recommender placeholder. This box will later show matched peer restaurants,
+                the winning peer strategy, and evidence-backed recommendation text.
+            </div>
+        </section>
+        """).strip(),
         unsafe_allow_html=True,
     )
 
@@ -728,6 +805,17 @@ def _filter_marketing_for_scope(
             return pd.DataFrame()
         df = df[df["latest_segment"].astype(str).eq(str(selected_segment))].copy()
     return df
+
+
+def _filter_marketing_for_restaurant(outcomes_df: pd.DataFrame, selected: str) -> pd.DataFrame:
+    if outcomes_df.empty:
+        return pd.DataFrame()
+    name_col = "restaurant_name" if "restaurant_name" in outcomes_df.columns else "name"
+    if name_col not in outcomes_df.columns:
+        return pd.DataFrame()
+
+    df = outcomes_df.copy()
+    return df[df[name_col].fillna("").astype(str).apply(_normalize_name).eq(_normalize_name(selected))].copy()
 
 
 # =============================================================================
@@ -1281,58 +1369,52 @@ def render():
     m_cluster_table = build_marketing_rank_table(cluster_rank_df)
     m_segment_table = build_marketing_rank_table(segment_rank_df)
     m_global_table = build_marketing_rank_table(global_rank_df)
+    restaurant_rank_df = _filter_marketing_for_restaurant(marketing_outcomes, selected)
+    m_restaurant_table = build_marketing_rank_table(restaurant_rank_df)
 
     st.markdown("## Strategy Diagnosis")
-    render_strategy_context(selected, cluster_text, segment_text)
+    st.markdown("<div style='height:0.35rem;'></div>", unsafe_allow_html=True)
 
-    with st.container(border=True):
-        _strategy_box_header(
-            1,
-            "Key issue 1, 2, 3",
-            "Hardcoded problem statements for revenue, booking, and GA funnel gaps.",
-        )
-        render_placeholder_list_box(
-            [
-                (
-                    "Key issue 1",
-                    "Revenue and booking uplift problem placeholder. Replace this with logic that picks the main growth pain from priority, bookings, and GMV signals.",
-                ),
-                (
-                    "Key issue 2",
-                    "GA funnel problem placeholder. Use this for low item views, weak add-to-cart intent, or poor view-to-purchase conversion once rules are added.",
-                ),
-                (
-                    "Key issue 3",
-                    "Audience and channel fit placeholder. Use cluster and segment evidence to explain why similar restaurants need stronger CRM, KOL, or FB support.",
-                ),
-            ]
-        )
-    st.markdown("<div style='height:0.65rem;'></div>", unsafe_allow_html=True)
+    render_placeholder_section(
+        1,
+        "Key issue 1, 2, 3",
+        "Hardcoded problem statements for revenue, booking, and GA funnel gaps.",
+        [
+            (
+                "Key issue 1",
+                "Revenue and booking uplift problem placeholder. Replace this with logic that picks the main growth pain from priority, bookings, and GMV signals.",
+            ),
+            (
+                "Key issue 2",
+                "GA funnel problem placeholder. Use this for low item views, weak add-to-cart intent, or poor view-to-purchase conversion once rules are added.",
+            ),
+            (
+                "Key issue 3",
+                "Audience and channel fit placeholder. Use cluster and segment evidence to explain why similar restaurants need stronger CRM, KOL, or FB support.",
+            ),
+        ],
+    )
 
-    with st.container(border=True):
-        _strategy_box_header(
-            2,
-            "Recommended strategy 1, 2, 3",
-            "Hardcoded action plan mapped to each issue.",
-        )
-        render_placeholder_list_box(
-            [
-                (
-                    "Strategy 1",
-                    "Prioritise a conversion-focused package with visible offers, CRM reminders, and booking-oriented messaging.",
-                ),
-                (
-                    "Strategy 2",
-                    "Improve funnel intent with stronger menu presentation, clearer value anchors, and retargeting for high-intent visitors.",
-                ),
-                (
-                    "Strategy 3",
-                    "Use peer-proven CRM/KOL/FB activities from the ranking below to reinforce the restaurant's best-fit growth channel.",
-                ),
-            ],
-            accent="#111827",
-        )
-    st.markdown("<div style='height:0.65rem;'></div>", unsafe_allow_html=True)
+    render_placeholder_section(
+        2,
+        "Recommended strategy 1, 2, 3",
+        "Hardcoded action plan mapped to each issue.",
+        [
+            (
+                "Strategy 1",
+                "Prioritise a conversion-focused package with visible offers, CRM reminders, and booking-oriented messaging.",
+            ),
+            (
+                "Strategy 2",
+                "Improve funnel intent with stronger menu presentation, clearer value anchors, and retargeting for high-intent visitors.",
+            ),
+            (
+                "Strategy 3",
+                "Use peer-proven CRM/KOL/FB activities from the ranking below to reinforce the restaurant's best-fit growth channel.",
+            ),
+        ],
+        accent="#111827",
+    )
 
     with st.container(border=True):
         _strategy_box_header(
@@ -1368,13 +1450,17 @@ def render():
 
         default_segment = segment if segment in cluster_segments else (cluster_segments[0] if cluster_segments else None)
 
-        rank_tabs = st.tabs(["Cluster", "Segment", "Global"])
+        rank_tabs = st.tabs(["Restaurant", "Cluster", "Segment", "Global"])
         with rank_tabs[0]:
+            st.caption(f"{selected}'s own CRM / KOL / FB activity outcomes")
+            _render_rank_html_table(m_restaurant_table)
+        with rank_tabs[1]:
             st.caption(cluster_text)
             _render_rank_html_table(m_cluster_table)
-        with rank_tabs[1]:
-            seg_col, note_col = st.columns([1, 2])
-            with seg_col:
+        with rank_tabs[2]:
+            st.caption(f"{cluster_text} | Segment-level ranking within selected cluster")
+            selector_col, _ = st.columns([0.42, 0.58])
+            with selector_col:
                 scope_segment = st.selectbox(
                     "Segment filter",
                     cluster_segments if cluster_segments else ["No segment data"],
@@ -1382,8 +1468,6 @@ def render():
                     disabled=not cluster_segments,
                     key=f"marketing_segment_filter_{selected}",
                 )
-            with note_col:
-                st.caption(f"{cluster_text} | Segment: {scope_segment if cluster_segments else 'Not available'}")
             scoped_marketing = _filter_marketing_for_scope(
                 marketing_outcomes,
                 cluster_id,
@@ -1391,36 +1475,19 @@ def render():
                 "Segment",
             )
             _render_rank_html_table(build_marketing_rank_table(scoped_marketing))
-        with rank_tabs[2]:
+        with rank_tabs[3]:
             st.caption("All restaurants")
             _render_rank_html_table(m_global_table)
-    st.markdown("<div style='height:0.65rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:1.15rem;'></div>", unsafe_allow_html=True)
 
-    with st.container(border=True):
-        _strategy_box_header(
-            4,
-            "Restaurant GA snapshot",
-            "This restaurant's own funnel metrics vs cluster benchmark.",
-        )
-        render_ga_snapshot_cards(build_ga_snapshot_cards(selected, ga_monthly_df, assignments, cluster_id))
-    st.markdown("<div style='height:0.65rem;'></div>", unsafe_allow_html=True)
+    render_ga_snapshot_section(
+        4,
+        "Restaurant GA snapshot",
+        "This restaurant's own funnel metrics vs cluster benchmark.",
+        build_ga_snapshot_cards(selected, ga_monthly_df, assignments, cluster_id),
+    )
 
-    with st.container(border=True):
-        _strategy_box_header(
-            5,
-            "Peer recommender",
-            "Reserved for peer-based recommendations.",
-        )
-        st.markdown(
-            dedent(f"""
-            <div style='background:#fff;border:1px dashed {BORDER_COLOR};border-radius:8px;
-                        padding:1rem 1.15rem;color:{TEXT_COLOR};line-height:1.5;'>
-                Peer recommender placeholder. This box will later show matched peer restaurants,
-                the winning peer strategy, and evidence-backed recommendation text.
-            </div>
-            """).strip(),
-            unsafe_allow_html=True,
-        )
+    render_peer_recommender_section()
 
     st.markdown("---")
     st.markdown("## Optional AI Narrative")
