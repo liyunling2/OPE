@@ -33,10 +33,26 @@ load_dotenv()
 # =============================================================================
 
 def extract_json(text):
-    # extract content between ```json ... ```
+    if not text or not text.strip():
+        raise ValueError("extract_json received empty input")
+
+    text = text.strip()
+
+    # extract ```json ... ``` block if present
     match = re.search(r"```json\s*(.*?)\s*```", text, re.DOTALL)
     if match:
-        text = match.group(1)
+        text = match.group(1).strip()
+
+    # fallback: sometimes LLM returns ``` ... ``` without "json"
+    else:
+        match = re.search(r"```\s*(.*?)\s*```", text, re.DOTALL)
+        if match:
+            text = match.group(1).strip()
+
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON after extraction: {text[:200]}") from e
 
     return json.loads(text)
 def _normalize_name(value: str) -> str:
@@ -1113,14 +1129,13 @@ def render():
         response = extract_json(st.session_state[ai_key])
 
         # st.markdown(st.session_state[ai_key])
-
-        st.download_button(
-            label="Download AI Narrative",
-            data="AI STRATEGY NARRATIVE\n%s\n\n%s" % (selected, st.session_state[ai_key]),
-            file_name="ai_strategy_%s.txt" % selected.replace(" ", "_"),
-            mime="text/plain",
-            width="stretch",
-        )
+        # st.download_button(
+        #     label="Download AI Narrative",
+        #     data="AI STRATEGY NARRATIVE\n%s\n\n%s" % (selected, st.session_state[ai_key]),
+        #     file_name="ai_strategy_%s.txt" % selected.replace(" ", "_"),
+        #     mime="text/plain",
+        #     width="stretch",
+        # )
 
        
         issues = response.get("issues", [])

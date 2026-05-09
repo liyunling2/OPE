@@ -234,7 +234,6 @@ RESTAURANT BOOKING HISTORY (raw dataframe — do not filter, do not aggregate, d
 {momentum_df}
 
 
-
 AVAILABLE PACKAGES
 1. BASIC   — Awareness Starter. Key tools: Blogger 20k×1/30k×1, Boost 2K THB, Pop-up Banner,
           Homepage guarantee, Line@, Push. Revenue guarantee: 30K THB / 90 days.
@@ -331,3 +330,8 @@ All descriptions must be concise, data-driven paragraphs. Do not invent metrics 
     - Include one sentence on messaging direction — what the content or campaign must communicate to address the root issue.
 
 """
+
+
+
+# PEER RECOMMENDER'S DATA TO COMPARE AGAINST SELECTED RESTAURANT (raw dataframe — do not filter, do not aggregate, do not transform):
+# {XXXX}
