@@ -1000,7 +1000,6 @@ def render():
                 st.session_state[ai_key] = None
 
     if st.session_state.get(ai_key):
-        st.markdown('cohere a used')
         st.markdown(st.session_state[ai_key])
         st.download_button(
             label="Download AI Narrative",
