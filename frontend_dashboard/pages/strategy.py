@@ -1,14 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-pages/strategy.py
-Redone Strategy Page with clean GA ranking tables + AI Narrative.
-
-Fixes included:
-- Removed misleading Active Months and Campaign Months columns.
-- Keeps only final strategy score formulas in the frontend.
-- AI narrative restored and updated to use the new GA + CRM/KOL/FB ranking tables.
-"""
-
 from __future__ import annotations
 
 import os
@@ -18,6 +7,7 @@ import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
 from google import genai
+import cohere
 
 from data.loader import (
     load_priority,
@@ -565,7 +555,29 @@ def call_gemini(prompt: str) -> str:
     response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
     return response.text.strip()
 
+def call_cohere(prompt: str) -> str:
+    try:
+        api_key = os.getenv("COHERE_API_KEY")
 
+        co = cohere.ClientV2(api_key) 
+
+        # Analyze the text without RAG
+        response = co.chat(
+            model="command-a-03-2025",
+            messages=[
+                {
+                    "role": "user", 
+                    "content": f"{prompt}"
+                }
+            ]
+        )
+        if response and response.message.content[0].text:
+            return response.message.content[0].text
+        return "_(No response generated)_"
+        
+    except Exception as e:
+        return f"_(Playbook generation unavailable: {e})_"
+    
 def build_ai_prompt(
     selected: str,
     row: dict,
@@ -982,12 +994,13 @@ def render():
                     m_segment_table=m_segment_table,
                     m_global_table=m_global_table,
                 )
-                st.session_state[ai_key] = call_gemini(prompt)
+                st.session_state[ai_key] = call_cohere(prompt)
             except Exception as e:
                 st.error("AI generation failed: %s" % e)
                 st.session_state[ai_key] = None
 
     if st.session_state.get(ai_key):
+        st.markdown('cohere a used')
         st.markdown(st.session_state[ai_key])
         st.download_button(
             label="Download AI Narrative",
