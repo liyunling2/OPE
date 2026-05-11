@@ -458,6 +458,14 @@ def build_marketing_rank_table(scope_df: pd.DataFrame) -> pd.DataFrame:
 
     df["revenue_uplift_pct"] = pd.to_numeric(df["revenue_uplift_pct"], errors="coerce")
     df["bookings_uplift_pct"] = pd.to_numeric(df["bookings_uplift_pct"], errors="coerce")
+    df = df[
+        df["revenue_uplift_pct"].notna()
+        & df["bookings_uplift_pct"].notna()
+        & df["revenue_uplift_pct"].ge(0)
+        & df["bookings_uplift_pct"].ge(0)
+    ].copy()
+    if df.empty:
+        return pd.DataFrame()
 
     count_col = "activity_id" if "activity_id" in df.columns else strategy_col
     restaurant_col = "restaurant_name" if "restaurant_name" in df.columns else None
@@ -485,8 +493,21 @@ def build_marketing_rank_table(scope_df: pd.DataFrame) -> pd.DataFrame:
 
 def display_marketing_rank_table(title: str, table: pd.DataFrame) -> None:
     st.markdown(f"#### {title}")
+    st.caption(
+        "Revenue uplift and booking uplift are average percentage changes versus the campaign baseline. "
+        "Only strategies with nonnegative revenue and booking uplift are ranked."
+    )
+    with st.expander("How score is calculated", expanded=False):
+        st.markdown(
+            """
+            `Strategy Score = (Revenue uplift % × 0.60) + (Booking uplift % × 0.40)`
+
+            The table first removes campaigns with negative revenue or booking uplift, then averages the remaining
+            uplift values by activity. Higher score means the strategy has historically improved both GMV and bookings.
+            """
+        )
     if table.empty:
-        st.info("No CRM/KOL/FB strategy outcome data available for this scope.")
+        st.info("No CRM/KOL/FB strategies with nonnegative revenue and booking uplift are available for this scope.")
         return
 
     display_cols = [
@@ -502,13 +523,13 @@ def display_marketing_rank_table(title: str, table: pd.DataFrame) -> None:
             "rank": "Rank",
             "strategy_name": "Activity",
             "count": "Count",
-            "avg_revenue_uplift_pct": "Revenue Uplift",
-            "avg_bookings_uplift_pct": "Booking Uplift",
+            "avg_revenue_uplift_pct": "Revenue Uplift %",
+            "avg_bookings_uplift_pct": "Booking Uplift %",
             "marketing_strategy_score": "Strategy Score",
         }
     )
-    out["Revenue Uplift"] = out["Revenue Uplift"].apply(fmt_pct)
-    out["Booking Uplift"] = out["Booking Uplift"].apply(fmt_pct)
+    out["Revenue Uplift %"] = out["Revenue Uplift %"].apply(fmt_pct)
+    out["Booking Uplift %"] = out["Booking Uplift %"].apply(fmt_pct)
     out["Strategy Score"] = out["Strategy Score"].apply(lambda v: fmt_num(v, 3))
 
     st.dataframe(out, hide_index=True, width="stretch", height=min(320, 72 + len(out) * 36))
@@ -620,8 +641,17 @@ def render_placeholder_section(
 
 def _render_rank_html_table(table: pd.DataFrame) -> None:
     if table.empty:
-        st.info("No CRM/KOL/FB strategy outcome data available for this scope.")
+        st.info("No CRM/KOL/FB strategies with nonnegative revenue and booking uplift are available for this scope.")
         return
+
+    with st.expander("How score is calculated", expanded=False):
+        st.markdown(
+            """
+            `Score = (Revenue uplift % × 0.60) + (Booking uplift % × 0.40)`
+
+            Campaigns with negative revenue or booking uplift are filtered out before ranking.
+            """
+        )
 
     rows = []
     for _, rec in table.head(8).iterrows():
@@ -654,8 +684,8 @@ def _render_rank_html_table(table: pd.DataFrame) -> None:
                         <th style='padding:0.8rem 1rem;'>Rank</th>
                         <th style='padding:0.8rem 1rem;'>Activity</th>
                         <th style='padding:0.8rem 1rem;'>Count</th>
-                        <th style='padding:0.8rem 1rem;'>Revenue uplift</th>
-                        <th style='padding:0.8rem 1rem;'>Booking uplift</th>
+                        <th style='padding:0.8rem 1rem;'>Revenue uplift %</th>
+                        <th style='padding:0.8rem 1rem;'>Booking uplift %</th>
                         <th style='padding:0.8rem 1rem;'>Score</th>
                     </tr>
                 </thead>
@@ -982,6 +1012,14 @@ def render_peer_recommender_section(
             peer_dist = top_peers[["name_norm", "sim_w", "distance"]].copy()
             peer_campaigns = o[o["_name_norm"].isin(set(peer_dist["name_norm"]))].copy()
             peer_campaigns = peer_campaigns.merge(peer_dist, left_on="_name_norm", right_on="name_norm", how="left")
+            peer_campaigns["revenue_uplift_pct"] = pd.to_numeric(peer_campaigns["revenue_uplift_pct"], errors="coerce")
+            peer_campaigns["bookings_uplift_pct"] = pd.to_numeric(peer_campaigns["bookings_uplift_pct"], errors="coerce")
+            peer_campaigns = peer_campaigns[
+                peer_campaigns["revenue_uplift_pct"].notna()
+                & peer_campaigns["bookings_uplift_pct"].notna()
+                & peer_campaigns["revenue_uplift_pct"].ge(0)
+                & peer_campaigns["bookings_uplift_pct"].ge(0)
+            ].copy()
 
             rec = (
                 peer_campaigns.groupby(["strategy_name", "channel"], dropna=False)
@@ -989,6 +1027,7 @@ def render_peer_recommender_section(
                     campaigns=("activity_id", "nunique"),
                     peers_using=("restaurant_name", "nunique"),
                     med_rev_uplift=("revenue_uplift_pct", "median"),
+                    med_booking_uplift=("bookings_uplift_pct", "median"),
                     med_roi=("roi", "median"),
                     total_incremental=("incremental_revenue_thb", "sum"),
                     total_sim_weight=("sim_w", "sum"),
@@ -1000,6 +1039,7 @@ def render_peer_recommender_section(
             rec["is_reliable"] = rec["peers_using"] >= min_peers
             rec["score"] = (
                 rec["med_rev_uplift"].fillna(0) * 100
+                + rec["med_booking_uplift"].fillna(0) * 60
                 + rec["med_roi"].fillna(0) * 50
                 + np.log1p(rec["total_sim_weight"]) * 20
                 + rec["is_reliable"].astype(int) * 30
@@ -1021,41 +1061,72 @@ def render_peer_recommender_section(
                     diverse_recs.append(r)
 
             top_recs = pd.DataFrame(diverse_recs)
+            if top_recs.empty:
+                top_recs = pd.DataFrame(
+                    columns=[
+                        "strategy_name",
+                        "channel",
+                        "med_rev_uplift",
+                        "med_booking_uplift",
+                        "peers_using",
+                        "campaigns",
+                    ]
+                )
 
             st.markdown("#### Top Strategies Recommended by Peers")
+            st.caption(
+                "Percentages show median uplift from similar restaurants' campaign outcomes: "
+                "revenue uplift is the GMV change, booking uplift is the booking-count change. "
+                "Strategies with negative revenue or booking uplift are excluded."
+            )
+            with st.expander("How score is calculated", expanded=False):
+                st.markdown(
+                    """
+                    `Peer score = median revenue uplift × 100 + median booking uplift × 60 + median ROI × 50 + similarity weight + reliability bonus`
+
+                    Similarity weight favors closer peer restaurants. Reliability bonus is added when at least two peers used the same strategy.
+                    Negative revenue or booking uplift campaigns are removed before this score is calculated.
+                    """
+                )
             displayable_recs = top_recs[top_recs["med_rev_uplift"].notna()].head(3)
             st.session_state["peer_recs"] = displayable_recs.copy()
 
             if displayable_recs.empty:
-                st.info("No peer-validated strategies with recorded performance data. Try increasing peers.")
+                st.info("No peer-validated strategies with nonnegative revenue and booking uplift. Try increasing peers.")
             else:
                 rec_cards = []
                 for _, r in displayable_recs.iterrows():
                     uplift = pd.to_numeric(pd.Series([r.get("med_rev_uplift")]), errors="coerce").iloc[0]
+                    booking_uplift = pd.to_numeric(pd.Series([r.get("med_booking_uplift")]), errors="coerce").iloc[0]
                     roi_val = pd.to_numeric(pd.Series([r.get("med_roi")]), errors="coerce").iloc[0]
-                    peers_using = int(r.get("peers_using", 0) or 0)
-                    campaigns = int(r.get("campaigns", 0) or 0)
+                    # peers_using = int(r.get("peers_using", 0) or 0)
+                    # campaigns = int(r.get("campaigns", 0) or 0)
                     total_sim_weight = _to_float(r.get("total_sim_weight"))
                     color = "#3f7f2f" if pd.notna(uplift) and uplift >= 0 else "#cc0000"
                     rec_cards.append(
                         {
                             "label": f"{r.get('strategy_name', 'Unknown')} · {r.get('channel', 'Unknown')}",
                             "value": fmt_pct(uplift),
+                            "booking_value": fmt_pct(booking_uplift),
+                            # "meta": f"{peers_using} peer{'s' if peers_using != 1 else ''} · {campaigns} campaign{'s' if campaigns != 1 else ''}",
                             "color": color,
                         }
                     )
 
                 st.markdown(
-                    "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0.65rem;'>"
+                    "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.15rem;margin-bottom:1rem;'>"
                     + "".join(
                         dedent(f"""
                         <div style='background:#fff;border:1px solid {card['color']};border-radius:10px;
-                                    padding:1rem 1.15rem;min-height:8rem;'>
+                                    padding:1rem 1.15rem;min-height:9.25rem;'>
                             <div style='font-size:0.95rem;color:#3f3f46;font-weight:650;'>{escape(card['label'])}</div>
                             <div style='font-size:1.55rem;color:{card['color']};font-weight:850;line-height:1.2;margin-top:0.35rem;'>
                                 {escape(card['value'])}
                             </div>
-                            <div style='font-size:0.92rem;color:#3f3f46;margin-top:0.2rem;'></div>
+                            <div style='font-size:0.78rem;color:{MUTED_TEXT};margin-top:0.15rem;'>median revenue uplift</div>
+                            <div style='font-size:0.88rem;color:#3f3f46;margin-top:0.45rem;'>
+                                Booking uplift: <strong>{escape(card['booking_value'])}</strong>
+                            </div>
                         </div>
                         """).strip()
                         for card in rec_cards
