@@ -245,10 +245,14 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
             combined = combined.drop(columns=[bcol])
 
         if "is_in_priority_list_base" in combined.columns:
-            combined["is_in_priority_list"] = combined["is_in_priority_list_base"].fillna(False).astype(bool)
+            combined["is_in_priority_list"] = (
+                combined["is_in_priority_list_base"].fillna(False).infer_objects(copy=False).astype(bool)
+            )
             combined = combined.drop(columns=["is_in_priority_list_base"])
         else:
-            combined["is_in_priority_list"] = combined["is_in_priority_list"].fillna(False).astype(bool)
+            combined["is_in_priority_list"] = (
+                combined["is_in_priority_list"].fillna(False).infer_objects(copy=False).astype(bool)
+            )
 
     combined["priority_tier"]       = combined["priority_tier"].fillna("Monitor - outside stable-growth priority universe")
     combined["recommended_channel"] = combined["recommended_channel"].where(combined["recommended_channel"].notna(), pd.NA)

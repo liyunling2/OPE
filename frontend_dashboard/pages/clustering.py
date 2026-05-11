@@ -60,6 +60,11 @@ def _clear_ga_campaign_type_filter() -> None:
     st.session_state["selected_ga_campaign_type"] = "All"
 
 
+def _clear_city_filter() -> None:
+    st.session_state["selected_city"] = "All"
+    st.session_state["selected_city_widget_reset"] = int(st.session_state.get("selected_city_widget_reset", 0) or 0) + 1
+
+
 def _render_campaign_strategy_naming_expander() -> None:
     with st.expander("How Campaign Names and Assigned Strategies Are Named", expanded=False):
         st.markdown(
@@ -798,42 +803,88 @@ def _render_scope_bar(
     segment_filter: str,
     cluster_filter: str,
 ) -> None:
+    chip_style = (
+        "font-size:0.76rem; color:#374151; background:#ffffff; "
+        "border:1px solid #e5e7eb; border-radius:999px; padding:0.18rem 0.55rem;"
+    )
+
+    def _filter_chip(label: str, value: str) -> str:
+        value = str(value or "").strip()
+        if not value or value.lower() in {"all", "all clusters", "none", "nan"}:
+            return ""
+        return f'<span style="{chip_style}">{html.escape(label)}: {html.escape(value)}</span>'
+
+    active_filter_chips = "\n".join(
+        chip
+        for chip in [
+            _filter_chip("Restaurant", restaurant_filter),
+            _filter_chip("Segment", segment_filter),
+            _filter_chip("Cluster", cluster_filter),
+        ]
+        if chip
+    )
+
+    scope_bar_style = (
+        "display:flex; align-items:center; justify-content:space-between; gap:0.75rem; "
+        "flex-wrap:wrap; border:1px solid #e5e7eb; border-radius:8px; "
+        "padding:0.55rem 0.75rem; background:#fafafa; margin:0.2rem 0 1rem;"
+    )
+    scope_label_style = "display:flex; align-items:center; gap:0.55rem; min-width:0; flex-wrap:wrap;"
+    scope_chips_style = "display:flex; gap:0.45rem; flex-wrap:wrap;"
+    scope_html = (
+        f'<div style="{scope_bar_style}">'
+        f'<div style="{scope_label_style}">'
+        '<span style="font-size:0.72rem; color:#6b7280; font-weight:800; text-transform:uppercase;">Scope</span>'
+        f'<span style="font-size:0.92rem; color:#111827; font-weight:800;">{html.escape(scope_label)}</span>'
+        "</div>"
+        f'<div style="{scope_chips_style}">'
+        f'<span style="{chip_style}">{restaurant_count:,} restaurants</span>'
+        f"{active_filter_chips}"
+        "</div>"
+        "</div>"
+    )
     st.markdown(
-        f"""
-        <div style="
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:0.75rem;
-            flex-wrap:wrap;
-            border:1px solid #e5e7eb;
-            border-radius:8px;
-            padding:0.55rem 0.75rem;
-            background:#fafafa;
-            margin:0.2rem 0 1rem;
-        ">
-            <div style="display:flex; align-items:center; gap:0.55rem; min-width:0; flex-wrap:wrap;">
-                <span style="font-size:0.72rem; color:#6b7280; font-weight:800; text-transform:uppercase;">Scope</span>
-                <span style="font-size:0.92rem; color:#111827; font-weight:800;">{html.escape(scope_label)}</span>
-            </div>
-            <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
-                <span style="font-size:0.76rem; color:#374151; background:#ffffff; border:1px solid #e5e7eb; border-radius:999px; padding:0.18rem 0.55rem;">
-                    {restaurant_count:,} restaurants
-                </span>
-                <span style="font-size:0.76rem; color:#374151; background:#ffffff; border:1px solid #e5e7eb; border-radius:999px; padding:0.18rem 0.55rem;">
-                    Restaurant: {html.escape(restaurant_filter)}
-                </span>
-                <span style="font-size:0.76rem; color:#374151; background:#ffffff; border:1px solid #e5e7eb; border-radius:999px; padding:0.18rem 0.55rem;">
-                    Segment: {html.escape(segment_filter)}
-                </span>
-                <span style="font-size:0.76rem; color:#374151; background:#ffffff; border:1px solid #e5e7eb; border-radius:999px; padding:0.18rem 0.55rem;">
-                    Cluster: {html.escape(cluster_filter)}
-                </span>
-            </div>
-        </div>
-        """,
+        scope_html,
         unsafe_allow_html=True,
     )
+
+def _add_city_to_outcomes(outcomes_df: pd.DataFrame, assignments: pd.DataFrame) -> pd.DataFrame:
+    if outcomes_df.empty or assignments.empty:
+        return outcomes_df.copy()
+
+    df = outcomes_df.copy()
+    a = assignments.copy()
+
+    if "name_norm" not in a.columns and "name" in a.columns:
+        a["name_norm"] = a["name"].apply(_normalize_name)
+
+    if "city" not in a.columns:
+        return df
+
+    name_col = "restaurant_name" if "restaurant_name" in df.columns else "name"
+    if name_col not in df.columns:
+        return df
+
+    df["name_norm"] = df[name_col].fillna("").astype(str).apply(_normalize_name)
+
+    city_lookup = (
+        a[["name_norm", "city"]]
+        .dropna(subset=["name_norm"])
+        .drop_duplicates("name_norm")
+    )
+
+    df = df.merge(city_lookup, on="name_norm", how="left", suffixes=("", "_assignment"))
+
+    if "city_assignment" in df.columns:
+        df["city"] = df["city"].where(
+            df["city"].notna() & df["city"].astype(str).str.strip().ne(""),
+            df["city_assignment"],
+        ) if "city" in df.columns else df["city_assignment"]
+
+    df = df.drop(columns=["city_assignment"], errors="ignore")
+    df["city"] = df["city"].fillna("Unknown")
+
+    return df
 
 def render():
     assignments = load_cluster_assignments() # Load from clustering_results
@@ -864,6 +915,7 @@ def render():
     assignments["cluster_id"] = pd.to_numeric(assignments["cluster_id"], errors="coerce").astype(int)
     if "name_norm" not in assignments.columns:
         assignments["name_norm"] = assignments["name"].apply(_normalize_name)
+    outcomes_df = _add_city_to_outcomes(outcomes_df, assignments)
 
     all_clusters_option = "All Clusters"
     cluster_rows = assignments[["cluster_id", "cluster_label"]].drop_duplicates().sort_values(["cluster_id", "cluster_label"])
@@ -877,7 +929,11 @@ def render():
     selected_restaurant_filter = str(st.session_state.get("selected_restaurant", "All") or "All").strip()
     selected_segment_filter = str(st.session_state.get("selected_segment", "All") or "All").strip()
     selected_cluster_filter = st.session_state.get("selected_cluster", "All")
-    selected_city_filter = str(st.session_state.get("selected_city", "All") or "All").strip()
+    city_widget_reset = int(st.session_state.get("selected_city_widget_reset", 0) or 0)
+    city_widget_key = f"selected_city_widget_{city_widget_reset}"
+    selected_city_filter = str(
+        st.session_state.get(city_widget_key, st.session_state.get("selected_city", "All")) or "All"
+    ).strip()
     if not selected_restaurant_filter or selected_restaurant_filter.lower() in {"none", "nan"}:
         selected_restaurant_filter = "All"
     if not selected_segment_filter or selected_segment_filter.lower() in {"none", "nan"}:
@@ -898,6 +954,28 @@ def render():
     restaurant_selected = selected_restaurant_filter != "All"
     segment_selected = selected_segment_filter != "All"
     cluster_selected = selected_cluster_value is not None
+
+    restaurant_lookup = pd.DataFrame()
+    if restaurant_selected:
+        restaurant_lookup = assignments[
+            assignments["name_norm"] == _normalize_name(selected_restaurant_filter)
+        ].head(1)
+        if restaurant_lookup.empty:
+            st.warning(
+                f"Navbar restaurant filter '{selected_restaurant_filter}' was not found in the clustering data. "
+                "Showing the broader navbar segment scope instead."
+            )
+            restaurant_selected = False
+            selected_restaurant_filter = "All"
+        elif "city" in restaurant_lookup.columns:
+            restaurant_city = str(restaurant_lookup.iloc[0].get("city", "") or "").strip()
+            if restaurant_city and restaurant_city.lower() not in {"none", "nan", "unknown"}:
+                selected_city_filter = restaurant_city
+                st.session_state["selected_city"] = restaurant_city
+            else:
+                selected_city_filter = "All"
+                st.session_state["selected_city"] = "All"
+
     city_selected = selected_city_filter != "All"
 
     segment_assignments = assignments.copy()
@@ -918,19 +996,6 @@ def render():
     elif city_selected:
         segment_assignments = segment_assignments.iloc[0:0].copy()
 
-    restaurant_lookup = pd.DataFrame()
-    if restaurant_selected:
-        restaurant_lookup = assignments[
-            assignments["name_norm"] == _normalize_name(selected_restaurant_filter)
-        ].head(1)
-        if restaurant_lookup.empty:
-            st.warning(
-                f"Navbar restaurant filter '{selected_restaurant_filter}' was not found in the clustering data. "
-                "Showing the broader navbar segment scope instead."
-            )
-            restaurant_selected = False
-            selected_restaurant_filter = "All"
-
     if restaurant_selected and not restaurant_lookup.empty:
         active_restaurant = str(restaurant_lookup.iloc[0].get("name", selected_restaurant_filter))
         active_cluster_raw = pd.to_numeric(
@@ -946,6 +1011,8 @@ def render():
         )
         if segment_selected and "latest_segment" in cluster_df.columns:
             cluster_df = cluster_df[cluster_df["latest_segment"].astype(str).eq(selected_segment_filter)].copy()
+        if city_selected and "city" in cluster_df.columns:
+            cluster_df = cluster_df[cluster_df["city"].astype(str).eq(selected_city_filter)].copy()
     else:
         active_cluster = selected_cluster_value if cluster_selected else all_clusters_option
         cluster_df = segment_assignments.copy()
@@ -974,8 +1041,12 @@ def render():
                     out = out.iloc[0:0].copy()
         if segment_selected and "latest_segment" in out.columns:
             out = out[out["latest_segment"].astype(str).eq(selected_segment_filter)].copy()
-            if city_selected and "city" in out.columns:
-                out = out[out["city"].astype(str).eq(selected_city_filter)].copy()
+        elif segment_selected:
+            out = out.iloc[0:0].copy()
+        if city_selected and "city" in out.columns:
+            out = out[out["city"].astype(str).eq(selected_city_filter)].copy()
+        elif city_selected:
+            out = out.iloc[0:0].copy()
         return out
 
     scope_parts = []
@@ -993,9 +1064,6 @@ def render():
         scope_parts.append(f"City: {selected_city_filter}")
     scope_label = " | ".join(scope_parts) if scope_parts else all_clusters_option
 
-    def _clear_city_filter() -> None:
-       st.session_state["selected_city"] = "All"
-
     min_sample_size = 3
     _render_scope_bar(
         scope_label,
@@ -1005,24 +1073,33 @@ def render():
         selected_cluster_label,
     )
 
-    # Fix
     if "city" in assignments.columns:
         available_cities = sorted(assignments["city"].dropna().astype(str).unique())
         city_options = ["All"] + available_cities
-        current_city = str(st.session_state.get("selected_city", "All") or "All")
+        current_city = selected_city_filter
         if current_city not in city_options:
             current_city = "All"
         city_cols = st.columns([2, 1])
         with city_cols[0]:
-            st.selectbox(
-                "Filter by City",
-                city_options,
-                index=city_options.index(current_city),
-                key="selected_city",
-            )
+            if restaurant_selected:
+                st.selectbox(
+                    "Filter by City",
+                    city_options,
+                    index=city_options.index(current_city),
+                    key=f"selected_city_restaurant_display_{hashlib.md5(current_city.encode('utf-8')).hexdigest()[:8]}",
+                    disabled=True,
+                )
+            else:
+                selected_city_widget = st.selectbox(
+                    "Filter by City",
+                    city_options,
+                    index=city_options.index(current_city),
+                    key=city_widget_key,
+                )
+                st.session_state["selected_city"] = selected_city_widget
         with city_cols[1]:
             st.markdown("<div style='height:1.72rem;'></div>", unsafe_allow_html=True)
-            st.button("Clear city filter", on_click=_clear_city_filter, width="stretch")
+            st.button("Clear city filter", on_click=_clear_city_filter, width="stretch", disabled=restaurant_selected)
     else:
         st.warning("No 'city' column found in clustering assignments — city filter unavailable.")  # ← tells you exactly what's wrong
 
@@ -1283,7 +1360,7 @@ def render():
                 strategy_campaign_display = _prepare_strategy_campaign_display(raw_strategy_campaigns)
                 _render_filterable_table(
                     strategy_campaign_display,
-                    key=f"raw_strategy_campaign_table_{str(active_cluster)}_{active_rest_norm}_{selected_segment_filter}",
+                    key=f"raw_strategy_campaign_table_{str(active_cluster)}_{active_rest_norm}_{selected_segment_filter}_{selected_city_filter}",
                     height=360,
                     initial_sort_column="Bookings Uplift %",
                     initial_sort_direction="desc",
