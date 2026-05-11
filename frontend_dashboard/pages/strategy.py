@@ -1041,7 +1041,61 @@ def render_ai_diagnosis_explainer() -> None:
 # =============================================================================
 # Main page
 # =============================================================================
+def _add_city_to_marketing_outcomes(outcomes_df: pd.DataFrame, assignments: pd.DataFrame) -> pd.DataFrame:
+    if outcomes_df.empty or assignments.empty:
+        return outcomes_df.copy()
 
+    df = outcomes_df.copy()
+    a = assignments.copy()
+
+    if "name_norm" not in a.columns and "name" in a.columns:
+        a["name_norm"] = a["name"].apply(_normalize_name)
+
+    if "city" not in a.columns:
+        return df
+
+    city_lookup = (
+        a[["name_norm", "city"]]
+        .dropna(subset=["name_norm"])
+        .drop_duplicates("name_norm")
+        .rename(columns={"city": "assignment_city"})
+    )
+
+    name_col = "restaurant_name" if "restaurant_name" in df.columns else "name"
+    if name_col not in df.columns:
+        return df
+
+    df["name_norm"] = df[name_col].fillna("").astype(str).apply(_normalize_name)
+    df = df.merge(city_lookup, on="name_norm", how="left")
+
+    if "city" in df.columns:
+        df["city"] = df["city"].where(
+            df["city"].notna()
+            & df["city"].astype(str).str.strip().ne("")
+            & df["city"].astype(str).str.lower().ne("nan"),
+            df["assignment_city"],
+        )
+    else:
+        df["city"] = df["assignment_city"]
+
+    df = df.drop(columns=["assignment_city"], errors="ignore")
+    df["city"] = df["city"].fillna("Unknown")
+    return df
+
+def _filter_to_city(df: pd.DataFrame, city: str | None) -> pd.DataFrame:
+    if df.empty or not city or city == "Not available in data":
+        return df.copy()
+    if "city" not in df.columns:
+        return df.copy()
+
+    return df[
+        df["city"]
+        .fillna("")
+        .astype(str)
+        .str.strip()
+        .eq(str(city).strip())
+    ].copy()
+    
 def render():
     priority_df = load_priority()
     momentum_df = load_momentum()
@@ -1062,22 +1116,89 @@ def render():
         st.warning("No priority data found. Run the data pipeline first.")
         return
 
-    all_names = priority_df.sort_values("priority_score", ascending=False)["name"].dropna().astype(str).tolist()
+    # all_names = priority_df.sort_values("priority_score", ascending=False)["name"].dropna().astype(str).tolist()
+
+    # navbar_selected = str(st.session_state.get("selected_restaurant", "All") or "All")
+    # previous_selected = st.session_state.get("strategy_restaurant", None)
+    # if navbar_selected != "All" and navbar_selected in all_names:
+    #     selected = navbar_selected
+    # elif previous_selected in all_names:
+    #     selected = previous_selected
+    # else:
+    #     selected = all_names[0]
+    # st.session_state["strategy_restaurant"] = selected
+    
+    
+    # Use clustered restaurant universe instead of priority_df only
+    if not assignments.empty and "name" in assignments.columns:
+        restaurant_universe = assignments.copy()
+
+        # Keep only restaurants with a valid cluster
+        if "cluster_id" in restaurant_universe.columns:
+            restaurant_universe = restaurant_universe[
+                pd.to_numeric(restaurant_universe["cluster_id"], errors="coerce").notna()
+            ].copy()
+
+        if "cluster_label" in restaurant_universe.columns:
+            restaurant_universe = restaurant_universe[
+                ~restaurant_universe["cluster_label"]
+                .astype(str)
+                .str.contains("Unclustered", case=False, na=False)
+            ].copy()
+
+        all_names = (
+            restaurant_universe["name"]
+            .dropna()
+            .astype(str)
+            .sort_values()
+            .unique()
+            .tolist()
+        )
+    else:
+        all_names = (
+            priority_df["name"]
+            .dropna()
+            .astype(str)
+            .sort_values()
+            .unique()
+            .tolist()
+        )
 
     navbar_selected = str(st.session_state.get("selected_restaurant", "All") or "All")
     previous_selected = st.session_state.get("strategy_restaurant", None)
+
     if navbar_selected != "All" and navbar_selected in all_names:
         selected = navbar_selected
     elif previous_selected in all_names:
         selected = previous_selected
-    else:
+    elif all_names:
         selected = all_names[0]
+    else:
+        st.warning("No restaurant found in clustered restaurant universe.")
+        return
+
     st.session_state["strategy_restaurant"] = selected
 
     row, hist, segment, cluster_id, cluster_label = get_selected_context(selected, priority_df, momentum_df, assignments)
 
     cluster_text = f"Cluster {cluster_id}: {cluster_label}" if cluster_id is not None else "Cluster not available"
     segment_text = segment if segment else "Segment not available"
+
+    city_text = "City not available"
+    if not assignments.empty and "name" in assignments.columns:
+        assignment_city_lookup = assignments.copy()
+
+        if "name_norm" not in assignment_city_lookup.columns:
+            assignment_city_lookup["name_norm"] = assignment_city_lookup["name"].apply(_normalize_name)
+
+        selected_assignment = assignment_city_lookup[
+            assignment_city_lookup["name_norm"].eq(_normalize_name(selected))
+        ].head(1)
+
+        if not selected_assignment.empty and "city" in selected_assignment.columns:
+            city_text = display_value(selected_assignment.iloc[0].get("city"))
+            
+            
     score = pd.to_numeric(row.get("priority_score", 0), errors="coerce")
     if pd.isna(score):
         score = 0
@@ -1090,6 +1211,7 @@ def render():
                     <div style='font-size:1.25rem;color:{TEXT_COLOR};font-weight:700;'>{selected}</div>
                     <div style='font-size:0.78rem;color:{MUTED_TEXT};margin-top:4px;'>{cluster_text}</div>
                     <div style='font-size:0.78rem;color:{MUTED_TEXT};margin-top:2px;'>Segment: {segment_text}</div>
+                    <div style='font-size:0.78rem;color:{MUTED_TEXT};margin-top:2px;'>City: {city_text}</div>
                 </div>
                 <div style='text-align:right;'>
                     <div style='font-size:1.75rem;color:#cc0000;font-weight:700;'>{score:.0f}</div>
@@ -1166,11 +1288,19 @@ def render():
     # ga_segment_table = build_ga_rank_table(ga_segment_df)
     # ga_global_table = build_ga_rank_table(ga_global_df)
 
-    marketing_outcomes = load_cluster_strategy_outcomes()
-    cluster_rank_df, segment_rank_df, global_rank_df = filter_marketing_scopes(marketing_outcomes, cluster_id, segment)
-    m_cluster_table = build_marketing_rank_table(cluster_rank_df)
-    # m_segment_table = build_marketing_rank_table(segment_rank_df)
+    marketing_outcomes = _add_city_to_marketing_outcomes(
+        load_cluster_strategy_outcomes(),
+        assignments,
+    )
+
+    cluster_rank_df, segment_rank_df, global_rank_df = filter_marketing_scopes(
+        marketing_outcomes,
+        cluster_id,
+        segment,
+    )
+
     m_global_table = build_marketing_rank_table(global_rank_df)
+
     restaurant_rank_df = _filter_marketing_for_restaurant(marketing_outcomes, selected)
     m_restaurant_table = build_marketing_rank_table(restaurant_rank_df)
 
@@ -1279,34 +1409,71 @@ def render():
         default_segment = segment if segment in cluster_segments else (cluster_segments[0] if cluster_segments else None)
 
         rank_tabs = st.tabs(["Restaurant", "Cluster", "Segment", "Global"])
-        with rank_tabs[0]:
-            st.caption(f"{selected}'s own CRM / KOL / FB activity outcomes")
-            _render_rank_html_table(m_restaurant_table)
-        with rank_tabs[1]:
-            st.caption(cluster_text)
-            _render_rank_html_table(m_cluster_table)
-        with rank_tabs[2]:
-            st.caption(f"{cluster_text} | Segment-level ranking within selected cluster")
-            selector_col, _ = st.columns([0.42, 0.58])
-            with selector_col:
-                scope_segment = st.selectbox(
-                    "Segment filter",
-                    cluster_segments if cluster_segments else ["No segment data"],
-                    index=cluster_segments.index(default_segment) if default_segment in cluster_segments else 0,
-                    disabled=not cluster_segments,
-                    key=f"marketing_segment_filter_{selected}",
-                )
-            scoped_marketing = _filter_marketing_for_scope(
-                marketing_outcomes,
-                cluster_id,
-                scope_segment if cluster_segments else None,
-                "Segment",
+
+    with rank_tabs[0]:
+        st.caption(f"{selected}'s own CRM / KOL / FB activity outcomes")
+        _render_rank_html_table(m_restaurant_table)
+
+    with rank_tabs[1]:
+        use_city_cluster = st.checkbox(
+            f"Only show {city_text} restaurants in this cluster",
+            value=city_text not in {"City not available", "Not available in data"},
+            disabled=city_text in {"City not available", "Not available in data"},
+            key=f"cluster_city_filter_{selected}",
+        )
+
+        scoped_cluster = cluster_rank_df.copy()
+        if use_city_cluster:
+            scoped_cluster = _filter_to_city(scoped_cluster, city_text)
+
+        st.caption(
+            f"{cluster_text}"
+            + (f" | City: {city_text}" if use_city_cluster else " | All cities")
+        )
+
+        _render_rank_html_table(build_marketing_rank_table(scoped_cluster))
+
+    with rank_tabs[2]:
+        selector_col, toggle_col = st.columns([0.42, 0.58])
+
+        with selector_col:
+            scope_segment = st.selectbox(
+                "Segment filter",
+                cluster_segments if cluster_segments else ["No segment data"],
+                index=cluster_segments.index(default_segment) if default_segment in cluster_segments else 0,
+                disabled=not cluster_segments,
+                key=f"marketing_segment_filter_{selected}",
             )
-            _render_rank_html_table(build_marketing_rank_table(scoped_marketing))
-        with rank_tabs[3]:
-            st.caption("All restaurants")
-            _render_rank_html_table(m_global_table)
-    st.markdown("<div style='height:1.15rem;'></div>", unsafe_allow_html=True)
+
+        with toggle_col:
+            st.markdown("<div style='height:1.72rem;'></div>", unsafe_allow_html=True)
+            use_city_segment = st.checkbox(
+                f"Only show {city_text} restaurants",
+                value=city_text not in {"City not available", "Not available in data"},
+                disabled=city_text in {"City not available", "Not available in data"},
+                key=f"segment_city_filter_{selected}",
+            )
+
+        scoped_marketing = _filter_marketing_for_scope(
+            marketing_outcomes,
+            cluster_id,
+            scope_segment if cluster_segments else None,
+            "Segment",
+        )
+
+        if use_city_segment:
+            scoped_marketing = _filter_to_city(scoped_marketing, city_text)
+
+        st.caption(
+            f"{cluster_text} | Segment: {scope_segment}"
+            + (f" | City: {city_text}" if use_city_segment else " | All cities")
+        )
+
+        _render_rank_html_table(build_marketing_rank_table(scoped_marketing))
+
+    with rank_tabs[3]:
+        st.caption("All restaurants")
+        _render_rank_html_table(m_global_table)
 
     render_ga_snapshot_section(
         4,

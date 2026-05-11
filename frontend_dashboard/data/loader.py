@@ -36,6 +36,8 @@ GA_OUTPUT_DIR = GA_DIR / "data_output"
 CLUSTERING_DIR = BASE_DIR / "clustering"
 CLUSTERING_OUTPUT_DIR = CLUSTERING_DIR / "data_output"
 
+RESTAURANT_CITY_SCRAPED_PATH = BASE_DIR / "_6_web_scraping" / "restaurant_city_scraped.csv"
+
 MOMENTUM_PATH = MOMENTUM_OUTPUT_DIR / "restaurants_agg_performance.parquet"
 MOMENTUM_GA_PATH = GA_OUTPUT_DIR / "combined_restaurant_ga.parquet"
 MOMENTUM_LABELS_PATH = MOMENTUM_OUTPUT_DIR / "priority_latest_momentum_labels.parquet"
@@ -870,17 +872,66 @@ def load_cluster_assignments() -> pd.DataFrame:
                 "latest_segment",
             ]
         )
+        
+    # Add scraped city from restaurant_city_scraped.csv
+    if RESTAURANT_CITY_SCRAPED_PATH.exists():
+        city_df = pd.read_csv(RESTAURANT_CITY_SCRAPED_PATH)
 
-    if "restaurant_name" in df.columns and "name" in df.columns:
-        right_name = df["name"]
-        left_name = df["restaurant name"]
-        if isinstance(right_name, pd.DataFrame):
-            right_name = right_name.iloc[:, 0]
-        if isinstance(left_name, pd.DataFrame):
-            left_name = left_name.iloc[:, 0]
-        df["name"] = right_name.where(right_name.notna(), left_name)
+        # Keep only reliable city rows
+        city_df = city_df.copy()
+        city_df["restaurant_id"] = pd.to_numeric(city_df["restaurant_id"], errors="coerce")
+        city_df["scraped_city"] = city_df["scraped_city"].astype(str).str.strip()
+
+        city_df = city_df[
+            city_df["restaurant_id"].notna()
+            & city_df["scraped_city"].notna()
+            & city_df["scraped_city"].ne("")
+            & city_df["scraped_city"].str.lower().ne("nan")
+        ].copy()
+
+        city_df["restaurant_id"] = city_df["restaurant_id"].astype(int)
+
+        # One city per restaurant_id
+        city_lookup = (
+            city_df.sort_values(
+                by=["confidence"],
+                ascending=True
+            )
+            .drop_duplicates("restaurant_id")
+            [["restaurant_id", "scraped_city"]]
+            .rename(columns={"scraped_city": "city"})
+        )
+
+        df["restaurant_id"] = pd.to_numeric(df["restaurant_id"], errors="coerce")
+        df = df.merge(city_lookup, on="restaurant_id", how="left", suffixes=("", "_scraped"))
+
+        # If df already has city, only fill blanks from scraped output
+        if "city_scraped" in df.columns:
+            df["city"] = df["city"].where(
+                df["city"].notna() & df["city"].astype(str).str.strip().ne(""),
+                df["city_scraped"]
+            )
+            df = df.drop(columns=["city_scraped"])
+
+        df["city"] = df["city"].fillna("Unknown")
+    else:
+        df["city"] = df.get("city", "Unknown")
+
+    # Standardise restaurant name column first
+    if "restaurant name" in df.columns and "name" in df.columns:
+        df["name"] = df["name"].where(df["name"].notna(), df["restaurant name"])
         df = df.drop(columns=["restaurant name"])
 
+    elif "restaurant name" in df.columns and "name" not in df.columns:
+        df = df.rename(columns={"restaurant name": "name"})
+
+    elif "restaurant_name" in df.columns and "name" not in df.columns:
+        df = df.rename(columns={"restaurant_name": "name"})
+
+    elif "restaurant_name" in df.columns and "name" in df.columns:
+        df["name"] = df["name"].where(df["name"].notna(), df["restaurant_name"])
+        df = df.drop(columns=["restaurant_name"])
+        
     rename_map = {
         "restaurant_name": "name",
         "cluster": "cluster_id",
@@ -911,7 +962,7 @@ def load_cluster_assignments() -> pd.DataFrame:
     else:
         df["restaurant_id"] = pd.Series([pd.NA] * len(df), dtype="Int64")
 
-    df["name"] = df["name"].astype(str).str.strip()
+    df["restaurant_name"] = df["name"].astype(str).str.strip()
     df["cluster_id"] = pd.to_numeric(df["cluster_id"], errors="coerce").fillna(-1).astype(int)
     df["x"] = pd.to_numeric(df["x"], errors="coerce")
     df["y"] = pd.to_numeric(df["y"], errors="coerce")

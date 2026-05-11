@@ -316,6 +316,7 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def render():
+    
     if "priority_tier_quick_filter" not in st.session_state:
         st.session_state["priority_tier_quick_filter"] = "All"
     if "priority_selected_restaurant" not in st.session_state:
@@ -326,6 +327,13 @@ def render():
     selected_cluster = st.session_state.get("selected_cluster", "All")
     base_priority_df = load_priority()
     priority_df = build_priority_universe(base_priority_df)
+    
+    # Keep only restaurants with a valid cluster
+    priority_df = priority_df[
+        priority_df["cluster_id"].notna()
+        & ~priority_df["cluster_label"].astype(str).str.contains("Unclustered", case=False, na=False)
+    ].copy()
+
     ranked_priority_df = filter_priority_for_navbar(
         priority_df,
         selected_restaurant,

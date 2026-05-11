@@ -18,6 +18,7 @@ from data.loader import (
     load_ga_restaurant_monthly,
     load_ga_campaign_outreach_raw,
     load_cluster_strategy_outcomes,
+    
 )
 from theme import BASE_LAYOUT, CHART_THEME, MUTED_TEXT
 
@@ -908,10 +909,12 @@ def render():
         ].copy()
     elif segment_selected:
         segment_assignments = segment_assignments.iloc[0:0].copy()
+        
     if city_selected and "city" in segment_assignments.columns:
         segment_assignments = segment_assignments[
             segment_assignments["city"].astype(str).eq(selected_city_filter)
         ].copy()
+        
     elif city_selected:
         segment_assignments = segment_assignments.iloc[0:0].copy()
 

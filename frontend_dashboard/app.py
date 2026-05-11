@@ -340,27 +340,72 @@ with col2:
         on_change=sync_cluster_filter,
     )
 
-restaurant_scope = momentum_df.copy()
+# restaurant_scope = momentum_df.copy()
+# if (
+#     st.session_state["selected_segment"] != "All"
+#     or st.session_state["selected_cluster"] != "All"
+# ) and not cluster_df.empty:
+#     restaurant_scope = cluster_df.copy()
+#     if st.session_state["selected_segment"] != "All" and "latest_segment" in restaurant_scope.columns:
+#         restaurant_scope = restaurant_scope[
+#             restaurant_scope["latest_segment"].astype(str).eq(st.session_state["selected_segment"])
+#         ].copy()
+#     if st.session_state["selected_cluster"] != "All" and "cluster_id" in restaurant_scope.columns:
+#         cluster_value = pd.to_numeric(pd.Series([st.session_state["selected_cluster"]]), errors="coerce").iloc[0]
+#         if pd.notna(cluster_value):
+#             restaurant_scope = restaurant_scope[
+#                 pd.to_numeric(restaurant_scope["cluster_id"], errors="coerce").eq(int(cluster_value))
+#             ].copy()
+
+# all_names = ["All"] + sorted(restaurant_scope["name"].dropna().unique())
+# if st.session_state["selected_restaurant"] not in all_names:
+#     st.session_state["selected_restaurant"] = "All"
+# st.session_state["navbar_restaurant"] = st.session_state["selected_restaurant"]
+
+restaurant_scope = cluster_df.copy()
+
+# Keep only restaurants with a valid cluster
+if not restaurant_scope.empty:
+    if "cluster_id" in restaurant_scope.columns:
+        restaurant_scope = restaurant_scope[
+            pd.to_numeric(restaurant_scope["cluster_id"], errors="coerce").notna()
+        ].copy()
+
+    if "cluster_label" in restaurant_scope.columns:
+        restaurant_scope = restaurant_scope[
+            ~restaurant_scope["cluster_label"]
+            .astype(str)
+            .str.contains("Unclustered", case=False, na=False)
+        ].copy()
+
+# Apply navbar segment filter
 if (
     st.session_state["selected_segment"] != "All"
-    or st.session_state["selected_cluster"] != "All"
-) and not cluster_df.empty:
-    restaurant_scope = cluster_df.copy()
-    if st.session_state["selected_segment"] != "All" and "latest_segment" in restaurant_scope.columns:
+    and "latest_segment" in restaurant_scope.columns
+):
+    restaurant_scope = restaurant_scope[
+        restaurant_scope["latest_segment"]
+        .astype(str)
+        .eq(st.session_state["selected_segment"])
+    ].copy()
+
+# Apply navbar cluster filter
+if (
+    st.session_state["selected_cluster"] != "All"
+    and "cluster_id" in restaurant_scope.columns
+):
+    cluster_value = pd.to_numeric(
+        pd.Series([st.session_state["selected_cluster"]]),
+        errors="coerce"
+    ).iloc[0]
+
+    if pd.notna(cluster_value):
         restaurant_scope = restaurant_scope[
-            restaurant_scope["latest_segment"].astype(str).eq(st.session_state["selected_segment"])
+            pd.to_numeric(restaurant_scope["cluster_id"], errors="coerce")
+            .eq(int(cluster_value))
         ].copy()
-    if st.session_state["selected_cluster"] != "All" and "cluster_id" in restaurant_scope.columns:
-        cluster_value = pd.to_numeric(pd.Series([st.session_state["selected_cluster"]]), errors="coerce").iloc[0]
-        if pd.notna(cluster_value):
-            restaurant_scope = restaurant_scope[
-                pd.to_numeric(restaurant_scope["cluster_id"], errors="coerce").eq(int(cluster_value))
-            ].copy()
 
 all_names = ["All"] + sorted(restaurant_scope["name"].dropna().unique())
-if st.session_state["selected_restaurant"] not in all_names:
-    st.session_state["selected_restaurant"] = "All"
-st.session_state["navbar_restaurant"] = st.session_state["selected_restaurant"]
 
 with col3:
     st.selectbox(
