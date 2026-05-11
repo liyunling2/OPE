@@ -64,34 +64,24 @@ def filter_untapped_priority(df: pd.DataFrame) -> pd.DataFrame:
     return df[df["priority_tier"].fillna("").astype(str).str.contains("untapped", case=False, na=False)].copy()
 
 
-def sync_navbar_restaurant_from_ranked_list(row: pd.Series) -> None:
+def store_ranked_list_selection(row: pd.Series) -> None:
     restaurant_name = str(row.get("Restaurant", "")).strip()
     if not restaurant_name or restaurant_name.lower() in {"nan", "none"}:
         return
 
-    if st.session_state.get("selected_restaurant") == restaurant_name:
-        return
+    st.session_state["priority_selected_restaurant"] = restaurant_name
 
-    row_segment = str(row.get("Segment", "")).strip()
-    if (
-        st.session_state.get("selected_segment", "All") != "All"
-        and row_segment
-        and row_segment != st.session_state.get("selected_segment")
-    ):
-        st.session_state["selected_segment"] = "All"
 
-    row_cluster = str(row.get("Cluster", "")).strip()
-    selected_cluster = st.session_state.get("selected_cluster", "All")
-    if selected_cluster != "All":
-        try:
-            cluster_matches = row_cluster.startswith(f"Cluster {int(selected_cluster)}")
-        except (TypeError, ValueError):
-            cluster_matches = False
-        if not cluster_matches:
-            st.session_state["selected_cluster"] = "All"
-
+def navigate_to_restaurant_page(restaurant_name: str, page: str) -> None:
+    st.session_state["selected_segment"] = "All"
+    st.session_state["selected_cluster"] = "All"
     st.session_state["selected_restaurant"] = restaurant_name
-    st.rerun()
+    st.session_state["navbar_segment"] = "All"
+    st.session_state["navbar_cluster"] = "All"
+    st.session_state["navbar_restaurant"] = restaurant_name
+    st.session_state["nav_page"] = page
+    if page == "Strategy":
+        st.session_state["strategy_restaurant"] = restaurant_name
 
 
 def filter_priority_for_navbar(
@@ -319,6 +309,8 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
 def render():
     if "priority_untapped_only" not in st.session_state:
         st.session_state["priority_untapped_only"] = False
+    if "priority_selected_restaurant" not in st.session_state:
+        st.session_state["priority_selected_restaurant"] = None
 
     selected_restaurant = st.session_state["selected_restaurant"]
     selected_segment = st.session_state["selected_segment"]
@@ -403,7 +395,32 @@ def render():
             selected_rows = selection.get("rows", [])
         selected_rows = selected_rows or []
         if selected_rows:
-            sync_navbar_restaurant_from_ranked_list(sorted_display_df.iloc[selected_rows[0]])
+            store_ranked_list_selection(sorted_display_df.iloc[selected_rows[0]])
+
+        selected_from_list = st.session_state.get("priority_selected_restaurant")
+        if selected_from_list and selected_from_list not in set(sorted_display_df["Restaurant"].astype(str)):
+            selected_from_list = None
+            st.session_state["priority_selected_restaurant"] = None
+        if selected_from_list:
+            action_cols = st.columns([2.4, 1, 1, 2.6])
+            with action_cols[0]:
+                st.info(f"Selected restaurant: {selected_from_list}")
+            with action_cols[1]:
+                st.button(
+                    "Open in Clustering",
+                    width="stretch",
+                    key="open_selected_in_clustering",
+                    on_click=navigate_to_restaurant_page,
+                    args=(selected_from_list, "Clustering"),
+                )
+            with action_cols[2]:
+                st.button(
+                    "Open in Strategy",
+                    width="stretch",
+                    key="open_selected_in_strategy",
+                    on_click=navigate_to_restaurant_page,
+                    args=(selected_from_list, "Strategy"),
+                )
 
         st.markdown("---")
 
