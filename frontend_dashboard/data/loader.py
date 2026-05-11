@@ -871,7 +871,7 @@ def load_cluster_assignments() -> pd.DataFrame:
             ]
         )
 
-    if "restaurant name" in df.columns and "name" in df.columns:
+    if "restaurant_name" in df.columns and "name" in df.columns:
         right_name = df["name"]
         left_name = df["restaurant name"]
         if isinstance(right_name, pd.DataFrame):
@@ -882,7 +882,7 @@ def load_cluster_assignments() -> pd.DataFrame:
         df = df.drop(columns=["restaurant name"])
 
     rename_map = {
-        "restaurant name": "name",
+        "restaurant_name": "name",
         "cluster": "cluster_id",
         "hybrid_cluster": "cluster_id",
         "Primary Theme": "cluster_label",
