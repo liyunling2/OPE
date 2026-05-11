@@ -225,7 +225,15 @@ specific number in the data below. Vague advice is a failure.
    the issue ranking — do NOT estimate or assume.
 7. Use bullet points only. One finding per bullet. No paragraphs.
 8. Do not repeat the same metric twice across different sections.
- 
+9. PEER DATA must be used as citation evidence in the CRM / KOL / FB strategy:
+   - Identify the top 1-2 performing peer restaurants from PEER RECOMMENDER'S DATA
+     based on their revenue uplift or booking uplift metrics.
+   - Name the peer restaurant and the specific campaign/strategy it ran.
+   - Cite its exact outcome metrics (revenue uplift %, booking uplift %).
+   - Use this as proof that the recommended strategy works for similar restaurants
+     in the same cluster or segment.
+   - Do NOT recommend the peer's strategy if it contradicts the issue identified —
+     only cite peers whose campaigns address the same funnel gap.
 # DATA
 RESTAURANT IDENTITY
 Restaurant:     {selected}
@@ -244,7 +252,10 @@ RESTAURANT CLUSTER COMPARISON (raw dataframe — do not modify, do not recalcula
 RESTAURANT BOOKING HISTORY (raw dataframe — do not filter, do not aggregate, do not transform):
 {momentum_df}
 
-PEER RECOMMENDER'S DATA TO COMPARE AGAINST SELECTED RESTAURANT (raw dataframe — do not filter, do not aggregate, do not transform):
+PEER RECOMMENDER'S DATA — restaurants in the same cluster with known campaign outcomes.
+Use to identify the top 1-2 performing peers and cite their campaigns as evidence
+in the CRM / KOL / FB strategy. Do not use as a benchmark table for gap analysis.
+(raw dataframe — do not filter, do not aggregate, do not transform):
 {peerdata}
 
 AVAILABLE PACKAGES
@@ -338,10 +349,13 @@ All descriptions must be concise, data-driven paragraphs. Do not invent metrics 
 - The description must:
     - Name the strategy from the marketing ranking table.
     - Cite exact Revenue uplift and Booking uplift figures from the table.
-    - Reference a specific peer campaign by name and state its outcome.
+    - Reference a specific peer restaurant by name from PEER RECOMMENDER'S DATA.
+        State the campaign/strategy it ran and cite its exact revenue uplift and booking
+        uplift figures from that dataset. Only cite a peer whose campaign addresses the
+        same funnel gap identified in the issues — do not cite a peer just because they
+        performed well overall.
     - Explain which funnel gap the strategy closes.
     - Include one sentence on messaging direction — what the content or campaign must communicate to address the root issue.
-
 """
 
 
