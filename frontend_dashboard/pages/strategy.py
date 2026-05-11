@@ -1105,8 +1105,8 @@ def render_peer_recommender_section(
                     uplift = pd.to_numeric(pd.Series([r.get("med_rev_uplift")]), errors="coerce").iloc[0]
                     booking_uplift = pd.to_numeric(pd.Series([r.get("med_booking_uplift")]), errors="coerce").iloc[0]
                     roi_val = pd.to_numeric(pd.Series([r.get("med_roi")]), errors="coerce").iloc[0]
-                    peers_using = int(r.get("peers_using", 0) or 0)
-                    campaigns = int(r.get("campaigns", 0) or 0)
+                    # peers_using = int(r.get("peers_using", 0) or 0)
+                    # campaigns = int(r.get("campaigns", 0) or 0)
                     total_sim_weight = _to_float(r.get("total_sim_weight"))
                     color = "#3f7f2f" if pd.notna(uplift) and uplift >= 0 else "#cc0000"
                     rec_cards.append(
