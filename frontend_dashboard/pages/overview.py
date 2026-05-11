@@ -187,25 +187,23 @@ def render() -> None:
     steps = [
         (
             "Go to the Overview tab",
-            "The page shows how the restaurants are ranked by their priority scores, GMV per GA view and No. of campaigns. "
+            "View how restaurants are prioritized based on key performance indicators such as Priority Score, GMV per GA View, and Number of Campaigns. This provides a quick snapshot of overall restaurant performance and opportunity size "
         ),
         (
             "Filter by segments or clusters",
-            "Use the filter bar at the top to narrow down by segments and cluster type."
-            "Filters persist across all tabs.",
+            "Use the filter bar at the top of the page to narrow results by segment or cluster type. Applied filters persist across all pages, allowing you to maintain context while exploring different views.",
         ),
         (
             "Inspect a restaurant's detail view in the clustering tab",
-            "something"
+            "Select a restaurant in the Clustering tab to explore its detailed profile, including cluster classification, behavioral patterns, and performance characteristics. Use these insights to better understand the restaurant’s positioning and potential growth drivers."
         ),
         (
             "Review the Strategy tab",
-            "The Marketing Strategy panel shows which channels have worked historically "
-            "and what targeted actions are advised to increase future bookings for that restaurant.",
+            "Generate a diagnosis on the main issues the restaurant is facing based on their metrics. Formulate a data-driven targeted strategy based on their metrics compared against clusters, segment, peers performance.",
         ),
         (
             "Data driven actions",
-            "With the insights gained, use it to curate marketing strategies to specific restaurants"
+            "Use the insights gathered across the dashboard to design and tailor marketing strategies for specific restaurants, enabling more focused outreach and higher-impact campaigns."
         ),
     ]
 
