@@ -256,4 +256,4 @@ def render() -> None:
     df = pd.DataFrame(terms, columns=["Term", "Definition"])
 
     st.markdown("### Key terms")
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    st.dataframe(df, width="stretch", hide_index=True)

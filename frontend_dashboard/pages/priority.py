@@ -213,7 +213,7 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
         'n_campaigns', 'avg_lift_per_day', 'avg_roi',
         'n_positive_lift', 'n_negative_lift', 'channels_used', 'best_channel',
         'lift_norm', 'roi_norm',
-        # Subscores — GA campaign responsiveness
+        # Subscores — Google Ads responsiveness
         'avg_gmv_per_view', 'n_months_gmv', 'ga_campaign_responsiveness',
         # Risk flags
         'risk_thin_ga_demand_data', 'risk_inverse_attribution_rs',
@@ -479,7 +479,7 @@ def render():
             |---|---|---|---|
             | R1 | < 3 consecutive months of GA4 data | High campaign reliance; organic demand unestablished | `ga4_demand × −20%` |
             | R2 | `booking_demand > median` AND `ga4_demand < median` | Booking & GA4 signals move in opposite directions | `ga4_demand × −10%` |
-            | R3 | < 3 consecutive months of GA campaign data | Too few GA4 observations for reliable responsiveness | `ga_campaign_responsiveness × −20%` |
+            | R3 | < 3 consecutive months of Google Ads data | Too few GA4 observations for reliable responsiveness | `ga_campaign_responsiveness × −20%` |
             | R4 | avg GMV per view < 1 | Campaigns correlate with worse funnel performance | `ga_campaign_responsiveness × −10%` |
 
             > ⓘ Risks are **additive** — a restaurant can trigger multiple penalties simultaneously.
@@ -503,7 +503,7 @@ def render():
                 b3.metric("GA4 Demand", f"{brow.get('ga4_demand', 0):.4f}")
                 b4.metric("Campaign Responsiveness", f"{brow.get('campaign_responsiveness', 0):.4f}")
                 b5.metric("Internal Campaign Responsiveness", f"{brow.get('internal_mkt_campaign_responsiveness', 0):.4f}")
-                b6.metric("GA Campaign Responsiveness", f"{brow.get('avg_gmv_per_view', 0):.4f}")
+                b6.metric("Google Ads Responsiveness", f"{brow.get('avg_gmv_per_view', 0):.4f}")
 
                 breakdown_df = pd.DataFrame(
                     [

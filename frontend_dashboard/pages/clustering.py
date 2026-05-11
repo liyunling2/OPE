@@ -13,7 +13,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-import streamlit.components.v1 as components
 from data.loader import (
     load_cluster_assignments,
     load_ga_restaurant_monthly,
@@ -476,7 +475,7 @@ def _prepare_campaign_breakdown_display(df: pd.DataFrame) -> pd.DataFrame:
     rename_map = {
         "year_month": "Year Month",
         "yearMonth": "Year Month",
-        "googleAdsCampaignType": "GA Campaign Type",
+        "googleAdsCampaignType": "Google Ads Campaign Type",
         "campaign_name": "Campaign Name",
         "campaignName": "Campaign Name",
         "campaign_id": "Campaign ID",
@@ -788,7 +787,7 @@ def _render_filterable_table(
       updateSortIndicators_{table_id}();
       </script>
       """
-    components.html(table_html, height=height + 70, scrolling=False)
+    st.iframe(table_html, height=height + 70)
 
 
 def _render_scope_bar(
@@ -850,7 +849,7 @@ def render():
     st.markdown("## Clustering Explorer")
     st.markdown(
         f"<p style='color:{MUTED_TEXT}; margin-top:-0.5rem;'>"
-        "Compare strategy outcomes and Google Ads campaign effectiveness for the current navbar scope."
+        "Compare strategy outcomes and Google Ads for the current navbar scope."
         "</p>",
         unsafe_allow_html=True,
     )
@@ -1288,7 +1287,7 @@ def render():
                 )
 
     st.markdown("---")
-    st.markdown("### GA Campaign Effectiveness")
+    st.markdown("### Google Ads")
     ga_scope_assignments = cluster_df.copy()
     if restaurant_selected:
         ga_scope_assignments = ga_scope_assignments[ga_scope_assignments["name_norm"] == active_rest_norm].copy()
@@ -1297,10 +1296,10 @@ def render():
     scope_ga_rows = _prepare_scope_ga_restaurant_rows(ga_restaurant_monthly, assignments, scope_name_norms)
 
     if scope_ga_monthly.empty:
-        st.info("No GA campaign effectiveness data available for this scope.")
+        st.info("No Google Ads data available for this scope.")
     else:
         st.caption(
-            "Observed GA quality for the current navbar scope. GMV / GA View, Add to Cart Rate, "
+            "Observed Google Ads quality for the current navbar scope. GMV / GA View, Add to Cart Rate, "
             "and View to Purchase Rate come from restaurant-level GA item activity and GMV; no sessions "
             "are allocated in this section."
         )
@@ -1507,15 +1506,15 @@ def render():
             initial_sort_direction="desc",
         )
 
-    st.markdown("#### Raw GA Campaign Breakdown")
+    st.markdown("#### Raw Google Ads Breakdown")
     st.caption(
         "Source: `data/marketing/googleAPI/campaigns_outreach.parquet`. "
-        "Rows are raw GA campaign sessions by campaign and month. These are not allocated to clusters "
+        "Rows are raw Google Ads sessions by campaign and month. These are not allocated to clusters "
         "or restaurants."
     )
 
     if ga_campaign_raw.empty:
-        st.info("No raw GA campaign outreach rows found.")
+        st.info("No raw Google Ads outreach rows found.")
     else:
         campaign_scope = ga_campaign_raw.copy()
         if not scope_ga_monthly.empty:
@@ -1527,7 +1526,7 @@ def render():
         else:
             campaign_scope["sessions"] = pd.to_numeric(campaign_scope["sessions"], errors="coerce").fillna(0)
             total_sessions = campaign_scope["sessions"].sum()
-            st.caption(f"Raw GA campaign rows total {total_sessions:,.0f} sessions in the visible month window.")
+            st.caption(f"Raw Google Ads rows total {total_sessions:,.0f} sessions in the visible month window.")
             campaign_scope["session_share"] = np.where(
                 total_sessions > 0,
                 campaign_scope["sessions"] / total_sessions,
@@ -1559,7 +1558,7 @@ def render():
                 **BASE_LAYOUT,
                 height=260,
                 showlegend=False,
-                xaxis=dict(**CHART_THEME["xaxis"], title="GA Campaign Type", tickangle=-20),
+                xaxis=dict(**CHART_THEME["xaxis"], title="Google Ads Campaign Type", tickangle=-20),
                 yaxis=dict(**CHART_THEME["yaxis"], title="Sessions"),
             )
             campaign_mix_event = st.plotly_chart(
@@ -1584,7 +1583,7 @@ def render():
             ga_filter_cols = st.columns([2, 1])
             with ga_filter_cols[0]:
                 st.caption(
-                    "Click a bar to filter the raw table by GA Campaign Type."
+                    "Click a bar to filter the raw table by Google Ads Campaign Type."
                     + (
                         f" Active filter: {selected_ga_campaign_type}."
                         if selected_ga_campaign_type != "All"
@@ -1592,7 +1591,7 @@ def render():
                     )
                 )
             with ga_filter_cols[1]:
-                st.button("Clear GA type filter", on_click=_clear_ga_campaign_type_filter, width="stretch")
+                st.button("Clear Google Ads type filter", on_click=_clear_ga_campaign_type_filter, width="stretch")
 
             filtered_campaign_scope = campaign_scope.copy()
             if selected_ga_campaign_type != "All":

@@ -37,7 +37,7 @@ if "selected_cluster" not in st.session_state:
 
 PAGE_OPTIONS = ["Guide", "Overview", "Clustering", "Strategy"]
 if st.session_state.get("nav_page") not in PAGE_OPTIONS:
-    st.session_state["nav_page"] = "Guide"
+    st.session_state.pop("nav_page", None)
 
 
 def sync_segment_filter():
@@ -321,7 +321,6 @@ with col1:
     st.selectbox(
         "Segment",
         segment_options,
-        index=segment_options.index(st.session_state["selected_segment"]),
         key="navbar_segment",
         on_change=sync_segment_filter,
     )
@@ -334,8 +333,6 @@ with col2:
     st.selectbox(
         "Cluster",
         cluster_options,
-        index=cluster_options.index(st.session_state["selected_cluster"])
-        if st.session_state["selected_cluster"] in cluster_options else 0,
         format_func=lambda cid: (
             "All" if cid == "All" else f"Cluster {cid}: {cluster_label_map.get(cid, 'Unknown')}"
         ),
@@ -369,8 +366,6 @@ with col3:
     st.selectbox(
         "Restaurant",
         all_names,
-        index=all_names.index(st.session_state["selected_restaurant"])
-        if st.session_state["selected_restaurant"] in all_names else 0,
         key="navbar_restaurant",
         on_change=sync_restaurant_filter,
         disabled=restaurant_filter_disabled,
@@ -386,7 +381,6 @@ with col4:
 page = st.radio(
     "Navigation",
     PAGE_OPTIONS,
-    index=PAGE_OPTIONS.index(current_page) if current_page in PAGE_OPTIONS else 0,
     key="nav_page",
     label_visibility="collapsed",
     horizontal=True,

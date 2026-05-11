@@ -100,7 +100,7 @@ def _table_for_prompt(table: pd.DataFrame, table_type: str, top_n: int = 5) -> s
     for _, rec in table.head(top_n).iterrows():
         if table_type == "ga":
             lines.append(
-                "- Rank {rank}: {name} | GMV/GA={gmv} | Add-to-cart={atc} | View-to-purchase={v2p} | GA score={score}".format(
+                "- Rank {rank}: {name} | GMV/GA={gmv} | Add-to-cart={atc} | View-to-purchase={v2p} | Google Ads score={score}".format(
                     rank=int(rec.get("rank", 0)),
                     name=rec.get("strategy", "-"),
                     gmv=fmt_thb(rec.get("gmv_per_ga")),
@@ -213,7 +213,7 @@ specific number in the data below. Vague advice is a failure.
 3. If multiple issues exist, RANK them by business impact (revenue loss > conversion
    gap > traffic gap) and state the ranking with justification.
 4. The strategy for each issue must be directly traceable to the evidence:
-   - GA campaign type strategy → cite specific campaign type from GA ranking table
+   - Google Ads strategy → cite specific campaign type from Google Ads ranking table
    - CRM/KOL/FB action → cite specific strategy from marketing ranking table
    - Package choice → link to funnel stage the package addresses
 5. Peer citations must name the specific strategy and its outcome metrics.
@@ -231,7 +231,7 @@ Priority Score: {priority_score}
 Priority Tier: {priority_tier}
  
 RESTAURANT METRICS (latest available)
-GA FUNNEL:
+GOOGLE ADS FUNNEL:
 {_restaurant_ga_snapshot(row, hist)}
 
 RESTAURANT CLUSTER COMPARISON (raw dataframe — do not modify, do not recalculate):
@@ -278,8 +278,8 @@ The JSON structure must strictly follow this schema:
       "description": "string"
     }},
     {{
-      "title":       "GA campaign strategy",
-      "description": "string"    // GA campaign actions aligned to funnel gaps
+      "title":       "Google Ads strategy",
+      "description": "string"    // Google Ads actions aligned to funnel gaps
     }},
     {{
       "title":       "CRM / KOL / FB strategy",
@@ -313,15 +313,15 @@ All descriptions must be concise, data-driven paragraphs. Do not invent metrics 
 - The overview must:
     - Summarise the restaurant's primary growth challenge and the funnel stages most at risk.
     - Explain the overall strategic direction and why it is appropriate for this restaurant's segment or cluster.
-    - Connect the GA and CRM/KOL/FB strategies into a unified recommendation.
+    - Connect the Google Ads and CRM/KOL/FB strategies into a unified recommendation.
     - Directly describe the motivation of the strategy to address the issues identified
     - State the expected commercial outcome (bookings, GMV, conversion, or traffic quality improvement).
     - Do not repeat raw issue descriptions verbatim; synthesise and elevate into an executive recommendation.
 
-2b. "GA campaign strategy"
+2b. "Google Ads strategy"
 - Write a concise paragraph covering all Google Ads campaign actions.
 - The description must:
-- Name the campaign type from the GA ranking table (cluster scope preferred).
+- Name the campaign type from the Google Ads ranking table (cluster scope preferred).
 - State which funnel stage is targeted (Traffic / Add-to-cart / View-to-purchase).
 - Cite the exact Score, Add-to-cart rate, or View-to-purchase rate as supporting evidence.
 - Explain which funnel metric the campaign is expected to move and why.

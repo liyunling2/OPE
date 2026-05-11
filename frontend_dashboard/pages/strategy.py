@@ -117,7 +117,7 @@ METRIC_HIGHLIGHT_TERMS = [
     "Booking uplift",
     "Priority Score",
     "Priority Tier",
-    "GA Strategy Score",
+    "Google Ads Strategy Score",
     "GMV/GA view",
     "GMV / GA View",
     "GMV per GA view",
@@ -260,7 +260,7 @@ def build_ga_scope_rankings(
     assignments: pd.DataFrame,
 ) -> dict[str, pd.DataFrame]:
     """
-    Build GA campaign type ranking inputs for cluster, segment, and global scopes.
+    Build Google Ads campaign type ranking inputs for cluster, segment, and global scopes.
 
     Correct Count logic:
     - Google Ads campaign sessions are platform-month level, not restaurant-level.
@@ -355,7 +355,7 @@ def build_ga_scope_rankings(
 def build_ga_rank_table(scope_df: pd.DataFrame) -> pd.DataFrame:
     """
     Ranks Google Ads campaign types using:
-    GA Strategy Score = 0.40 x GMV/GA + 0.30 x Add to Cart + 0.30 x View to Purchase.
+    Google Ads Strategy Score = 0.40 x GMV/GA + 0.30 x Add to Cart + 0.30 x View to Purchase.
     """
     if scope_df.empty or "googleAdsCampaignType" not in scope_df.columns:
         return pd.DataFrame()
@@ -407,7 +407,7 @@ def build_ga_rank_table(scope_df: pd.DataFrame) -> pd.DataFrame:
 def display_ga_rank_table(title: str, table: pd.DataFrame) -> None:
     st.markdown(f"#### {title}")
     if table.empty:
-        st.info("No GA campaign strategy data available for this scope.")
+        st.info("No Google Ads strategy data available for this scope.")
         return
 
     out = table.copy().rename(
@@ -417,13 +417,13 @@ def display_ga_rank_table(title: str, table: pd.DataFrame) -> None:
             "gmv_per_ga": "GMV/GA",
             "add_to_cart": "Add to Cart",
             "view_to_purchase": "View to Purchase",
-            "ga_strategy_score": "GA Strategy Score",
+            "ga_strategy_score": "Google Ads Strategy Score",
         }
     )
     out["GMV/GA"] = out["GMV/GA"].apply(fmt_thb)
     out["Add to Cart"] = out["Add to Cart"].apply(fmt_pct)
     out["View to Purchase"] = out["View to Purchase"].apply(fmt_pct)
-    out["GA Strategy Score"] = out["GA Strategy Score"].apply(lambda v: fmt_num(v, 3))
+    out["Google Ads Strategy Score"] = out["Google Ads Strategy Score"].apply(lambda v: fmt_num(v, 3))
 
     st.dataframe(out, hide_index=True, width="stretch", height=min(320, 72 + len(out) * 36))
 
@@ -1021,9 +1021,9 @@ def render_ai_diagnosis_explainer() -> None:
                 <ul style='margin-top:0.35rem;'>
                     {highlighted_bullets([
                         "Selected restaurant identity: restaurant name, cluster ID, cluster label, latest segment, Priority Score, and Priority Tier.",
-                        "Restaurant funnel snapshot: latest available GA metrics such as items viewed, GMV/GA view, Add-to-cart rate, View-to-purchase rate, and revenue per view.",
+                        "Restaurant funnel snapshot: latest available Google Ads metrics such as items viewed, GMV/GA view, Add-to-cart rate, View-to-purchase rate, and revenue per view.",
                         "Restaurant booking / momentum history: the raw momentum dataframe is passed in so the model can refer to booking trajectory and performance signals.",
-                        "GA strategy evidence: the GA campaign ranking object generated from cluster, segment, and global scopes is passed in so the model can connect funnel gaps to campaign-type evidence.",
+                        "Google Ads evidence: the Google Ads ranking object generated from cluster, segment, and global scopes is passed in so the model can connect funnel gaps to campaign-type evidence.",
                         "Package rules: Basic, Standard, and Premium package capabilities are embedded directly in the prompt so the model can match package choice to the funnel stage being addressed.",
                     ])}
                 </ul>
@@ -1062,47 +1062,44 @@ def render():
         st.warning("No priority data found. Run the data pipeline first.")
         return
 
-    preselected = st.session_state.get("strategy_restaurant", None)
     all_names = priority_df.sort_values("priority_score", ascending=False)["name"].dropna().astype(str).tolist()
-    default_idx = all_names.index(preselected) if preselected in all_names else 0
 
-    col_sel, col_info = st.columns([2, 3])
-    with col_sel:
-        selected = st.selectbox(
-            "Restaurant",
-            all_names,
-            index=default_idx,
-            format_func=lambda n: "#%d  %s" % (all_names.index(n) + 1, n),
-        )
-        st.session_state["strategy_restaurant"] = selected
+    navbar_selected = str(st.session_state.get("selected_restaurant", "All") or "All")
+    previous_selected = st.session_state.get("strategy_restaurant", None)
+    if navbar_selected != "All" and navbar_selected in all_names:
+        selected = navbar_selected
+    elif previous_selected in all_names:
+        selected = previous_selected
+    else:
+        selected = all_names[0]
+    st.session_state["strategy_restaurant"] = selected
 
     row, hist, segment, cluster_id, cluster_label = get_selected_context(selected, priority_df, momentum_df, assignments)
 
-    with col_info:
-        cluster_text = f"Cluster {cluster_id}: {cluster_label}" if cluster_id is not None else "Cluster not available"
-        segment_text = segment if segment else "Segment not available"
-        score = pd.to_numeric(row.get("priority_score", 0), errors="coerce")
-        if pd.isna(score):
-            score = 0
-        st.markdown(
-            f"""
-            <div style='background:{SURFACE_COLOR};border:1px solid {BORDER_COLOR};
-                        border-left:4px solid #cc0000;border-radius:8px;padding:1rem 1.4rem;'>
-                <div style='display:flex;justify-content:space-between;gap:1rem;align-items:center;'>
-                    <div>
-                        <div style='font-size:1.25rem;color:{TEXT_COLOR};font-weight:700;'>{selected}</div>
-                        <div style='font-size:0.78rem;color:{MUTED_TEXT};margin-top:4px;'>{cluster_text}</div>
-                        <div style='font-size:0.78rem;color:{MUTED_TEXT};margin-top:2px;'>Segment: {segment_text}</div>
-                    </div>
-                    <div style='text-align:right;'>
-                        <div style='font-size:1.75rem;color:#cc0000;font-weight:700;'>{score:.0f}</div>
-                        <div style='font-size:0.7rem;color:{MUTED_TEXT};'>PRIORITY SCORE</div>
-                    </div>
+    cluster_text = f"Cluster {cluster_id}: {cluster_label}" if cluster_id is not None else "Cluster not available"
+    segment_text = segment if segment else "Segment not available"
+    score = pd.to_numeric(row.get("priority_score", 0), errors="coerce")
+    if pd.isna(score):
+        score = 0
+    st.markdown(
+        f"""
+        <div style='background:{SURFACE_COLOR};border:1px solid {BORDER_COLOR};
+                    border-left:4px solid #cc0000;border-radius:8px;padding:1rem 1.4rem;'>
+            <div style='display:flex;justify-content:space-between;gap:1rem;align-items:center;'>
+                <div>
+                    <div style='font-size:1.25rem;color:{TEXT_COLOR};font-weight:700;'>{selected}</div>
+                    <div style='font-size:0.78rem;color:{MUTED_TEXT};margin-top:4px;'>{cluster_text}</div>
+                    <div style='font-size:0.78rem;color:{MUTED_TEXT};margin-top:2px;'>Segment: {segment_text}</div>
+                </div>
+                <div style='text-align:right;'>
+                    <div style='font-size:1.75rem;color:#cc0000;font-weight:700;'>{score:.0f}</div>
+                    <div style='font-size:0.7rem;color:{MUTED_TEXT};'>PRIORITY SCORE</div>
                 </div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     st.markdown("---")
 
@@ -1112,7 +1109,7 @@ def render():
     # st.markdown("## Section 1: Google Analytics Metrics")
     # formula_card(
     #     "GA Strategy Ranking Formula",
-    #     ["GA Strategy Score = (GMV/GA × 0.40) + (Add to Cart × 0.30) + (View to Purchase × 0.30)"],
+    #     ["Google Ads Strategy Score = (GMV/GA × 0.40) + (Add to Cart × 0.30) + (View to Purchase × 0.30)"],
     # )
 
     # ga_rankings = build_ga_scope_rankings(ga_monthly_df, ga_campaign_monthly_df, assignments)
@@ -1313,7 +1310,7 @@ def render():
 
     render_ga_snapshot_section(
         4,
-        "Restaurant GA snapshot",
+        "Restaurant Google Ads snapshot",
         "This restaurant's own funnel metrics vs cluster benchmark.",
         build_ga_snapshot_cards(selected, ga_monthly_df, assignments, cluster_id),
     )
