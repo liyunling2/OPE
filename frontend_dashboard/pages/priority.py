@@ -64,6 +64,10 @@ def filter_untapped_priority(df: pd.DataFrame) -> pd.DataFrame:
     return df[df["priority_tier"].fillna("").astype(str).str.contains("untapped", case=False, na=False)].copy()
 
 
+def set_untapped_priority_filter(active: bool) -> None:
+    st.session_state["priority_untapped_only"] = active
+
+
 def store_ranked_list_selection(row: pd.Series) -> None:
     restaurant_name = str(row.get("Restaurant", "")).strip()
     if not restaurant_name or restaurant_name.lower() in {"nan", "none"}:
@@ -328,11 +332,21 @@ def render():
     st.markdown('List is derived by ranking highest GMV/GA View, highest priority score and lowest number of marketing efforts')
     quick_cols = st.columns([1, 1, 4])
     with quick_cols[0]:
-        if st.button("Untapped only", width="stretch", type="primary" if st.session_state["priority_untapped_only"] else "secondary"):
-            st.session_state["priority_untapped_only"] = True
+        st.button(
+            "Untapped only",
+            width="stretch",
+            type="primary" if st.session_state["priority_untapped_only"] else "secondary",
+            on_click=set_untapped_priority_filter,
+            args=(True,),
+        )
     with quick_cols[1]:
-        if st.button("Show all tiers", width="stretch", disabled=not st.session_state["priority_untapped_only"]):
-            st.session_state["priority_untapped_only"] = False
+        st.button(
+            "Show all tiers",
+            width="stretch",
+            disabled=not st.session_state["priority_untapped_only"],
+            on_click=set_untapped_priority_filter,
+            args=(False,),
+        )
     if st.session_state["priority_untapped_only"]:
         ranked_priority_df = filter_untapped_priority(ranked_priority_df)
         st.caption("Quick filter active: showing Untapped restaurants only.")
