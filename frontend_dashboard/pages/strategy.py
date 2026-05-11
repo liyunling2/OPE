@@ -1501,8 +1501,7 @@ def render_package_details() -> None:
 - (+) Guaranteed in Restaurants Promotion Banner (1 week)
 - (+) Blog: Advertorial: Individual
 """)
-
-
+        
 def render_ai_diagnosis_explainer() -> None:
     with st.expander("How AI Strategy Diagnosis Is Generated", expanded=False):
         st.markdown(
@@ -1515,14 +1514,16 @@ def render_ai_diagnosis_explainer() -> None:
                 <ul style='margin-top:0.35rem;'>
                     {highlighted_bullets([
                         "Selected restaurant identity: restaurant name, cluster ID, cluster label, latest segment, Priority Score, and Priority Tier.",
-                        "Restaurant funnel snapshot: latest available Google Ads metrics such as items viewed, GMV/GA view, Add-to-cart rate, View-to-purchase rate, and revenue per view.",
+                        "Restaurant google ads funnel metrics: latest available Google Ads metrics such as items viewed, GMV/GA view, Add-to-cart rate, View-to-purchase rate, and revenue per view.",
                         "Restaurant booking / momentum history: the raw momentum dataframe is passed in so the model can refer to booking trajectory and performance signals.",
+                        "Benchmark comparisons: raw Google Ads ranking tables across cluster, segment, and global scopes so the model can compare actual performance against benchmarks and quantify gaps.",
                         "Google Ads evidence: the Google Ads ranking object generated from cluster, segment, and global scopes is passed in so the model can connect funnel gaps to campaign-type evidence.",
+                        "Peer recommendation evidence: peer restaurant campaign data with known booking and revenue uplift outcomes is included so the model can cite comparable restaurants and campaign results when recommending CRM, KOL, or Facebook strategies.",
                         "Package rules: Basic, Standard, and Premium package capabilities are embedded directly in the prompt so the model can match package choice to the funnel stage being addressed.",
                     ])}
                 </ul>
                 <p style='margin-top:0.85rem;'><b>Guardrails used in the prompt:</b> {highlight_metrics_html(
-                    "The model is instructed to use only the supplied data, avoid inventing metrics, mark missing values as insufficient data, rank issues by business impact, and connect every recommendation back to the evidence provided."
+                    "The model is instructed to use only the supplied data, avoid inventing metrics, mark missing values as insufficient data, rank issues by business impact, and connect every recommendation back to the evidence provided. Recommendations must be traceable to evidence from Google Ads rankings, peer campaign outcomes, and package rules."
                 )}</p>
                 <p style='margin-top:0.85rem;'><b>Important limitation:</b> {highlight_metrics_html(
                     "The CRM / KOL / FB strategy ranking tables below remain the source of truth for channel-performance evidence. In the current implementation, those ranking tables are shown to users in the dashboard but are not directly passed into the AI diagnosis call."
