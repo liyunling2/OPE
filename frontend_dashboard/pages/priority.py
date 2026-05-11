@@ -58,16 +58,21 @@ def get_tier(tier):
     return "gray", str(tier), "#7c82a0"
 
 
-def filter_untapped_priority(df: pd.DataFrame) -> pd.DataFrame:
-    if df.empty or "priority_tier" not in df.columns:
+def filter_priority_by_tier(df: pd.DataFrame, tier_filter: str) -> pd.DataFrame:
+    if df.empty or "priority_tier" not in df.columns or tier_filter == "All":
         return df
-    return df[df["priority_tier"].fillna("").astype(str).str.contains("untapped", case=False, na=False)].copy()
+
+    return df[
+        df["priority_tier"]
+        .fillna("")
+        .astype(str)
+        .str.contains(tier_filter, case=False, na=False)
+    ].copy()
 
 
-def set_untapped_priority_filter(active: bool) -> None:
-    st.session_state["priority_untapped_only"] = active
-
-
+def set_priority_tier_filter(tier: str) -> None:
+    st.session_state["priority_tier_quick_filter"] = tier
+    
 def store_ranked_list_selection(row: pd.Series) -> None:
     restaurant_name = str(row.get("Restaurant", "")).strip()
     if not restaurant_name or restaurant_name.lower() in {"nan", "none"}:
@@ -311,8 +316,8 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def render():
-    if "priority_untapped_only" not in st.session_state:
-        st.session_state["priority_untapped_only"] = False
+    if "priority_tier_quick_filter" not in st.session_state:
+        st.session_state["priority_tier_quick_filter"] = "All"
     if "priority_selected_restaurant" not in st.session_state:
         st.session_state["priority_selected_restaurant"] = None
 
@@ -330,26 +335,50 @@ def render():
     
     st.markdown("## Prioritised Ranked List")
     st.markdown('List is derived by ranking highest GMV/GA View, highest priority score and lowest number of marketing efforts')
-    quick_cols = st.columns([1, 1, 4])
+    quick_cols = st.columns([1, 1, 1, 1, 3])
+
     with quick_cols[0]:
         st.button(
-            "Untapped only",
+            "Untapped",
             width="stretch",
-            type="primary" if st.session_state["priority_untapped_only"] else "secondary",
-            on_click=set_untapped_priority_filter,
-            args=(True,),
+            type="primary" if st.session_state["priority_tier_quick_filter"] == "Untapped" else "secondary",
+            on_click=set_priority_tier_filter,
+            args=("Untapped",),
         )
+
     with quick_cols[1]:
+        st.button(
+            "Review",
+            width="stretch",
+            type="primary" if st.session_state["priority_tier_quick_filter"] == "Review" else "secondary",
+            on_click=set_priority_tier_filter,
+            args=("Review",),
+        )
+
+    with quick_cols[2]:
+        st.button(
+            "Proven",
+            width="stretch",
+            type="primary" if st.session_state["priority_tier_quick_filter"] == "Proven" else "secondary",
+            on_click=set_priority_tier_filter,
+            args=("Proven",),
+        )
+
+    with quick_cols[3]:
         st.button(
             "Show all tiers",
             width="stretch",
-            disabled=not st.session_state["priority_untapped_only"],
-            on_click=set_untapped_priority_filter,
-            args=(False,),
+            disabled=st.session_state["priority_tier_quick_filter"] == "All",
+            on_click=set_priority_tier_filter,
+            args=("All",),
         )
-    if st.session_state["priority_untapped_only"]:
-        ranked_priority_df = filter_untapped_priority(ranked_priority_df)
-        st.caption("Quick filter active: showing Untapped restaurants only.")
+
+    active_tier_filter = st.session_state["priority_tier_quick_filter"]
+
+    if active_tier_filter != "All":
+        ranked_priority_df = filter_priority_by_tier(ranked_priority_df, active_tier_filter)
+        st.caption(f"Quick filter active: showing {active_tier_filter} restaurants only.")
+        
 
     cols = []
     for idx, row in ranked_priority_df.iterrows():
@@ -563,8 +592,11 @@ def render():
         selected_segment,
         selected_cluster,
     )
-    if st.session_state["priority_untapped_only"]:
-        df = filter_untapped_priority(df)
+    active_tier_filter = st.session_state["priority_tier_quick_filter"]
+
+    if active_tier_filter != "All":
+        df = filter_priority_by_tier(df, active_tier_filter)
+        
     st.markdown(f"### _Top Restaurants based on Priority Scores_")
     st.caption("🟡 Amber bars = Seasonal flag — strong MoM but weak YoY. Timing-sensitive activation.")
 
