@@ -440,7 +440,7 @@ def display_ga_rank_table(title: str, table: pd.DataFrame) -> None:
 # CRM/KOL/FB ranking logic
 # =============================================================================
 
-def build_marketing_rank_table(scope_df: pd.DataFrame) -> pd.DataFrame:
+def build_marketing_rank_table(scope_df: pd.DataFrame, include_negative: bool = False) -> pd.DataFrame:
     """Ranks CRM/KOL/FB strategies from raw campaign outcomes."""
     if scope_df.empty:
         return pd.DataFrame()
@@ -461,9 +461,12 @@ def build_marketing_rank_table(scope_df: pd.DataFrame) -> pd.DataFrame:
     df = df[
         df["revenue_uplift_pct"].notna()
         & df["bookings_uplift_pct"].notna()
-        & df["revenue_uplift_pct"].ge(0)
-        & df["bookings_uplift_pct"].ge(0)
     ].copy()
+    if not include_negative:
+        df = df[
+            df["revenue_uplift_pct"].ge(0)
+            & df["bookings_uplift_pct"].ge(0)
+        ].copy()
     if df.empty:
         return pd.DataFrame()
 
@@ -491,23 +494,33 @@ def build_marketing_rank_table(scope_df: pd.DataFrame) -> pd.DataFrame:
     return grouped
 
 
-def display_marketing_rank_table(title: str, table: pd.DataFrame) -> None:
+def display_marketing_rank_table(title: str, table: pd.DataFrame, include_negative: bool = False) -> None:
     st.markdown(f"#### {title}")
+    negative_note = (
+        "Campaigns with negative revenue or booking uplift are included before averaging."
+        if include_negative
+        else "Only strategies with nonnegative revenue and booking uplift are ranked."
+    )
     st.caption(
         "Revenue uplift and booking uplift are average percentage changes versus the campaign baseline. "
-        "Only strategies with nonnegative revenue and booking uplift are ranked."
+        f"{negative_note}"
     )
     with st.expander("How score is calculated", expanded=False):
         st.markdown(
             """
             `Strategy Score = (Revenue uplift % × 0.60) + (Booking uplift % × 0.40)`
 
-            The table first removes campaigns with negative revenue or booking uplift, then averages the remaining
+            The table filters campaigns according to the negative-uplift toggle, then averages the remaining
             uplift values by activity. Higher score means the strategy has historically improved both GMV and bookings.
             """
         )
     if table.empty:
-        st.info("No CRM/KOL/FB strategies with nonnegative revenue and booking uplift are available for this scope.")
+        empty_note = (
+            "No CRM/KOL/FB strategies with revenue and booking uplift data are available for this scope."
+            if include_negative
+            else "No CRM/KOL/FB strategies with nonnegative revenue and booking uplift are available for this scope."
+        )
+        st.info(empty_note)
         return
 
     display_cols = [
@@ -639,17 +652,27 @@ def render_placeholder_section(
     )
 
 
-def _render_rank_html_table(table: pd.DataFrame) -> None:
+def _render_rank_html_table(table: pd.DataFrame, include_negative: bool = False) -> None:
     if table.empty:
-        st.info("No CRM/KOL/FB strategies with nonnegative revenue and booking uplift are available for this scope.")
+        empty_note = (
+            "No CRM/KOL/FB strategies with revenue and booking uplift data are available for this scope."
+            if include_negative
+            else "No CRM/KOL/FB strategies with nonnegative revenue and booking uplift are available for this scope."
+        )
+        st.info(empty_note)
         return
 
     with st.expander("How score is calculated", expanded=False):
+        filter_note = (
+            "Campaigns with negative revenue or booking uplift are included before ranking."
+            if include_negative
+            else "Campaigns with negative revenue or booking uplift are filtered out before ranking."
+        )
         st.markdown(
-            """
+            f"""
             `Score = (Revenue uplift % × 0.60) + (Booking uplift % × 0.40)`
 
-            Campaigns with negative revenue or booking uplift are filtered out before ranking.
+            {filter_note}
             """
         )
 
@@ -1791,7 +1814,6 @@ def render():
     m_global_table = build_marketing_rank_table(global_rank_df)
 
     restaurant_rank_df = _filter_marketing_for_restaurant(marketing_outcomes, selected)
-    m_restaurant_table = build_marketing_rank_table(restaurant_rank_df)
     # Enrich once using global rank table so every strategy gets coverage.
     # outcomes_df now carries avg_revenue_uplift_pct, avg_bookings_uplift_pct, lift_reliability.
     outcomes_df = enrich_outcomes_with_rank_stats(outcomes_df, m_global_table)
@@ -1902,11 +1924,21 @@ def render():
 
         default_segment = segment if segment in cluster_segments else (cluster_segments[0] if cluster_segments else None)
 
+        show_negative_uplift = st.toggle(
+            "Show negative uplift campaigns",
+            value=False,
+            key=f"show_negative_strategy_rankings_{selected}",
+            help="Include campaigns where revenue uplift or booking uplift is below zero before strategy scores are averaged.",
+        )
+
         rank_tabs = st.tabs(["Restaurant", "Cluster", "Segment", "Global"])
 
     with rank_tabs[0]:
         st.caption(f"{selected}'s own CRM / KOL / FB activity outcomes")
-        _render_rank_html_table(m_restaurant_table)
+        _render_rank_html_table(
+            build_marketing_rank_table(restaurant_rank_df, include_negative=show_negative_uplift),
+            include_negative=show_negative_uplift,
+        )
 
     with rank_tabs[1]:
         use_city_cluster = st.checkbox(
@@ -1925,7 +1957,10 @@ def render():
             + (f" | City: {city_text}" if use_city_cluster else " | All cities")
         )
 
-        _render_rank_html_table(build_marketing_rank_table(scoped_cluster))
+        _render_rank_html_table(
+            build_marketing_rank_table(scoped_cluster, include_negative=show_negative_uplift),
+            include_negative=show_negative_uplift,
+        )
 
     with rank_tabs[2]:
         selector_col, toggle_col = st.columns([0.42, 0.58])
@@ -1963,11 +1998,17 @@ def render():
             + (f" | City: {city_text}" if use_city_segment else " | All cities")
         )
 
-        _render_rank_html_table(build_marketing_rank_table(scoped_marketing))
+        _render_rank_html_table(
+            build_marketing_rank_table(scoped_marketing, include_negative=show_negative_uplift),
+            include_negative=show_negative_uplift,
+        )
 
     with rank_tabs[3]:
         st.caption("All restaurants")
-        _render_rank_html_table(m_global_table)
+        _render_rank_html_table(
+            build_marketing_rank_table(global_rank_df, include_negative=show_negative_uplift),
+            include_negative=show_negative_uplift,
+        )
 
     render_ga_snapshot_section(
         4,
