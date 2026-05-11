@@ -10,6 +10,7 @@ Examples:
     python pull_cities.py --limit 25 --dry-run
     python pull_cities.py --workers 8
     python pull_cities.py --no-web
+    python pull_cities.py --google-places
     python pull_cities.py --repair-errors
 """
 
@@ -38,6 +39,15 @@ OPE_DIR = SCRIPT_DIR.parent
 DEFAULT_INPUT_PATH = SCRIPT_DIR / "unique_restaurant_list.csv"
 DEFAULT_OUTPUT_PATH = SCRIPT_DIR / "restaurant_city_scraped.csv"
 DEFAULT_PLACES_PATH = OPE_DIR / "_1_eda" / "data_output" / "places_api_new_results.csv"
+DEFAULT_ENV_PATH = OPE_DIR / ".env"
+GOOGLE_PLACES_TEXT_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText"
+GOOGLE_PLACES_FIELD_MASK = "places.displayName,places.formattedAddress,places.addressComponents"
+DEFAULT_GOOGLE_KEY_ENV_VARS = (
+    "GOOGLE_PLACES_API_KEY",
+    "GOOGLE_MAPS_API_KEY",
+    "PLACES_API_KEY",
+    "GOOGLE_API_KEY",
+)
 
 DEFAULT_SEARCH_PROVIDERS = (
     {
@@ -348,6 +358,31 @@ def clean_text(text: Any) -> str:
     return re.sub(r"\s+", " ", str(text)).strip()
 
 
+def load_env_file(path: Path) -> dict[str, str]:
+    """Read simple KEY=VALUE lines from .env without echoing secrets."""
+    if not path.exists():
+        return {}
+
+    env_vars = {}
+    for raw_line in path.read_text().splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        env_vars[key.strip()] = value.strip().strip('"').strip("'")
+    return env_vars
+
+
+def get_google_places_api_key(env_path: Path, env_var_names: tuple[str, ...]) -> tuple[str | None, str | None]:
+    """Return Google Places API key and the env var name used, without logging the key."""
+    env_file_vars = load_env_file(env_path)
+    for env_var_name in env_var_names:
+        value = clean_text(env_file_vars.get(env_var_name))
+        if value:
+            return value, env_var_name
+    return None, None
+
+
 def canonical_location(location: str) -> str:
     """Map alternate spellings and Thai administrative names to reporting city."""
     return LOCATION_ALIASES.get(location.lower(), location)
@@ -620,12 +655,132 @@ def search_restaurant_city(name: str, session: requests.Session) -> dict[str, st
     }
 
 
+def city_from_address_components(components: list[dict[str, Any]]) -> tuple[str | None, str | None]:
+    """Infer city/province from Google Places address components."""
+    preferred_types = (
+        "locality",
+        "postal_town",
+        "administrative_area_level_2",
+        "administrative_area_level_1",
+        "country",
+    )
+    for preferred_type in preferred_types:
+        for component in components:
+            if preferred_type not in component.get("types", []):
+                continue
+            long_name = clean_text(component.get("long_name") or component.get("longText"))
+            short_name = clean_text(component.get("short_name") or component.get("shortText"))
+            for candidate in (long_name, short_name):
+                city, _, matched_keyword = infer_city_from_text(candidate, source_kind="places")
+                if city:
+                    return city, matched_keyword
+    return None, None
+
+
+def search_google_places_city(name: str, session: requests.Session, api_key: str) -> dict[str, str | None]:
+    """Use Google Places API (New) Text Search to infer a restaurant city."""
+    query = f"{clean_text(name)} restaurant"
+    try:
+        response = session.post(
+            GOOGLE_PLACES_TEXT_SEARCH_URL,
+            json={"textQuery": query, "maxResultCount": 1},
+            headers={
+                "X-Goog-Api-Key": api_key,
+                "X-Goog-FieldMask": GOOGLE_PLACES_FIELD_MASK,
+                "Content-Type": "application/json",
+            },
+            timeout=REQUEST_TIMEOUT,
+        )
+        payload = response.json()
+    except (requests.RequestException, ValueError) as exc:
+        return {
+            "city": None,
+            "confidence": "error",
+            "matched_keyword": None,
+            "source": "google_places_api",
+            "search_query": query,
+            "source_text": None,
+            "error": f"Google Places request failed: {exc}",
+        }
+
+    if response.status_code >= 400 or "error" in payload:
+        error = payload.get("error") or {}
+        message = clean_text(error.get("message"))
+        status = clean_text(error.get("status"))
+        return {
+            "city": None,
+            "confidence": "error",
+            "matched_keyword": None,
+            "source": "google_places_api",
+            "search_query": query,
+            "source_text": None,
+            "error": f"Google Places status {status}: {message}".strip(),
+        }
+
+    results = payload.get("places") or []
+    if not results:
+        return {
+            "city": None,
+            "confidence": "low",
+            "matched_keyword": None,
+            "source": "not_found_google_places",
+            "search_query": query,
+            "source_text": None,
+            "error": None,
+        }
+
+    top_result = results[0]
+    display_name = top_result.get("displayName") or {}
+    evidence = " ".join(
+        value
+        for value in (
+            clean_text(display_name.get("text")),
+            clean_text(top_result.get("formattedAddress")),
+        )
+        if value
+    )
+    city, confidence, matched_keyword = infer_city_from_text(evidence, source_kind="places")
+    if city:
+        return {
+            "city": city,
+            "confidence": confidence,
+            "matched_keyword": matched_keyword,
+            "source": "google_places_api",
+            "search_query": query,
+            "source_text": evidence[:1000],
+            "error": None,
+        }
+
+    city, matched_keyword = city_from_address_components(top_result.get("addressComponents") or [])
+    if city:
+        return {
+            "city": city,
+            "confidence": "high",
+            "matched_keyword": matched_keyword,
+            "source": "google_places_api",
+            "search_query": query,
+            "source_text": evidence[:1000] if evidence else None,
+            "error": None,
+        }
+
+    return {
+        "city": None,
+        "confidence": "low",
+        "matched_keyword": None,
+        "source": "not_found_google_places",
+        "search_query": query,
+        "source_text": evidence[:1000] if evidence else None,
+        "error": None,
+    }
+
+
 def infer_restaurant_city(
     restaurant_name: str,
     places_hints: dict[str, dict[str, str | None]],
     session: requests.Session | None,
+    google_places_api_key: str | None = None,
 ) -> dict[str, str | None]:
-    """Resolve one restaurant city from name, local Places hints, then web search."""
+    """Resolve one restaurant city from name, local hints, Google Places, then web search."""
     city, confidence, matched_keyword = infer_city_from_text(restaurant_name, source_kind="name")
     if city:
         return {
@@ -649,6 +804,11 @@ def infer_restaurant_city(
             "source_text": place_hint["source_text"],
             "error": None,
         }
+
+    if google_places_api_key and session is not None:
+        google_result = search_google_places_city(restaurant_name, session, google_places_api_key)
+        if google_result["city"] or google_result["source"] != "not_found_google_places":
+            return google_result
 
     if session is None:
         return {
@@ -692,8 +852,13 @@ def is_retryable_output(row: pd.Series) -> bool:
     source = clean_text(row.get("source")).lower()
     city = clean_text(row.get("scraped_city"))
     source_text = clean_text(row.get("source_text"))
-    weak_blank = not city and not source_text and source in {"web_search", "not_found_web", "not_found_local"}
-    return confidence == "error" or "403 client error" in error or weak_blank
+    weak_blank = not city and not source_text and source in {
+        "web_search",
+        "not_found_web",
+        "not_found_local",
+        "not_found_google_places",
+    }
+    return confidence == "error" or "403 client error" in error or "google places status" in error or weak_blank
 
 
 def append_rows(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -709,10 +874,11 @@ def build_output_row(
     places_hints: dict[str, dict[str, str | None]],
     search_providers: tuple[dict[str, str], ...],
     no_web: bool,
+    google_places_api_key: str | None,
 ) -> dict[str, Any]:
     """Resolve one input row into the output schema."""
-    session = None if no_web else get_worker_session(search_providers)
-    result = infer_restaurant_city(row["name"], places_hints, session)
+    session = None if no_web and not google_places_api_key else get_worker_session(search_providers)
+    result = infer_restaurant_city(row["name"], places_hints, session, google_places_api_key)
 
     return {
         "restaurant_id": row["restaurant_id"],
@@ -737,6 +903,7 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_PLACES_PATH,
         help="Existing Places API output used for local address hints.",
     )
+    parser.add_argument("--env", type=Path, default=DEFAULT_ENV_PATH, help=".env file containing API keys.")
     parser.add_argument("--limit", type=int, default=None, help="Only process the first N remaining rows.")
     parser.add_argument(
         "--workers",
@@ -753,6 +920,18 @@ def parse_args() -> argparse.Namespace:
         help="Reprocess rows whose previous output has confidence=error or a 403 error.",
     )
     parser.add_argument("--no-web", action="store_true", help="Skip web search fallback and use only local hints.")
+    parser.add_argument(
+        "--google-places",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Use Google Places API before generic web search when a Places key is available.",
+    )
+    parser.add_argument(
+        "--google-key-env",
+        nargs="+",
+        default=list(DEFAULT_GOOGLE_KEY_ENV_VARS),
+        help="Env var names to check in .env for the Google Places API key.",
+    )
     parser.add_argument(
         "--include-duckduckgo",
         action="store_true",
@@ -787,12 +966,16 @@ def main() -> None:
     places_hints = load_places_city_hints(args.places)
     search_providers = DEFAULT_SEARCH_PROVIDERS + (DUCKDUCKGO_PROVIDER if args.include_duckduckgo else ())
     workers = max(1, args.workers)
+    google_places_api_key, google_key_env_name = (None, None)
+    if args.google_places:
+        google_places_api_key, google_key_env_name = get_google_places_api_key(args.env, tuple(args.google_key_env))
 
     print(f"Input restaurants: {len(restaurants)}")
     print(f"Existing rows skipped: {0 if args.force else len(done_ids)}")
     print(f"Existing error rows to repair: {0 if args.force else len(retry_ids)}")
     print(f"Local Places hints loaded: {len(places_hints)}")
     print(f"Rows to process: {len(rows_to_process)}")
+    print(f"Google Places API: {'enabled via ' + google_key_env_name if google_places_api_key else 'disabled (no key found)'}")
     print(f"Web search providers: {'none' if args.no_web else ', '.join(provider['name'] for provider in search_providers)}")
     print(f"Workers: {workers}")
     if args.dry_run:
@@ -811,7 +994,7 @@ def main() -> None:
 
     if workers == 1:
         for index, row in enumerate(tqdm(input_rows, total=len(input_rows)), start=1):
-            output_row = build_output_row(row, places_hints, search_providers, args.no_web)
+            output_row = build_output_row(row, places_hints, search_providers, args.no_web, google_places_api_key)
             handle_output(output_row)
 
             if (
@@ -823,7 +1006,7 @@ def main() -> None:
     else:
         with ThreadPoolExecutor(max_workers=workers) as executor:
             futures = [
-                executor.submit(build_output_row, row, places_hints, search_providers, args.no_web)
+                executor.submit(build_output_row, row, places_hints, search_providers, args.no_web, google_places_api_key)
                 for row in input_rows
             ]
             for future in tqdm(as_completed(futures), total=len(futures)):
