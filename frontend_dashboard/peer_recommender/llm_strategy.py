@@ -1,9 +1,11 @@
 import pandas as pd
 import streamlit as st
 import os
-from google import genai
-from dotenv import load_dotenv
-import cohere
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    def load_dotenv(*args, **kwargs):
+        return False
 
 
 def display_value(value):
@@ -146,7 +148,12 @@ def call_cohere(selected: str,
     ga_rankings:pd.DataFrame,
     momentum_df:pd.DataFrame) -> str:
     try:
+        import cohere
+
+        load_dotenv()
         api_key = os.getenv("COHERE_API_KEY")
+        if not api_key:
+            return "_(Playbook generation unavailable: COHERE_API_KEY is not set.)_"
 
         co = cohere.ClientV2(api_key) 
 

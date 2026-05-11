@@ -35,6 +35,10 @@ if "selected_segment" not in st.session_state:
 if "selected_cluster" not in st.session_state:
     st.session_state["selected_cluster"] = "All"
 
+PAGE_OPTIONS = ["Guide", "Overview", "Clustering", "Strategy"]
+if st.session_state.get("nav_page") not in PAGE_OPTIONS:
+    st.session_state["nav_page"] = "Guide"
+
 
 def sync_segment_filter():
     st.session_state["selected_segment"] = st.session_state.get("navbar_segment", "All")
@@ -287,6 +291,11 @@ st.markdown(
 
 
 col1, col2, col3, col4 = st.columns([1, 1, 1.2, 0.55])
+current_page = st.session_state.get("nav_page", "Guide")
+restaurant_filter_disabled = current_page == "Overview"
+if restaurant_filter_disabled:
+    st.session_state["selected_restaurant"] = "All"
+    st.session_state["navbar_restaurant"] = "All"
 
 segments_available = sorted(momentum_df["latest_segment"].dropna().unique()) if "latest_segment" in momentum_df.columns else []
 if cluster_df.empty or "cluster_id" not in cluster_df.columns:
@@ -364,6 +373,9 @@ with col3:
         if st.session_state["selected_restaurant"] in all_names else 0,
         key="navbar_restaurant",
         on_change=sync_restaurant_filter,
+        disabled=restaurant_filter_disabled,
+        help="Restaurant filtering is disabled on the Overview page so the priority ranking stays broad."
+        if restaurant_filter_disabled else None,
     )
 
 with col4:
@@ -373,7 +385,9 @@ with col4:
 
 page = st.radio(
     "Navigation",
-    ["Guide", "Overview", "Clustering", "Strategy"],
+    PAGE_OPTIONS,
+    index=PAGE_OPTIONS.index(current_page) if current_page in PAGE_OPTIONS else 0,
+    key="nav_page",
     label_visibility="collapsed",
     horizontal=True,
 )

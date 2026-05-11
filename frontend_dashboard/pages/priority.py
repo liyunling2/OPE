@@ -58,6 +58,12 @@ def get_tier(tier):
     return "gray", str(tier), "#7c82a0"
 
 
+def filter_untapped_priority(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty or "priority_tier" not in df.columns:
+        return df
+    return df[df["priority_tier"].fillna("").astype(str).str.contains("untapped", case=False, na=False)].copy()
+
+
 def sync_navbar_restaurant_from_ranked_list(row: pd.Series) -> None:
     restaurant_name = str(row.get("Restaurant", "")).strip()
     if not restaurant_name or restaurant_name.lower() in {"nan", "none"}:
@@ -311,6 +317,9 @@ def build_priority_universe(priority_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def render():
+    if "priority_untapped_only" not in st.session_state:
+        st.session_state["priority_untapped_only"] = False
+
     selected_restaurant = st.session_state["selected_restaurant"]
     selected_segment = st.session_state["selected_segment"]
     selected_cluster = st.session_state.get("selected_cluster", "All")
@@ -325,6 +334,17 @@ def render():
     
     st.markdown("## Prioritised Ranked List")
     st.markdown('List is derived by ranking highest GMV/GA View, highest priority score and lowest number of marketing efforts')
+    quick_cols = st.columns([1, 1, 4])
+    with quick_cols[0]:
+        if st.button("Untapped only", width="stretch", type="primary" if st.session_state["priority_untapped_only"] else "secondary"):
+            st.session_state["priority_untapped_only"] = True
+    with quick_cols[1]:
+        if st.button("Show all tiers", width="stretch", disabled=not st.session_state["priority_untapped_only"]):
+            st.session_state["priority_untapped_only"] = False
+    if st.session_state["priority_untapped_only"]:
+        ranked_priority_df = filter_untapped_priority(ranked_priority_df)
+        st.caption("Quick filter active: showing Untapped restaurants only.")
+
     cols = []
     for idx, row in ranked_priority_df.iterrows():
         rank     = idx + 1
@@ -512,6 +532,8 @@ def render():
         selected_segment,
         selected_cluster,
     )
+    if st.session_state["priority_untapped_only"]:
+        df = filter_untapped_priority(df)
     st.markdown(f"### _Top Restaurants based on Priority Scores_")
     st.caption("🟡 Amber bars = Seasonal flag — strong MoM but weak YoY. Timing-sensitive activation.")
 

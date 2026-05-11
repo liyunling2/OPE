@@ -9,9 +9,11 @@ import numpy as np
 import pandas as pd
 from peer_recommender.llm_strategy import call_cohere
 import streamlit as st
-from dotenv import load_dotenv
-from google import genai
-import cohere
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    def load_dotenv(*args, **kwargs):
+        return False
 
 from data.loader import (
     load_priority,
@@ -100,6 +102,55 @@ def display_value(value):
     if not text or text.lower() in {"unknown", "nan", "none", "-", "<na>"}:
         return "Not available in data"
     return text
+
+
+METRIC_HIGHLIGHT_TERMS = [
+    "View-to-purchase rate",
+    "View to Purchase",
+    "Add-to-cart rate",
+    "Add to Cart",
+    "Revenue per view",
+    "Revenue Uplift %",
+    "Revenue uplift",
+    "Bookings Uplift %",
+    "Bookings uplift",
+    "Booking uplift",
+    "Priority Score",
+    "Priority Tier",
+    "GA Strategy Score",
+    "GMV/GA view",
+    "GMV / GA View",
+    "GMV per GA view",
+    "GMV/GA",
+    "GA4",
+    "items viewed",
+    "conversion",
+    "bookings",
+    "GMV",
+]
+
+
+def highlight_metrics_html(text: str) -> str:
+    escaped_text = escape("" if text is None else str(text))
+    if not escaped_text:
+        return escaped_text
+
+    terms = sorted({escape(term) for term in METRIC_HIGHLIGHT_TERMS}, key=len, reverse=True)
+    pattern = re.compile(r"(?<![\w/])(" + "|".join(re.escape(term) for term in terms) + r")(?![\w/])", re.IGNORECASE)
+
+    def repl(match: re.Match) -> str:
+        term = match.group(0)
+        return (
+            "<span style='display:inline-block;background:#fff3cd;color:#7a5200;"
+            "border:1px solid #f2d37b;border-radius:6px;padding:0.02rem 0.34rem;"
+            "font-weight:800;line-height:1.35;white-space:nowrap;'>%s</span>" % term
+        )
+
+    return pattern.sub(repl, escaped_text)
+
+
+def highlighted_bullets(items: list[str]) -> str:
+    return "".join(f"<li>{highlight_metrics_html(item)}</li>" for item in items)
 
 
 def factual_segment(row: dict, hist: pd.DataFrame | None = None):
@@ -496,7 +547,7 @@ def render_placeholder_list_box(items: list[tuple[str, str]], accent: str = "#cc
                 <div style='font-size:0.78rem;font-weight:850;color:{accent};
                             text-transform:uppercase;letter-spacing:0.02em;'>{escape(label)}</div>
                 <div style='font-size:0.95rem;color:{TEXT_COLOR};line-height:1.45;margin-top:0.35rem;'>
-                    {escape(body)}
+                    {highlight_metrics_html(body)}
                 </div>
             </div>
             """).strip()
@@ -528,7 +579,7 @@ def render_placeholder_section(
                     {escape(label)}
                 </div>
                 <div style='font-size:0.94rem;color:{TEXT_COLOR};line-height:1.5;'>
-                    {escape(body)}
+                    {highlight_metrics_html(body)}
                 </div>
             </div>
             """).strip()
@@ -961,33 +1012,30 @@ def render_package_details() -> None:
 def render_ai_diagnosis_explainer() -> None:
     with st.expander("How AI Strategy Diagnosis Is Generated", expanded=False):
         st.markdown(
-            """
-            **What the AI does:** When you click `Generate AI Narrative`, the dashboard calls Cohere
-            (`command-a-03-2025`) to turn the selected restaurant's data into two structured outputs:
-            `Key issues Identified` and `Recommended strategy`. The response is required to come back as
-            JSON, which is then rendered into the diagnosis cards.
-
-            **Data passed into the AI prompt:**
-
-            - Selected restaurant identity: restaurant name, cluster ID, cluster label, latest segment,
-              priority score, and priority tier.
-            - Restaurant funnel snapshot: latest available GA metrics such as items viewed, GMV/GA view,
-              add-to-cart rate, view-to-purchase rate, and revenue per view.
-            - Restaurant booking / momentum history: the raw momentum dataframe is passed in so the model
-              can refer to booking trajectory and performance signals.
-            - GA strategy evidence: the GA campaign ranking object generated from cluster, segment, and
-              global scopes is passed in so the model can connect funnel gaps to campaign-type evidence.
-            - Package rules: Basic, Standard, and Premium package capabilities are embedded directly in the
-              prompt so the model can match package choice to the funnel stage being addressed.
-
-            **Guardrails used in the prompt:** The model is instructed to use only the supplied data, avoid
-            inventing metrics, mark missing values as `insufficient data`, rank issues by business impact,
-            and connect every recommendation back to the evidence provided.
-
-            **Important limitation:** The CRM / KOL / FB strategy ranking tables below remain the source of
-            truth for channel-performance evidence. In the current implementation, those ranking tables are
-            shown to users in the dashboard but are not directly passed into the AI diagnosis call.
-            """
+            dedent(f"""
+            <div style='font-size:0.95rem;color:{TEXT_COLOR};line-height:1.6;'>
+                <p><b>What the AI does:</b> {highlight_metrics_html(
+                    "When you click Generate AI Narrative, the dashboard calls Cohere command-a-03-2025 to turn the selected restaurant's data into two structured outputs: Key issues Identified and Recommended strategy. The response is required to come back as JSON, which is then rendered into the diagnosis cards."
+                )}</p>
+                <p style='margin-top:0.85rem;'><b>Data passed into the AI prompt:</b></p>
+                <ul style='margin-top:0.35rem;'>
+                    {highlighted_bullets([
+                        "Selected restaurant identity: restaurant name, cluster ID, cluster label, latest segment, Priority Score, and Priority Tier.",
+                        "Restaurant funnel snapshot: latest available GA metrics such as items viewed, GMV/GA view, Add-to-cart rate, View-to-purchase rate, and revenue per view.",
+                        "Restaurant booking / momentum history: the raw momentum dataframe is passed in so the model can refer to booking trajectory and performance signals.",
+                        "GA strategy evidence: the GA campaign ranking object generated from cluster, segment, and global scopes is passed in so the model can connect funnel gaps to campaign-type evidence.",
+                        "Package rules: Basic, Standard, and Premium package capabilities are embedded directly in the prompt so the model can match package choice to the funnel stage being addressed.",
+                    ])}
+                </ul>
+                <p style='margin-top:0.85rem;'><b>Guardrails used in the prompt:</b> {highlight_metrics_html(
+                    "The model is instructed to use only the supplied data, avoid inventing metrics, mark missing values as insufficient data, rank issues by business impact, and connect every recommendation back to the evidence provided."
+                )}</p>
+                <p style='margin-top:0.85rem;'><b>Important limitation:</b> {highlight_metrics_html(
+                    "The CRM / KOL / FB strategy ranking tables below remain the source of truth for channel-performance evidence. In the current implementation, those ranking tables are shown to users in the dashboard but are not directly passed into the AI diagnosis call."
+                )}</p>
+            </div>
+            """).strip(),
+            unsafe_allow_html=True,
         )
 
 # =============================================================================
