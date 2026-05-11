@@ -823,6 +823,13 @@ def _render_scope_bar(
         ]
         if chip
     )
+    single_restaurant_selected = bool(
+        str(restaurant_filter or "").strip()
+        and str(restaurant_filter or "").strip().lower() not in {"all", "none", "nan"}
+    )
+    restaurant_count_chip = (
+        "" if single_restaurant_selected else f'<span style="{chip_style}">{restaurant_count:,} restaurants</span>'
+    )
 
     scope_bar_style = (
         "display:flex; align-items:center; justify-content:space-between; gap:0.75rem; "
@@ -838,7 +845,7 @@ def _render_scope_bar(
         f'<span style="font-size:0.92rem; color:#111827; font-weight:800;">{html.escape(scope_label)}</span>'
         "</div>"
         f'<div style="{scope_chips_style}">'
-        f'<span style="{chip_style}">{restaurant_count:,} restaurants</span>'
+        f"{restaurant_count_chip}"
         f"{active_filter_chips}"
         "</div>"
         "</div>"
