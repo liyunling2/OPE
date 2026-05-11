@@ -146,7 +146,9 @@ def call_cohere(selected: str,
     cluster_id,
     cluster_label,
     ga_rankings:pd.DataFrame,
-    momentum_df:pd.DataFrame) -> str:
+    momentum_df:pd.DataFrame,
+    peerdata:pd.DataFrame
+    ) -> str:
     try:
         import cohere
 
@@ -165,7 +167,8 @@ def call_cohere(selected: str,
                     cluster_id=cluster_id,
                     cluster_label=cluster_label,
                     ga_rankings=ga_rankings,
-                    momentum_df=momentum_df
+                    momentum_df=momentum_df,
+                    peerdata=peerdata
         )
         # Analyze the text without RAG
         response = co.chat(
@@ -193,7 +196,8 @@ def build_ai_prompt(
     cluster_id,
     cluster_label,
     ga_rankings:pd.DataFrame,
-    momentum_df:pd.DataFrame
+    momentum_df:pd.DataFrame,
+    peerdata:pd.DataFrame
 ) -> str:
     priority_score = fmt_num(pd.to_numeric(pd.Series([row.get("priority_score")]), errors="coerce").iloc[0], 1)
     priority_tier = display_value(row.get("priority_tier"))
@@ -240,6 +244,8 @@ RESTAURANT CLUSTER COMPARISON (raw dataframe — do not modify, do not recalcula
 RESTAURANT BOOKING HISTORY (raw dataframe — do not filter, do not aggregate, do not transform):
 {momentum_df}
 
+PEER RECOMMENDER'S DATA TO COMPARE AGAINST SELECTED RESTAURANT (raw dataframe — do not filter, do not aggregate, do not transform):
+{peerdata}
 
 AVAILABLE PACKAGES
 1. BASIC   — Awareness Starter. Key tools: Blogger 20k×1/30k×1, Boost 2K THB, Pop-up Banner,
@@ -340,5 +346,4 @@ All descriptions must be concise, data-driven paragraphs. Do not invent metrics 
 
 
 
-# PEER RECOMMENDER'S DATA TO COMPARE AGAINST SELECTED RESTAURANT (raw dataframe — do not filter, do not aggregate, do not transform):
-# {XXXX}
+
