@@ -1114,7 +1114,7 @@ def render_peer_recommender_section(
                             "label": f"{r.get('strategy_name', 'Unknown')} · {r.get('channel', 'Unknown')}",
                             "value": fmt_pct(uplift),
                             "booking_value": fmt_pct(booking_uplift),
-                            "meta": f"{peers_using} peer{'s' if peers_using != 1 else ''} · {campaigns} campaign{'s' if campaigns != 1 else ''}",
+                            # "meta": f"{peers_using} peer{'s' if peers_using != 1 else ''} · {campaigns} campaign{'s' if campaigns != 1 else ''}",
                             "color": color,
                         }
                     )
@@ -1133,7 +1133,6 @@ def render_peer_recommender_section(
                             <div style='font-size:0.88rem;color:#3f3f46;margin-top:0.45rem;'>
                                 Booking uplift: <strong>{escape(card['booking_value'])}</strong>
                             </div>
-                            <div style='font-size:0.76rem;color:{MUTED_TEXT};margin-top:0.25rem;'>{escape(card['meta'])}</div>
                         </div>
                         """).strip()
                         for card in rec_cards
