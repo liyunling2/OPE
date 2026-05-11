@@ -214,6 +214,11 @@ specific number in the data below. Vague advice is a failure.
    (b) the cluster/segment/global benchmark it is being compared to
    (c) the quantified gap (pp or absolute)
    (d) WHY this gap is the priority — not just that it exists
+   Comparison rule: compute every gap as ACTUAL - BENCHMARK. If the gap is positive
+   or zero, the restaurant is at/above benchmark and that metric MUST NOT be described
+   as "low", "below benchmark", "weak", "underperforming", or an issue. For percentage
+   metrics, report the gap in percentage points. Example: 7.3% vs 6.5467% is +0.7533pp,
+   so add-to-cart is above benchmark and cannot be an issue.
 3. If multiple issues exist, RANK them by business impact (revenue loss > conversion
    gap > traffic gap) and state the ranking with justification.
 4. The strategy for each issue must be directly traceable to the evidence:
@@ -306,6 +311,8 @@ The JSON structure must strictly follow this schema:
   - Reference supporting evidence from the provided data.
   - Mention the affected funnel stage where relevant (traffic, add-to-cart, view-to-purchase).
   - Explain why the issue matters commercially.
+  - Only describe a metric as a weakness when the actual value is lower than the stated benchmark.
+    If actual is higher than benchmark, either call it a strength or omit it from issues.
 - Keep descriptions concise but data-driven.
 - Do not invent metrics or unsupported claims.
 
@@ -343,7 +350,5 @@ All descriptions must be concise, data-driven paragraphs. Do not invent metrics 
     - Include one sentence on messaging direction — what the content or campaign must communicate to address the root issue.
 
 """
-
-
 
 
