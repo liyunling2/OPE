@@ -1176,8 +1176,8 @@ def render_peer_recommender_section(
                         .agg(
                             n_campaigns=("activity_id", "nunique"),
                             avg_roi=("roi", "median"),
-                            revenue_uplift_pct=("revenue_uplift_pct", "median"),
-                            booking_uplift_pct=("bookings_uplift_pct", "median"),
+                            revenue_uplift_pct=("revenue_uplift_pct", lambda x : (x * 100).median()),
+                            booking_uplift_pct=("bookings_uplift_pct", lambda x : (x * 100).median()),
                             n_positive_lift=("revenue_uplift_pct", lambda x: (x > 0).sum()),
                             n_total=("revenue_uplift_pct", "count"),
                         )
