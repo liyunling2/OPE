@@ -36,10 +36,25 @@ if "selected_cluster" not in st.session_state:
     st.session_state["selected_cluster"] = "All"
 
 
+def sync_segment_filter():
+    st.session_state["selected_segment"] = st.session_state.get("navbar_segment", "All")
+
+
+def sync_cluster_filter():
+    st.session_state["selected_cluster"] = st.session_state.get("navbar_cluster", "All")
+
+
+def sync_restaurant_filter():
+    st.session_state["selected_restaurant"] = st.session_state.get("navbar_restaurant", "All")
+
+
 def clear_navbar_filters():
     st.session_state["selected_segment"] = "All"
     st.session_state["selected_cluster"] = "All"
     st.session_state["selected_restaurant"] = "All"
+    st.session_state["navbar_segment"] = "All"
+    st.session_state["navbar_cluster"] = "All"
+    st.session_state["navbar_restaurant"] = "All"
     st.session_state["selected_strategy_family"] = "All"
     st.session_state["selected_ga_campaign_type"] = "All"
 
@@ -288,17 +303,26 @@ else:
     cluster_options = ["All"] + cluster_rows["cluster_id"].astype(int).tolist()
     cluster_label_map = dict(zip(cluster_rows["cluster_id"].astype(int), cluster_rows["cluster_label"]))
 
+segment_options = ["All"] + (segments_available if segments_available else list(SEGMENT_COLORS.keys()))
+if st.session_state["selected_segment"] not in segment_options:
+    st.session_state["selected_segment"] = "All"
+st.session_state["navbar_segment"] = st.session_state["selected_segment"]
+
 with col1:
-    st.session_state["selected_segment"] = st.selectbox(
+    st.selectbox(
         "Segment",
-        ["All"] + (segments_available if segments_available else list(SEGMENT_COLORS.keys())),
-        index=(["All"] + (segments_available if segments_available else list(SEGMENT_COLORS.keys()))).index(
-            st.session_state["selected_segment"]
-        )
+        segment_options,
+        index=segment_options.index(st.session_state["selected_segment"]),
+        key="navbar_segment",
+        on_change=sync_segment_filter,
     )
 
+if st.session_state["selected_cluster"] not in cluster_options:
+    st.session_state["selected_cluster"] = "All"
+st.session_state["navbar_cluster"] = st.session_state["selected_cluster"]
+
 with col2:
-    st.session_state["selected_cluster"] = st.selectbox(
+    st.selectbox(
         "Cluster",
         cluster_options,
         index=cluster_options.index(st.session_state["selected_cluster"])
@@ -306,6 +330,8 @@ with col2:
         format_func=lambda cid: (
             "All" if cid == "All" else f"Cluster {cid}: {cluster_label_map.get(cid, 'Unknown')}"
         ),
+        key="navbar_cluster",
+        on_change=sync_cluster_filter,
     )
 
 restaurant_scope = momentum_df.copy()
@@ -328,13 +354,16 @@ if (
 all_names = ["All"] + sorted(restaurant_scope["name"].dropna().unique())
 if st.session_state["selected_restaurant"] not in all_names:
     st.session_state["selected_restaurant"] = "All"
+st.session_state["navbar_restaurant"] = st.session_state["selected_restaurant"]
 
 with col3:
-    st.session_state["selected_restaurant"] = st.selectbox(
+    st.selectbox(
         "Restaurant",
         all_names,
         index=all_names.index(st.session_state["selected_restaurant"])
         if st.session_state["selected_restaurant"] in all_names else 0,
+        key="navbar_restaurant",
+        on_change=sync_restaurant_filter,
     )
 
 with col4:
@@ -344,14 +373,14 @@ with col4:
 
 page = st.radio(
     "Navigation",
-    ["Overview", "Priority", "Clustering", "Strategy"],
+    ["Guide", "Overview", "Clustering", "Strategy"],
     label_visibility="collapsed",
     horizontal=True,
 )
 
 st.markdown("<div style='height:0.35rem;'></div>", unsafe_allow_html=True)
 
-if page == "Overview":
+if page == "Guide":
     from pages import overview
 
     overview.render()
@@ -359,7 +388,7 @@ if page == "Overview":
 #     from pages import momentum
 
     # momentum.render()
-elif page == "Priority":
+elif page == "Overview":
     from pages import priority
 
     priority.render()

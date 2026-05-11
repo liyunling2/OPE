@@ -60,6 +60,43 @@ def _clear_ga_campaign_type_filter() -> None:
     st.session_state["selected_ga_campaign_type"] = "All"
 
 
+def _render_campaign_strategy_naming_expander() -> None:
+    with st.expander("How Campaign Names and Assigned Strategies Are Named", expanded=False):
+        st.markdown(
+            """
+            **Campaign Name** comes from the raw marketing activity fields: CRM uses `crm_campaign_name`,
+            FB uses `fb_campaign`, KOL uses the creator username, and rows fall back to `activity_id`
+            when a source-specific name is unavailable.
+
+            **Assigned Strategy** is rule-based, not manually labeled. The dashboard reads the channel plus
+            keywords from the campaign name, CRM topic, FB campaign, and KOL username, then assigns one
+            category:
+
+            - `CRM | Reactivation`: CRM campaigns with words like `reactivat`, `winback`, `inactive`,
+                `lapsed`, `dormant`, `comeback`, or `churn`.
+            - `CRM | Loyalty & Retention`: CRM campaigns with words like `loyal`, `member`, `vip`,
+                `retention`, `repeat`, `reward`, or `point`.
+            - `CRM | Promotional Blast`: CRM campaigns with words like `promo`, `discount`, `voucher`,
+                `coupon`, `deal`, `sale`, `flash`, `bundle`, or `off`.
+            - `CRM | Seasonal Campaign`: CRM campaigns with words like `season`, `festival`, `holiday`,
+                `songkran`, `new year`, `christmas`, `valentine`, `ramadan`, or `lunar`.
+            - `CRM | Lifecycle Nurture`: the default CRM category when the campaign is a normal CRM push
+                or notification and does not match the reactivation, loyalty, promo, or seasonal keywords.
+
+            For example, `TH_BKK_ctnoti_netcore_single_N_N_active_20260109_1100_yok-chinese-restaurant-jan26`
+            is treated as `CRM | Lifecycle Nurture` because it is a CRM notification campaign for an active
+            audience, and its topic `yok-chinese-restaurant-jan26` does not contain promo, discount,
+            reactivation, loyalty, or seasonal keywords. The restaurant/month slug gives context, but it
+            does not by itself imply a specific promotional strategy.
+
+            FB campaigns use similar keyword rules: retargeting words map to `FB | Retargeting`, promo/deal
+            words map to `FB | Conversion Offer`, and prospecting/acquisition/reach/awareness words map to
+            `FB | Prospecting & Awareness`; otherwise they become `FB | Performance Campaign`. KOL campaigns
+            map to creator collaboration or promo categories based on influencer/creator/promo keywords.
+            """
+        )
+
+
 def _get_plotly_selected_x(event) -> str | None:
     selection = getattr(event, "selection", None)
     if selection is None and isinstance(event, dict):
@@ -993,6 +1030,7 @@ def render():
         )
 
     st.markdown("### Marketing Strategy Effectiveness")
+    _render_campaign_strategy_naming_expander()
     with st.container():
         strategy_scope_outcomes = _filter_by_selected_cluster(outcomes_df)
         if restaurant_selected and "restaurant_name" in strategy_scope_outcomes.columns:
@@ -1221,40 +1259,6 @@ def render():
                     )
                     st.plotly_chart(fig_strategy_mix, width="stretch")
 
-                with st.expander("How Campaign Names and Assigned Strategies Are Named", expanded=False):
-                    st.markdown(
-                        """
-                        **Campaign Name** comes from the raw marketing activity fields: CRM uses `crm_campaign_name`,
-                        FB uses `fb_campaign`, KOL uses the creator username, and rows fall back to `activity_id`
-                        when a source-specific name is unavailable.
-
-                        **Assigned Strategy** is rule-based, not manually labeled. The dashboard reads the channel plus
-                        keywords from the campaign name, CRM topic, FB campaign, and KOL username, then assigns one
-                        category:
-
-                        - `CRM | Reactivation`: CRM campaigns with words like `reactivat`, `winback`, `inactive`,
-                            `lapsed`, `dormant`, `comeback`, or `churn`.
-                        - `CRM | Loyalty & Retention`: CRM campaigns with words like `loyal`, `member`, `vip`,
-                            `retention`, `repeat`, `reward`, or `point`.
-                        - `CRM | Promotional Blast`: CRM campaigns with words like `promo`, `discount`, `voucher`,
-                            `coupon`, `deal`, `sale`, `flash`, `bundle`, or `off`.
-                        - `CRM | Seasonal Campaign`: CRM campaigns with words like `season`, `festival`, `holiday`,
-                            `songkran`, `new year`, `christmas`, `valentine`, `ramadan`, or `lunar`.
-                        - `CRM | Lifecycle Nurture`: the default CRM category when the campaign is a normal CRM push
-                            or notification and does not match the reactivation, loyalty, promo, or seasonal keywords.
-
-                        For example, `TH_BKK_ctnoti_netcore_single_N_N_active_20260109_1100_yok-chinese-restaurant-jan26`
-                        is treated as `CRM | Lifecycle Nurture` because it is a CRM notification campaign for an active
-                        audience, and its topic `yok-chinese-restaurant-jan26` does not contain promo, discount,
-                        reactivation, loyalty, or seasonal keywords. The restaurant/month slug gives context, but it
-                        does not by itself imply a specific promotional strategy.
-
-                        FB campaigns use similar keyword rules: retargeting words map to `FB | Retargeting`, promo/deal
-                        words map to `FB | Conversion Offer`, and prospecting/acquisition/reach/awareness words map to
-                        `FB | Prospecting & Awareness`; otherwise they become `FB | Performance Campaign`. KOL campaigns
-                        map to creator collaboration or promo categories based on influencer/creator/promo keywords.
-                        """
-                    )
                 raw_strategy_campaigns["_booking_uplift_sort"] = pd.to_numeric(
                     raw_strategy_campaigns.get("bookings_uplift_pct"),
                     errors="coerce",

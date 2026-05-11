@@ -7,7 +7,7 @@ from textwrap import dedent
 from html import escape
 import numpy as np
 import pandas as pd
-from frontend_dashboard.peer_recommender.llm_strategy import call_cohere
+from peer_recommender.llm_strategy import call_cohere
 import streamlit as st
 from dotenv import load_dotenv
 from google import genai
@@ -957,6 +957,39 @@ def render_package_details() -> None:
 - (+) Blog: Advertorial: Individual
 """)
 
+
+def render_ai_diagnosis_explainer() -> None:
+    with st.expander("How AI Strategy Diagnosis Is Generated", expanded=False):
+        st.markdown(
+            """
+            **What the AI does:** When you click `Generate AI Narrative`, the dashboard calls Cohere
+            (`command-a-03-2025`) to turn the selected restaurant's data into two structured outputs:
+            `Key issues Identified` and `Recommended strategy`. The response is required to come back as
+            JSON, which is then rendered into the diagnosis cards.
+
+            **Data passed into the AI prompt:**
+
+            - Selected restaurant identity: restaurant name, cluster ID, cluster label, latest segment,
+              priority score, and priority tier.
+            - Restaurant funnel snapshot: latest available GA metrics such as items viewed, GMV/GA view,
+              add-to-cart rate, view-to-purchase rate, and revenue per view.
+            - Restaurant booking / momentum history: the raw momentum dataframe is passed in so the model
+              can refer to booking trajectory and performance signals.
+            - GA strategy evidence: the GA campaign ranking object generated from cluster, segment, and
+              global scopes is passed in so the model can connect funnel gaps to campaign-type evidence.
+            - Package rules: Basic, Standard, and Premium package capabilities are embedded directly in the
+              prompt so the model can match package choice to the funnel stage being addressed.
+
+            **Guardrails used in the prompt:** The model is instructed to use only the supplied data, avoid
+            inventing metrics, mark missing values as `insufficient data`, rank issues by business impact,
+            and connect every recommendation back to the evidence provided.
+
+            **Important limitation:** The CRM / KOL / FB strategy ranking tables below remain the source of
+            truth for channel-performance evidence. In the current implementation, those ranking tables are
+            shown to users in the dashboard but are not directly passed into the AI diagnosis call.
+            """
+        )
+
 # =============================================================================
 # Main page
 # =============================================================================
@@ -1097,6 +1130,7 @@ def render():
     m_restaurant_table = build_marketing_rank_table(restaurant_rank_df)
 
     st.markdown("## Strategy Diagnosis")
+    render_ai_diagnosis_explainer()
     st.markdown("<div style='height:0.35rem;'></div>", unsafe_allow_html=True)
 
     ## generate issue and strat

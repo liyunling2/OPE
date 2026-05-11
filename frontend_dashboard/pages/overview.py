@@ -186,7 +186,7 @@ def render() -> None:
 
     steps = [
         (
-            "Go to the Priority tab",
+            "Go to the Overview tab",
             "The page shows how the restaurants are ranked by their priority scores, GMV per GA view and No. of campaigns. "
         ),
         (
