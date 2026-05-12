@@ -3,7 +3,6 @@
 This repo is now trimmed to the active dashboard workflow plus the minimum set of notebooks and outputs that feed it.
 
 ## Start Here
-
 - Dashboard entrypoint: `frontend_dashboard/app.py`
 - Dashboard data layer: `frontend_dashboard/data/loader.py`
 
@@ -58,6 +57,12 @@ This repo is now trimmed to the active dashboard workflow plus the minimum set o
   - `data_output/gmv/gmv_monthly.parquet`
 - Purpose: GA alignment and GMV-per-GA-view enrichment.
 
+### `_6_web_scraping/`
+- Notebooks:
+  - `pull_cities.ipynb`
+  - `pull_names.ipynb`
+- Purpose: Scrape location for unique restaurant names from booking file
+
 ### `clustering/`
 - Notebook: `clustering.ipynb`
 - Output folder: `data_output/`
@@ -78,3 +83,6 @@ This repo is now trimmed to the active dashboard workflow plus the minimum set o
 cd frontend_dashboard
 streamlit run app.py
 ```
+
+### Environment set up
+- COHERE_API_KEY
