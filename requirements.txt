@@ -4,3 +4,8 @@ plotly
 requests
 python-dotenv
 google-genai
+scikit-learn
+umap-learn
+matplotlib
+seaborn
+cohere
